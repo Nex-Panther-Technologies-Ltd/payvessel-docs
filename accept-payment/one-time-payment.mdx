@@ -1,0 +1,421 @@
+---
+title: "One Time Payment"
+description: "Process single, one-off payments with Payvessel"
+---
+
+# One Time Payment
+
+**Accept immediate, single-transaction payments from your customers.**
+
+One-time payments are the most common type of transaction, perfect for e-commerce purchases, service fees, donations, and any scenario where customers pay once for goods or services.
+
+<CardGroup cols={2}>
+  <Card title="⚡ Instant Processing" icon="bolt">
+    Real-time payment processing with immediate confirmation
+  </Card>
+  <Card title="💳 Multiple Methods" icon="credit-card">
+    Accept cards, bank transfers, and digital wallets
+  </Card>
+</CardGroup>
+
+***
+
+## Payment Methods Supported
+
+### 💳 Credit & Debit Cards
+
+Accept major card networks worldwide:
+
+<CardGroup cols={4}>
+  <Card title="Visa" icon="cc-visa">
+    Global card network acceptance
+  </Card>
+  <Card title="Mastercard" icon="cc-mastercard">
+    Worldwide transaction processing
+  </Card>
+  <Card title="American Express" icon="cc-amex">
+    Premium card network support
+  </Card>
+  <Card title="Discover" icon="cc-discover">
+    US-focused card network
+  </Card>
+</CardGroup>
+
+### 🏦 Bank Transfers
+
+Direct bank account payments:
+
+- **ACH (US)** - Automated Clearing House transfers
+- **SEPA (EU)** - Single Euro Payments Area
+- **Faster Payments (UK)** - Real-time bank transfers
+- **Interac (Canada)** - Online banking payments
+
+### 📱 Digital Wallets
+
+Modern payment methods:
+
+<CardGroup cols={3}>
+  <Card title="Apple Pay" icon="apple">
+    iOS and Safari browser payments
+  </Card>
+  <Card title="Google Pay" icon="google">
+    Android and Chrome browser payments
+  </Card>
+  <Card title="PayPal" icon="paypal">
+    Global digital wallet solution
+  </Card>
+</CardGroup>
+
+## API Implementation
+
+### 🚀 Create One-Time Payment
+
+```bash
+curl https://api.payvessel.com/api/v1/payments \
+  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
+  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: payment_12345_20241027" \
+  -d '{
+    "amount": 2000,
+    "currency": "USD",
+    "payment_method": {
+      "type": "card",
+      "card": {
+        "number": "4111111111111111",
+        "exp_month": 12,
+        "exp_year": 2030,
+        "cvc": "123"
+      }
+    },
+    "confirm": true,
+    "description": "Payment for Order #12345",
+    "metadata": {
+      "order_id": "12345",
+      "customer_id": "cust_67890"
+    }
+  }'
+```
+
+### 📝 Request Parameters
+
+<AccordionGroup>
+  <Accordion icon="dollar-sign" title="Required Parameters">
+    **amount** (integer) - Payment amount in smallest currency unit (cents)
+    **currency** (string) - Three-letter ISO currency code (USD, EUR, GBP)
+    **payment_method** (object) - Payment method details
+    **confirm** (boolean) - Whether to confirm payment immediately
+  </Accordion>
+  <Accordion icon="list" title="Optional Parameters">
+    **description** (string) - Payment description for records
+    **metadata** (object) - Custom key-value pairs for your reference
+    **customer** (string) - Customer ID for saved customer
+    **receipt_email** (string) - Email address for receipt delivery
+  </Accordion>
+</AccordionGroup>
+
+### ✅ Successful Response
+
+```json
+{
+  "id": "pay_1234567890abcdef",
+  "object": "payment",
+  "amount": 2000,
+  "amount_received": 2000,
+  "currency": "usd",
+  "status": "succeeded",
+  "created": 1634567890,
+  "description": "Payment for Order #12345",
+  "payment_method": {
+    "id": "pm_1234567890abcdef",
+    "type": "card",
+    "card": {
+      "brand": "visa",
+      "last4": "1111",
+      "exp_month": 12,
+      "exp_year": 2030
+    }
+  },
+  "receipt_url": "https://pay.payvessel.com/receipts/pay_1234567890abcdef",
+  "metadata": {
+    "order_id": "12345",
+    "customer_id": "cust_67890"
+  }
+}
+```
+
+## Implementation Examples
+
+### 🟨 Node.js Implementation
+
+```javascript
+const payvessel = require('payvessel')('PVKEY-3ZO1QOSQH83C5Q3PBCVUT1');
+
+async function createOneTimePayment(paymentData) {
+  try {
+    const payment = await payvessel.payments.create({
+      amount: paymentData.amount, // Amount in cents
+      currency: paymentData.currency,
+      payment_method: {
+        type: 'card',
+        card: {
+          number: paymentData.cardNumber,
+          exp_month: paymentData.expMonth,
+          exp_year: paymentData.expYear,
+          cvc: paymentData.cvc
+        }
+      },
+      confirm: true,
+      description: paymentData.description,
+      metadata: paymentData.metadata
+    });
+
+    if (payment.status === 'succeeded') {
+      console.log('Payment successful:', payment.id);
+      return payment;
+    } else {
+      console.log('Payment failed:', payment.status);
+      throw new Error('Payment failed');
+    }
+  } catch (error) {
+    console.error('Payment error:', error.message);
+    throw error;
+  }
+}
+
+// Usage example
+const paymentResult = await createOneTimePayment({
+  amount: 2000, // $20.00
+  currency: 'USD',
+  cardNumber: '4111111111111111',
+  expMonth: 12,
+  expYear: 2030,
+  cvc: '123',
+  description: 'Product purchase',
+  metadata: { order_id: '12345' }
+});
+```
+
+### 🐍 Python Implementation
+
+```python
+import payvessel
+
+payvessel.api_key = "PVKEY-3ZO1QOSQH83C5Q3PBCVUT1"
+
+def create_one_time_payment(payment_data):
+    try:
+        payment = payvessel.Payment.create(
+            amount=payment_data['amount'],  # Amount in cents
+            currency=payment_data['currency'],
+            payment_method={
+                'type': 'card',
+                'card': {
+                    'number': payment_data['card_number'],
+                    'exp_month': payment_data['exp_month'],
+                    'exp_year': payment_data['exp_year'],
+                    'cvc': payment_data['cvc']
+                }
+            },
+            confirm=True,
+            description=payment_data['description'],
+            metadata=payment_data.get('metadata', {})
+        )
+
+        if payment.status == 'succeeded':
+            print(f'Payment successful: {payment.id}')
+            return payment
+        else:
+            print(f'Payment failed: {payment.status}')
+            raise Exception('Payment failed')
+    
+    except payvessel.error.PayvesselError as e:
+        print(f'Payment error: {e.user_message}')
+        raise
+
+# Usage example
+payment_result = create_one_time_payment({
+    'amount': 2000,  # $20.00
+    'currency': 'USD',
+    'card_number': '4111111111111111',
+    'exp_month': 12,
+    'exp_year': 2030,
+    'cvc': '123',
+    'description': 'Product purchase',
+    'metadata': {'order_id': '12345'}
+})
+```
+
+### 🐘 PHP Implementation
+
+```php
+<?php
+require_once('vendor/autoload.php');
+
+\Payvessel\Payvessel::setApiKey("PVKEY-3ZO1QOSQH83C5Q3PBCVUT1");
+
+function createOneTimePayment($paymentData) {
+    try {
+        $payment = \Payvessel\Payment::create([
+            'amount' => $paymentData['amount'], // Amount in cents
+            'currency' => $paymentData['currency'],
+            'payment_method' => [
+                'type' => 'card',
+                'card' => [
+                    'number' => $paymentData['card_number'],
+                    'exp_month' => $paymentData['exp_month'],
+                    'exp_year' => $paymentData['exp_year'],
+                    'cvc' => $paymentData['cvc']
+                ]
+            ],
+            'confirm' => true,
+            'description' => $paymentData['description'],
+            'metadata' => $paymentData['metadata'] ?? []
+        ]);
+
+        if ($payment->status === 'succeeded') {
+            echo "Payment successful: " . $payment->id . "\n";
+            return $payment;
+        } else {
+            echo "Payment failed: " . $payment->status . "\n";
+            throw new Exception('Payment failed');
+        }
+    } catch (\Payvessel\Exception\ApiErrorException $e) {
+        echo "Payment error: " . $e->getMessage() . "\n";
+        throw $e;
+    }
+}
+
+// Usage example
+$paymentResult = createOneTimePayment([
+    'amount' => 2000, // $20.00
+    'currency' => 'USD',
+    'card_number' => '4111111111111111',
+    'exp_month' => 12,
+    'exp_year' => 2030,
+    'cvc' => '123',
+    'description' => 'Product purchase',
+    'metadata' => ['order_id' => '12345']
+]);
+?>
+```
+
+## Payment Statuses
+
+<AccordionGroup>
+  <Accordion icon="clock" title="pending">
+    Payment is being processed and requires additional time
+    - Bank transfer processing
+    - Card network authorization
+    - Additional verification required
+  </Accordion>
+  <Accordion icon="check-circle" title="succeeded">
+    Payment completed successfully
+    - Funds captured and will be settled
+    - Customer charged successfully
+    - Receipt generated and available
+  </Accordion>
+  <Accordion icon="times-circle" title="failed">
+    Payment was declined or failed
+    - Insufficient funds
+    - Invalid payment details
+    - Bank or issuer rejection
+  </Accordion>
+  <Accordion icon="pause-circle" title="requires_action">
+    Additional customer action required
+    - 3D Secure authentication needed
+    - Bank redirect required
+    - Customer approval pending
+  </Accordion>
+</AccordionGroup>
+
+## Error Handling
+
+### ⚠️ Common Payment Errors
+
+Handle different error scenarios appropriately:
+
+```javascript
+try {
+  const payment = await payvessel.payments.create(paymentData);
+  
+  if (payment.status === 'succeeded') {
+    // Payment successful - fulfill order
+    await fulfillOrder(payment);
+  } else if (payment.status === 'requires_action') {
+    // Redirect customer for additional authentication
+    window.location.href = payment.next_action.redirect_to_url.url;
+  }
+} catch (error) {
+  switch (error.code) {
+    case 'card_declined':
+      showError('Your card was declined. Please try a different payment method.');
+      break;
+    case 'insufficient_funds':
+      showError('Your card has insufficient funds. Please use a different card.');
+      break;
+    case 'expired_card':
+      showError('Your card has expired. Please update your payment information.');
+      break;
+    default:
+      showError('An error occurred processing your payment. Please try again.');
+  }
+}
+```
+
+## Testing One-Time Payments
+
+### 🧪 Test Card Numbers
+
+Use these test cards in sandbox environment:
+
+<CardGroup cols={2}>
+  <Card title="✅ Successful Payments" icon="check">
+    - **4111111111111111** - Visa (US)
+    - **5555555555554444** - Mastercard (US)
+    - **378282246310005** - American Express
+    - **6011111111111117** - Discover
+  </Card>
+  <Card title="❌ Declined Payments" icon="times">
+    - **4000000000000002** - Generic decline
+    - **4000000000009995** - Insufficient funds
+    - **4000000000000069** - Expired card
+    - **4000000000000127** - Incorrect CVC
+  </Card>
+</CardGroup>
+
+### 🔧 Testing Checklist
+
+<Steps>
+  <Step title="Successful Payment Flow">
+    Test complete payment process from initiation to completion
+  </Step>
+  <Step title="Error Scenarios">
+    Test various decline reasons and error handling
+  </Step>
+  <Step title="Different Payment Methods">
+    Test cards, bank transfers, and digital wallets
+  </Step>
+  <Step title="Currency Support">
+    Test payments in different supported currencies
+  </Step>
+</Steps>
+
+<Note>
+**Amount Format:** Always specify amounts in the smallest currency unit (cents for USD, pence for GBP, etc.). For example, $20.00 should be passed as 2000.
+</Note>
+
+<div style={{textAlign: 'center', marginTop: '2rem'}}>
+
+**Ready to start accepting one-time payments?**
+
+<CardGroup cols={2}>
+  <Card title="🚀 Quick Integration" icon="rocket" href="/quickstart">
+    Get started with our integration guide
+  </Card>
+  <Card title="🧪 Test in Sandbox" icon="flask" href="/api-basics/testing">
+    Test your integration safely
+  </Card>
+</CardGroup>
+
+</div>

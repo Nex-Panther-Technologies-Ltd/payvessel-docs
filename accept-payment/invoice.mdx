@@ -1,0 +1,699 @@
+---
+title: "Invoice"
+description: "Generate and send professional invoices with automated payment collection"
+---
+
+# Invoice
+
+**Create professional invoices and collect payments seamlessly with automated reminders and tracking.**
+
+Generate, send, and manage invoices with built-in payment processing, automatic follow-ups, and comprehensive reporting.
+
+<CardGroup cols={2}>
+  <Card title="📄 Professional Invoices" icon="file-invoice">
+    Branded invoices with itemized billing
+  </Card>
+  <Card title="⚡ Auto-Collection" icon="bolt">
+    Automated payment reminders and processing
+  </Card>
+</CardGroup>
+
+***
+
+## How It Works
+
+### 🔄 Invoice Lifecycle
+
+<Steps>
+  <Step title="Create Invoice">
+    Generate invoice with line items, taxes, and due dates
+  </Step>
+  <Step title="Send to Customer">
+    Email invoice with payment link automatically
+  </Step>
+  <Step title="Customer Payment">
+    Customer pays via secure payment page
+  </Step>
+  <Step title="Auto-Reconciliation">
+    Payment automatically marks invoice as paid
+  </Step>
+  <Step title="Receipt Generation">
+    Automatic receipt sent to customer
+  </Step>
+</Steps>
+
+### 💼 Business Benefits
+
+<CardGroup cols={3}>
+  <Card title="⏰ Time Savings" icon="clock">
+    Automated invoice generation and sending
+  </Card>
+  <Card title="💰 Faster Payments" icon="money-bill">
+    Reduced payment cycle times
+  </Card>
+  <Card title="📊 Better Tracking" icon="chart-line">
+    Real-time payment status updates
+  </Card>
+</CardGroup>
+
+## API Implementation
+
+### 🚀 Create Invoice
+
+```bash
+curl https://api.payvessel.com/api/v1/invoices \
+  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
+  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "customer": {
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "phone": "+1234567890",
+      "address": {
+        "line1": "123 Main Street",
+        "city": "New York",
+        "state": "NY",
+        "postal_code": "10001",
+        "country": "US"
+      }
+    },
+    "line_items": [
+      {
+        "description": "Website Development",
+        "quantity": 1,
+        "unit_price": 250000,
+        "tax_rate": 10
+      },
+      {
+        "description": "SEO Optimization",
+        "quantity": 3,
+        "unit_price": 50000,
+        "tax_rate": 10
+      }
+    ],
+    "currency": "USD",
+    "due_date": "2024-02-15",
+    "invoice_number": "INV-2024-001",
+    "notes": "Payment terms: Net 30 days",
+    "footer": "Thank you for your business!",
+    "auto_send": true,
+    "payment_methods": ["card", "bank_transfer"],
+    "metadata": {
+      "project_id": "proj_12345",
+      "client_type": "enterprise"
+    }
+  }'
+```
+
+### 📝 Request Parameters
+
+<AccordionGroup>
+  <Accordion icon="user" title="Customer Information">
+    **customer.name** (string) - Customer's full name
+    **customer.email** (string) - Customer's email address
+    **customer.phone** (string) - Customer's phone number
+    **customer.address** (object) - Customer's billing address
+  </Accordion>
+  <Accordion icon="list" title="Line Items">
+    **description** (string) - Item description
+    **quantity** (number) - Item quantity
+    **unit_price** (number) - Price per unit in cents
+    **tax_rate** (number) - Tax percentage (optional)
+    **discount_rate** (number) - Discount percentage (optional)
+  </Accordion>
+  <Accordion icon="cog" title="Invoice Configuration">
+    **due_date** (string) - Payment due date (ISO 8601)
+    **invoice_number** (string) - Unique invoice identifier
+    **auto_send** (boolean) - Automatically send to customer
+    **payment_methods** (array) - Accepted payment methods
+    **notes** (string) - Additional notes for customer
+  </Accordion>
+</AccordionGroup>
+
+### ✅ Successful Response
+
+```json
+{
+  "id": "inv_1234567890abcdef",
+  "object": "invoice",
+  "invoice_number": "INV-2024-001",
+  "status": "sent",
+  "customer": {
+    "id": "cust_1234567890abcdef",
+    "name": "John Doe",
+    "email": "john.doe@example.com"
+  },
+  "line_items": [
+    {
+      "id": "li_1234567890abcdef",
+      "description": "Website Development",
+      "quantity": 1,
+      "unit_price": 250000,
+      "tax_rate": 10,
+      "subtotal": 250000,
+      "tax_amount": 25000,
+      "total": 275000
+    },
+    {
+      "id": "li_2234567890abcdef",
+      "description": "SEO Optimization",
+      "quantity": 3,
+      "unit_price": 50000,
+      "tax_rate": 10,
+      "subtotal": 150000,
+      "tax_amount": 15000,
+      "total": 165000
+    }
+  ],
+  "subtotal": 400000,
+  "tax_amount": 40000,
+  "total_amount": 440000,
+  "currency": "USD",
+  "created": 1634567890,
+  "due_date": "2024-02-15",
+  "payment_url": "https://pay.payvessel.com/invoice/inv_1234567890abcdef",
+  "pdf_url": "https://api.payvessel.com/v1/invoices/inv_1234567890abcdef/pdf",
+  "notes": "Payment terms: Net 30 days",
+  "metadata": {
+    "project_id": "proj_12345",
+    "client_type": "enterprise"
+  }
+}
+```
+
+## Implementation Examples
+
+### 🟨 Node.js Implementation
+
+```javascript
+const payvessel = require('payvessel')('PVKEY-3ZO1QOSQH83C5Q3PBCVUT1');
+
+async function createInvoice(invoiceData) {
+  try {
+    const invoice = await payvessel.invoices.create({
+      customer: invoiceData.customer,
+      line_items: invoiceData.line_items,
+      currency: invoiceData.currency || 'USD',
+      due_date: invoiceData.due_date,
+      invoice_number: invoiceData.invoice_number || generateInvoiceNumber(),
+      notes: invoiceData.notes,
+      footer: invoiceData.footer,
+      auto_send: invoiceData.auto_send !== false,
+      payment_methods: invoiceData.payment_methods || ['card', 'bank_transfer'],
+      metadata: invoiceData.metadata || {}
+    });
+
+    console.log('Invoice created:', invoice.id);
+    console.log('Payment URL:', invoice.payment_url);
+
+    if (invoice.auto_send) {
+      console.log('Invoice automatically sent to:', invoice.customer.email);
+    }
+
+    return invoice;
+  } catch (error) {
+    console.error('Invoice creation error:', error.message);
+    throw error;
+  }
+}
+
+function generateInvoiceNumber() {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const timestamp = Date.now().toString().slice(-6);
+  return `INV-${year}-${month}-${timestamp}`;
+}
+
+async function getInvoiceStatus(invoiceId) {
+  try {
+    const invoice = await payvessel.invoices.retrieve(invoiceId);
+    return {
+      id: invoice.id,
+      status: invoice.status,
+      amount_paid: invoice.amount_paid,
+      amount_due: invoice.amount_due,
+      payment_url: invoice.payment_url
+    };
+  } catch (error) {
+    console.error('Invoice retrieval error:', error.message);
+    throw error;
+  }
+}
+
+// Usage example
+const invoice = await createInvoice({
+  customer: {
+    name: 'John Doe',
+    email: 'john.doe@example.com',
+    phone: '+1234567890'
+  },
+  line_items: [
+    {
+      description: 'Website Development',
+      quantity: 1,
+      unit_price: 250000, // $2,500.00
+      tax_rate: 10
+    }
+  ],
+  due_date: '2024-02-15',
+  notes: 'Payment terms: Net 30 days'
+});
+```
+
+### 🐍 Python Implementation
+
+```python
+import payvessel
+from datetime import datetime, timedelta
+
+payvessel.api_key = "PVKEY-3ZO1QOSQH83C5Q3PBCVUT1"
+
+def create_invoice(invoice_data):
+    try:
+        invoice = payvessel.Invoice.create(
+            customer=invoice_data['customer'],
+            line_items=invoice_data['line_items'],
+            currency=invoice_data.get('currency', 'USD'),
+            due_date=invoice_data['due_date'],
+            invoice_number=invoice_data.get('invoice_number') or generate_invoice_number(),
+            notes=invoice_data.get('notes'),
+            footer=invoice_data.get('footer'),
+            auto_send=invoice_data.get('auto_send', True),
+            payment_methods=invoice_data.get('payment_methods', ['card', 'bank_transfer']),
+            metadata=invoice_data.get('metadata', {})
+        )
+
+        print(f'Invoice created: {invoice.id}')
+        print(f'Payment URL: {invoice.payment_url}')
+
+        if invoice.auto_send:
+            print(f'Invoice automatically sent to: {invoice.customer.email}')
+
+        return invoice
+    
+    except payvessel.error.PayvesselError as e:
+        print(f'Invoice creation error: {e.user_message}')
+        raise
+
+def generate_invoice_number():
+    now = datetime.now()
+    timestamp = str(int(now.timestamp()))[-6:]
+    return f"INV-{now.year}-{now.month:02d}-{timestamp}"
+
+def send_payment_reminder(invoice_id, message=None):
+    try:
+        invoice = payvessel.Invoice.retrieve(invoice_id)
+        
+        if invoice.status != 'paid':
+            reminder = payvessel.Invoice.send_reminder(
+                invoice_id,
+                message=message or "Gentle reminder: Your invoice is due soon."
+            )
+            print(f'Payment reminder sent for invoice: {invoice_id}')
+            return reminder
+        else:
+            print('Invoice is already paid')
+            return None
+    
+    except payvessel.error.PayvesselError as e:
+        print(f'Reminder sending error: {e.user_message}')
+        raise
+
+# Usage example
+invoice = create_invoice({
+    'customer': {
+        'name': 'John Doe',
+        'email': 'john.doe@example.com',
+        'phone': '+1234567890'
+    },
+    'line_items': [
+        {
+            'description': 'Website Development',
+            'quantity': 1,
+            'unit_price': 250000,  # $2,500.00
+            'tax_rate': 10
+        }
+    ],
+    'due_date': (datetime.now() + timedelta(days=30)).isoformat()[:10],
+    'notes': 'Payment terms: Net 30 days'
+})
+```
+
+### 🐘 PHP Implementation
+
+```php
+<?php
+require_once('vendor/autoload.php');
+
+\Payvessel\Payvessel::setApiKey("PVKEY-3ZO1QOSQH83C5Q3PBCVUT1");
+
+function createInvoice($invoiceData) {
+    try {
+        $invoice = \Payvessel\Invoice::create([
+            'customer' => $invoiceData['customer'],
+            'line_items' => $invoiceData['line_items'],
+            'currency' => $invoiceData['currency'] ?? 'USD',
+            'due_date' => $invoiceData['due_date'],
+            'invoice_number' => $invoiceData['invoice_number'] ?? generateInvoiceNumber(),
+            'notes' => $invoiceData['notes'] ?? null,
+            'footer' => $invoiceData['footer'] ?? null,
+            'auto_send' => $invoiceData['auto_send'] ?? true,
+            'payment_methods' => $invoiceData['payment_methods'] ?? ['card', 'bank_transfer'],
+            'metadata' => $invoiceData['metadata'] ?? []
+        ]);
+
+        echo "Invoice created: " . $invoice->id . "\n";
+        echo "Payment URL: " . $invoice->payment_url . "\n";
+
+        if ($invoice->auto_send) {
+            echo "Invoice automatically sent to: " . $invoice->customer->email . "\n";
+        }
+
+        return $invoice;
+    } catch (\Payvessel\Exception\ApiErrorException $e) {
+        echo "Invoice creation error: " . $e->getMessage() . "\n";
+        throw $e;
+    }
+}
+
+function generateInvoiceNumber() {
+    $timestamp = substr(time(), -6);
+    $date = new DateTime();
+    return sprintf("INV-%s-%02d-%s", 
+        $date->format('Y'), 
+        $date->format('n'), 
+        $timestamp
+    );
+}
+
+function schedulePaymentReminders($invoiceId) {
+    try {
+        // Schedule reminders for 7 days before due date, on due date, and 7 days after
+        $reminderSchedule = [
+            ['days_before_due' => 7, 'message' => 'Your invoice is due in 7 days.'],
+            ['days_before_due' => 0, 'message' => 'Your invoice is due today.'],
+            ['days_after_due' => 7, 'message' => 'Your invoice is now 7 days overdue.']
+        ];
+
+        foreach ($reminderSchedule as $reminder) {
+            \Payvessel\Invoice::scheduleReminder($invoiceId, $reminder);
+        }
+
+        echo "Payment reminders scheduled for invoice: $invoiceId\n";
+    } catch (\Payvessel\Exception\ApiErrorException $e) {
+        echo "Reminder scheduling error: " . $e->getMessage() . "\n";
+        throw $e;
+    }
+}
+
+// Usage example
+$invoice = createInvoice([
+    'customer' => [
+        'name' => 'John Doe',
+        'email' => 'john.doe@example.com',
+        'phone' => '+1234567890'
+    ],
+    'line_items' => [
+        [
+            'description' => 'Website Development',
+            'quantity' => 1,
+            'unit_price' => 250000, // $2,500.00
+            'tax_rate' => 10
+        ]
+    ],
+    'due_date' => date('Y-m-d', strtotime('+30 days')),
+    'notes' => 'Payment terms: Net 30 days'
+]);
+
+schedulePaymentReminders($invoice->id);
+?>
+```
+
+## Advanced Features
+
+### 🔄 Recurring Invoices
+
+Create subscription-based invoicing:
+
+```javascript
+async function createRecurringInvoice(invoiceData) {
+  const invoice = await payvessel.invoices.create({
+    ...invoiceData,
+    recurring: {
+      interval: 'monthly', // weekly, monthly, quarterly, yearly
+      interval_count: 1,
+      end_date: '2024-12-31',
+      auto_send: true
+    }
+  });
+  
+  console.log('Recurring invoice created:', invoice.id);
+  return invoice;
+}
+```
+
+### 📄 Invoice Templates
+
+Use predefined templates for consistent branding:
+
+```javascript
+const invoice = await payvessel.invoices.create({
+  template_id: 'tpl_professional_blue',
+  customer: customerData,
+  line_items: items,
+  customization: {
+    logo_url: 'https://yourcompany.com/logo.png',
+    primary_color: '#1E40AF',
+    footer_text: 'Custom footer message'
+  }
+});
+```
+
+### 💳 Partial Payments
+
+Allow customers to pay invoices in installments:
+
+```javascript
+const invoice = await payvessel.invoices.create({
+  ...invoiceData,
+  payment_options: {
+    allow_partial_payments: true,
+    minimum_payment_amount: 10000, // $100 minimum
+    installment_plans: [
+      { installments: 3, interval: 'monthly' },
+      { installments: 6, interval: 'monthly' }
+    ]
+  }
+});
+```
+
+## Invoice Management
+
+### 📊 Invoice Status Tracking
+
+```bash
+curl https://api.payvessel.com/api/v1/invoices/inv_1234567890abcdef \
+  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
+  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF"
+```
+
+### 📈 Status Response
+
+```json
+{
+  "id": "inv_1234567890abcdef",
+  "status": "partially_paid",
+  "total_amount": 440000,
+  "amount_paid": 200000,
+  "amount_due": 240000,
+  "payment_history": [
+    {
+      "id": "pmt_1234567890abcdef",
+      "amount": 200000,
+      "paid_at": 1634567890,
+      "payment_method": "card"
+    }
+  ],
+  "next_payment_reminder": "2024-02-10T00:00:00Z"
+}
+```
+
+### 📧 Send Payment Reminders
+
+```bash
+curl -X POST https://api.payvessel.com/api/v1/invoices/inv_1234567890abcdef/reminders \
+  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
+  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "message": "Friendly reminder: Your invoice is due tomorrow.",
+    "send_copy_to": "accounts@yourcompany.com"
+  }'
+```
+
+## Industry Use Cases
+
+### 🏢 Professional Services
+
+<AccordionGroup>
+  <Accordion icon="briefcase" title="Consulting Firms">
+    **Time-Based Billing:**
+    - Hourly rate calculations
+    - Project milestone billing
+    - Expense reimbursements
+    - Retainer management
+  </Accordion>
+  <Accordion icon="heart" title="Healthcare Providers">
+    **Medical Billing:**
+    - Insurance claim processing
+    - Patient copayment collection
+    - Treatment plan invoicing
+    - Recurring appointment billing
+  </Accordion>
+  <Accordion icon="hammer" title="Construction Companies">
+    **Project Invoicing:**
+    - Material and labor costs
+    - Progress payment requests
+    - Change order billing
+    - Final completion invoicing
+  </Accordion>
+</AccordionGroup>
+
+### 🛍️ E-commerce & Retail
+
+<CardGroup cols={2}>
+  <Card title="🏪 Wholesale" icon="boxes">
+    - Bulk order invoicing
+    - Net payment terms
+    - Volume discount calculations
+    - Credit limit management
+  </Card>
+  <Card title="🚚 B2B Services" icon="truck">
+    - Service delivery invoicing
+    - Subscription billing
+    - Usage-based pricing
+    - Multi-location billing
+  </Card>
+</CardGroup>
+
+## Reporting & Analytics
+
+### 📊 Invoice Analytics
+
+Track key metrics with comprehensive reporting:
+
+```javascript
+// Get invoice analytics
+const analytics = await payvessel.invoices.analytics({
+  period: 'last_30_days',
+  group_by: 'status'
+});
+
+console.log('Invoice metrics:', {
+  total_invoices: analytics.total_count,
+  total_amount: analytics.total_amount,
+  paid_percentage: analytics.paid_percentage,
+  average_payment_time: analytics.avg_payment_time_days
+});
+```
+
+### 📈 Key Performance Indicators
+
+<CardGroup cols={2}>
+  <Card title="💰 Revenue Metrics" icon="chart-line">
+    - Total invoiced amount
+    - Collection rate
+    - Average invoice value
+    - Revenue trends
+  </Card>
+  <Card title="⏱️ Efficiency Metrics" icon="clock">
+    - Average payment time
+    - Overdue invoice rate
+    - Reminder effectiveness
+    - Processing time reduction
+  </Card>
+</CardGroup>
+
+## Webhook Integration
+
+### 🔔 Invoice Events
+
+Monitor invoice lifecycle events:
+
+```javascript
+// Webhook handler for invoice events
+app.post('/webhook/invoices', (req, res) => {
+  const event = req.body;
+  
+  switch (event.type) {
+    case 'invoice.created':
+      logInvoiceCreated(event.data);
+      break;
+    case 'invoice.sent':
+      trackInvoiceSent(event.data);
+      break;
+    case 'invoice.paid':
+      processInvoicePayment(event.data);
+      break;
+    case 'invoice.overdue':
+      handleOverdueInvoice(event.data);
+      break;
+  }
+  
+  res.status(200).send('OK');
+});
+
+function processInvoicePayment(invoiceData) {
+  // Update internal records
+  // Send thank you email
+  // Trigger fulfillment process
+  console.log(`Invoice ${invoiceData.invoice_number} paid: $${invoiceData.amount_paid / 100}`);
+}
+```
+
+## Best Practices
+
+### ✅ Invoice Optimization
+
+<CardGroup cols={2}>
+  <Card title="🎨 Design Best Practices" icon="palette">
+    - Clear, professional layout
+    - Prominent payment buttons
+    - Mobile-responsive design
+    - Brand consistency
+  </Card>
+  <Card title="💬 Communication Tips" icon="comments">
+    - Clear payment terms
+    - Multiple payment options
+    - Automated follow-ups
+    - Personal touch in messaging
+  </Card>
+</CardGroup>
+
+### 🔒 Security & Compliance
+
+- **PCI DSS Compliance** - Secure payment processing
+- **Data Encryption** - End-to-end invoice data protection
+- **Access Controls** - Role-based invoice management
+- **Audit Trails** - Complete payment history tracking
+
+<Warning>
+**Late Payment Handling:** Configure automatic reminder schedules and late payment fees to improve collection rates while maintaining customer relationships.
+</Warning>
+
+<div style={{textAlign: 'center', marginTop: '2rem'}}>
+
+**Ready to streamline your invoicing?**
+
+<CardGroup cols={2}>
+  <Card title="🚀 Start Creating" icon="rocket" href="/api-reference/endpoint/create">
+    Begin with invoice API integration
+  </Card>
+  <Card title="📊 Track Performance" icon="chart-bar" href="/api-basics/webhooks">
+    Set up invoice event monitoring
+  </Card>
+</CardGroup>
+
+</div>

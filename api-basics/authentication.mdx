@@ -1,0 +1,127 @@
+---
+title: "Authentication"
+description: "Learn how to authenticate your API requests with Payvessel"
+---
+
+# Authentication
+
+**Secure your API requests with Payvessel's authentication system.**
+
+All API requests to Payvessel must be authenticated using your API credentials. This ensures that only authorized applications can access your account and process payments.
+
+<CardGroup cols={2}>
+  <Card title="🔐 API Key" icon="key">
+    Your unique identifier for API access
+  </Card>
+  <Card title="� API Secret" icon="lock">
+    Your secret token for request authentication
+  </Card>
+</CardGroup>
+
+***
+
+## Authentication Headers
+
+Include these headers in every API request:
+
+```json
+{
+  "api-key": "PVKEY-FNLYA8DW2LGZE6KFI0K4AA7N5JP",
+  "api-secret": "Bearer PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y",
+  "Content-Type": "application/json"
+}
+```
+
+<Warning>
+**Keep your credentials secure!** Never expose your API secret in client-side code or public repositories.
+</Warning>
+
+## Environment Details
+
+### 🧪 Sandbox Environment
+The sandbox environment is dedicated to test and development phases.
+
+<CodeGroup>
+```bash Base URL
+https://sandbox.payvessel.com
+```
+
+```bash API Key
+PVKEY-3ZO1QOSQH83C5Q3PBCVUT1
+```
+
+```bash API Secret
+Bearer PVSECRET-OZJD0SZ2F2WOTXAF
+```
+</CodeGroup>
+
+### 🚀 Production Environment
+The production environment is dedicated to live applications with real connections to institutions.
+
+<CodeGroup>
+```bash Base URL
+https://api.payvessel.com
+```
+
+```bash API Key
+Your production API key (starts with PVKEY-)
+```
+
+```bash API Secret
+Your production API secret (starts with Bearer PVSECRET-)
+```
+</CodeGroup>
+
+## Key Rotation
+
+Regular key rotation is essential for maintaining security:
+
+<Steps>
+  <Step title="Generate New Key">
+    Create a new API key in your Payvessel dashboard
+  </Step>
+  <Step title="Update Application">
+    Deploy your application with the new key
+  </Step>
+  <Step title="Test Thoroughly">
+    Verify all functionality works with the new key
+  </Step>
+  <Step title="Revoke Old Key">
+    Disable the old key once the new one is confirmed working
+  </Step>
+</Steps>
+
+
+
+## Troubleshooting Authentication
+
+<AccordionGroup>
+  <Accordion icon="exclamation-triangle" title="401 Unauthorized">
+    **Common causes:**
+    - Invalid or expired API key
+    - Missing Authorization header
+    - Key used in wrong environment
+    
+    **Solutions:**
+    - Verify key format and environment
+    - Check header spelling and format
+    - Regenerate key if necessary
+  </Accordion>
+  <Accordion icon="ban" title="403 Forbidden">
+    **Common causes:**
+    - Insufficient permissions for the operation
+    - Account not verified for live transactions
+    - API key doesn't have required scopes
+    
+    **Solutions:**
+    - Check account verification status
+    - Verify API key permissions
+    - Contact support for scope issues
+  </Accordion>
+</AccordionGroup>
+
+
+<div style={{textAlign: 'center', marginTop: '2rem'}}>
+
+
+</div>

@@ -1,0 +1,160 @@
+---
+title: "Environments"
+description: "Understanding Payvessel's sandbox and production environments"
+---
+
+# Environments
+
+**Safely develop and test your integration before going live with Payvessel's dedicated environments.**
+
+Payvessel provides separate environments to ensure you can build, test, and deploy your payment integration with confidence.
+
+<CardGroup cols={2}>
+  <Card title="🧪 Sandbox Environment" icon="flask">
+    Safe testing environment with simulated transactions
+  </Card>
+  <Card title="🚀 Production Environment" icon="rocket">
+    Live environment for real payments and transactions
+  </Card>
+</CardGroup>
+
+***
+
+## Sandbox Environment
+
+The sandbox environment provides a complete replica of the production API without processing real money or affecting live systems.
+
+### 🎯 Purpose and Benefits
+
+<CardGroup cols={3}>
+  <Card title="🔧 Development" icon="tools">
+    Build and iterate on your integration safely
+  </Card>
+  <Card title="✅ Testing" icon="check-circle">
+    Validate all payment flows and error scenarios
+  </Card>
+  <Card title="🎓 Learning" icon="graduation-cap">
+    Understand API behavior without financial risk
+  </Card>
+</CardGroup>
+
+### 📋 Sandbox Features
+
+<AccordionGroup>
+  <Accordion icon="credit-card" title="Test Payment Methods">
+    - Test credit card numbers for various scenarios
+    - Simulated bank account information
+    - Mock mobile money accounts
+    - Cryptocurrency test networks
+  </Accordion>
+  <Accordion icon="webhook" title="Webhook Testing">
+    - Full webhook functionality
+    - Simulated event triggers
+    - Webhook validation tools
+    - Real-time event monitoring
+  </Accordion>
+  <Accordion icon="chart-bar" title="Complete Dashboard">
+    - Transaction history and analytics
+    - Account management features
+    - API key management
+    - Webhook configuration
+  </Accordion>
+</AccordionGroup>
+
+### 🌐 Sandbox Endpoints
+
+The sandbox environment is dedicated to test and development phases.
+
+```bash
+# Sandbox Base URL
+https://sandbox.payvessel.com
+```
+
+Example sandbox request:
+```bash
+curl https://sandbox.payvessel.com/api/v1/payments \
+  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
+  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "amount": 1000,
+    "currency": "USD",
+    "payment_method": "card"
+  }'
+```
+
+## Production Environment
+
+The production environment processes real payments and handles live customer transactions.
+
+### 🚀 Going Live Requirements
+
+<Steps>
+  <Step title="Complete Integration">
+    Fully implement and test your integration in sandbox
+  </Step>
+  <Step title="Business Verification">
+    Complete KYC and business verification process
+  </Step>
+  <Step title="Security Review">
+    Pass security assessment and compliance checks
+  </Step>
+  <Step title="Go-Live Approval">
+    Receive approval from Payvessel team
+  </Step>
+</Steps>
+
+### 🌐 Production Endpoints
+
+The production environment is dedicated to live applications with real connections to institutions.
+
+```bash
+# Production Base URL
+https://api.payvessel.com
+
+```
+
+Example production request:
+```bash
+curl https://api.payvessel.com/api/v1/payments \
+  -H "api-key: PVKEY-[your-production-key]" \
+  -H "api-secret: Bearer PVSECRET-[your-production-secret]" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "amount": 1000,
+    "currency": "USD",
+    "payment_method": "card"
+  }'
+```
+
+### 🔐 Production Security
+
+Production environment includes enhanced security measures:
+
+- **Real-time fraud monitoring**
+- **Advanced threat detection**
+- **Compliance scanning**
+- **Audit logging**
+- **Encrypted data storage**
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="🧪 Sandbox Testing" icon="flask">
+    - Test all payment flows thoroughly
+    - Validate error handling scenarios
+    - Test webhook endpoints
+    - Verify currency and amount handling
+  </Card>
+  <Card title="🚀 Production Deployment" icon="rocket">
+    - Use separate API keys for each environment
+    - Implement proper error handling
+    - Monitor transaction success rates
+    - Set up alerting for failures
+  </Card>
+</CardGroup>
+
+
+<div style={{textAlign: 'center', marginTop: '2rem'}}>
+
+</div>

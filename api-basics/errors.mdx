@@ -1,0 +1,601 @@
+---
+title: "Errors"
+description: "Complete list of Payvessel API error codes and messages"
+---
+
+# Error Codes
+
+**Complete reference of Payvessel API error codes and their corresponding error messages.**
+
+This page contains all the error codes you may encounter when using the Payvessel API, along with their descriptions and suggested actions.
+
+<CardGroup cols={2}>
+  <Card title="� Payment Errors" icon="credit-card">
+    Card and payment method related errors
+  </Card>
+  <Card title="� Authentication Errors" icon="key">
+    API credentials and permission errors
+  </Card>
+</CardGroup>
+
+***
+
+## Error Response Format
+
+All Payvessel API errors follow a consistent structure:
+
+```json
+{
+  "error": {
+    "type": "card_error",
+    "code": "card_declined",
+    "message": "Your card was declined",
+    "param": "payment_method",
+    "request_id": "req_abc123"
+  }
+}
+```
+
+## Authentication Errors
+
+<div className="overflow-x-auto">
+<table>
+  <thead>
+    <tr>
+      <th>Error Code</th>
+      <th>Error Message</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>invalid_api_key</code></td>
+      <td>Invalid API key provided</td>
+      <td>The API key is malformed or incorrect</td>
+    </tr>
+    <tr>
+      <td><code>missing_api_key</code></td>
+      <td>API key is required</td>
+      <td>No API key was provided in the request headers</td>
+    </tr>
+    <tr>
+      <td><code>invalid_api_secret</code></td>
+      <td>Invalid API secret provided</td>
+      <td>The API secret is malformed or incorrect</td>
+    </tr>
+    <tr>
+      <td><code>missing_api_secret</code></td>
+      <td>API secret is required</td>
+      <td>No API secret was provided in the request headers</td>
+    </tr>
+    <tr>
+      <td><code>account_inactive</code></td>
+      <td>Account is inactive</td>
+      <td>Your Payvessel account has been deactivated</td>
+    </tr>
+    <tr>
+      <td><code>insufficient_permissions</code></td>
+      <td>Insufficient permissions for this operation</td>
+      <td>Your API key doesn't have permission for this action</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+## Request Validation Errors
+
+<div className="overflow-x-auto">
+<table>
+  <thead>
+    <tr>
+      <th>Error Code</th>
+      <th>Error Message</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>missing_required_field</code></td>
+      <td>Missing required field: [field_name]</td>
+      <td>A required parameter was not provided</td>
+    </tr>
+    <tr>
+      <td><code>invalid_field_format</code></td>
+      <td>Invalid format for field: [field_name]</td>
+      <td>The field value doesn't match the expected format</td>
+    </tr>
+    <tr>
+      <td><code>invalid_amount</code></td>
+      <td>Invalid amount specified</td>
+      <td>Amount must be a positive number</td>
+    </tr>
+    <tr>
+      <td><code>invalid_currency</code></td>
+      <td>Invalid currency code</td>
+      <td>Currency code is not supported or malformed</td>
+    </tr>
+    <tr>
+      <td><code>amount_too_small</code></td>
+      <td>Amount below minimum limit</td>
+      <td>Payment amount is below the minimum allowed</td>
+    </tr>
+    <tr>
+      <td><code>amount_too_large</code></td>
+      <td>Amount exceeds maximum limit</td>
+      <td>Payment amount exceeds the maximum allowed</td>
+    </tr>
+    <tr>
+      <td><code>invalid_email</code></td>
+      <td>Invalid email address format</td>
+      <td>The provided email address is not valid</td>
+    </tr>
+    <tr>
+      <td><code>invalid_phone</code></td>
+      <td>Invalid phone number format</td>
+      <td>The provided phone number is not valid</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+## Card Payment Errors
+
+<div className="overflow-x-auto">
+<table>
+  <thead>
+    <tr>
+      <th>Error Code</th>
+      <th>Error Message</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>card_declined</code></td>
+      <td>Your card was declined</td>
+      <td>The card issuer declined the payment</td>
+    </tr>
+    <tr>
+      <td><code>insufficient_funds</code></td>
+      <td>Insufficient funds</td>
+      <td>The card does not have enough available balance</td>
+    </tr>
+    <tr>
+      <td><code>expired_card</code></td>
+      <td>Your card has expired</td>
+      <td>The card expiry date has passed</td>
+    </tr>
+    <tr>
+      <td><code>incorrect_cvc</code></td>
+      <td>Your card's security code is incorrect</td>
+      <td>The CVC/CVV code provided is invalid</td>
+    </tr>
+    <tr>
+      <td><code>incorrect_number</code></td>
+      <td>Your card number is incorrect</td>
+      <td>The card number is invalid or malformed</td>
+    </tr>
+    <tr>
+      <td><code>lost_card</code></td>
+      <td>Your card has been reported lost</td>
+      <td>The card has been reported as lost by the cardholder</td>
+    </tr>
+    <tr>
+      <td><code>stolen_card</code></td>
+      <td>Your card has been reported stolen</td>
+      <td>The card has been reported as stolen by the cardholder</td>
+    </tr>
+    <tr>
+      <td><code>pickup_card</code></td>
+      <td>Your card cannot be used for this payment</td>
+      <td>The card issuer requests that the card be retained</td>
+    </tr>
+    <tr>
+      <td><code>restricted_card</code></td>
+      <td>Your card has restrictions</td>
+      <td>The card has restrictions that prevent this payment</td>
+    </tr>
+    <tr>
+      <td><code>security_violation</code></td>
+      <td>Security violation detected</td>
+      <td>The payment was flagged for potential fraud</td>
+    </tr>
+    <tr>
+      <td><code>service_not_allowed</code></td>
+      <td>Service not allowed</td>
+      <td>The card issuer does not allow this type of transaction</td>
+    </tr>
+    <tr>
+      <td><code>transaction_not_allowed</code></td>
+      <td>Transaction not allowed</td>
+      <td>The transaction type is not permitted for this card</td>
+    </tr>
+    <tr>
+      <td><code>processing_error</code></td>
+      <td>An error occurred processing your card</td>
+      <td>A technical error occurred during card processing</td>
+    </tr>
+    <tr>
+      <td><code>issuer_not_available</code></td>
+      <td>Card issuer temporarily unavailable</td>
+      <td>The card issuer's system is temporarily down</td>
+    </tr>
+    <tr>
+      <td><code>try_again_later</code></td>
+      <td>Please try again later</td>
+      <td>Temporary processing issue, retry may succeed</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+## Bank Transfer Errors
+
+<div className="overflow-x-auto">
+<table>
+  <thead>
+    <tr>
+      <th>Error Code</th>
+      <th>Error Message</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>invalid_account_number</code></td>
+      <td>Invalid bank account number</td>
+      <td>The provided bank account number is invalid</td>
+    </tr>
+    <tr>
+      <td><code>invalid_routing_number</code></td>
+      <td>Invalid routing number</td>
+      <td>The routing number is invalid or not found</td>
+    </tr>
+    <tr>
+      <td><code>account_closed</code></td>
+      <td>Bank account is closed</td>
+      <td>The specified bank account has been closed</td>
+    </tr>
+    <tr>
+      <td><code>account_frozen</code></td>
+      <td>Bank account is frozen</td>
+      <td>The account is temporarily frozen or restricted</td>
+    </tr>
+    <tr>
+      <td><code>insufficient_funds_bank</code></td>
+      <td>Insufficient funds in bank account</td>
+      <td>The bank account does not have sufficient funds</td>
+    </tr>
+    <tr>
+      <td><code>invalid_account_holder</code></td>
+      <td>Account holder name mismatch</td>
+      <td>The account holder name doesn't match records</td>
+    </tr>
+    <tr>
+      <td><code>bank_declined</code></td>
+      <td>Bank declined the transfer</td>
+      <td>The bank rejected the transfer request</td>
+    </tr>
+    <tr>
+      <td><code>transfer_limit_exceeded</code></td>
+      <td>Transfer limit exceeded</td>
+      <td>The transfer amount exceeds daily/monthly limits</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+## Mobile Money Errors
+
+<div className="overflow-x-auto">
+<table>
+  <thead>
+    <tr>
+      <th>Error Code</th>
+      <th>Error Message</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>invalid_mobile_number</code></td>
+      <td>Invalid mobile number</td>
+      <td>The mobile number format is incorrect</td>
+    </tr>
+    <tr>
+      <td><code>mobile_money_not_registered</code></td>
+      <td>Mobile money account not found</td>
+      <td>No mobile money account found for this number</td>
+    </tr>
+    <tr>
+      <td><code>mobile_money_insufficient_funds</code></td>
+      <td>Insufficient mobile money balance</td>
+      <td>The mobile money account has insufficient funds</td>
+    </tr>
+    <tr>
+      <td><code>mobile_money_declined</code></td>
+      <td>Mobile money payment declined</td>
+      <td>The mobile money provider declined the payment</td>
+    </tr>
+    <tr>
+      <td><code>mobile_money_timeout</code></td>
+      <td>Mobile money transaction timeout</td>
+      <td>The mobile money transaction timed out</td>
+    </tr>
+    <tr>
+      <td><code>mobile_money_limit_exceeded</code></td>
+      <td>Mobile money limit exceeded</td>
+      <td>Transaction exceeds mobile money daily limits</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+## Error Handling Implementation
+
+### 🔄 Retry Logic
+
+Implement intelligent retry logic for different error types:
+
+```javascript
+class PaymentErrorHandler {
+  constructor() {
+    this.maxRetries = 3;
+    this.retryableErrors = ['api_error', 'rate_limit_error'];
+    this.nonRetryableErrors = ['authentication_error', 'invalid_request_error'];
+  }
+  
+  async handlePaymentRequest(paymentData) {
+    let attempt = 0;
+    
+    while (attempt < this.maxRetries) {
+      try {
+        const response = await this.makePaymentRequest(paymentData);
+        return response;
+        
+      } catch (error) {
+        attempt++;
+        
+        // Don't retry on client errors
+        if (this.isClientError(error)) {
+          throw this.formatUserError(error);
+        }
+        
+        // Don't retry on final attempt
+        if (attempt >= this.maxRetries) {
+          throw error;
+        }
+        
+        // Calculate delay with exponential backoff
+        const delay = this.calculateRetryDelay(attempt, error);
+        await this.sleep(delay);
+      }
+    }
+  }
+  
+  isClientError(error) {
+    return error.status >= 400 && error.status < 500;
+  }
+  
+  calculateRetryDelay(attempt, error) {
+    // Use retry_after header if available (rate limiting)
+    if (error.retry_after) {
+      return error.retry_after * 1000;
+    }
+    
+    // Exponential backoff with jitter
+    const baseDelay = 1000; // 1 second
+    const maxDelay = 30000;  // 30 seconds
+    const exponentialDelay = baseDelay * Math.pow(2, attempt - 1);
+    const jitter = Math.random() * 1000;
+    
+    return Math.min(maxDelay, exponentialDelay + jitter);
+  }
+  
+  formatUserError(error) {
+    const userMessages = {
+      'card_declined': 'Your card was declined. Please try a different payment method.',
+      'insufficient_funds': 'Your card has insufficient funds. Please use a different card.',
+      'expired_card': 'Your card has expired. Please update your payment information.',
+      'incorrect_cvc': 'The security code is incorrect. Please check and try again.',
+      'invalid_api_key': 'Authentication failed. Please contact support.'
+    };
+    
+    return {
+      userMessage: userMessages[error.code] || 'An error occurred processing your payment.',
+      errorCode: error.code,
+      canRetry: this.retryableErrors.includes(error.type)
+    };
+  }
+}
+```
+
+### 🎯 User-Friendly Error Messages
+
+Display appropriate messages to users:
+
+```javascript
+// Error message mapping
+const getUserErrorMessage = (error) => {
+  const messages = {
+    // Card errors
+    'card_declined': 'Your card was declined. Please try a different payment method or contact your bank.',
+    'insufficient_funds': 'Your account has insufficient funds. Please use a different card or add funds to your account.',
+    'expired_card': 'Your card has expired. Please update your payment information with a valid card.',
+    'incorrect_cvc': 'The security code is incorrect. Please check the 3-4 digit code on your card and try again.',
+    'lost_card': 'Your card has been reported lost. Please use a different payment method.',
+    'stolen_card': 'Your card has been reported stolen. Please use a different payment method.',
+    
+    // Processing errors
+    'processing_error': 'We encountered an error processing your payment. Please try again.',
+    'issuer_not_available': 'Your card issuer is temporarily unavailable. Please try again later.',
+    'try_again_later': 'Please try again in a few minutes.',
+    
+    // Request errors
+    'invalid_amount': 'The payment amount is invalid. Please check and try again.',
+    'currency_not_supported': 'This currency is not supported. Please select a different currency.',
+    
+    // General fallback
+    'default': 'An unexpected error occurred. Please try again or contact support if the problem persists.'
+  };
+  
+  return messages[error.code] || messages.default;
+};
+
+// Usage in UI
+const handlePaymentError = (error) => {
+  const userMessage = getUserErrorMessage(error);
+  
+  // Display to user
+  showErrorMessage(userMessage);
+  
+  // Log technical details for debugging
+  console.error('Payment error:', {
+    code: error.code,
+    type: error.type,
+    requestId: error.request_id,
+    timestamp: new Date().toISOString()
+  });
+};
+```
+
+## Debugging and Logging
+
+### 🔍 Request ID Tracking
+
+Use request IDs for debugging:
+
+```javascript
+// Include request ID in error logging
+const logPaymentError = (error, context) => {
+  const logEntry = {
+    timestamp: new Date().toISOString(),
+    level: 'error',
+    message: 'Payment processing failed',
+    error: {
+      type: error.type,
+      code: error.code,
+      message: error.message,
+      request_id: error.request_id
+    },
+    context: {
+      user_id: context.userId,
+      payment_amount: context.amount,
+      payment_method: context.paymentMethod,
+      session_id: context.sessionId
+    }
+  };
+  
+  console.error(JSON.stringify(logEntry));
+  
+  // Send to monitoring service
+  errorMonitoring.captureError(logEntry);
+};
+```
+
+### 📊 Error Monitoring
+
+Set up comprehensive error monitoring:
+
+```javascript
+class ErrorMonitoring {
+  constructor() {
+    this.errorCounts = new Map();
+    this.alertThresholds = {
+      'card_declined': 0.15, // Alert if > 15% decline rate
+      'api_error': 0.01,     // Alert if > 1% API errors
+      'timeout': 0.05        // Alert if > 5% timeouts
+    };
+  }
+  
+  recordError(errorType, errorCode) {
+    const key = `${errorType}:${errorCode}`;
+    const current = this.errorCounts.get(key) || 0;
+    this.errorCounts.set(key, current + 1);
+    
+    this.checkAlertThresholds(errorType, errorCode);
+  }
+  
+  checkAlertThresholds(errorType, errorCode) {
+    const threshold = this.alertThresholds[errorCode];
+    if (!threshold) return;
+    
+    const errorRate = this.calculateErrorRate(errorType, errorCode);
+    if (errorRate > threshold) {
+      this.sendAlert({
+        type: 'high_error_rate',
+        errorCode: errorCode,
+        currentRate: errorRate,
+        threshold: threshold
+      });
+    }
+  }
+  
+  sendAlert(alertData) {
+    // Send to monitoring service
+    console.warn('Error rate alert:', alertData);
+  }
+}
+```
+
+## Testing Error Scenarios
+
+### 🧪 Error Testing
+
+Test error handling with specific test cases:
+
+```javascript
+// Test different error scenarios
+describe('Payment Error Handling', () => {
+  const testCards = {
+    declined: '4000000000000002',
+    insufficientFunds: '4000000000009995',
+    expired: '4000000000000069',
+    incorrectCvc: '4000000000000127'
+  };
+  
+  test('handles declined card gracefully', async () => {
+    const payment = await createPayment({
+      card: testCards.declined,
+      amount: 1000
+    });
+    
+    expect(payment.error.code).toBe('card_declined');
+    expect(payment.error.type).toBe('card_error');
+  });
+  
+  test('handles rate limiting', async () => {
+    // Simulate rate limit by making many requests
+    const promises = Array(100).fill().map(() => 
+      createPayment({ card: '4111111111111111', amount: 100 })
+    );
+    
+    const results = await Promise.allSettled(promises);
+    const rateLimited = results.some(r => 
+      r.status === 'rejected' && 
+      r.reason.error.code === 'rate_limit_exceeded'
+    );
+    
+    expect(rateLimited).toBe(true);
+  });
+});
+```
+
+<Warning>
+**Never Ignore Errors:** Always handle API errors appropriately. Unhandled errors can lead to poor user experience and failed transactions.
+</Warning>
+
+<div style={{textAlign: 'center', marginTop: '2rem'}}>
+
+**Ready to implement robust error handling?**
+
+<CardGroup cols={2}>
+  <Card title="🔄 Best Practices" icon="check-circle" href="/api-basics/best-practices">
+    Learn error handling best practices
+  </Card>
+  <Card title="🧪 Testing Guide" icon="flask" href="/api-basics/testing">
+    Test error scenarios comprehensively
+  </Card>
+</CardGroup>
+
+</div>

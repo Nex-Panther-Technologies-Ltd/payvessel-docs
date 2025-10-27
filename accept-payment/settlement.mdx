@@ -1,0 +1,941 @@
+---
+title: "Settlement"
+description: "Manage payment settlements and payouts with automated scheduling and comprehensive reporting"
+---
+
+# Settlement
+
+**Automate payment settlements with flexible payout schedules, multi-currency support, and detailed reconciliation.**
+
+Streamline your settlement process with automated payouts, real-time balance tracking, and comprehensive settlement reporting for efficient cash flow management.
+
+<CardGroup cols={2}>
+  <Card title="⚡ Automated Payouts" icon="bolt">
+    Scheduled settlements with flexible timing
+  </Card>
+  <Card title="🌍 Multi-Currency" icon="globe">
+    Global settlement support with currency conversion
+  </Card>
+</CardGroup>
+
+***
+
+## How It Works
+
+### 🔄 Settlement Process
+
+<Steps>
+  <Step title="Payment Collection">
+    Customer payments are collected and processed
+  </Step>
+  <Step title="Balance Accumulation">
+    Funds accumulate in your settlement balance
+  </Step>
+  <Step title="Settlement Schedule">
+    Payouts occur based on your configured schedule
+  </Step>
+  <Step title="Bank Transfer">
+    Funds are transferred to your designated bank account
+  </Step>
+  <Step title="Reconciliation">
+    Detailed settlement reports are generated
+  </Step>
+</Steps>
+
+### 💰 Settlement Types
+
+<CardGroup cols={3}>
+  <Card title="📅 Scheduled" icon="calendar">
+    Daily, weekly, or monthly payouts
+  </Card>
+  <Card title="⚡ Instant" icon="zap">
+    On-demand settlement for eligible funds
+  </Card>
+  <Card title="🎯 Conditional" icon="target">
+    Minimum balance or trigger-based payouts
+  </Card>
+</CardGroup>
+
+## API Implementation
+
+### 🚀 Get Settlement Balance
+
+```bash
+curl https://api.payvessel.com/api/v1/balance \
+  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
+  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF"
+```
+
+### 📊 Balance Response
+
+```json
+{
+  "object": "balance",
+  "available": [
+    {
+      "amount": 245000,
+      "currency": "USD",
+      "source_types": {
+        "card": 200000,
+        "bank_transfer": 45000
+      }
+    }
+  ],
+  "pending": [
+    {
+      "amount": 50000,
+      "currency": "USD",
+      "source_types": {
+        "card": 30000,
+        "bank_transfer": 20000
+      }
+    }
+  ],
+  "reserved": [
+    {
+      "amount": 15000,
+      "currency": "USD",
+      "reason": "chargeback_protection"
+    }
+  ],
+  "next_payout": {
+    "amount": 245000,
+    "currency": "USD",
+    "scheduled_date": "2024-01-20T09:00:00Z",
+    "method": "bank_transfer"
+  }
+}
+```
+
+### 💸 Create Manual Payout
+
+```bash
+curl https://api.payvessel.com/api/v1/payouts \
+  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
+  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "amount": 100000,
+    "currency": "USD",
+    "method": "bank_transfer",
+    "destination": "bank_acc_1234567890abcdef",
+    "description": "Manual payout for Q1 sales",
+    "metadata": {
+      "period": "Q1-2024",
+      "category": "sales",
+      "requested_by": "finance_team"
+    }
+  }'
+```
+
+### 📝 Payout Parameters
+
+<AccordionGroup>
+  <Accordion icon="money-bill" title="Payout Details">
+    **amount** (number, required) - Payout amount in cents
+    **currency** (string, required) - Three-letter currency code
+    **method** (string, required) - Payout method (bank_transfer, debit_card)
+    **destination** (string, required) - Destination account ID
+  </Accordion>
+  <Accordion icon="info" title="Additional Information">
+    **description** (string, optional) - Payout description
+    **statement_descriptor** (string, optional) - Bank statement description
+    **metadata** (object, optional) - Custom metadata
+  </Accordion>
+  <Accordion icon="cog" title="Processing Options">
+    **instant** (boolean) - Request instant payout if available
+    **split_payouts** (array) - Split payout to multiple destinations
+    **hold_until** (string) - Hold payout until specific date
+  </Accordion>
+</AccordionGroup>
+
+### ✅ Payout Response
+
+```json
+{
+  "id": "po_1234567890abcdef",
+  "object": "payout",
+  "amount": 100000,
+  "currency": "USD",
+  "status": "pending",
+  "method": "bank_transfer",
+  "destination": {
+    "id": "bank_acc_1234567890abcdef",
+    "bank_name": "Wells Fargo",
+    "account_number": "****1234",
+    "routing_number": "121000248"
+  },
+  "estimated_arrival": "2024-01-22T09:00:00Z",
+  "created": 1634567890,
+  "description": "Manual payout for Q1 sales",
+  "statement_descriptor": "PAYVESSEL PAYOUT",
+  "fees": {
+    "amount": 50,
+    "currency": "USD",
+    "description": "Standard bank transfer fee"
+  },
+  "metadata": {
+    "period": "Q1-2024",
+    "category": "sales",
+    "requested_by": "finance_team"
+  }
+}
+```
+
+## Implementation Examples
+
+### 🟨 Node.js Implementation
+
+```javascript
+const payvessel = require('payvessel')('PVKEY-3ZO1QOSQH83C5Q3PBCVUT1');
+
+async function getSettlementBalance() {
+  try {
+    const balance = await payvessel.balance.retrieve();
+    
+    console.log('Available balance:', {
+      amount: balance.available[0].amount / 100,
+      currency: balance.available[0].currency
+    });
+    
+    console.log('Pending balance:', {
+      amount: balance.pending[0].amount / 100,
+      currency: balance.pending[0].currency
+    });
+    
+    return balance;
+  } catch (error) {
+    console.error('Balance retrieval error:', error.message);
+    throw error;
+  }
+}
+
+async function createPayout(payoutData) {
+  try {
+    const payout = await payvessel.payouts.create({
+      amount: payoutData.amount,
+      currency: payoutData.currency || 'USD',
+      method: payoutData.method || 'bank_transfer',
+      destination: payoutData.destination,
+      description: payoutData.description,
+      instant: payoutData.instant || false,
+      metadata: payoutData.metadata || {}
+    });
+
+    console.log('Payout created:', payout.id);
+    console.log('Status:', payout.status);
+    console.log('Estimated arrival:', payout.estimated_arrival);
+
+    // Log payout for tracking
+    await logPayoutActivity(payout);
+
+    return payout;
+  } catch (error) {
+    console.error('Payout creation error:', error.message);
+    
+    // Handle specific error cases
+    if (error.code === 'insufficient_funds') {
+      throw new Error('Insufficient balance for payout');
+    } else if (error.code === 'invalid_destination') {
+      throw new Error('Invalid destination account');
+    }
+    
+    throw error;
+  }
+}
+
+async function scheduleAutomaticPayouts(schedule) {
+  try {
+    const payoutSchedule = await payvessel.payoutSchedules.create({
+      interval: schedule.interval, // daily, weekly, monthly
+      day_of_week: schedule.day_of_week, // For weekly payouts
+      day_of_month: schedule.day_of_month, // For monthly payouts
+      minimum_amount: schedule.minimum_amount || 1000, // Minimum payout amount
+      destination: schedule.destination,
+      active: true,
+      metadata: {
+        created_by: 'automated_system',
+        purpose: 'regular_settlement'
+      }
+    });
+
+    console.log('Payout schedule created:', payoutSchedule.id);
+    return payoutSchedule;
+  } catch (error) {
+    console.error('Schedule creation error:', error.message);
+    throw error;
+  }
+}
+
+async function getPayoutHistory(filters = {}) {
+  try {
+    const payouts = await payvessel.payouts.list({
+      limit: filters.limit || 20,
+      created: filters.created,
+      status: filters.status,
+      destination: filters.destination
+    });
+
+    return payouts.data.map(payout => ({
+      id: payout.id,
+      amount: payout.amount / 100,
+      currency: payout.currency,
+      status: payout.status,
+      method: payout.method,
+      created: new Date(payout.created * 1000),
+      estimated_arrival: payout.estimated_arrival
+    }));
+  } catch (error) {
+    console.error('Payout history error:', error.message);
+    throw error;
+  }
+}
+
+// Usage examples
+const balance = await getSettlementBalance();
+
+const payout = await createPayout({
+  amount: 50000, // $500.00
+  destination: 'bank_acc_1234567890abcdef',
+  description: 'Weekly settlement payout',
+  metadata: {
+    period: 'week_3_2024',
+    auto_generated: false
+  }
+});
+
+const schedule = await scheduleAutomaticPayouts({
+  interval: 'weekly',
+  day_of_week: 1, // Monday
+  minimum_amount: 10000, // $100 minimum
+  destination: 'bank_acc_1234567890abcdef'
+});
+```
+
+### 🐍 Python Implementation
+
+```python
+import payvessel
+from datetime import datetime, timedelta
+
+payvessel.api_key = "PVKEY-3ZO1QOSQH83C5Q3PBCVUT1"
+
+def get_settlement_balance():
+    try:
+        balance = payvessel.Balance.retrieve()
+        
+        available = balance.available[0] if balance.available else {'amount': 0, 'currency': 'USD'}
+        pending = balance.pending[0] if balance.pending else {'amount': 0, 'currency': 'USD'}
+        
+        print(f'Available balance: ${available["amount"] / 100:.2f} {available["currency"]}')
+        print(f'Pending balance: ${pending["amount"] / 100:.2f} {pending["currency"]}')
+        
+        return balance
+    
+    except payvessel.error.PayvesselError as e:
+        print(f'Balance retrieval error: {e.user_message}')
+        raise
+
+def create_instant_payout(amount, destination, description=None):
+    try:
+        payout = payvessel.Payout.create(
+            amount=amount,
+            currency='USD',
+            method='instant',
+            destination=destination,
+            description=description or 'Instant payout request',
+            metadata={
+                'type': 'instant',
+                'requested_at': datetime.now().isoformat()
+            }
+        )
+        
+        print(f'Instant payout created: {payout.id}')
+        print(f'Status: {payout.status}')
+        
+        if payout.status == 'paid':
+            print('Instant payout completed successfully')
+        else:
+            print(f'Payout queued, estimated arrival: {payout.estimated_arrival}')
+        
+        return payout
+    
+    except payvessel.error.PayvesselError as e:
+        print(f'Instant payout error: {e.user_message}')
+        raise
+
+def calculate_settlement_fees(amount, method='bank_transfer'):
+    try:
+        fee_calculation = payvessel.Payout.calculate_fees(
+            amount=amount,
+            method=method,
+            currency='USD'
+        )
+        
+        return {
+            'payout_amount': amount,
+            'fee_amount': fee_calculation.fee_amount,
+            'net_amount': amount - fee_calculation.fee_amount,
+            'fee_rate': fee_calculation.fee_rate
+        }
+    
+    except payvessel.error.PayvesselError as e:
+        print(f'Fee calculation error: {e.user_message}')
+        raise
+
+def generate_settlement_report(start_date, end_date):
+    try:
+        payouts = payvessel.Payout.list(
+            created={
+                'gte': int(start_date.timestamp()),
+                'lte': int(end_date.timestamp())
+            },
+            limit=100
+        )
+        
+        report = {
+            'period': {
+                'start': start_date.isoformat(),
+                'end': end_date.isoformat()
+            },
+            'summary': {
+                'total_payouts': len(payouts.data),
+                'total_amount': sum(p.amount for p in payouts.data),
+                'total_fees': sum(p.fees.get('amount', 0) for p in payouts.data)
+            },
+            'by_status': {},
+            'by_method': {}
+        }
+        
+        for payout in payouts.data:
+            # Group by status
+            status = payout.status
+            report['by_status'][status] = report['by_status'].get(status, 0) + 1
+            
+            # Group by method
+            method = payout.method
+            report['by_method'][method] = report['by_method'].get(method, 0) + 1
+        
+        return report
+    
+    except payvessel.error.PayvesselError as e:
+        print(f'Report generation error: {e.user_message}')
+        raise
+
+# Usage examples
+balance = get_settlement_balance()
+
+instant_payout = create_instant_payout(
+    amount=25000,  # $250.00
+    destination='bank_acc_1234567890abcdef',
+    description='Urgent payment request'
+)
+
+fees = calculate_settlement_fees(100000, 'instant')  # $1000.00
+print(f'Settlement fees: ${fees["fee_amount"] / 100:.2f}')
+
+report = generate_settlement_report(
+    datetime.now() - timedelta(days=30),
+    datetime.now()
+)
+```
+
+### 🐘 PHP Implementation
+
+```php
+<?php
+require_once('vendor/autoload.php');
+
+\Payvessel\Payvessel::setApiKey("PVKEY-3ZO1QOSQH83C5Q3PBCVUT1");
+
+function getSettlementBalance() {
+    try {
+        $balance = \Payvessel\Balance::retrieve();
+        
+        $available = $balance->available[0] ?? ['amount' => 0, 'currency' => 'USD'];
+        $pending = $balance->pending[0] ?? ['amount' => 0, 'currency' => 'USD'];
+        
+        echo "Available balance: $" . ($available['amount'] / 100) . " " . $available['currency'] . "\n";
+        echo "Pending balance: $" . ($pending['amount'] / 100) . " " . $pending['currency'] . "\n";
+        
+        return $balance;
+    } catch (\Payvessel\Exception\ApiErrorException $e) {
+        echo "Balance retrieval error: " . $e->getMessage() . "\n";
+        throw $e;
+    }
+}
+
+function createScheduledPayout($amount, $destination, $scheduleDate) {
+    try {
+        $payout = \Payvessel\Payout::create([
+            'amount' => $amount,
+            'currency' => 'USD',
+            'method' => 'bank_transfer',
+            'destination' => $destination,
+            'hold_until' => $scheduleDate,
+            'description' => 'Scheduled settlement payout',
+            'metadata' => [
+                'type' => 'scheduled',
+                'scheduled_date' => $scheduleDate
+            ]
+        ]);
+
+        echo "Scheduled payout created: " . $payout->id . "\n";
+        echo "Amount: $" . ($payout->amount / 100) . "\n";
+        echo "Scheduled for: " . $scheduleDate . "\n";
+
+        return $payout;
+    } catch (\Payvessel\Exception\ApiErrorException $e) {
+        echo "Scheduled payout error: " . $e->getMessage() . "\n";
+        throw $e;
+    }
+}
+
+function processBulkPayouts($payouts) {
+    $results = [];
+    
+    foreach ($payouts as $payoutData) {
+        try {
+            $payout = \Payvessel\Payout::create([
+                'amount' => $payoutData['amount'],
+                'currency' => $payoutData['currency'] ?? 'USD',
+                'method' => $payoutData['method'] ?? 'bank_transfer',
+                'destination' => $payoutData['destination'],
+                'description' => $payoutData['description'] ?? 'Bulk payout',
+                'metadata' => array_merge(
+                    ['bulk_id' => uniqid('bulk_')],
+                    $payoutData['metadata'] ?? []
+                )
+            ]);
+
+            $results[] = [
+                'reference_id' => $payoutData['reference_id'] ?? null,
+                'payout_id' => $payout->id,
+                'status' => 'success',
+                'amount' => $payout->amount
+            ];
+        } catch (\Payvessel\Exception\ApiErrorException $e) {
+            $results[] = [
+                'reference_id' => $payoutData['reference_id'] ?? null,
+                'status' => 'failed',
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+    
+    return $results;
+}
+
+function getPayoutAnalytics($period = 30) {
+    try {
+        $startDate = time() - ($period * 24 * 60 * 60);
+        
+        $payouts = \Payvessel\Payout::all([
+            'created' => ['gte' => $startDate],
+            'limit' => 100
+        ]);
+        
+        $analytics = [
+            'total_payouts' => count($payouts->data),
+            'total_amount' => 0,
+            'total_fees' => 0,
+            'by_status' => [],
+            'by_method' => [],
+            'average_amount' => 0
+        ];
+        
+        foreach ($payouts->data as $payout) {
+            $analytics['total_amount'] += $payout->amount;
+            $analytics['total_fees'] += $payout->fees['amount'] ?? 0;
+            
+            // Group by status
+            $status = $payout->status;
+            $analytics['by_status'][$status] = ($analytics['by_status'][$status] ?? 0) + 1;
+            
+            // Group by method
+            $method = $payout->method;
+            $analytics['by_method'][$method] = ($analytics['by_method'][$method] ?? 0) + 1;
+        }
+        
+        if ($analytics['total_payouts'] > 0) {
+            $analytics['average_amount'] = $analytics['total_amount'] / $analytics['total_payouts'];
+        }
+        
+        return $analytics;
+    } catch (\Payvessel\Exception\ApiErrorException $e) {
+        echo "Analytics error: " . $e->getMessage() . "\n";
+        throw $e;
+    }
+}
+
+// Usage examples
+$balance = getSettlementBalance();
+
+$scheduledPayout = createScheduledPayout(
+    75000, // $750.00
+    'bank_acc_1234567890abcdef',
+    date('Y-m-d', strtotime('+3 days'))
+);
+
+$bulkPayouts = [
+    [
+        'reference_id' => 'VENDOR_001',
+        'amount' => 50000,
+        'destination' => 'bank_acc_1111111111111111',
+        'description' => 'Vendor payment #001'
+    ],
+    [
+        'reference_id' => 'VENDOR_002',
+        'amount' => 75000,
+        'destination' => 'bank_acc_2222222222222222',
+        'description' => 'Vendor payment #002'
+    ]
+];
+
+$bulkResults = processBulkPayouts($bulkPayouts);
+?>
+```
+
+## Advanced Settlement Features
+
+### 🌍 Multi-Currency Settlements
+
+Handle settlements across different currencies:
+
+```javascript
+// Multi-currency balance check
+const balance = await payvessel.balance.retrieve();
+
+balance.available.forEach(curr => {
+  console.log(`${curr.currency}: ${curr.amount / 100}`);
+});
+
+// Create currency-specific payout
+const euroPayout = await payvessel.payouts.create({
+  amount: 50000, // €500.00
+  currency: 'EUR',
+  destination: 'bank_acc_eur_123456',
+  method: 'sepa_credit_transfer'
+});
+```
+
+### 🎯 Conditional Settlements
+
+Set up smart settlement rules:
+
+```javascript
+const conditionalSettlement = await payvessel.settlementRules.create({
+  name: 'High Volume Settlement',
+  conditions: {
+    minimum_balance: 100000, // $1,000 minimum
+    maximum_hold_days: 7,
+    business_days_only: true
+  },
+  actions: {
+    payout_percentage: 90, // Keep 10% as reserve
+    destination: 'bank_acc_primary',
+    notification_email: 'finance@company.com'
+  }
+});
+```
+
+### 📊 Settlement Analytics
+
+Advanced reporting and insights:
+
+```javascript
+const analytics = await payvessel.settlements.analytics({
+  period: 'last_90_days',
+  group_by: ['currency', 'method', 'status'],
+  include_forecasting: true
+});
+
+console.log('Settlement insights:', {
+  velocity: analytics.settlement_velocity,
+  average_amount: analytics.average_settlement,
+  peak_days: analytics.peak_settlement_days,
+  forecasted_next_30_days: analytics.forecast.next_30_days
+});
+```
+
+## Settlement Management
+
+### 📋 Payout History
+
+```bash
+curl "https://api.payvessel.com/api/v1/payouts?limit=50&status=paid" \
+  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
+  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF"
+```
+
+### 📊 Settlement Summary
+
+```json
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "po_1234567890abcdef",
+      "amount": 100000,
+      "currency": "USD",
+      "status": "paid",
+      "method": "bank_transfer",
+      "created": 1634567890,
+      "arrival_date": 1634654290
+    }
+  ],
+  "summary": {
+    "total_payouts": 156,
+    "total_amount": 2450000,
+    "total_fees": 7800,
+    "net_amount": 2442200,
+    "pending_payouts": 3,
+    "failed_payouts": 1
+  }
+}
+```
+
+### 🔍 Individual Payout Details
+
+```bash
+curl https://api.payvessel.com/api/v1/payouts/po_1234567890abcdef \
+  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
+  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF"
+```
+
+## Settlement Reconciliation
+
+### 📝 Reconciliation Reports
+
+Generate detailed settlement reconciliation:
+
+```javascript
+async function generateReconciliationReport(settlementDate) {
+  const transactions = await payvessel.transactions.list({
+    created: {
+      gte: settlementDate.start,
+      lte: settlementDate.end
+    },
+    status: 'succeeded'
+  });
+
+  const fees = await payvessel.fees.list({
+    created: {
+      gte: settlementDate.start,
+      lte: settlementDate.end
+    }
+  });
+
+  const refunds = await payvessel.refunds.list({
+    created: {
+      gte: settlementDate.start,
+      lte: settlementDate.end
+    }
+  });
+
+  return {
+    period: settlementDate,
+    gross_revenue: transactions.data.reduce((sum, t) => sum + t.amount, 0),
+    total_fees: fees.data.reduce((sum, f) => sum + f.amount, 0),
+    total_refunds: refunds.data.reduce((sum, r) => sum + r.amount, 0),
+    net_settlement: calculateNetSettlement(transactions, fees, refunds),
+    transaction_breakdown: groupTransactionsByType(transactions.data)
+  };
+}
+```
+
+### 🔍 Settlement Verification
+
+```javascript
+function verifySettlement(payoutId, expectedAmount) {
+  return payvessel.payouts.retrieve(payoutId)
+    .then(payout => {
+      const verification = {
+        payout_id: payoutId,
+        expected_amount: expectedAmount,
+        actual_amount: payout.amount,
+        matches: payout.amount === expectedAmount,
+        status: payout.status,
+        discrepancy: payout.amount - expectedAmount
+      };
+
+      if (!verification.matches) {
+        console.warn('Settlement amount discrepancy detected:', verification);
+      }
+
+      return verification;
+    });
+}
+```
+
+## Industry Applications
+
+### 🛍️ E-commerce Settlements
+
+<AccordionGroup>
+  <Accordion icon="store" title="Marketplace Platforms">
+    **Multi-Vendor Payouts:**
+    - Automatic seller settlements
+    - Commission deductions
+    - Tax withholding
+    - Performance-based settlements
+  </Accordion>
+  <Accordion icon="shipping-fast" title="Subscription Services">
+    **Recurring Revenue:**
+    - Monthly recurring settlements
+    - Pro-rated settlements
+    - Failed payment handling
+    - Dunning management integration
+  </Accordion>
+  <Accordion icon="mobile-alt" title="Digital Products">
+    **Content Platforms:**
+    - Creator revenue sharing
+    - Geographic revenue splits
+    - Tax compliance settlements
+    - Royalty distributions
+  </Accordion>
+</AccordionGroup>
+
+### 🏢 Service Industries
+
+<CardGroup cols={2}>
+  <Card title="🚗 Rideshare & Delivery" icon="car">
+    - Driver/courier payouts
+    - Instant cash-out options
+    - Fuel incentive settlements
+    - Performance bonuses
+  </Card>
+  <Card title="🏨 Hospitality" icon="hotel">
+    - Property owner settlements
+    - Revenue sharing models
+    - Seasonal settlement adjustments
+    - Multi-property management
+  </Card>
+</CardGroup>
+
+## Security & Compliance
+
+### 🔒 Settlement Security
+
+<CardGroup cols={2}>
+  <Card title="🛡️ Fraud Prevention" icon="shield">
+    - Payout velocity monitoring
+    - Destination verification
+    - Suspicious activity detection
+    - Multi-factor authentication
+  </Card>
+  <Card title="📋 Compliance" icon="clipboard-list">
+    - AML transaction monitoring
+    - Tax reporting integration
+    - Regulatory compliance
+    - Audit trail maintenance
+  </Card>
+</CardGroup>
+
+### 🔐 Access Controls
+
+```javascript
+// Role-based settlement permissions
+const settlementPermissions = {
+  finance_manager: ['create_payout', 'view_balance', 'schedule_settlements'],
+  accountant: ['view_balance', 'generate_reports', 'reconcile_settlements'],
+  cfo: ['all_permissions'],
+  automated_system: ['create_scheduled_payouts', 'process_bulk_settlements']
+};
+
+function authorizeSettlementAction(userRole, action) {
+  const permissions = settlementPermissions[userRole] || [];
+  return permissions.includes(action) || permissions.includes('all_permissions');
+}
+```
+
+## Webhook Integration
+
+### 🔔 Settlement Events
+
+Monitor settlement and payout events:
+
+```javascript
+// Webhook handler for settlement events
+app.post('/webhook/settlements', (req, res) => {
+  const event = req.body;
+  
+  switch (event.type) {
+    case 'balance.available':
+      handleBalanceUpdate(event.data);
+      break;
+    case 'payout.created':
+      logPayoutCreated(event.data);
+      break;
+    case 'payout.paid':
+      handlePayoutCompleted(event.data);
+      break;
+    case 'payout.failed':
+      handlePayoutFailed(event.data);
+      break;
+    case 'settlement.scheduled':
+      notifySettlementScheduled(event.data);
+      break;
+  }
+  
+  res.status(200).send('OK');
+});
+
+function handlePayoutCompleted(payoutData) {
+  // Update internal accounting
+  updateAccountingSystem(payoutData);
+  
+  // Send confirmation to finance team
+  sendPayoutConfirmation(payoutData);
+  
+  // Update cash flow forecasts
+  updateCashFlowProjections(payoutData);
+  
+  console.log(`Payout ${payoutData.id} completed: $${payoutData.amount / 100}`);
+}
+```
+
+## Best Practices
+
+### ✅ Settlement Optimization
+
+<CardGroup cols={2}>
+  <Card title="💰 Cash Flow Management" icon="chart-line">
+    - Optimize settlement frequency
+    - Maintain adequate reserves
+    - Plan for seasonal variations
+    - Monitor settlement velocity
+  </Card>
+  <Card title="⚡ Processing Efficiency" icon="bolt">
+    - Use bulk payout processing
+    - Implement automated scheduling
+    - Set up conditional settlements
+    - Minimize manual interventions
+  </Card>
+</CardGroup>
+
+### 📊 Reporting & Analytics
+
+- **Regular Reconciliation** - Daily settlement verification
+- **Performance Metrics** - Track settlement speed and accuracy
+- **Predictive Analytics** - Forecast cash flow needs
+- **Compliance Reporting** - Automated regulatory reports
+
+<Warning>
+**Settlement Limits:** Payout limits may apply based on your account verification level and processing history. Contact support for limit increases.
+</Warning>
+
+<div style={{textAlign: 'center', marginTop: '2rem'}}>
+
+**Ready to optimize your settlements?**
+
+<CardGroup cols={2}>
+  <Card title="🚀 API Integration" icon="code" href="/api-reference/introduction">
+    Explore settlement API documentation
+  </Card>
+  <Card title="📈 Analytics Setup" icon="chart-bar" href="/api-basics/webhooks">
+    Configure settlement event tracking
+  </Card>
+</CardGroup>
+
+</div>

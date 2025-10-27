@@ -7,7 +7,7 @@
     "light": "#ff8533",
     "dark": "#cc5500"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "https://www.payvessel.com/favicon.ico",
   "navigation": {
     "tabs": [
       {
@@ -18,33 +18,112 @@
             "pages": [
               "index",
               "quickstart",
-              "development"
+              "support"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Use cases",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "use-cases/fintechs",
+              "use-cases/banks-and-ofis",
+              "use-cases/travel-and-hospitality",
+              "use-cases/e-commerce",
+              "use-cases/remittance",
+              "use-cases/telecommunications"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "API Basics",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
+              "api-basics/authentication",
+              "api-basics/environments",
+              "api-basics/webhooks",
+              "api-basics/testing",
+              "api-basics/errors"
             ]
           },
           {
-            "group": "AI tools",
+            "group": "Accept Payment",
             "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "accept-payment/one-time-payment",
+              "accept-payment/customer-reserved-account",
+              "accept-payment/invoice",
+              "accept-payment/refunds",
+              "accept-payment/settlement",
+              "accept-payment/payment-links"
+            ]
+          },
+          {
+            "group": "Transfer/Payout",
+            "pages": [
+              "transfer-payout/single-transfers",
+              "transfer-payout/bulk-transfers"
+            ]
+          },
+          {
+            "group": "Wallets",
+            "pages": [
+              "wallets/create-wallet",
+              "wallets/wallet-balance",
+              "wallets/get-wallets",
+              "wallets/wallet-statement"
+            ]
+          },
+          {
+            "group": "Verification APIs",
+            "pages": [
+              "verification-apis/verifying-your-customers",
+              "verification-apis/bvn-verification",
+              "verification-apis/nin-verification",
+              "verification-apis/liveness-detections",
+              "verification-apis/face-comparison",
+              "verification-apis/credit-score-service",
+              "verification-apis/blacklist-check",
+              "verification-apis/loan-features"
+            ]
+          },
+          {
+            "group": "Bill Payments",
+            "pages": [
+              "bill-payments/get-billers-information",
+              "bill-payments/get-biller-products",
+              "bill-payments/verify-customer",
+              "bill-payments/create-bill-payment",
+              "bill-payments/get-bill-payments-history",
+              "bill-payments/get-bill-payment-details",
+              "bill-payments/requery-payment"
+            ]
+          },
+          {
+            "group": "Cardholders",
+            "pages": [
+              "cardholders/enroll-cardholder",
+              "cardholders/get-cardholders",
+              "cardholders/get-cardholder-by-id"
+            ]
+          },
+          {
+            "group": "Card Issuance",
+            "pages": [
+              "card-issuance/create-card",
+              "card-issuance/get-all-cards",
+              "card-issuance/get-a-card",
+              "card-issuance/fund-card",
+              "card-issuance/withdraw-from-card",
+              "card-issuance/freeze-card",
+              "card-issuance/unfreeze-card",
+              "card-issuance/terminate-card"
+            ]
+          },
+          {
+            "group": "Webhook",
+            "pages": [
+              "webhook/overview",
+              "webhook/verifying-webhooks",
+              "webhook/supported-events"
             ]
           }
+          
         ]
       },
       {
@@ -71,13 +150,13 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
+          "anchor": "Dashboard",
+          "href": "https://app.payvessel.com",
           "icon": "book-open-cover"
         },
         {
           "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
+          "href": "https://blog.payvessel.com",
           "icon": "newspaper"
         }
       ]
@@ -91,13 +170,13 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "mailto:support@payvessel.com"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "href": "https://app.payvessel.com"
     }
   },
   "contextual": {
@@ -114,9 +193,10 @@
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "facebook": "https://www.facebook.com/payvessel",
+      "x": "https://x.com/payvessel/",
+      "instagram": "https://www.instagram.com/payvessel/",
+      "linkedin": "https://www.linkedin.com/company/payvessel"
     }
   }
 }

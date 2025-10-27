@@ -1,80 +1,164 @@
 ---
 title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+description: "Chart your integration course before setting sail with Payvessel"
 ---
 
-## Get started in three steps
+<img
+  src="https://www.payvessel.com/hero-image-three.png"
+  alt="Payvessel Integration Journey"
+/>
 
-Get your documentation site running locally and make your first customization.
+# Payvessel Quickstart Guide
 
-### Step 1: Set up your local environment
+**Chart your integration course before setting sail with Payvessel.**
 
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
-    
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
-
-### Step 2: Deploy your changes
-
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
-    
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
-
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
-
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
-
-### Step 3: Go live
-
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
-
-## Next steps
-
-Now that you have your docs running, explore these key features:
+To integrate Payvessel into your application, follow this step-by-step navigation guide.
 
 <CardGroup cols={2}>
+  <Card title="⚡ Fast Setup" icon="bolt">
+    Get up and running in minutes with our streamlined onboarding
+  </Card>
+  <Card title="🔒 Secure Testing" icon="shield-check">
+    Test safely in our sandbox environment with no real money
+  </Card>
+</CardGroup>
 
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
+***
 
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
+## 🏗️ Step 1: Create Your Developer Account
+**Sign up for a free developer account** to access our sandbox environment where you can safely test all features without real money.
 
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
+<Frame>
+  <img src="/images/checks-passed.png" alt="Sandbox Environment Features" />
+</Frame>
 
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
+In the Payvessel sandbox, you'll be able to:
+- 💳 Process payments using test card data and mock accounts
+- 🏦 Simulate bank transfers and mobile money transactions
+- 🔔 Test webhooks and error scenarios
+- ✅ Validate customer identification processes
 
+<Tip>
+Learn more about testing in our sandbox environment in our [development guide](/development).
+</Tip>
+
+## ⚙️ Step 2: Configure Your Integration
+**Choose your integration vessel** based on your technical stack and business needs:
+
+<CardGroup cols={3}>
+  <Card title="Payvessel Checkout" icon="credit-card" href="/api-reference/endpoint/create">
+    Use our pre-built, optimized payment UI for quick implementation
+  </Card>
+  <Card title="SDKs & Plugins" icon="code" href="/essentials/code">
+    Leverage our libraries for popular frameworks and platforms
+  </Card>
+  <Card title="Direct API Integration" icon="plug" href="/api-reference/introduction">
+    Build custom payment flows using our flexible endpoints
+  </Card>
+</CardGroup>
+
+<Warning>
+📘 **New to APIs?**
+Read our [beginner-friendly guide](/essentials/markdown) to understand how APIs work and how to implement them in your application.
+</Warning>
+
+Once you select your integration method, test thoroughly using sandbox credentials and our provided test data. We've compiled common integration patterns and best practices to help you avoid early obstacles.
+
+<AccordionGroup>
+  <Accordion icon="flask" title="Testing Best Practices">
+    - Use our comprehensive test card numbers
+    - Validate all error scenarios
+    - Test webhook endpoints thoroughly
+    - Verify mobile money simulations
+  </Accordion>
+  <Accordion icon="book" title="Integration Patterns">
+    - Single payment flows
+    - Subscription billing
+    - Multi-party transactions
+    - Mobile-first implementations
+  </Accordion>
+</AccordionGroup>
+
+## 🚀 Step 3: Launch Your Live Account
+After successful testing, **upgrade to a production account** to access real transaction processing capabilities and actual fund movements.
+
+## 📋 Step 4: Complete Business Verification
+To begin live transactions, you'll need to **complete our verification process**, which includes submitting business documentation and bank account details for settlement.
+
+<Steps>
+  <Step title="Submit Business Documents">
+    Upload your business registration and tax documents
+  </Step>
+  <Step title="Verify Banking Details">
+    Provide settlement account information for fund transfers
+  </Step>
+  <Step title="Complete KYC Process">
+    Submit identity verification for business owners
+  </Step>
+  <Step title="Wait for Approval">
+    Our team will review and approve your application within 24-48 hours
+  </Step>
+</Steps>
+
+## 🌟 Step ∞: Go Live! 🚀
+**Once verified and approved, you're ready to navigate live waters!** Start accepting real payments in multiple currencies through your Payvessel dashboard.
+
+<CardGroup cols={2}>
+  <Card title="🎯 Explore Dashboard" icon="chart-line">
+    Discover advanced features and settings unavailable in test mode
+  </Card>
+  <Card title="✅ Review Integration" icon="list-check">
+    Use our go-live checklist to ensure everything is shipshape
+  </Card>
+  <Card title="🔄 Transfer Configurations" icon="arrows-rotate">
+    Migrate webhooks, redirect URLs, and security settings
+  </Card>
+  <Card title="📊 Monitor Performance" icon="gauge-high">
+    Track transactions and optimize your payment flows
+  </Card>
 </CardGroup>
 
 <Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
+**Pre-Launch Checklist:**
+- [ ] All sandbox tests passing
+- [ ] Webhook endpoints configured
+- [ ] Error handling implemented
+- [ ] Security best practices followed
+- [ ] Production credentials updated
 </Note>
+
+***
+
+## 🆘 Need Guidance?
+
+Our developer documentation includes detailed tutorials, API references, and troubleshooting guides to ensure smooth sailing throughout your integration journey.
+
+<CardGroup cols={2}>
+  <Card title="📚 Support" icon="book-open" href="/api-reference/introduction">
+    Comprehensive API references and guides
+  </Card>
+  <Card title="💬 Developer Support" icon="comments" href="https://support.payvessel.com">
+    Get help from our integration experts
+  </Card>
+  <Card title="🧪 Testing Tools" icon="vial" href="/development">
+    Sandbox environment and test utilities
+  </Card>
+  <Card title="📖 Code Examples" icon="code" href="/essentials/code">
+    Ready-to-use integration snippets
+  </Card>
+</CardGroup>
+
+<div style={{textAlign: 'center', marginTop: '2rem'}}>
+  
+**Ready to begin your payment journey?**
+
+<CardGroup cols={2}>
+  <Card title="🚀 Create Developer Account" icon="user-plus" href="https://dashboard.payvessel.com/signup">
+    Start building with Payvessel today
+  </Card>
+  <Card title="📖 Explore API Docs" icon="book" href="/api-reference/introduction">
+    Dive deep into our comprehensive API
+  </Card>
+</CardGroup>
+
+</div>

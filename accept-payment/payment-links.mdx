@@ -1,0 +1,1077 @@
+---
+title: "Payment Links"
+description: "Create shareable payment links for quick and easy payment collection"
+---
+
+# Payment Links
+
+**Generate secure, shareable payment links for seamless payment collection without coding.**
+
+Create professional payment pages with customizable branding, multiple payment methods, and detailed analytics for efficient payment collection across all channels.
+
+<CardGroup cols={2}>
+  <Card title="🔗 No-Code Solution" icon="link">
+    Create payment links without technical integration
+  </Card>
+  <Card title="📱 Multi-Channel" icon="mobile">
+    Share via email, SMS, social media, or QR codes
+  </Card>
+</CardGroup>
+
+***
+
+## How It Works
+
+### 🔄 Payment Link Flow
+
+<Steps>
+  <Step title="Create Link">
+    Generate payment link with amount and description
+  </Step>
+  <Step title="Share Link">
+    Send link via email, SMS, or embed on website
+  </Step>
+  <Step title="Customer Payment">
+    Customer clicks link and completes secure payment
+  </Step>
+  <Step title="Instant Notification">
+    Receive real-time payment confirmations
+  </Step>
+  <Step title="Automatic Receipt">
+    Customer receives payment receipt automatically
+  </Step>
+</Steps>
+
+### 💼 Link Types
+
+<CardGroup cols={3}>
+  <Card title="💰 Fixed Amount" icon="dollar-sign">
+    Set specific payment amounts
+  </Card>
+  <Card title="🎯 Flexible Amount" icon="edit">
+    Allow customer to enter amount
+  </Card>
+  <Card title="🔄 Recurring" icon="repeat">
+    Subscription and recurring payments
+  </Card>
+</CardGroup>
+
+## API Implementation
+
+### 🚀 Create Payment Link
+
+```bash
+curl https://api.payvessel.com/api/v1/payment_links \
+  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
+  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "amount": 25000,
+    "currency": "USD",
+    "description": "Professional Website Design Service",
+    "customer_info": {
+      "collect_name": true,
+      "collect_email": true,
+      "collect_phone": true,
+      "collect_address": false
+    },
+    "payment_methods": ["card", "bank_transfer", "digital_wallet"],
+    "expires_at": "2024-02-15T23:59:59Z",
+    "max_uses": 1,
+    "success_url": "https://yourwebsite.com/payment-success",
+    "cancel_url": "https://yourwebsite.com/payment-cancelled",
+    "branding": {
+      "logo_url": "https://yourcompany.com/logo.png",
+      "primary_color": "#1E40AF",
+      "company_name": "Your Company Ltd"
+    },
+    "metadata": {
+      "service_type": "web_design",
+      "project_id": "proj_12345",
+      "sales_rep": "john_doe"
+    }
+  }'
+```
+
+### 📝 Request Parameters
+
+<AccordionGroup>
+  <Accordion icon="money-bill" title="Payment Configuration">
+    **amount** (number, required) - Payment amount in cents
+    **currency** (string, required) - Three-letter currency code
+    **description** (string, required) - Payment description
+    **payment_methods** (array, optional) - Accepted payment methods
+  </Accordion>
+  <Accordion icon="user" title="Customer Information">
+    **collect_name** (boolean) - Collect customer name
+    **collect_email** (boolean) - Collect customer email
+    **collect_phone** (boolean) - Collect customer phone
+    **collect_address** (boolean) - Collect customer address
+  </Accordion>
+  <Accordion icon="cog" title="Link Settings">
+    **expires_at** (string, optional) - Link expiration date
+    **max_uses** (number, optional) - Maximum number of uses
+    **success_url** (string, optional) - Redirect after successful payment
+    **cancel_url** (string, optional) - Redirect after cancelled payment
+  </Accordion>
+  <Accordion icon="palette" title="Branding Options">
+    **logo_url** (string, optional) - Company logo URL
+    **primary_color** (string, optional) - Brand color hex code
+    **company_name** (string, optional) - Company name display
+    **custom_css** (string, optional) - Custom styling
+  </Accordion>
+</AccordionGroup>
+
+### ✅ Successful Response
+
+```json
+{
+  "id": "plink_1234567890abcdef",
+  "object": "payment_link",
+  "url": "https://pay.payvessel.com/plink_1234567890abcdef",
+  "qr_code": "https://api.payvessel.com/v1/payment_links/plink_1234567890abcdef/qr",
+  "amount": 25000,
+  "currency": "USD",
+  "description": "Professional Website Design Service",
+  "status": "active",
+  "created": 1634567890,
+  "expires_at": "2024-02-15T23:59:59Z",
+  "max_uses": 1,
+  "uses": 0,
+  "customer_info": {
+    "collect_name": true,
+    "collect_email": true,
+    "collect_phone": true,
+    "collect_address": false
+  },
+  "payment_methods": ["card", "bank_transfer", "digital_wallet"],
+  "success_url": "https://yourwebsite.com/payment-success",
+  "cancel_url": "https://yourwebsite.com/payment-cancelled",
+  "branding": {
+    "logo_url": "https://yourcompany.com/logo.png",
+    "primary_color": "#1E40AF",
+    "company_name": "Your Company Ltd"
+  },
+  "analytics": {
+    "views": 0,
+    "conversions": 0,
+    "conversion_rate": 0
+  },
+  "metadata": {
+    "service_type": "web_design",
+    "project_id": "proj_12345",
+    "sales_rep": "john_doe"
+  }
+}
+```
+
+## Implementation Examples
+
+### 🟨 Node.js Implementation
+
+```javascript
+const payvessel = require('payvessel')('PVKEY-3ZO1QOSQH83C5Q3PBCVUT1');
+
+async function createPaymentLink(linkData) {
+  try {
+    const paymentLink = await payvessel.paymentLinks.create({
+      amount: linkData.amount,
+      currency: linkData.currency || 'USD',
+      description: linkData.description,
+      customer_info: linkData.customer_info || {
+        collect_name: true,
+        collect_email: true
+      },
+      payment_methods: linkData.payment_methods || ['card'],
+      expires_at: linkData.expires_at,
+      max_uses: linkData.max_uses,
+      success_url: linkData.success_url,
+      cancel_url: linkData.cancel_url,
+      branding: linkData.branding,
+      metadata: linkData.metadata || {}
+    });
+
+    console.log('Payment link created:', paymentLink.id);
+    console.log('Link URL:', paymentLink.url);
+    console.log('QR Code:', paymentLink.qr_code);
+
+    // Auto-share if requested
+    if (linkData.auto_share) {
+      await sharePaymentLink(paymentLink, linkData.share_options);
+    }
+
+    return paymentLink;
+  } catch (error) {
+    console.error('Payment link creation error:', error.message);
+    throw error;
+  }
+}
+
+async function sharePaymentLink(paymentLink, shareOptions) {
+  if (shareOptions.email) {
+    await emailService.send({
+      to: shareOptions.email,
+      subject: 'Payment Request',
+      template: 'payment_link',
+      data: {
+        amount: paymentLink.amount / 100,
+        currency: paymentLink.currency,
+        description: paymentLink.description,
+        payment_url: paymentLink.url,
+        qr_code: paymentLink.qr_code
+      }
+    });
+  }
+
+  if (shareOptions.sms) {
+    await smsService.send({
+      to: shareOptions.sms,
+      message: `Payment request: ${paymentLink.description} - $${paymentLink.amount / 100}. Pay here: ${paymentLink.url}`
+    });
+  }
+
+  console.log('Payment link shared successfully');
+}
+
+async function createFlexibleAmountLink(config) {
+  try {
+    const flexibleLink = await payvessel.paymentLinks.create({
+      amount_type: 'flexible',
+      min_amount: config.min_amount || 100, // $1.00 minimum
+      max_amount: config.max_amount, // Optional maximum
+      suggested_amounts: config.suggested_amounts || [1000, 2500, 5000], // Suggested amounts
+      description: config.description,
+      customer_info: {
+        collect_name: true,
+        collect_email: true,
+        collect_message: true // Allow customer to add a message
+      },
+      branding: config.branding,
+      metadata: config.metadata
+    });
+
+    console.log('Flexible payment link created:', flexibleLink.url);
+    return flexibleLink;
+  } catch (error) {
+    console.error('Flexible link creation error:', error.message);
+    throw error;
+  }
+}
+
+async function getPaymentLinkAnalytics(linkId) {
+  try {
+    const analytics = await payvessel.paymentLinks.analytics(linkId);
+    
+    return {
+      link_id: linkId,
+      total_views: analytics.views,
+      successful_payments: analytics.conversions,
+      conversion_rate: analytics.conversion_rate,
+      total_amount_collected: analytics.total_amount,
+      average_payment: analytics.average_payment,
+      traffic_sources: analytics.traffic_sources,
+      payment_methods_used: analytics.payment_methods
+    };
+  } catch (error) {
+    console.error('Analytics retrieval error:', error.message);
+    throw error;
+  }
+}
+
+// Usage examples
+const paymentLink = await createPaymentLink({
+  amount: 15000, // $150.00
+  description: 'Freelance Design Work',
+  customer_info: {
+    collect_name: true,
+    collect_email: true,
+    collect_phone: false
+  },
+  expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days
+  max_uses: 1,
+  branding: {
+    company_name: 'Design Studio',
+    primary_color: '#FF6B6B'
+  },
+  auto_share: true,
+  share_options: {
+    email: 'client@example.com'
+  }
+});
+
+const flexibleLink = await createFlexibleAmountLink({
+  description: 'Donation to Charity',
+  min_amount: 500, // $5.00 minimum
+  suggested_amounts: [1000, 2500, 5000, 10000], // $10, $25, $50, $100
+  branding: {
+    company_name: 'Charity Organization',
+    logo_url: 'https://charity.org/logo.png'
+  }
+});
+```
+
+### 🐍 Python Implementation
+
+```python
+import payvessel
+from datetime import datetime, timedelta
+
+payvessel.api_key = "PVKEY-3ZO1QOSQH83C5Q3PBCVUT1"
+
+def create_payment_link(link_data):
+    try:
+        payment_link = payvessel.PaymentLink.create(
+            amount=link_data['amount'],
+            currency=link_data.get('currency', 'USD'),
+            description=link_data['description'],
+            customer_info=link_data.get('customer_info', {
+                'collect_name': True,
+                'collect_email': True
+            }),
+            payment_methods=link_data.get('payment_methods', ['card']),
+            expires_at=link_data.get('expires_at'),
+            max_uses=link_data.get('max_uses'),
+            success_url=link_data.get('success_url'),
+            cancel_url=link_data.get('cancel_url'),
+            branding=link_data.get('branding'),
+            metadata=link_data.get('metadata', {})
+        )
+
+        print(f'Payment link created: {payment_link.id}')
+        print(f'Link URL: {payment_link.url}')
+        print(f'QR Code: {payment_link.qr_code}')
+
+        return payment_link
+    
+    except payvessel.error.PayvesselError as e:
+        print(f'Payment link creation error: {e.user_message}')
+        raise
+
+def create_recurring_payment_link(subscription_data):
+    try:
+        recurring_link = payvessel.PaymentLink.create(
+            amount=subscription_data['amount'],
+            currency=subscription_data.get('currency', 'USD'),
+            description=subscription_data['description'],
+            recurring={
+                'interval': subscription_data['interval'],  # monthly, yearly
+                'interval_count': subscription_data.get('interval_count', 1),
+                'trial_period_days': subscription_data.get('trial_days', 0)
+            },
+            customer_info={
+                'collect_name': True,
+                'collect_email': True,
+                'collect_phone': subscription_data.get('collect_phone', False)
+            },
+            branding=subscription_data.get('branding'),
+            metadata=subscription_data.get('metadata', {})
+        )
+
+        print(f'Recurring payment link created: {recurring_link.url}')
+        return recurring_link
+    
+    except payvessel.error.PayvesselError as e:
+        print(f'Recurring link creation error: {e.user_message}')
+        raise
+
+def generate_qr_code_for_link(link_id, size='medium'):
+    try:
+        qr_code = payvessel.PaymentLink.generate_qr_code(
+            link_id,
+            size=size,  # small, medium, large
+            format='png',
+            include_logo=True
+        )
+        
+        return {
+            'qr_code_url': qr_code.url,
+            'download_url': qr_code.download_url,
+            'embed_code': qr_code.embed_html
+        }
+    
+    except payvessel.error.PayvesselError as e:
+        print(f'QR code generation error: {e.user_message}')
+        raise
+
+def bulk_create_payment_links(links_data):
+    results = []
+    
+    for link_data in links_data:
+        try:
+            payment_link = create_payment_link(link_data)
+            results.append({
+                'reference_id': link_data.get('reference_id'),
+                'link_id': payment_link.id,
+                'url': payment_link.url,
+                'status': 'success'
+            })
+        except Exception as e:
+            results.append({
+                'reference_id': link_data.get('reference_id'),
+                'status': 'failed',
+                'error': str(e)
+            })
+    
+    return results
+
+def get_payment_link_performance(link_id):
+    try:
+        link = payvessel.PaymentLink.retrieve(link_id)
+        analytics = payvessel.PaymentLink.analytics(link_id)
+        
+        return {
+            'link_id': link_id,
+            'status': link.status,
+            'created': datetime.fromtimestamp(link.created),
+            'expires_at': link.expires_at,
+            'max_uses': link.max_uses,
+            'current_uses': link.uses,
+            'remaining_uses': (link.max_uses or float('inf')) - link.uses,
+            'analytics': {
+                'views': analytics.views,
+                'conversions': analytics.conversions,
+                'conversion_rate': analytics.conversion_rate,
+                'total_collected': analytics.total_amount,
+                'average_payment': analytics.average_payment
+            }
+        }
+    
+    except payvessel.error.PayvesselError as e:
+        print(f'Performance retrieval error: {e.user_message}')
+        raise
+
+# Usage examples
+payment_link = create_payment_link({
+    'amount': 20000,  # $200.00
+    'description': 'Consulting Session',
+    'customer_info': {
+        'collect_name': True,
+        'collect_email': True,
+        'collect_company': True
+    },
+    'expires_at': (datetime.now() + timedelta(days=30)).isoformat(),
+    'max_uses': 5,
+    'branding': {
+        'company_name': 'Consulting Firm',
+        'primary_color': '#4F46E5'
+    },
+    'metadata': {
+        'service_type': 'consulting',
+        'duration': '1_hour'
+    }
+})
+
+recurring_link = create_recurring_payment_link({
+    'amount': 2999,  # $29.99
+    'description': 'Monthly SaaS Subscription',
+    'interval': 'monthly',
+    'trial_days': 14,
+    'branding': {
+        'company_name': 'SaaS Platform',
+        'logo_url': 'https://saas.com/logo.png'
+    }
+})
+```
+
+### 🐘 PHP Implementation
+
+```php
+<?php
+require_once('vendor/autoload.php');
+
+\Payvessel\Payvessel::setApiKey("PVKEY-3ZO1QOSQH83C5Q3PBCVUT1");
+
+function createPaymentLink($linkData) {
+    try {
+        $paymentLink = \Payvessel\PaymentLink::create([
+            'amount' => $linkData['amount'],
+            'currency' => $linkData['currency'] ?? 'USD',
+            'description' => $linkData['description'],
+            'customer_info' => $linkData['customer_info'] ?? [
+                'collect_name' => true,
+                'collect_email' => true
+            ],
+            'payment_methods' => $linkData['payment_methods'] ?? ['card'],
+            'expires_at' => $linkData['expires_at'] ?? null,
+            'max_uses' => $linkData['max_uses'] ?? null,
+            'success_url' => $linkData['success_url'] ?? null,
+            'cancel_url' => $linkData['cancel_url'] ?? null,
+            'branding' => $linkData['branding'] ?? [],
+            'metadata' => $linkData['metadata'] ?? []
+        ]);
+
+        echo "Payment link created: " . $paymentLink->id . "\n";
+        echo "Link URL: " . $paymentLink->url . "\n";
+        echo "QR Code: " . $paymentLink->qr_code . "\n";
+
+        return $paymentLink;
+    } catch (\Payvessel\Exception\ApiErrorException $e) {
+        echo "Payment link creation error: " . $e->getMessage() . "\n";
+        throw $e;
+    }
+}
+
+function createDonationLink($donationConfig) {
+    try {
+        $donationLink = \Payvessel\PaymentLink::create([
+            'amount_type' => 'flexible',
+            'min_amount' => $donationConfig['min_amount'] ?? 100, // $1.00
+            'suggested_amounts' => $donationConfig['suggested_amounts'] ?? [500, 1000, 2500, 5000],
+            'description' => $donationConfig['description'],
+            'customer_info' => [
+                'collect_name' => true,
+                'collect_email' => true,
+                'collect_message' => true,
+                'collect_anonymous_option' => true
+            ],
+            'payment_methods' => ['card', 'bank_transfer', 'digital_wallet'],
+            'branding' => [
+                'company_name' => $donationConfig['organization_name'],
+                'logo_url' => $donationConfig['logo_url'] ?? null,
+                'primary_color' => $donationConfig['brand_color'] ?? '#10B981',
+                'thank_you_message' => 'Thank you for your generous donation!'
+            ],
+            'metadata' => [
+                'type' => 'donation',
+                'campaign' => $donationConfig['campaign'] ?? 'general',
+                'tax_deductible' => $donationConfig['tax_deductible'] ?? true
+            ]
+        ]);
+
+        echo "Donation link created: " . $donationLink->url . "\n";
+        return $donationLink;
+    } catch (\Payvessel\Exception\ApiErrorException $e) {
+        echo "Donation link creation error: " . $e->getMessage() . "\n";
+        throw $e;
+    }
+}
+
+function createInvoicePaymentLink($invoiceData) {
+    try {
+        $invoiceLink = \Payvessel\PaymentLink::create([
+            'amount' => $invoiceData['amount'],
+            'currency' => $invoiceData['currency'] ?? 'USD',
+            'description' => 'Invoice Payment: ' . $invoiceData['invoice_number'],
+            'customer_info' => [
+                'collect_name' => true,
+                'collect_email' => true,
+                'prefill_name' => $invoiceData['customer_name'] ?? null,
+                'prefill_email' => $invoiceData['customer_email'] ?? null
+            ],
+            'expires_at' => $invoiceData['due_date'] ?? null,
+            'max_uses' => 1,
+            'payment_methods' => ['card', 'bank_transfer'],
+            'branding' => [
+                'company_name' => $invoiceData['company_name'],
+                'logo_url' => $invoiceData['company_logo'] ?? null,
+                'custom_css' => '
+                    .payment-form { 
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                    }
+                    .amount-display { 
+                        font-size: 2em; 
+                        font-weight: bold; 
+                        color: #2d3748; 
+                    }'
+            ],
+            'success_url' => $invoiceData['success_url'] ?? null,
+            'metadata' => [
+                'type' => 'invoice',
+                'invoice_id' => $invoiceData['invoice_id'],
+                'invoice_number' => $invoiceData['invoice_number'],
+                'customer_id' => $invoiceData['customer_id'] ?? null
+            ]
+        ]);
+
+        echo "Invoice payment link created: " . $invoiceLink->url . "\n";
+        
+        // Auto-send if email provided
+        if (!empty($invoiceData['customer_email'])) {
+            sendInvoicePaymentLink($invoiceLink, $invoiceData);
+        }
+
+        return $invoiceLink;
+    } catch (\Payvessel\Exception\ApiErrorException $e) {
+        echo "Invoice link creation error: " . $e->getMessage() . "\n";
+        throw $e;
+    }
+}
+
+function sendInvoicePaymentLink($paymentLink, $invoiceData) {
+    $emailData = [
+        'to' => $invoiceData['customer_email'],
+        'subject' => 'Payment Request - Invoice ' . $invoiceData['invoice_number'],
+        'template' => 'invoice_payment_link',
+        'data' => [
+            'customer_name' => $invoiceData['customer_name'],
+            'invoice_number' => $invoiceData['invoice_number'],
+            'amount' => $paymentLink->amount / 100,
+            'currency' => $paymentLink->currency,
+            'due_date' => $invoiceData['due_date'],
+            'payment_url' => $paymentLink->url,
+            'qr_code' => $paymentLink->qr_code,
+            'company_name' => $invoiceData['company_name']
+        ]
+    ];
+    
+    // Send email (implement your email service)
+    // EmailService::send($emailData);
+    
+    echo "Invoice payment link sent to: " . $invoiceData['customer_email'] . "\n";
+}
+
+function getPaymentLinkStats($linkIds) {
+    $stats = [];
+    
+    foreach ($linkIds as $linkId) {
+        try {
+            $link = \Payvessel\PaymentLink::retrieve($linkId);
+            $analytics = \Payvessel\PaymentLink::analytics($linkId);
+            
+            $stats[] = [
+                'link_id' => $linkId,
+                'description' => $link->description,
+                'amount' => $link->amount,
+                'status' => $link->status,
+                'uses' => $link->uses,
+                'max_uses' => $link->max_uses,
+                'analytics' => [
+                    'views' => $analytics->views,
+                    'conversions' => $analytics->conversions,
+                    'conversion_rate' => $analytics->conversion_rate,
+                    'total_collected' => $analytics->total_amount
+                ]
+            ];
+        } catch (\Payvessel\Exception\ApiErrorException $e) {
+            $stats[] = [
+                'link_id' => $linkId,
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+    
+    return $stats;
+}
+
+// Usage examples
+$paymentLink = createPaymentLink([
+    'amount' => 50000, // $500.00
+    'description' => 'Professional Photography Session',
+    'customer_info' => [
+        'collect_name' => true,
+        'collect_email' => true,
+        'collect_phone' => true
+    ],
+    'expires_at' => date('c', strtotime('+14 days')),
+    'max_uses' => 1,
+    'branding' => [
+        'company_name' => 'Pro Photography Studio',
+        'primary_color' => '#E53E3E'
+    ]
+]);
+
+$donationLink = createDonationLink([
+    'organization_name' => 'Local Animal Shelter',
+    'description' => 'Help us care for rescued animals',
+    'min_amount' => 500, // $5.00
+    'suggested_amounts' => [1000, 2500, 5000, 10000], // $10, $25, $50, $100
+    'campaign' => 'winter_care_2024',
+    'tax_deductible' => true
+]);
+
+$invoiceLink = createInvoicePaymentLink([
+    'invoice_id' => 'inv_12345',
+    'invoice_number' => 'INV-2024-001',
+    'amount' => 150000, // $1,500.00
+    'customer_name' => 'John Smith',
+    'customer_email' => 'john@example.com',
+    'due_date' => date('c', strtotime('+30 days')),
+    'company_name' => 'Design Agency Ltd'
+]);
+?>
+```
+
+## Advanced Features
+
+### 🎨 Custom Branding
+
+Create fully branded payment experiences:
+
+```javascript
+const brandedLink = await payvessel.paymentLinks.create({
+  amount: 10000,
+  description: 'Premium Service',
+  branding: {
+    logo_url: 'https://company.com/logo.png',
+    primary_color: '#1E40AF',
+    secondary_color: '#F3F4F6',
+    font_family: 'Inter, sans-serif',
+    custom_css: `
+      .payment-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 15px;
+      }
+      .amount-display {
+        font-size: 2.5em;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+    `,
+    company_name: 'Premium Services Inc',
+    support_email: 'support@company.com',
+    privacy_policy_url: 'https://company.com/privacy',
+    terms_of_service_url: 'https://company.com/terms'
+  }
+});
+```
+
+### 📊 Advanced Analytics
+
+Track detailed performance metrics:
+
+```javascript
+const analytics = await payvessel.paymentLinks.detailedAnalytics(linkId, {
+  include_geographic: true,
+  include_device_breakdown: true,
+  include_conversion_funnel: true,
+  date_range: {
+    start: '2024-01-01',
+    end: '2024-01-31'
+  }
+});
+
+console.log('Detailed analytics:', {
+  geographic_breakdown: analytics.geography,
+  device_types: analytics.devices,
+  conversion_funnel: analytics.funnel,
+  abandonment_rate: analytics.abandonment_rate,
+  average_time_to_complete: analytics.avg_completion_time
+});
+```
+
+### 🔄 Smart Routing
+
+Optimize payment success with intelligent routing:
+
+```javascript
+const smartLink = await payvessel.paymentLinks.create({
+  amount: 5000,
+  description: 'Product Purchase',
+  smart_routing: {
+    enabled: true,
+    optimize_for: 'conversion_rate', // or 'cost', 'speed'
+    fallback_methods: ['card', 'bank_transfer', 'digital_wallet'],
+    geographic_routing: true,
+    currency_optimization: true
+  }
+});
+```
+
+## Use Cases & Applications
+
+### 🛍️ E-commerce Applications
+
+<AccordionGroup>
+  <Accordion icon="shopping-cart" title="Product Sales">
+    **Direct Product Links:**
+    - Individual product payment links
+    - Bundle and package deals
+    - Limited-time offers with expiration
+    - Inventory-linked payment limits
+  </Accordion>
+  <Accordion icon="gift" title="Gift & Voucher Sales">
+    **Gift Card Links:**
+    - Flexible amount gift cards
+    - Preset denomination options
+    - Custom message collection
+    - Automated delivery scheduling
+  </Accordion>
+  <Accordion icon="repeat" title="Subscription Services">
+    **Recurring Payment Links:**
+    - Monthly/yearly subscriptions
+    - Trial period configurations
+    - Upgrade/downgrade options
+    - Pause and resume functionality
+  </Accordion>
+</AccordionGroup>
+
+### 🏢 Service Industries
+
+<CardGroup cols={2}>
+  <Card title="💼 Professional Services" icon="briefcase">
+    - Consultation bookings
+    - Project deposits
+    - Retainer payments
+    - Hourly rate collections
+  </Card>
+  <Card title="🎓 Education & Training" icon="graduation-cap">
+    - Course registrations
+    - Workshop payments
+    - Certification fees
+    - Material purchases
+  </Card>
+  <Card title="🏥 Healthcare" icon="heart">
+    - Appointment payments
+    - Treatment deposits
+    - Insurance deductibles
+    - Prescription payments
+  </Card>
+  <Card title="🎪 Events & Entertainment" icon="ticket">
+    - Event ticket sales
+    - Workshop registrations
+    - Merchandise sales
+    - VIP package upgrades
+  </Card>
+</CardGroup>
+
+### 🤝 Non-Profit & Donations
+
+<AccordionGroup>
+  <Accordion icon="hand-holding-heart" title="Fundraising Campaigns">
+    **Donation Collection:**
+    - Flexible donation amounts
+    - Suggested contribution levels
+    - Campaign progress tracking
+    - Donor recognition options
+  </Accordion>
+  <Accordion icon="users" title="Membership Drives">
+    **Membership Payments:**
+    - Annual membership fees
+    - Different tier options
+    - Family plan discounts
+    - Auto-renewal setups
+  </Accordion>
+  <Accordion icon="calendar" title="Event Fundraising">
+    **Special Events:**
+    - Gala ticket sales
+    - Auction item purchases
+    - Sponsorship packages
+    - Table reservations
+  </Accordion>
+</AccordionGroup>
+
+## Link Management
+
+### 📋 List Payment Links
+
+```bash
+curl "https://api.payvessel.com/api/v1/payment_links?limit=25&status=active" \
+  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
+  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF"
+```
+
+### 📊 Performance Dashboard
+
+```json
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "plink_1234567890abcdef",
+      "description": "Professional Photography Session",
+      "amount": 50000,
+      "status": "active",
+      "uses": 3,
+      "max_uses": 10,
+      "analytics": {
+        "views": 45,
+        "conversions": 3,
+        "conversion_rate": 6.7,
+        "total_collected": 150000
+      }
+    }
+  ],
+  "summary": {
+    "total_links": 23,
+    "active_links": 18,
+    "total_collected": 2450000,
+    "average_conversion_rate": 8.3
+  }
+}
+```
+
+### 🔧 Update Payment Link
+
+```bash
+curl -X POST https://api.payvessel.com/api/v1/payment_links/plink_1234567890abcdef \
+  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
+  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "description": "Updated Photography Session Package",
+    "expires_at": "2024-03-15T23:59:59Z",
+    "max_uses": 15
+  }'
+```
+
+## Integration Examples
+
+### 📱 Social Media Integration
+
+```javascript
+// Generate social media optimized links
+const socialLink = await payvessel.paymentLinks.create({
+  amount: 2999,
+  description: 'Premium Course Access',
+  social_optimization: {
+    generate_og_tags: true,
+    twitter_card: true,
+    preview_image: 'https://course.com/preview.jpg'
+  },
+  branding: {
+    company_name: 'Online Learning Academy'
+  }
+});
+
+// Share on social platforms
+const socialContent = {
+  facebook: `🚀 Unlock your potential with our Premium Course! Get instant access for just $${socialLink.amount / 100}. ${socialLink.url}`,
+  twitter: `🎓 Level up your skills! Premium Course access - $${socialLink.amount / 100} ${socialLink.url} #learning #skills`,
+  linkedin: `Invest in your professional development. Our Premium Course offers comprehensive training for $${socialLink.amount / 100}. ${socialLink.url}`
+};
+```
+
+### 📧 Email Campaign Integration
+
+```javascript
+// Create email-optimized payment links
+async function createEmailCampaignLinks(campaignData) {
+  const links = await Promise.all(
+    campaignData.products.map(product => 
+      payvessel.paymentLinks.create({
+        amount: product.price,
+        description: product.name,
+        email_optimization: {
+          utm_source: 'email',
+          utm_medium: 'campaign',
+          utm_campaign: campaignData.campaign_id,
+          preheader_text: `Get ${product.name} for $${product.price / 100}`
+        },
+        expires_at: campaignData.expires_at,
+        branding: campaignData.branding
+      })
+    )
+  );
+
+  return links.map(link => ({
+    product_id: link.metadata.product_id,
+    payment_url: link.url,
+    qr_code: link.qr_code
+  }));
+}
+```
+
+### 🌐 Website Integration
+
+```html
+<!-- Embed payment link as button -->
+<div class="payment-section">
+  <h3>Premium Subscription</h3>
+  <p>Unlock all features with our premium plan</p>
+  <a href="https://pay.payvessel.com/plink_1234567890abcdef" 
+     class="payment-button"
+     target="_blank">
+    Pay $29.99/month
+  </a>
+</div>
+
+<!-- QR Code integration -->
+<div class="qr-payment">
+  <img src="https://api.payvessel.com/v1/payment_links/plink_1234567890abcdef/qr" 
+       alt="Payment QR Code" 
+       width="200" 
+       height="200">
+  <p>Scan to pay with your mobile device</p>
+</div>
+```
+
+## Webhook Integration
+
+### 🔔 Payment Link Events
+
+Monitor payment link activity:
+
+```javascript
+// Webhook handler for payment link events
+app.post('/webhook/payment-links', (req, res) => {
+  const event = req.body;
+  
+  switch (event.type) {
+    case 'payment_link.viewed':
+      trackLinkView(event.data);
+      break;
+    case 'payment_link.payment_started':
+      trackPaymentStart(event.data);
+      break;
+    case 'payment_link.payment_completed':
+      handlePaymentCompleted(event.data);
+      break;
+    case 'payment_link.expired':
+      handleLinkExpired(event.data);
+      break;
+  }
+  
+  res.status(200).send('OK');
+});
+
+function handlePaymentCompleted(linkData) {
+  // Update inventory
+  updateInventory(linkData.metadata.product_id, -1);
+  
+  // Send confirmation email
+  sendPaymentConfirmation(linkData.customer_email, linkData);
+  
+  // Update CRM
+  updateCustomerRecord(linkData.customer_email, {
+    last_purchase: linkData.amount,
+    purchase_date: new Date()
+  });
+  
+  console.log(`Payment completed via link: ${linkData.link_id}`);
+}
+```
+
+## Best Practices
+
+### ✅ Optimization Tips
+
+<CardGroup cols={2}>
+  <Card title="🎯 Conversion Optimization" icon="bullseye">
+    - Use clear, compelling descriptions
+    - Add trust badges and security icons
+    - Optimize for mobile devices
+    - Include customer testimonials
+  </Card>
+  <Card title="🔒 Security Best Practices" icon="shield">
+    - Set appropriate expiration dates
+    - Limit maximum uses when needed
+    - Monitor for suspicious activity
+    - Use HTTPS for all redirect URLs
+  </Card>
+</CardGroup>
+
+### 📊 Performance Monitoring
+
+- **A/B Testing** - Test different descriptions and designs
+- **Conversion Tracking** - Monitor conversion rates by traffic source
+- **User Experience** - Track completion times and abandonment rates
+- **Device Optimization** - Ensure mobile-friendly payment flows
+
+<Warning>
+**Link Security:** Payment links should be treated as sensitive information. Avoid sharing them publicly unless intended for public use, and consider setting expiration dates for time-sensitive payments.
+</Warning>
+
+<div style={{textAlign: 'center', marginTop: '2rem'}}>
+
+**Ready to start collecting payments?**
+
+<CardGroup cols={2}>
+  <Card title="🔗 Create Your First Link" icon="link" href="/api-reference/endpoint/create">
+    Start with payment link API
+  </Card>
+  <Card title="📊 Track Performance" icon="chart-bar" href="/api-basics/webhooks">
+    Set up analytics and webhooks
+  </Card>
+</CardGroup>
+
+</div>

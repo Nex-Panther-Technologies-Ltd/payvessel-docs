@@ -1,0 +1,559 @@
+---
+title: "Webhooks"
+description: "Real-time payment notifications from Payvessel to your application"
+---
+
+# Webhooks
+
+**Stay informed about payment events in real-time with Payvessel's reliable webhook system.**
+
+Webhooks allow Payvessel to notify your application immediately when important events occur, such as successful payments, failed transactions, or account updates.
+
+<CardGroup cols={2}>
+  <Card title="⚡ Real-time Updates" icon="bolt">
+    Receive instant notifications when events occur
+  </Card>
+  <Card title="🔒 Secure Delivery" icon="shield-check">
+    Cryptographically signed payloads for verification
+  </Card>
+</CardGroup>
+
+***
+
+## Payment Notification Security
+
+**Critical security measures to protect your webhook endpoint from unauthorized access and ensure data integrity.**
+
+### 🔐 Security Implementation Requirements
+
+<Steps>
+  <Step title="Verify Payvessel Hash Signature">
+    Validate HMAC SHA-512 signature to ensure data integrity
+  </Step>
+  <Step title="Verify Payvessel IP Address">
+    Check that requests originate from trusted Payvessel servers
+  </Step>
+  <Step title="Prevent Duplicate Transactions">
+    Implement transaction history checks to avoid duplicate processing
+  </Step>
+</Steps>
+
+## Webhook Security Implementation
+
+### 🛡️ Hash Signature Verification
+
+When receiving data from a webhook, it's crucial to ensure the data hasn't been tampered with during transmission:
+
+<AccordionGroup>
+  <Accordion icon="key" title="Retrieve Payvessel Signature">
+    Extract the Payvessel signature from the request's metadata. This will be available in the `HTTP_PAYVESSEL_HTTP_SIGNATURE` header.
+  </Accordion>
+  <Accordion icon="hash" title="Generate Hash for Payload">
+    Use your secret key (`PVSECRET-`) as the key for an HMAC with the SHA-512 algorithm. The payload of the webhook request is used as the message input for this HMAC function.
+  </Accordion>
+  <Accordion icon="check" title="Compare Hashes">
+    Compare the generated hash with the Payvessel signature received in the request's metadata. If they match, the data hasn't been tampered with.
+  </Accordion>
+</AccordionGroup>
+
+### 🌐 IP Address Verification
+
+Validate that incoming webhook requests originate from trusted Payvessel servers:
+
+**Trusted IP Addresses:**
+- `3.255.23.38`
+- `162.246.254.36`
+
+<Warning>
+If the IP address doesn't match the trusted list, reject the request as it may be unauthorized.
+</Warning>
+
+### 🔄 Duplicate Transaction Prevention
+
+Webhooks can sometimes be delivered multiple times due to network issues or retries:
+
+- **Transaction History Check:** Query your payment transaction database to check if a transaction with the same reference already exists
+- **Duplicate Handling:** If a matching transaction is found, ignore the duplicate request
+- **Idempotency:** Ensure your webhook processing is idempotent
+
+## Implementation Examples
+
+### 🐍 Python Django Webhook Handler
+
+Complete Django implementation with security verification:
+
+```python
+import json
+import hmac
+import hashlib
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+
+@require_POST
+@csrf_exempt
+def payvessel_payment_done(request):
+    payload = request.body
+    payvessel_signature = request.META.get('HTTP_PAYVESSEL_HTTP_SIGNATURE')
+    
+    # Get IP address (may differ depending on your server setup)
+    # ip_address = u'{}'.format(request.META.get('HTTP_X_FORWARDED_FOR'))
+    ip_address = u'{}'.format(request.META.get('REMOTE_ADDR'))
+    
+    # Your secret key
+    secret = bytes("PVSECRET-", 'utf-8')
+    hashkey = hmac.new(secret, request.body, hashlib.sha512).hexdigest()
+    
+    # Trusted IP addresses
+    ipAddress = ["3.255.23.38", "162.246.254.36"]
+    
+    # Verify signature and IP address
+    if payvessel_signature == hashkey and ip_address in ipAddress:
+        data = json.loads(payload)
+        amount = float(data['order']['amount'])
+        settlementAmount = float(data['order']['settlement_amount'])
+        fee = float(data['order']['fee'])
+        reference = data['transaction']['reference']
+        description = data['order']['description']
+        
+        # Check if reference already exists in your payment transaction table   
+        if not paymentgateway.objects.filter(reference=reference).exists():
+            # Fund user wallet here
+            # ... your business logic ...
+            return JsonResponse({"message": "success"}, status=200) 
+        else:
+            return JsonResponse({"message": "transaction already exist"}, status=200) 
+    else:
+        return JsonResponse({"message": "Permission denied, invalid hash or ip address."}, status=400)
+```
+
+### 🐘 PHP Webhook Handler
+
+Secure PHP implementation for webhook processing:
+
+```php
+<?php
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $payload = file_get_contents('php://input');
+    $payvessel_signature = $_SERVER['HTTP_PAYVESSEL_HTTP_SIGNATURE'];
+    
+    // Get IP address (may differ depending on your server setup)
+    // $ip_address = $_SERVER['HTTP_X_FORWARDED_FOR']; 
+    $ip_address = $_SERVER['REMOTE_ADDR']; 
+    
+    // Your secret key
+    $secret = "PVSECRET-";
+    $hashkey = hash_hmac('sha512', $payload, $secret);
+    
+    // Trusted IP addresses
+    $ipAddress = ["3.255.23.38", "162.246.254.36"];
+     
+    // Verify signature and IP address
+    if ($payvessel_signature == $hashkey && in_array($ip_address, $ipAddress)) {
+        $data = json_decode($payload, true);
+        $amount = floatval($data['order']['amount']);
+        $settlementAmount = floatval($data['order']['settlement_amount']);
+        $fee = floatval($data['order']['fee']);
+        $reference = $data['transaction']['reference'];
+        $description = $data['order']['description'];
+
+        // Check if reference already exists in your payment transaction table
+        if (!paymentgateway::where('reference', $reference)->exists()) {
+            // Fund user wallet here
+            // ... your business logic ...
+            echo json_encode(["message" => "success"]);
+            http_response_code(200);
+        } else {
+            echo json_encode(["message" => "transaction already exist"]);
+            http_response_code(200);
+        }
+    } else {
+        echo json_encode(["message" => "Permission denied, invalid hash or ip address."]);
+        http_response_code(400);
+    }
+} else {
+    echo json_encode(["message" => "Method not allowed"]);
+    http_response_code(405);
+}
+?>
+```
+
+### 🟨 Node.js Express Webhook Handler
+
+Complete Node.js implementation with security verification:
+
+```javascript
+const crypto = require('crypto');
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+const port = 3000;
+
+// Use raw body parser for webhook signature verification
+app.use('/payvessel_payment_done', bodyParser.raw({type: 'application/json'}));
+
+app.post('/payvessel_payment_done', (req, res) => {
+  const payload = req.body;
+  const payvessel_signature = req.header('HTTP_PAYVESSEL_HTTP_SIGNATURE');
+  
+  // Get IP address
+  const ip_address = req.connection.remoteAddress || 
+                    req.socket.remoteAddress || 
+                    req.headers['x-forwarded-for'];
+  
+  // Your secret key
+  const secret = 'PVSECRET-';
+  
+  // Generate hash for verification
+  const hash = crypto.createHmac('sha512', secret)
+    .update(payload)
+    .digest('hex');
+  
+  // Trusted IP addresses
+  const ipAddress = ["3.255.23.38", "162.246.254.36"];
+  
+  // Verify signature and IP address
+  if (payvessel_signature === hash && ipAddress.includes(ip_address)) {
+    const data = JSON.parse(payload);
+    const amount = parseFloat(data.order.amount);
+    const settlementAmount = parseFloat(data.order.settlement_amount);
+    const fee = parseFloat(data.order.fee);
+    const reference = data.transaction.reference;
+    const description = data.order.description;
+
+    // Check if reference already exists in your payment transaction table
+    // Replace this with your actual database check
+    checkTransactionExists(reference)
+      .then(exists => {
+        if (!exists) {
+          // Fund user wallet here
+          // ... your business logic ...
+          res.status(200).json({ message: 'success' });
+        } else {
+          res.status(200).json({ message: 'transaction already exist' });
+        }
+      })
+      .catch(error => {
+        console.error('Database error:', error);
+        res.status(500).json({ message: 'internal server error' });
+      });
+  } else {
+    res.status(400).json({ message: 'Permission denied, invalid hash or ip address.' });
+  }
+});
+
+// Example database check function
+async function checkTransactionExists(reference) {
+  // Replace with your actual database query
+  // Example: return await PaymentTransaction.findOne({ reference });
+  return false; // Placeholder
+}
+
+app.listen(port, () => {
+  console.log(`Webhook server running on port ${port}`);
+});
+```
+
+### 💎 Ruby on Rails Webhook Handler
+
+Rails implementation with security verification:
+
+```ruby
+class WebhooksController < ApplicationController
+  skip_before_action :verify_authenticity_token
+  
+  def payvessel_payment_done
+    payload = request.body.read
+    payvessel_signature = request.headers['HTTP_PAYVESSEL_HTTP_SIGNATURE']
+    ip_address = request.remote_ip
+    
+    # Your secret key
+    secret = 'PVSECRET-'
+    hashkey = OpenSSL::HMAC.hexdigest('SHA512', secret, payload)
+    
+    # Trusted IP addresses
+    trusted_ips = ['3.255.23.38', '162.246.254.36']
+    
+    # Verify signature and IP address
+    if payvessel_signature == hashkey && trusted_ips.include?(ip_address)
+      data = JSON.parse(payload)
+      amount = data['order']['amount'].to_f
+      settlement_amount = data['order']['settlement_amount'].to_f
+      fee = data['order']['fee'].to_f
+      reference = data['transaction']['reference']
+      description = data['order']['description']
+      
+      # Check if reference already exists
+      unless PaymentTransaction.exists?(reference: reference)
+        # Fund user wallet here
+        # ... your business logic ...
+        render json: { message: 'success' }, status: 200
+      else
+        render json: { message: 'transaction already exist' }, status: 200
+      end
+    else
+      render json: { message: 'Permission denied, invalid hash or ip address.' }, status: 400
+    end
+  end
+end
+```
+
+### ☕ Java Spring Boot Webhook Handler
+
+Spring Boot implementation with security verification:
+
+```java
+@RestController
+@RequestMapping("/webhook")
+public class WebhookController {
+    
+    private static final String SECRET = "PVSECRET-";
+    private static final List<String> TRUSTED_IPS = Arrays.asList("3.255.23.38", "162.246.254.36");
+    
+    @PostMapping("/payvessel_payment_done")
+    public ResponseEntity<?> handlePayvesselWebhook(
+            HttpServletRequest request,
+            @RequestBody String payload) {
+        
+        try {
+            String signature = request.getHeader("HTTP_PAYVESSEL_HTTP_SIGNATURE");
+            String ipAddress = getClientIpAddress(request);
+            
+            // Verify signature
+            String computedHash = computeHmacSha512(payload, SECRET);
+            
+            // Verify signature and IP
+            if (signature.equals(computedHash) && TRUSTED_IPS.contains(ipAddress)) {
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode data = mapper.readTree(payload);
+                
+                double amount = data.get("order").get("amount").asDouble();
+                double settlementAmount = data.get("order").get("settlement_amount").asDouble();
+                double fee = data.get("order").get("fee").asDouble();
+                String reference = data.get("transaction").get("reference").asText();
+                String description = data.get("order").get("description").asText();
+                
+                // Check if transaction exists
+                if (!paymentService.transactionExists(reference)) {
+                    // Process payment
+                    // ... your business logic ...
+                    return ResponseEntity.ok(Map.of("message", "success"));
+                } else {
+                    return ResponseEntity.ok(Map.of("message", "transaction already exist"));
+                }
+            } else {
+                return ResponseEntity.badRequest()
+                    .body(Map.of("message", "Permission denied, invalid hash or ip address."));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                .body(Map.of("message", "Internal server error"));
+        }
+    }
+    
+    private String computeHmacSha512(String data, String secret) {
+        try {
+            Mac mac = Mac.getInstance("HmacSHA512");
+            SecretKeySpec keySpec = new SecretKeySpec(secret.getBytes(), "HmacSHA512");
+            mac.init(keySpec);
+            byte[] hash = mac.doFinal(data.getBytes());
+            return bytesToHex(hash);
+        } catch (Exception e) {
+            throw new RuntimeException("Error computing HMAC", e);
+        }
+    }
+    
+    private String bytesToHex(byte[] bytes) {
+        StringBuilder result = new StringBuilder();
+        for (byte b : bytes) {
+            result.append(String.format("%02x", b));
+        }
+        return result.toString();
+    }
+    
+    private String getClientIpAddress(HttpServletRequest request) {
+        String xForwardedFor = request.getHeader("X-Forwarded-For");
+        if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
+            return xForwardedFor.split(",")[0].trim();
+        }
+        return request.getRemoteAddr();
+    }
+}
+```
+
+## Webhook Payload Structure
+
+### 📋 Standard Webhook Format
+
+Payvessel webhook payloads contain transaction and order information:
+
+```json
+{
+  "order": {
+    "amount": "1000.00",
+    "settlement_amount": "970.00",
+    "fee": "30.00",
+    "description": "Payment for Order #12345",
+    "currency": "USD",
+    "status": "completed"
+  },
+  "transaction": {
+    "reference": "TXN_1634567890_ABC123",
+    "id": "pay_1234567890abcdef",
+    "status": "successful",
+    "created_at": "2024-10-27T10:00:00Z",
+    "updated_at": "2024-10-27T10:01:00Z"
+  },
+  "customer": {
+    "id": "cust_1234567890",
+    "email": "customer@example.com",
+    "name": "John Doe"
+  }
+}
+```
+
+## Testing Your Webhook Implementation
+
+### 🧪 Local Development Setup
+
+Test webhooks locally using ngrok or similar tools:
+
+```bash
+# Install ngrok
+npm install -g ngrok
+
+# Start your local server
+node server.js
+
+# In another terminal, expose local server
+ngrok http 3000
+
+# Use the ngrok URL in your webhook configuration
+# Example: https://abc123.ngrok.io/payvessel_payment_done
+```
+
+### � Webhook Testing Checklist
+
+<Steps>
+  <Step title="Signature Verification">
+    ✅ Verify HMAC SHA-512 signature matches
+    ✅ Use correct secret key (PVSECRET-)
+    ✅ Handle raw payload for hash calculation
+  </Step>
+  <Step title="IP Address Validation">
+    ✅ Check against trusted IP list
+    ✅ Handle different IP header formats
+    ✅ Account for proxy configurations
+  </Step>
+  <Step title="Duplicate Prevention">
+    ✅ Check transaction reference uniqueness
+    ✅ Handle duplicate webhook deliveries
+    ✅ Implement idempotent processing
+  </Step>
+  <Step title="Error Handling">
+    ✅ Return appropriate HTTP status codes
+    ✅ Log webhook events for debugging
+    ✅ Handle malformed payloads gracefully
+  </Step>
+</Steps>
+
+## Webhook Best Practices
+
+### ✅ Implementation Guidelines
+
+<CardGroup cols={2}>
+  <Card title="� Performance" icon="rocket">
+    - Respond within 30 seconds
+    - Process asynchronously when possible
+    - Return 200 status immediately
+    - Use queues for heavy processing
+  </Card>
+  <Card title="🔒 Security" icon="lock">
+    - Always verify signatures
+    - Validate IP addresses
+    - Use HTTPS endpoints only
+    - Log security events
+  </Card>
+</CardGroup>
+
+### 🔄 Reliability Measures
+
+<AccordionGroup>
+  <Accordion icon="repeat" title="Retry Handling">
+    **Payvessel Retry Policy:**
+    - Immediate retry for 5xx errors
+    - Exponential backoff for subsequent attempts
+    - Up to 3 days of retry attempts
+    - Manual replay available in dashboard
+  </Accordion>
+  <Accordion icon="database" title="Data Persistence">
+    **Store webhook data:**
+    - Log all incoming webhooks
+    - Store raw payload for debugging
+    - Track processing status
+    - Maintain audit trails
+  </Accordion>
+</AccordionGroup>
+
+## Troubleshooting Common Issues
+
+<AccordionGroup>
+  <Accordion icon="exclamation-triangle" title="Signature Verification Failed">
+    **Common Causes:**
+    - Using wrong secret key
+    - Modifying payload before verification
+    - Incorrect HMAC algorithm (should be SHA-512)
+    - Character encoding issues
+    
+    **Solutions:**
+    - Verify secret key format (starts with PVSECRET-)
+    - Use raw payload for hash calculation
+    - Ensure UTF-8 encoding
+    - Check header name formatting
+  </Accordion>
+  <Accordion icon="network-wired" title="IP Address Validation Failed">
+    **Common Causes:**
+    - Proxy or load balancer configuration
+    - Different IP header formats
+    - Firewall or NAT translation
+    
+    **Solutions:**
+    - Check X-Forwarded-For header
+    - Handle multiple IP formats
+    - Update trusted IP list if needed
+    - Test with different IP detection methods
+  </Accordion>
+  <Accordion icon="copy" title="Duplicate Transactions">
+    **Common Causes:**
+    - Network timeouts causing retries
+    - Multiple webhook endpoints
+    - Race conditions in processing
+    
+    **Solutions:**
+    - Check transaction reference before processing
+    - Use database transactions for atomicity
+    - Implement proper locking mechanisms
+    - Return success for already processed transactions
+  </Accordion>
+</AccordionGroup>
+
+<Warning>
+**Security Critical:** Always implement all three security measures (signature verification, IP validation, and duplicate prevention) to ensure the integrity and security of your webhook endpoint.
+</Warning>
+
+<div style={{textAlign: 'center', marginTop: '2rem'}}>
+
+**Ready to implement webhooks?**
+
+<CardGroup cols={2}>
+  <Card title="⚙️ Configure Webhooks" icon="cog" href="https://dashboard.payvessel.com/webhooks">
+    Set up webhook endpoints in your dashboard
+  </Card>
+  <Card title="🧪 Test Integration" icon="flask" href="/api-basics/testing">
+    Learn how to test your webhook implementation
+  </Card>
+</CardGroup>
+
+</div>

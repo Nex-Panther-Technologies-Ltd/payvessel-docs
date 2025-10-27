@@ -1,97 +1,112 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "Payvessel Developer Hub"
+description: "Welcome to the Payvessel Developer Hub, your launchpad for building seamless and secure financial experiences with the Payvessel API."
 ---
 
-## Setting up
-
-Get your documentation site up and running in minutes.
-
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
-
-## Make it yours
-
-Design a docs site that looks great and empowers your users.
+## Quick Start Guides
 
 <Columns cols={2}>
   <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
+    title="Accept Payments"
+    icon="credit-card"
+    href="/api-reference/endpoint/create"
   >
-    Edit your docs locally and preview them in real time.
+    Securely collect payments from cards, bank accounts, and mobile wallets.
   </Card>
   <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
+    title="Send Money & Payouts"
+    icon="paper-plane"
+    href="/api-reference/endpoint/create"
   >
-    Customize the design and colors of your site to match your brand.
-  </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+    Make instant transfers to bank accounts and mobile money users.
   </Card>
   <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
+    title="Verify Identities"
+    icon="shield-check"
+    href="/api-reference/endpoint/create"
   >
-    Auto-generate API documentation from OpenAPI specifications.
+    Authenticate user details like phone numbers, bank accounts, and identity documents.
+  </Card>
+  <Card
+    title="More Tools & Solutions"
+    icon="toolbox"
+    href="/quickstart"
+  >
+    Explore our SDKs, plugins, and no-code tools to integrate payments without direct API coding.
   </Card>
 </Columns>
 
-## Create beautiful pages
+## Core API Workflows
 
-Everything you need to create world-class documentation.
+### Accept a Payment
+
+Here's your guide to using the Payvessel API to accept a single payment.
+
+**Before you begin:** All Payvessel API requests must be authenticated with your secret API keys.
+
+**Next Step:** `POST api.payvessel.com/transaction/initialize`
+
+```bash
+# cURL Example
+curl https://api.payvessel.com/transaction/initialize \
+  -H "Authorization: Bearer YOUR_SECRET_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"amount": "500000", "email": "customer@email.com"}' \
+  -X POST
+```
+
+### Initiate a Transfer
+
+Here's how quickly you can send money programmatically with Payvessel.
+
+**Before you begin:** All Payvessel API requests must be authenticated with your secret API keys.
+
+**Next Step:** `POST api.payvessel.com/transfer/recipient`
+
+```bash
+# cURL Example
+curl https://api.payvessel.com/transfer/recipient \
+  -H "Authorization: Bearer YOUR_SECRET_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"type": "nuban", "name": "John Doe", "account_number": "0001234567", "bank_code": "058"}' \
+  -X POST
+```
+
+## Explore Our Code Demos
+
+We've built simple, real-world projects to show you how to use the Payvessel API. Explore all demos or start with these popular examples:
 
 <Columns cols={2}>
   <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
+    title="E-Commerce Store"
+    icon="shopping-cart"
+    href="https://github.com/PayvesselDev/sample-ecommerce-store"
   >
-    Use MDX to style your docs pages.
+    **APIs Used:** Accept Payments, Verify Transactions  
+    **Tech:** Vue.js
   </Card>
   <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
+    title="Event Ticketing App"
+    icon="ticket"
+    href="https://github.com/PayvesselDev/sample-event-ticketing"
   >
-    Add sample code to demonstrate how to use your product.
+    **APIs Used:** Accept Payments, Verify Transactions  
+    **Tech:** Android (Kotlin)
   </Card>
   <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
+    title="Subscription Service"
+    icon="calendar-check"
+    href="https://github.com/PayvesselDev/sample-subscription-service"
   >
-    Display images and other media.
+    **APIs Used:** Create Customer, Manage Subscriptions  
+    **Tech:** React
   </Card>
   <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
+    title="Point of Sale (POS)"
+    icon="cash-register"
+    href="https://github.com/PayvesselDev/sample-pos-restaurant"
   >
-    Write once and reuse across your docs.
+    **APIs Used:** Payment Requests, Terminal Events  
+    **Tech:** Node.js
   </Card>
 </Columns>
-
-## Need inspiration?
-
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>

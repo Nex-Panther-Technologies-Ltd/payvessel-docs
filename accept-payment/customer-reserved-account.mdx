@@ -1,0 +1,516 @@
+---
+title: "Customer Reserved Account"
+description: "Create dedicated virtual accounts for customers to make payments"
+---
+
+# Customer Reserved Account
+
+**Provide customers with dedicated virtual bank accounts for seamless payment collection.**
+
+Customer Reserved Accounts are virtual bank accounts assigned to specific customers, allowing them to make payments directly via bank transfer to their unique account number.
+
+<CardGroup cols={2}>
+  <Card title="🏦 Virtual Accounts" icon="university">
+    Unique account numbers for each customer
+  </Card>
+  <Card title="⚡ Instant Recognition" icon="bolt">
+    Automatic payment attribution and processing
+  </Card>
+</CardGroup>
+
+***
+
+## How It Works
+
+### 🔄 Account Creation Flow
+
+<Steps>
+  <Step title="Create Customer">
+    Register customer in Payvessel system with their details
+  </Step>
+  <Step title="Generate Account">
+    System creates a unique virtual account number for the customer
+  </Step>
+  <Step title="Share Details">
+    Provide customer with their dedicated account information
+  </Step>
+  <Step title="Receive Payments">
+    Customer transfers funds to their virtual account
+  </Step>
+  <Step title="Auto-Processing">
+    Payments are automatically credited to customer's balance
+  </Step>
+</Steps>
+
+### 💰 Benefits for Businesses
+
+<CardGroup cols={3}>
+  <Card title="🎯 Payment Attribution" icon="target">
+    Automatic identification of payment source
+  </Card>
+  <Card title="📊 Better Tracking" icon="chart-bar">
+    Detailed payment history per customer
+  </Card>
+  <Card title="⚡ Faster Processing" icon="zap">
+    Reduced manual reconciliation effort
+  </Card>
+</CardGroup>
+
+## API Implementation
+
+### 🚀 Create Customer Reserved Account
+
+```bash
+curl https://api.payvessel.com/api/v1/customers \
+  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
+  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "phone": "+1234567890",
+    "address": {
+      "line1": "123 Main Street",
+      "city": "New York",
+      "state": "NY",
+      "postal_code": "10001",
+      "country": "US"
+    },
+    "create_reserved_account": true,
+    "account_type": "individual",
+    "metadata": {
+      "customer_id": "internal_12345",
+      "tier": "premium"
+    }
+  }'
+```
+
+### 📝 Request Parameters
+
+<AccordionGroup>
+  <Accordion icon="user" title="Required Customer Information">
+    **name** (string) - Full name of the customer
+    **email** (string) - Valid email address
+    **phone** (string) - Phone number with country code
+    **create_reserved_account** (boolean) - Set to true to create virtual account
+  </Accordion>
+  <Accordion icon="home" title="Address Information">
+    **address.line1** (string) - Street address
+    **address.city** (string) - City name
+    **address.state** (string) - State or province
+    **address.postal_code** (string) - ZIP or postal code
+    **address.country** (string) - Two-letter country code
+  </Accordion>
+  <Accordion icon="cog" title="Optional Parameters">
+    **account_type** (string) - "individual" or "business"
+    **metadata** (object) - Custom key-value pairs
+    **preferred_bank** (string) - Preferred bank for virtual account
+  </Accordion>
+</AccordionGroup>
+
+### ✅ Successful Response
+
+```json
+{
+  "id": "cust_1234567890abcdef",
+  "object": "customer",
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "phone": "+1234567890",
+  "created": 1634567890,
+  "reserved_account": {
+    "id": "acc_1234567890abcdef",
+    "account_number": "1234567890",
+    "account_name": "John Doe",
+    "bank_name": "Payvessel Bank",
+    "bank_code": "044",
+    "routing_number": "123456789",
+    "status": "active",
+    "balance": 0,
+    "currency": "USD"
+  },
+  "address": {
+    "line1": "123 Main Street",
+    "city": "New York",
+    "state": "NY",
+    "postal_code": "10001",
+    "country": "US"
+  },
+  "metadata": {
+    "customer_id": "internal_12345",
+    "tier": "premium"
+  }
+}
+```
+
+## Implementation Examples
+
+### 🟨 Node.js Implementation
+
+```javascript
+const payvessel = require('payvessel')('PVKEY-3ZO1QOSQH83C5Q3PBCVUT1');
+
+async function createCustomerReservedAccount(customerData) {
+  try {
+    const customer = await payvessel.customers.create({
+      name: customerData.name,
+      email: customerData.email,
+      phone: customerData.phone,
+      address: customerData.address,
+      create_reserved_account: true,
+      account_type: customerData.account_type || 'individual',
+      metadata: customerData.metadata || {}
+    });
+
+    if (customer.reserved_account) {
+      console.log('Reserved account created:', customer.reserved_account.account_number);
+      
+      // Send account details to customer
+      await sendAccountDetailsToCustomer(customer);
+      
+      return customer;
+    } else {
+      throw new Error('Failed to create reserved account');
+    }
+  } catch (error) {
+    console.error('Account creation error:', error.message);
+    throw error;
+  }
+}
+
+async function sendAccountDetailsToCustomer(customer) {
+  const accountDetails = {
+    accountNumber: customer.reserved_account.account_number,
+    accountName: customer.reserved_account.account_name,
+    bankName: customer.reserved_account.bank_name,
+    routingNumber: customer.reserved_account.routing_number
+  };
+  
+  // Send via email, SMS, or your preferred communication method
+  await emailService.sendAccountDetails(customer.email, accountDetails);
+}
+
+// Usage example
+const customer = await createCustomerReservedAccount({
+  name: 'John Doe',
+  email: 'john.doe@example.com',
+  phone: '+1234567890',
+  address: {
+    line1: '123 Main Street',
+    city: 'New York',
+    state: 'NY',
+    postal_code: '10001',
+    country: 'US'
+  },
+  account_type: 'individual',
+  metadata: {
+    customer_id: 'internal_12345'
+  }
+});
+```
+
+### 🐍 Python Implementation
+
+```python
+import payvessel
+
+payvessel.api_key = "PVKEY-3ZO1QOSQH83C5Q3PBCVUT1"
+
+def create_customer_reserved_account(customer_data):
+    try:
+        customer = payvessel.Customer.create(
+            name=customer_data['name'],
+            email=customer_data['email'],
+            phone=customer_data['phone'],
+            address=customer_data['address'],
+            create_reserved_account=True,
+            account_type=customer_data.get('account_type', 'individual'),
+            metadata=customer_data.get('metadata', {})
+        )
+
+        if customer.reserved_account:
+            print(f'Reserved account created: {customer.reserved_account.account_number}')
+            
+            # Send account details to customer
+            send_account_details_to_customer(customer)
+            
+            return customer
+        else:
+            raise Exception('Failed to create reserved account')
+    
+    except payvessel.error.PayvesselError as e:
+        print(f'Account creation error: {e.user_message}')
+        raise
+
+def send_account_details_to_customer(customer):
+    account_details = {
+        'account_number': customer.reserved_account.account_number,
+        'account_name': customer.reserved_account.account_name,
+        'bank_name': customer.reserved_account.bank_name,
+        'routing_number': customer.reserved_account.routing_number
+    }
+    
+    # Send via email service
+    email_service.send_account_details(customer.email, account_details)
+
+# Usage example
+customer = create_customer_reserved_account({
+    'name': 'John Doe',
+    'email': 'john.doe@example.com',
+    'phone': '+1234567890',
+    'address': {
+        'line1': '123 Main Street',
+        'city': 'New York',
+        'state': 'NY',
+        'postal_code': '10001',
+        'country': 'US'
+    },
+    'account_type': 'individual',
+    'metadata': {
+        'customer_id': 'internal_12345'
+    }
+})
+```
+
+### 🐘 PHP Implementation
+
+```php
+<?php
+require_once('vendor/autoload.php');
+
+\Payvessel\Payvessel::setApiKey("PVKEY-3ZO1QOSQH83C5Q3PBCVUT1");
+
+function createCustomerReservedAccount($customerData) {
+    try {
+        $customer = \Payvessel\Customer::create([
+            'name' => $customerData['name'],
+            'email' => $customerData['email'],
+            'phone' => $customerData['phone'],
+            'address' => $customerData['address'],
+            'create_reserved_account' => true,
+            'account_type' => $customerData['account_type'] ?? 'individual',
+            'metadata' => $customerData['metadata'] ?? []
+        ]);
+
+        if ($customer->reserved_account) {
+            echo "Reserved account created: " . $customer->reserved_account->account_number . "\n";
+            
+            // Send account details to customer
+            sendAccountDetailsToCustomer($customer);
+            
+            return $customer;
+        } else {
+            throw new Exception('Failed to create reserved account');
+        }
+    } catch (\Payvessel\Exception\ApiErrorException $e) {
+        echo "Account creation error: " . $e->getMessage() . "\n";
+        throw $e;
+    }
+}
+
+function sendAccountDetailsToCustomer($customer) {
+    $accountDetails = [
+        'account_number' => $customer->reserved_account->account_number,
+        'account_name' => $customer->reserved_account->account_name,
+        'bank_name' => $customer->reserved_account->bank_name,
+        'routing_number' => $customer->reserved_account->routing_number
+    ];
+    
+    // Send via email service
+    EmailService::sendAccountDetails($customer->email, $accountDetails);
+}
+
+// Usage example
+$customer = createCustomerReservedAccount([
+    'name' => 'John Doe',
+    'email' => 'john.doe@example.com',
+    'phone' => '+1234567890',
+    'address' => [
+        'line1' => '123 Main Street',
+        'city' => 'New York',
+        'state' => 'NY',
+        'postal_code' => '10001',
+        'country' => 'US'
+    ],
+    'account_type' => 'individual',
+    'metadata' => ['customer_id' => 'internal_12345']
+]);
+?>
+```
+
+## Account Management
+
+### 💰 Check Account Balance
+
+```bash
+curl https://api.payvessel.com/api/v1/customers/cust_1234567890abcdef/reserved_account \
+  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
+  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF"
+```
+
+### 📊 Account Balance Response
+
+```json
+{
+  "id": "acc_1234567890abcdef",
+  "account_number": "1234567890",
+  "account_name": "John Doe",
+  "bank_name": "Payvessel Bank",
+  "status": "active",
+  "balance": 15000,
+  "currency": "USD",
+  "last_transaction": {
+    "id": "txn_1234567890abcdef",
+    "amount": 5000,
+    "type": "credit",
+    "description": "Bank transfer deposit",
+    "created": 1634567890
+  }
+}
+```
+
+### 📝 Transaction History
+
+```bash
+curl "https://api.payvessel.com/api/v1/customers/cust_1234567890abcdef/reserved_account/transactions" \
+  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
+  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF"
+```
+
+## Use Cases
+
+### 🏢 Business Applications
+
+<AccordionGroup>
+  <Accordion icon="graduation-cap" title="Educational Institutions">
+    **Student Fee Collection:**
+    - Assign unique accounts to each student
+    - Parents can transfer fees directly
+    - Automatic fee reconciliation
+    - Generate payment confirmations
+  </Accordion>
+  <Accordion icon="home" title="Property Management">
+    **Rent Collection:**
+    - Individual accounts for each tenant
+    - Automated rent payment tracking
+    - Late payment identification
+    - Maintenance fee collection
+  </Accordion>
+  <Accordion icon="handshake" title="Marketplace Platforms">
+    **Seller Accounts:**
+    - Dedicated accounts for marketplace sellers
+    - Customer payments directly to seller accounts
+    - Automatic commission deduction
+    - Real-time settlement
+  </Accordion>
+</AccordionGroup>
+
+### 🎯 Benefits by Industry
+
+<CardGroup cols={2}>
+  <Card title="🏥 Healthcare" icon="heart">
+    - Patient billing accounts
+    - Insurance payment processing
+    - Medical expense tracking
+    - Automated reconciliation
+  </Card>
+  <Card title="🚚 Logistics" icon="truck">
+    - Customer shipping accounts
+    - Prepaid balance management
+    - COD alternative solution
+    - Fleet payment tracking
+  </Card>
+  <Card title="🏪 Retail" icon="store">
+    - Customer loyalty accounts
+    - Layaway payment plans
+    - Bulk order processing
+    - Corporate account management
+  </Card>
+  <Card title="💼 Professional Services" icon="briefcase">
+    - Client retainer accounts
+    - Project-based billing
+    - Recurring service fees
+    - Expense reimbursement
+  </Card>
+</CardGroup>
+
+## Webhook Integration
+
+### 🔔 Account Events
+
+Monitor reserved account activity with webhooks:
+
+```javascript
+// Webhook handler for reserved account events
+app.post('/webhook/reserved-account', (req, res) => {
+  const event = req.body;
+  
+  switch (event.type) {
+    case 'reserved_account.credit':
+      handleAccountCredit(event.data);
+      break;
+    case 'reserved_account.debit':
+      handleAccountDebit(event.data);
+      break;
+    case 'reserved_account.low_balance':
+      notifyLowBalance(event.data);
+      break;
+  }
+  
+  res.status(200).send('OK');
+});
+
+function handleAccountCredit(accountData) {
+  // Process incoming payment
+  console.log(`Account ${accountData.account_number} credited with ${accountData.amount}`);
+  
+  // Update customer balance
+  // Send confirmation to customer
+  // Trigger any business logic
+}
+```
+
+## Security Considerations
+
+### 🔒 Account Security
+
+<CardGroup cols={2}>
+  <Card title="🔐 Access Control" icon="lock">
+    - Customer-specific account access
+    - Encrypted account numbers
+    - Secure API authentication
+    - Audit trail maintenance
+  </Card>
+  <Card title="🛡️ Fraud Prevention" icon="shield">
+    - Transaction monitoring
+    - Unusual activity detection
+    - Account status management
+    - Compliance reporting
+  </Card>
+</CardGroup>
+
+### 📋 Compliance Requirements
+
+- **KYC Verification** - Customer identity verification required
+- **AML Monitoring** - Anti-money laundering compliance
+- **Data Protection** - GDPR/CCPA compliance for customer data
+- **Financial Regulations** - Local banking regulation compliance
+
+<Warning>
+**Account Limits:** Reserved accounts may have transaction limits based on customer verification level and regulatory requirements.
+</Warning>
+
+<div style={{textAlign: 'center', marginTop: '2rem'}}>
+
+**Ready to implement customer reserved accounts?**
+
+<CardGroup cols={2}>
+  <Card title="🚀 API Integration" icon="code" href="/api-reference/introduction">
+    Explore the complete API documentation
+  </Card>
+  <Card title="🔔 Webhook Setup" icon="bell" href="/api-basics/webhooks">
+    Configure webhooks for account events
+  </Card>
+</CardGroup>
+
+</div>

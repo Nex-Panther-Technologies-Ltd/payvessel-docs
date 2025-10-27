@@ -1,0 +1,510 @@
+---
+title: "Testing"
+description: "Comprehensive testing strategies for your payment integration"
+---
+
+# Testing
+
+**Ensure your payment integration works flawlessly with comprehensive testing strategies and tools.**
+
+Thorough testing is crucial for payment systems to ensure reliability, security, and excellent user experience across all scenarios.
+
+<CardGroup cols={2}>
+  <Card title="🧪 Sandbox Testing" icon="flask">
+    Safe environment for comprehensive testing
+  </Card>
+  <Card title="✅ Test Coverage" icon="check-circle">
+    Cover all payment scenarios and edge cases
+  </Card>
+</CardGroup>
+
+***
+
+## Testing Environments
+
+### 🧪 Sandbox Environment
+
+Use Payvessel's sandbox for safe testing:
+
+```javascript
+// Sandbox configuration
+const testConfig = {
+  baseUrl: 'https://sandbox.payvessel.com',
+  apiKey: 'PVKEY-3ZO1QOSQH83C5Q3PBCVUT1',
+  apiSecret: 'Bearer PVSECRET-OZJD0SZ2F2WOTXAF'
+};
+
+// Test client setup
+const payvessel = new PayvesselClient(testConfig);
+```
+
+### 💳 Test Card Numbers
+
+Use these test cards for different scenarios:
+
+<AccordionGroup>
+  <Accordion icon="check-circle" title="Successful Payments">
+    **Visa:** 4111111111111111
+    **Mastercard:** 5555555555554444
+    **American Express:** 378282246310005
+    **Discover:** 6011111111111117
+    
+    - Use any future expiry date
+    - Use any 3-4 digit CVV
+    - Use any valid billing address
+  </Accordion>
+  <Accordion icon="times-circle" title="Declined Payments">
+    **Generic Decline:** 4000000000000002
+    **Insufficient Funds:** 4000000000009995
+    **Lost Card:** 4000000000009987
+    **Stolen Card:** 4000000000009979
+    **Expired Card:** 4000000000000069
+  </Accordion>
+  <Accordion icon="clock" title="Processing Delays">
+    **Slow Processing:** 4000000000000259
+    **Timeout:** 4000000000006975
+    **Processing Error:** 4000000000000119
+  </Accordion>
+  <Accordion icon="shield-check" title="Authentication Required">
+    **3D Secure Required:** 4000000000003220
+    **3D Secure Failed:** 4000000000003063
+    **Authentication Unavailable:** 4000000000003055
+  </Accordion>
+</AccordionGroup>
+
+## Testing Categories
+
+### 🎯 Functional Testing
+
+Test all core payment functionalities:
+
+<CardGroup cols={2}>
+  <Card title="💳 Payment Processing" icon="credit-card">
+    - Single payments
+    - Recurring payments
+    - Refunds and cancellations
+    - Partial refunds
+  </Card>
+  <Card title="👤 Customer Management" icon="user">
+    - Customer creation
+    - Payment method storage
+    - Customer updates
+    - Payment history
+  </Card>
+</CardGroup>
+
+### ⚠️ Error Handling Testing
+
+```javascript
+// Test suite for error scenarios
+describe('Payment Error Handling', () => {
+  test('handles declined card gracefully', async () => {
+    const declinedCard = '4000000000000002';
+    
+    const payment = await payvessel.payments.create({
+      amount: 1000,
+      currency: 'USD',
+      payment_method: {
+        type: 'card',
+        card: {
+          number: declinedCard,
+          exp_month: 12,
+          exp_year: 2030,
+          cvc: '123'
+        }
+      }
+    });
+    
+    expect(payment.status).toBe('failed');
+    expect(payment.failure_reason).toBe('card_declined');
+  });
+  
+  test('handles network timeouts', async () => {
+    // Simulate network timeout
+    const timeoutCard = '4000000000006975';
+    
+    await expect(
+      payvessel.payments.create({
+        amount: 1000,
+        currency: 'USD',
+        payment_method: {
+          type: 'card',
+          card: {
+            number: timeoutCard,
+            exp_month: 12,
+            exp_year: 2030,
+            cvc: '123'
+          }
+        }
+      })
+    ).rejects.toThrow('Request timeout');
+  });
+});
+```
+
+### 🔒 Security Testing
+
+<AccordionGroup>
+  <Accordion icon="shield" title="Input Validation">
+    **Test invalid inputs:**
+    - Malformed card numbers
+    - Invalid expiry dates
+    - Missing required fields
+    - SQL injection attempts
+    - XSS payloads
+  </Accordion>
+  <Accordion icon="key" title="Authentication Testing">
+    **Verify security measures:**
+    - Invalid API keys
+    - Expired tokens
+    - Rate limiting
+    - IP restrictions
+  </Accordion>
+</AccordionGroup>
+
+## Automated Testing
+
+### 🤖 Test Automation Framework
+
+```javascript
+// Payment test helper class
+class PaymentTestHelper {
+  constructor() {
+    this.client = new PayvesselClient({
+      baseUrl: 'https://sandbox.payvessel.com',
+      apiKey: process.env.PAYVESSEL_TEST_API_KEY,
+      apiSecret: process.env.PAYVESSEL_TEST_API_SECRET
+    });
+  }
+  
+  async createTestPayment(amount = 1000, currency = 'USD', cardNumber = '4111111111111111') {
+    return await this.client.payments.create({
+      amount,
+      currency,
+      payment_method: {
+        type: 'card',
+        card: {
+          number: cardNumber,
+          exp_month: 12,
+          exp_year: 2030,
+          cvc: '123'
+        }
+      },
+      confirm: true
+    });
+  }
+  
+  async testSuccessfulPayment() {
+    const payment = await this.createTestPayment();
+    expect(payment.status).toBe('succeeded');
+    return payment;
+  }
+  
+  async testDeclinedPayment() {
+    const payment = await this.createTestPayment(1000, 'USD', '4000000000000002');
+    expect(payment.status).toBe('failed');
+    expect(payment.failure_reason).toBe('card_declined');
+    return payment;
+  }
+}
+```
+
+### 📊 Test Coverage
+
+Ensure comprehensive test coverage:
+
+```javascript
+// Test matrix for different scenarios
+const testMatrix = [
+  // Payment amounts
+  { amount: 100, description: 'Minimum amount' },
+  { amount: 999999, description: 'Maximum amount' },
+  { amount: 1050, description: 'Amount with decimals' },
+  
+  // Currencies
+  { currency: 'USD', description: 'US Dollars' },
+  { currency: 'EUR', description: 'Euros' },
+  { currency: 'GBP', description: 'British Pounds' },
+  
+  // Card types
+  { card: 'visa', number: '4111111111111111' },
+  { card: 'mastercard', number: '5555555555554444' },
+  { card: 'amex', number: '378282246310005' },
+  
+  // Error scenarios
+  { scenario: 'decline', number: '4000000000000002' },
+  { scenario: 'insufficient_funds', number: '4000000000009995' },
+  { scenario: 'timeout', number: '4000000000006975' }
+];
+
+// Run tests for each combination
+testMatrix.forEach(test => {
+  it(`should handle ${test.description}`, async () => {
+    // Test implementation
+  });
+});
+```
+
+## Integration Testing
+
+### 🔗 End-to-End Testing
+
+Test complete user journeys:
+
+<Steps>
+  <Step title="Customer Journey">
+    Test from product selection to payment confirmation
+  </Step>
+  <Step title="Webhook Delivery">
+    Verify webhook events are received and processed
+  </Step>
+  <Step title="Refund Process">
+    Test complete refund workflow
+  </Step>
+  <Step title="Error Recovery">
+    Test error handling and user experience
+  </Step>
+</Steps>
+
+### 🔔 Webhook Testing
+
+```javascript
+// Webhook testing utility
+class WebhookTester {
+  constructor(webhookEndpoint) {
+    this.endpoint = webhookEndpoint;
+    this.receivedEvents = [];
+  }
+  
+  async simulateWebhook(eventType, data) {
+    const event = {
+      id: `evt_${Date.now()}`,
+      type: eventType,
+      data: data,
+      created: Math.floor(Date.now() / 1000)
+    };
+    
+    const signature = this.generateSignature(event);
+    
+    const response = await fetch(this.endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Payvessel-Signature': signature
+      },
+      body: JSON.stringify(event)
+    });
+    
+    return response;
+  }
+  
+  generateSignature(payload) {
+    const secret = process.env.WEBHOOK_SECRET;
+    return crypto
+      .createHmac('sha256', secret)
+      .update(JSON.stringify(payload))
+      .digest('hex');
+  }
+}
+
+// Test webhook handling
+describe('Webhook Processing', () => {
+  const webhookTester = new WebhookTester('http://localhost:3000/webhooks');
+  
+  test('processes payment.succeeded event', async () => {
+    const response = await webhookTester.simulateWebhook('payment.succeeded', {
+      payment: {
+        id: 'pay_123',
+        amount: 1000,
+        currency: 'USD',
+        status: 'succeeded'
+      }
+    });
+    
+    expect(response.status).toBe(200);
+  });
+});
+```
+
+## Performance Testing
+
+### ⚡ Load Testing
+
+Test system performance under load:
+
+```javascript
+// Load testing with Artillery or similar tool
+const loadTestConfig = {
+  target: 'https://sandbox.payvessel.com',
+  phases: [
+    { duration: 60, arrivalRate: 10 }, // Warm up
+    { duration: 120, arrivalRate: 50 }, // Sustained load
+    { duration: 60, arrivalRate: 100 }, // Peak load
+  ],
+  scenarios: [
+    {
+      name: 'Create Payment',
+      weight: 70,
+      flow: [
+        {
+          post: {
+            url: '/api/v1/payments',
+            headers: {
+              'api-key': 'PVKEY-3ZO1QOSQH83C5Q3PBCVUT1',
+              'api-secret': 'Bearer PVSECRET-OZJD0SZ2F2WOTXAF',
+              'Content-Type': 'application/json'
+            },
+            json: {
+              amount: 1000,
+              currency: 'USD',
+              payment_method: 'card'
+            }
+          }
+        }
+      ]
+    }
+  ]
+};
+```
+
+### 📊 Performance Metrics
+
+Monitor key performance indicators:
+
+<CardGroup cols={2}>
+  <Card title="🚀 Response Times" icon="clock">
+    - Average response time < 500ms
+    - 95th percentile < 1000ms
+    - 99th percentile < 2000ms
+    - No timeouts under normal load
+  </Card>
+  <Card title="📈 Throughput" icon="chart-line">
+    - Requests per second
+    - Success rate > 99.9%
+    - Error rate < 0.1%
+    - Concurrent user capacity
+  </Card>
+</CardGroup>
+
+## Mobile Testing
+
+### 📱 Device Testing
+
+Test across different mobile devices and conditions:
+
+<AccordionGroup>
+  <Accordion icon="mobile" title="Device Compatibility">
+    **iOS Testing:**
+    - Safari browser compatibility
+    - Touch interactions
+    - Auto-fill functionality
+    - Different screen sizes
+    
+    **Android Testing:**
+    - Chrome browser compatibility
+    - Various Android versions
+    - Different manufacturers
+    - Keyboard interactions
+  </Accordion>
+  <Accordion icon="wifi" title="Network Conditions">
+    **Test various network scenarios:**
+    - Slow 3G connections
+    - Intermittent connectivity
+    - Network timeouts
+    - Offline scenarios
+  </Accordion>
+</AccordionGroup>
+
+## Test Data Management
+
+### 🗃️ Test Data Strategy
+
+```javascript
+// Test data factory
+class TestDataFactory {
+  static createCustomer(overrides = {}) {
+    return {
+      email: `test${Date.now()}@example.com`,
+      name: 'Test Customer',
+      phone: '+1234567890',
+      ...overrides
+    };
+  }
+  
+  static createPayment(overrides = {}) {
+    return {
+      amount: 1000,
+      currency: 'USD',
+      payment_method: 'card',
+      customer: this.createCustomer(),
+      ...overrides
+    };
+  }
+  
+  static getTestCard(scenario = 'success') {
+    const cards = {
+      success: '4111111111111111',
+      decline: '4000000000000002',
+      insufficient_funds: '4000000000009995',
+      expired: '4000000000000069'
+    };
+    
+    return {
+      number: cards[scenario],
+      exp_month: 12,
+      exp_year: 2030,
+      cvc: '123'
+    };
+  }
+}
+```
+
+## Testing Checklist
+
+Before going live:
+
+<Steps>
+  <Step title="Functional Testing">
+    ✅ All payment flows work correctly
+    ✅ Error handling is robust
+    ✅ Refunds process successfully
+    ✅ Webhooks are received and processed
+  </Step>
+  <Step title="Security Testing">
+    ✅ Input validation prevents injection
+    ✅ Authentication works correctly
+    ✅ Sensitive data is not logged
+    ✅ Rate limiting is enforced
+  </Step>
+  <Step title="Performance Testing">
+    ✅ Response times meet requirements
+    ✅ System handles expected load
+    ✅ Error rates are acceptable
+    ✅ Mobile performance is optimized
+  </Step>
+  <Step title="Integration Testing">
+    ✅ End-to-end flows work
+    ✅ External dependencies handled
+    ✅ Monitoring and alerting work
+    ✅ Documentation is complete
+  </Step>
+</Steps>
+
+<Note>
+**Continuous Testing:** Payment systems should be tested continuously. Set up automated tests that run with every deployment and monitor production systems for any issues.
+</Note>
+
+<div style={{textAlign: 'center', marginTop: '2rem'}}>
+
+**Ready to implement comprehensive testing?**
+
+<CardGroup cols={2}>
+  <Card title="🔄 Best Practices" icon="check-circle" href="/api-basics/best-practices">
+    Learn testing best practices
+  </Card>
+  <Card title="⚠️ Error Handling" icon="exclamation-triangle" href="/api-basics/errors">
+    Understand error scenarios
+  </Card>
+</CardGroup>
+
+</div>

@@ -1,0 +1,792 @@
+---
+title: "Refunds"
+description: "Process refunds efficiently with automated workflows and comprehensive tracking"
+---
+
+# Refunds
+
+**Handle refunds seamlessly with automated processing, partial refunds, and comprehensive audit trails.**
+
+Process full and partial refunds with real-time status updates, automated notifications, and detailed reporting for complete transaction lifecycle management.
+
+<CardGroup cols={2}>
+  <Card title="⚡ Instant Processing" icon="bolt">
+    Real-time refund processing and notifications
+  </Card>
+  <Card title="📊 Complete Tracking" icon="chart-line">
+    Detailed refund history and analytics
+  </Card>
+</CardGroup>
+
+***
+
+## How It Works
+
+### 🔄 Refund Process Flow
+
+<Steps>
+  <Step title="Initiate Refund">
+    Create refund request for original transaction
+  </Step>
+  <Step title="Validation">
+    System validates refund eligibility and amount
+  </Step>
+  <Step title="Processing">
+    Refund processed through original payment method
+  </Step>
+  <Step title="Notification">
+    Customer automatically notified of refund status
+  </Step>
+  <Step title="Settlement">
+    Funds returned to customer's account
+  </Step>
+</Steps>
+
+### 💡 Refund Types
+
+<CardGroup cols={3}>
+  <Card title="💯 Full Refund" icon="undo">
+    Complete transaction reversal
+  </Card>
+  <Card title="📊 Partial Refund" icon="percentage">
+    Refund specific amount or items
+  </Card>
+  <Card title="🔄 Chargeback Protection" icon="shield">
+    Proactive dispute resolution
+  </Card>
+</CardGroup>
+
+## API Implementation
+
+### 🚀 Create Refund
+
+```bash
+curl https://api.payvessel.com/api/v1/refunds \
+  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
+  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "payment_id": "pmt_1234567890abcdef",
+    "amount": 15000,
+    "reason": "customer_request",
+    "description": "Customer requested refund for defective product",
+    "notify_customer": true,
+    "refund_application_fee": false,
+    "metadata": {
+      "order_id": "ORD-2024-001",
+      "return_tracking": "RT123456789",
+      "customer_service_ticket": "CS-789"
+    }
+  }'
+```
+
+### 📝 Request Parameters
+
+<AccordionGroup>
+  <Accordion icon="money-bill" title="Refund Details">
+    **payment_id** (string, required) - ID of the original payment
+    **amount** (number, optional) - Refund amount in cents (defaults to full amount)
+    **reason** (string, required) - Reason for refund
+    **description** (string, optional) - Detailed description
+  </Accordion>
+  <Accordion icon="list" title="Refund Reasons">
+    **customer_request** - Customer requested refund
+    **fraudulent** - Fraudulent transaction
+    **duplicate** - Duplicate charge
+    **product_not_received** - Product not delivered
+    **product_defective** - Defective product
+    **cancelled_order** - Order cancellation
+  </Accordion>
+  <Accordion icon="cog" title="Processing Options">
+    **notify_customer** (boolean) - Send refund notification
+    **refund_application_fee** (boolean) - Include processing fees
+    **instant_refund** (boolean) - Process immediately if available
+    **metadata** (object) - Custom tracking information
+  </Accordion>
+</AccordionGroup>
+
+### ✅ Successful Response
+
+```json
+{
+  "id": "ref_1234567890abcdef",
+  "object": "refund",
+  "payment_id": "pmt_1234567890abcdef",
+  "amount": 15000,
+  "currency": "USD",
+  "status": "succeeded",
+  "reason": "customer_request",
+  "description": "Customer requested refund for defective product",
+  "created": 1634567890,
+  "receipt_number": "RF-2024-001-123456",
+  "refund_method": "card",
+  "estimated_arrival": "2024-01-20T00:00:00Z",
+  "fees_refunded": 0,
+  "original_payment": {
+    "id": "pmt_1234567890abcdef",
+    "amount": 25000,
+    "currency": "USD",
+    "created": 1634467890
+  },
+  "metadata": {
+    "order_id": "ORD-2024-001",
+    "return_tracking": "RT123456789",
+    "customer_service_ticket": "CS-789"
+  }
+}
+```
+
+## Implementation Examples
+
+### 🟨 Node.js Implementation
+
+```javascript
+const payvessel = require('payvessel')('PVKEY-3ZO1QOSQH83C5Q3PBCVUT1');
+
+async function processRefund(refundData) {
+  try {
+    const refund = await payvessel.refunds.create({
+      payment_id: refundData.payment_id,
+      amount: refundData.amount, // Optional for partial refund
+      reason: refundData.reason,
+      description: refundData.description,
+      notify_customer: refundData.notify_customer !== false,
+      refund_application_fee: refundData.refund_application_fee || false,
+      metadata: refundData.metadata || {}
+    });
+
+    console.log('Refund processed:', refund.id);
+    console.log('Status:', refund.status);
+    console.log('Receipt number:', refund.receipt_number);
+
+    // Log refund for internal tracking
+    await logRefundActivity(refund);
+
+    // Update order status if applicable
+    if (refundData.metadata?.order_id) {
+      await updateOrderStatus(refundData.metadata.order_id, 'refunded');
+    }
+
+    return refund;
+  } catch (error) {
+    console.error('Refund processing error:', error.message);
+    
+    // Handle specific error cases
+    if (error.code === 'charge_already_refunded') {
+      throw new Error('This payment has already been fully refunded');
+    } else if (error.code === 'charge_expired_for_capture') {
+      throw new Error('Payment is too old to refund');
+    }
+    
+    throw error;
+  }
+}
+
+async function getRefundStatus(refundId) {
+  try {
+    const refund = await payvessel.refunds.retrieve(refundId);
+    return {
+      id: refund.id,
+      status: refund.status,
+      amount: refund.amount,
+      estimated_arrival: refund.estimated_arrival,
+      receipt_number: refund.receipt_number
+    };
+  } catch (error) {
+    console.error('Refund retrieval error:', error.message);
+    throw error;
+  }
+}
+
+async function listRefunds(filters = {}) {
+  try {
+    const refunds = await payvessel.refunds.list({
+      limit: filters.limit || 10,
+      created: filters.created,
+      payment_id: filters.payment_id,
+      status: filters.status
+    });
+
+    return refunds.data.map(refund => ({
+      id: refund.id,
+      payment_id: refund.payment_id,
+      amount: refund.amount,
+      status: refund.status,
+      reason: refund.reason,
+      created: refund.created
+    }));
+  } catch (error) {
+    console.error('Refund listing error:', error.message);
+    throw error;
+  }
+}
+
+// Usage examples
+const refund = await processRefund({
+  payment_id: 'pmt_1234567890abcdef',
+  amount: 15000, // $150.00 partial refund
+  reason: 'customer_request',
+  description: 'Customer not satisfied with product quality',
+  metadata: {
+    order_id: 'ORD-2024-001',
+    customer_service_ticket: 'CS-789'
+  }
+});
+```
+
+### 🐍 Python Implementation
+
+```python
+import payvessel
+from datetime import datetime
+
+payvessel.api_key = "PVKEY-3ZO1QOSQH83C5Q3PBCVUT1"
+
+def process_refund(refund_data):
+    try:
+        refund = payvessel.Refund.create(
+            payment_id=refund_data['payment_id'],
+            amount=refund_data.get('amount'),  # None for full refund
+            reason=refund_data['reason'],
+            description=refund_data.get('description'),
+            notify_customer=refund_data.get('notify_customer', True),
+            refund_application_fee=refund_data.get('refund_application_fee', False),
+            metadata=refund_data.get('metadata', {})
+        )
+
+        print(f'Refund processed: {refund.id}')
+        print(f'Status: {refund.status}')
+        print(f'Receipt number: {refund.receipt_number}')
+
+        # Log refund activity
+        log_refund_activity(refund)
+
+        # Send confirmation email if needed
+        if refund_data.get('send_confirmation'):
+            send_refund_confirmation(refund)
+
+        return refund
+    
+    except payvessel.error.InvalidRequestError as e:
+        if 'already_refunded' in str(e):
+            raise Exception('Payment has already been fully refunded')
+        elif 'insufficient_funds' in str(e):
+            raise Exception('Insufficient funds available for refund')
+        else:
+            raise Exception(f'Refund processing error: {e.user_message}')
+    
+    except payvessel.error.PayvesselError as e:
+        print(f'Payvessel error: {e.user_message}')
+        raise
+
+def calculate_refund_eligibility(payment_id):
+    try:
+        payment = payvessel.Payment.retrieve(payment_id)
+        refunds = payvessel.Refund.list(payment_id=payment_id)
+        
+        total_refunded = sum(refund.amount for refund in refunds.data)
+        available_amount = payment.amount - total_refunded
+        
+        return {
+            'payment_id': payment_id,
+            'original_amount': payment.amount,
+            'total_refunded': total_refunded,
+            'available_for_refund': available_amount,
+            'can_refund': available_amount > 0,
+            'refund_deadline': calculate_refund_deadline(payment.created)
+        }
+    
+    except payvessel.error.PayvesselError as e:
+        print(f'Eligibility check error: {e.user_message}')
+        raise
+
+def bulk_refund_processing(refund_requests):
+    results = []
+    
+    for request in refund_requests:
+        try:
+            refund = process_refund(request)
+            results.append({
+                'request_id': request.get('request_id'),
+                'refund_id': refund.id,
+                'status': 'success',
+                'amount': refund.amount
+            })
+        except Exception as e:
+            results.append({
+                'request_id': request.get('request_id'),
+                'status': 'failed',
+                'error': str(e)
+            })
+    
+    return results
+
+# Usage example
+refund = process_refund({
+    'payment_id': 'pmt_1234567890abcdef',
+    'amount': 15000,  # $150.00
+    'reason': 'product_defective',
+    'description': 'Product arrived damaged',
+    'notify_customer': True,
+    'metadata': {
+        'order_id': 'ORD-2024-001',
+        'return_reason': 'damaged_in_shipping'
+    }
+})
+```
+
+### 🐘 PHP Implementation
+
+```php
+<?php
+require_once('vendor/autoload.php');
+
+\Payvessel\Payvessel::setApiKey("PVKEY-3ZO1QOSQH83C5Q3PBCVUT1");
+
+function processRefund($refundData) {
+    try {
+        $refund = \Payvessel\Refund::create([
+            'payment_id' => $refundData['payment_id'],
+            'amount' => $refundData['amount'] ?? null, // null for full refund
+            'reason' => $refundData['reason'],
+            'description' => $refundData['description'] ?? null,
+            'notify_customer' => $refundData['notify_customer'] ?? true,
+            'refund_application_fee' => $refundData['refund_application_fee'] ?? false,
+            'metadata' => $refundData['metadata'] ?? []
+        ]);
+
+        echo "Refund processed: " . $refund->id . "\n";
+        echo "Status: " . $refund->status . "\n";
+        echo "Receipt number: " . $refund->receipt_number . "\n";
+
+        // Log refund for tracking
+        logRefundActivity($refund);
+
+        // Update internal systems
+        if (isset($refundData['metadata']['order_id'])) {
+            updateOrderStatus($refundData['metadata']['order_id'], 'refunded');
+        }
+
+        return $refund;
+    } catch (\Payvessel\Exception\InvalidRequestException $e) {
+        if (strpos($e->getMessage(), 'already_refunded') !== false) {
+            throw new Exception('Payment has already been fully refunded');
+        } elseif (strpos($e->getMessage(), 'charge_expired') !== false) {
+            throw new Exception('Payment is too old to refund');
+        } else {
+            throw new Exception('Refund processing error: ' . $e->getMessage());
+        }
+    } catch (\Payvessel\Exception\ApiErrorException $e) {
+        echo "Refund processing error: " . $e->getMessage() . "\n";
+        throw $e;
+    }
+}
+
+function getRefundAnalytics($dateRange = null) {
+    try {
+        $params = ['limit' => 100];
+        if ($dateRange) {
+            $params['created'] = $dateRange;
+        }
+
+        $refunds = \Payvessel\Refund::all($params);
+        
+        $analytics = [
+            'total_refunds' => count($refunds->data),
+            'total_amount' => 0,
+            'by_reason' => [],
+            'by_status' => []
+        ];
+
+        foreach ($refunds->data as $refund) {
+            $analytics['total_amount'] += $refund->amount;
+            
+            // Group by reason
+            $reason = $refund->reason;
+            $analytics['by_reason'][$reason] = ($analytics['by_reason'][$reason] ?? 0) + 1;
+            
+            // Group by status
+            $status = $refund->status;
+            $analytics['by_status'][$status] = ($analytics['by_status'][$status] ?? 0) + 1;
+        }
+
+        return $analytics;
+    } catch (\Payvessel\Exception\ApiErrorException $e) {
+        echo "Analytics error: " . $e->getMessage() . "\n";
+        throw $e;
+    }
+}
+
+// Usage example
+$refund = processRefund([
+    'payment_id' => 'pmt_1234567890abcdef',
+    'amount' => 15000, // $150.00
+    'reason' => 'customer_request',
+    'description' => 'Customer changed mind about purchase',
+    'notify_customer' => true,
+    'metadata' => [
+        'order_id' => 'ORD-2024-001',
+        'customer_service_rep' => 'agent_456'
+    ]
+]);
+?>
+```
+
+## Advanced Refund Features
+
+### 🔄 Instant Refunds
+
+Enable immediate refund processing for eligible transactions:
+
+```javascript
+const instantRefund = await payvessel.refunds.create({
+  payment_id: 'pmt_1234567890abcdef',
+  amount: 10000,
+  reason: 'customer_request',
+  instant_refund: true, // Request immediate processing
+  priority: 'high'
+});
+
+if (instantRefund.status === 'succeeded') {
+  console.log('Instant refund completed');
+} else {
+  console.log('Refund queued for standard processing');
+}
+```
+
+### 📊 Batch Refund Processing
+
+Process multiple refunds efficiently:
+
+```javascript
+const batchRefunds = await payvessel.refunds.createBatch([
+  {
+    payment_id: 'pmt_1111111111111111',
+    reason: 'event_cancelled',
+    description: 'Event cancelled due to weather'
+  },
+  {
+    payment_id: 'pmt_2222222222222222',
+    reason: 'event_cancelled',
+    description: 'Event cancelled due to weather'
+  }
+]);
+
+console.log('Batch refund status:', batchRefunds.status);
+console.log('Successful refunds:', batchRefunds.successful_count);
+console.log('Failed refunds:', batchRefunds.failed_count);
+```
+
+### 🎯 Conditional Refunds
+
+Set up automatic refund conditions:
+
+```javascript
+const conditionalRefund = await payvessel.refunds.create({
+  payment_id: 'pmt_1234567890abcdef',
+  amount: 20000,
+  reason: 'product_not_received',
+  conditions: {
+    delay_days: 7, // Wait 7 days before processing
+    require_confirmation: true, // Require customer confirmation
+    auto_cancel_if: {
+      product_delivered: true, // Cancel if product is delivered
+      dispute_opened: true // Cancel if customer opens dispute
+    }
+  }
+});
+```
+
+## Refund Management
+
+### 📋 List All Refunds
+
+```bash
+curl "https://api.payvessel.com/api/v1/refunds?limit=20&status=succeeded" \
+  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
+  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF"
+```
+
+### 📊 Refund Analytics
+
+```json
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "ref_1234567890abcdef",
+      "payment_id": "pmt_1234567890abcdef",
+      "amount": 15000,
+      "status": "succeeded",
+      "reason": "customer_request",
+      "created": 1634567890
+    }
+  ],
+  "total_count": 45,
+  "total_amount": 675000,
+  "analytics": {
+    "refund_rate": "3.2%",
+    "average_refund_amount": 15000,
+    "most_common_reason": "customer_request",
+    "processing_time_avg": "2.3 hours"
+  }
+}
+```
+
+### 🔍 Refund Details
+
+Get comprehensive refund information:
+
+```bash
+curl https://api.payvessel.com/api/v1/refunds/ref_1234567890abcdef \
+  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
+  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF"
+```
+
+## Industry Applications
+
+### 🛍️ E-commerce Refunds
+
+<AccordionGroup>
+  <Accordion icon="box" title="Product Returns">
+    **Return Processing:**
+    - Automatic refund on return receipt
+    - Partial refunds for damaged items
+    - Restocking fee deductions
+    - Return shipping cost handling
+  </Accordion>
+  <Accordion icon="calendar" title="Subscription Services">
+    **Service Refunds:**
+    - Pro-rated refund calculations
+    - Unused service period refunds
+    - Downgrade refund processing
+    - Cancellation refund automation
+  </Accordion>
+  <Accordion icon="ticket" title="Event Tickets">
+    **Event Cancellations:**
+    - Bulk refund processing
+    - Tiered refund schedules
+    - Transfer fee handling
+    - Insurance claim integration
+  </Accordion>
+</AccordionGroup>
+
+### 🏢 Service Industries
+
+<CardGroup cols={2}>
+  <Card title="✈️ Travel & Hospitality" icon="plane">
+    - Booking cancellation refunds
+    - Weather-related refunds
+    - Schedule change compensation
+    - Travel insurance integration
+  </Card>
+  <Card title="🎓 Education" icon="graduation-cap">
+    - Course cancellation refunds
+    - Withdrawal refund schedules
+    - Material fee refunds
+    - Transfer credit processing
+  </Card>
+</CardGroup>
+
+## Dispute Prevention
+
+### 🛡️ Proactive Refund Strategy
+
+Reduce chargebacks with strategic refund management:
+
+```javascript
+// Implement dispute prevention logic
+async function preventDispute(paymentId, customerComplaint) {
+  const payment = await payvessel.payments.retrieve(paymentId);
+  
+  // Check if proactive refund would be beneficial
+  const disputeRisk = await assessDisputeRisk(payment, customerComplaint);
+  
+  if (disputeRisk.score > 0.7) {
+    // Process proactive refund to prevent dispute
+    const refund = await payvessel.refunds.create({
+      payment_id: paymentId,
+      reason: 'dispute_prevention',
+      description: 'Proactive refund to resolve customer concern',
+      notify_customer: true,
+      metadata: {
+        dispute_risk_score: disputeRisk.score,
+        prevention_strategy: true
+      }
+    });
+    
+    console.log('Proactive refund processed to prevent dispute');
+    return refund;
+  }
+}
+```
+
+### 📞 Customer Service Integration
+
+```javascript
+// Integrate with customer service systems
+function integrateWithCustomerService(refund) {
+  // Create ticket in customer service system
+  const ticket = customerService.createTicket({
+    type: 'refund_processed',
+    customer_email: refund.customer_email,
+    refund_id: refund.id,
+    amount: refund.amount,
+    reason: refund.reason,
+    priority: refund.amount > 50000 ? 'high' : 'normal'
+  });
+  
+  // Send internal notification
+  notificationService.send({
+    to: 'customer-service@company.com',
+    subject: `Refund Processed: ${refund.receipt_number}`,
+    template: 'refund_notification',
+    data: { refund, ticket }
+  });
+}
+```
+
+## Refund Reporting
+
+### 📊 Comprehensive Analytics
+
+Track refund metrics and trends:
+
+```javascript
+async function generateRefundReport(period) {
+  const report = await payvessel.refunds.analytics({
+    period: period,
+    group_by: ['reason', 'status', 'payment_method'],
+    include_trends: true
+  });
+
+  return {
+    summary: {
+      total_refunds: report.total_count,
+      total_amount: report.total_amount,
+      refund_rate: report.refund_rate,
+      average_processing_time: report.avg_processing_time
+    },
+    breakdown: {
+      by_reason: report.by_reason,
+      by_payment_method: report.by_payment_method,
+      by_status: report.by_status
+    },
+    trends: {
+      volume_trend: report.volume_trend,
+      amount_trend: report.amount_trend,
+      reason_trends: report.reason_trends
+    }
+  };
+}
+```
+
+## Webhook Integration
+
+### 🔔 Refund Events
+
+Monitor refund status changes:
+
+```javascript
+// Webhook handler for refund events
+app.post('/webhook/refunds', (req, res) => {
+  const event = req.body;
+  
+  switch (event.type) {
+    case 'refund.created':
+      handleRefundCreated(event.data);
+      break;
+    case 'refund.succeeded':
+      handleRefundSucceeded(event.data);
+      break;
+    case 'refund.failed':
+      handleRefundFailed(event.data);
+      break;
+    case 'refund.updated':
+      handleRefundUpdated(event.data);
+      break;
+  }
+  
+  res.status(200).send('OK');
+});
+
+function handleRefundSucceeded(refundData) {
+  // Update order status
+  updateOrderStatus(refundData.metadata.order_id, 'refunded');
+  
+  // Send customer notification
+  sendRefundConfirmation(refundData);
+  
+  // Update inventory if applicable
+  if (refundData.metadata.return_to_inventory) {
+    restockItems(refundData.metadata.items);
+  }
+  
+  // Log for analytics
+  logRefundCompletion(refundData);
+}
+```
+
+## Best Practices
+
+### ✅ Refund Management Tips
+
+<CardGroup cols={2}>
+  <Card title="⚡ Speed Optimization" icon="rocket">
+    - Process refunds quickly
+    - Use instant refunds when available
+    - Automate common refund scenarios
+    - Set clear processing timelines
+  </Card>
+  <Card title="🤝 Customer Experience" icon="handshake">
+    - Provide clear refund policies
+    - Send proactive status updates
+    - Offer partial refund options
+    - Maintain professional communication
+  </Card>
+</CardGroup>
+
+### 🔍 Fraud Prevention
+
+<AccordionGroup>
+  <Accordion icon="shield" title="Refund Fraud Detection">
+    **Warning Signs:**
+    - Frequent refund requests from same customer
+    - Large refund amounts shortly after payment
+    - Unusual refund patterns or timing
+    - Requests to different payment methods
+  </Accordion>
+  <Accordion icon="eye" title="Monitoring & Controls">
+    **Prevention Measures:**
+    - Set refund amount limits
+    - Implement approval workflows
+    - Monitor refund velocity
+    - Verify refund legitimacy
+  </Accordion>
+</AccordionGroup>
+
+### 📈 Performance Optimization
+
+- **Batch Processing** - Handle multiple refunds efficiently
+- **Conditional Logic** - Automate refund decisions
+- **Integration Points** - Connect with existing systems
+- **Reporting** - Track performance metrics
+
+<Warning>
+**Refund Limits:** Most payment methods have time limits for refunds (typically 180 days). Check payment method specific limitations before processing refunds.
+</Warning>
+
+<div style={{textAlign: 'center', marginTop: '2rem'}}>
+
+**Ready to implement refund processing?**
+
+<CardGroup cols={2}>
+  <Card title="🚀 API Integration" icon="code" href="/api-reference/introduction">
+    Start with refund API documentation
+  </Card>
+  <Card title="📊 Analytics Setup" icon="chart-bar" href="/api-basics/webhooks">
+    Configure refund event tracking
+  </Card>
+</CardGroup>
+
+</div>
