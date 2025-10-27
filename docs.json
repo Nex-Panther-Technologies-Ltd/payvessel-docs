@@ -54,7 +54,7 @@
             ]
           },
           {
-            "group": "Transfer/Payout",
+            "group": "Send Money & Payouts",
             "pages": [
               "transfer-payout/single-transfers",
               "transfer-payout/bulk-transfers"
@@ -70,7 +70,7 @@
             ]
           },
           {
-            "group": "Verification APIs",
+            "group": "Verify Identities",
             "pages": [
               "verification-apis/verifying-your-customers",
               "verification-apis/bvn-verification",
