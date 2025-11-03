@@ -130,18 +130,48 @@
         "tab": "API reference",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Getting Started",
             "pages": [
               "api-reference/introduction"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Transactions",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference/transactions/initialize-payment",
+              "api-reference/transactions/verify-payment",
+              "api-reference/transactions/list-transactions"
+            ]
+          },
+          {
+            "group": "Transfers",
+            "pages": [
+              "api-reference/transfers/create-recipient",
+              "api-reference/transfers/initiate-transfer"
+            ]
+          },
+          {
+            "group": "Identity Verification",
+            "pages": [
+              "api-reference/verification/bvn-verification"
+            ]
+          },
+          {
+            "group": "Wallets",
+            "pages": [
+              "api-reference/wallets/create-wallet"
+            ]
+          },
+          {
+            "group": "Bill Payments",
+            "pages": [
+              "api-reference/endpoint/create"
+            ]
+          },
+          {
+            "group": "Card Management",
+            "pages": [
+              "api-reference/endpoint/get"
             ]
           }
         ]

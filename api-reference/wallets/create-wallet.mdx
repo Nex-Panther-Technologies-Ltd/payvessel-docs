@@ -1,0 +1,974 @@
+---
+title: "Create Wallet"
+description: "Create a digital wallet for customers to store funds and make transactions"
+---
+
+# Create Wallet
+
+Create a digital wallet for customers to securely store funds, make payments, and receive money. PayVessel wallets support multiple currencies and provide real-time balance tracking.
+
+<Note>
+Digital wallets enable you to build comprehensive fintech solutions with account-to-account transfers, bill payments, and merchant transactions.
+</Note>
+
+## Endpoint
+
+<Badge variant="success">**POST**</Badge> `/wallets/create`
+
+## Headers
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `Authorization` | string | **Required** | Bearer token with your secret API key |
+| `Content-Type` | string | **Required** | Must be `application/json` |
+| `Idempotency-Key` | string | **Recommended** | Unique key to prevent duplicate wallet creation |
+
+## Request Body
+
+<ParamField body="customer_id" type="string" required>
+  Unique identifier for the customer who will own this wallet
+  
+  <Note>One customer can have multiple wallets in different currencies</Note>
+</ParamField>
+
+<ParamField body="currency" type="string" default="NGN">
+  Primary currency for the wallet
+  
+  **Supported currencies:** `NGN`, `USD`, `GBP`, `EUR`, `GHS`, `KES`, `ZAR`
+</ParamField>
+
+<ParamField body="wallet_type" type="string" default="personal">
+  Type of wallet to create
+  
+  **Available types:**
+  - `personal` - Individual customer wallet
+  - `business` - Business/corporate wallet
+  - `savings` - High-yield savings wallet
+  - `current` - Current account wallet
+</ParamField>
+
+<ParamField body="label" type="string">
+  Human-readable label for the wallet (e.g., "Main Account", "Savings", "Business Funds")
+</ParamField>
+
+<ParamField body="customer_info" type="object" required>
+  Customer information for wallet creation
+  
+  <Expandable title="Customer Info Object">
+    <ParamField body="customer_info.first_name" type="string" required>
+      Customer's first name
+    </ParamField>
+    
+    <ParamField body="customer_info.last_name" type="string" required>
+      Customer's last name
+    </ParamField>
+    
+    <ParamField body="customer_info.email" type="string" required>
+      Customer's email address
+    </ParamField>
+    
+    <ParamField body="customer_info.phone" type="string" required>
+      Customer's phone number in international format
+    </ParamField>
+    
+    <ParamField body="customer_info.date_of_birth" type="string">
+      Customer's date of birth in YYYY-MM-DD format
+    </ParamField>
+    
+    <ParamField body="customer_info.bvn" type="string">
+      Customer's Bank Verification Number (required for NGN wallets)
+    </ParamField>
+    
+    <ParamField body="customer_info.address" type="object">
+      Customer's address information
+      
+      <Expandable title="Address Object">
+        <ParamField body="customer_info.address.street" type="string">
+          Street address
+        </ParamField>
+        
+        <ParamField body="customer_info.address.city" type="string">
+          City
+        </ParamField>
+        
+        <ParamField body="customer_info.address.state" type="string">
+          State or province
+        </ParamField>
+        
+        <ParamField body="customer_info.address.country" type="string">
+          Country code (ISO 3166-1 alpha-2)
+        </ParamField>
+        
+        <ParamField body="customer_info.address.postal_code" type="string">
+          Postal or ZIP code
+        </ParamField>
+      </Expandable>
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField body="initial_deposit" type="string" default="0">
+  Initial deposit amount in the smallest currency unit (optional)
+  
+  <Warning>Initial deposits require sufficient balance in your main account</Warning>
+</ParamField>
+
+<ParamField body="features" type="object">
+  Wallet features configuration
+  
+  <Expandable title="Features Object">
+    <ParamField body="features.debit_card" type="boolean" default="false">
+      Enable virtual debit card for the wallet
+    </ParamField>
+    
+    <ParamField body="features.bill_payments" type="boolean" default="true">
+      Allow bill payments from this wallet
+    </ParamField>
+    
+    <ParamField body="features.transfers" type="boolean" default="true">
+      Enable transfers to/from this wallet
+    </ParamField>
+    
+    <ParamField body="features.savings_interest" type="boolean" default="false">
+      Enable interest earning for savings wallets
+    </ParamField>
+    
+    <ParamField body="features.overdraft" type="boolean" default="false">
+      Allow overdraft facility (business wallets only)
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField body="limits" type="object">
+  Transaction limits for the wallet
+  
+  <Expandable title="Limits Object">
+    <ParamField body="limits.daily_transaction_limit" type="string">
+      Maximum daily transaction amount in smallest currency unit
+    </ParamField>
+    
+    <ParamField body="limits.monthly_transaction_limit" type="string">
+      Maximum monthly transaction amount in smallest currency unit
+    </ParamField>
+    
+    <ParamField body="limits.single_transaction_limit" type="string">
+      Maximum single transaction amount in smallest currency unit
+    </ParamField>
+    
+    <ParamField body="limits.daily_transaction_count" type="integer">
+      Maximum number of transactions per day
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField body="metadata" type="object">
+  Additional information about the wallet
+  
+  ```json
+  {
+    "source": "mobile_app",
+    "referral_code": "REF123",
+    "customer_segment": "premium",
+    "created_by": "customer_service"
+  }
+  ```
+</ParamField>
+
+## Example Request
+
+<CodeGroup>
+```bash cURL - Personal Wallet
+curl -X POST https://api.payvessel.com/wallets/create \
+  -H "Authorization: Bearer sk_test_abc123..." \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: wallet_2024_001" \
+  -d '{
+    "customer_id": "CUST_12345",
+    "currency": "NGN",
+    "wallet_type": "personal",
+    "label": "Main Account",
+    "customer_info": {
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "john.doe@example.com",
+      "phone": "+2348012345678",
+      "date_of_birth": "1990-05-15",
+      "bvn": "12345678901",
+      "address": {
+        "street": "15 Victoria Island Road",
+        "city": "Lagos",
+        "state": "Lagos",
+        "country": "NG",
+        "postal_code": "101001"
+      }
+    },
+    "initial_deposit": "50000",
+    "features": {
+      "debit_card": true,
+      "bill_payments": true,
+      "transfers": true
+    },
+    "limits": {
+      "daily_transaction_limit": "500000",
+      "single_transaction_limit": "100000"
+    },
+    "metadata": {
+      "source": "mobile_app",
+      "customer_segment": "standard"
+    }
+  }'
+```
+
+```javascript Node.js
+const payvessel = require('payvessel')(process.env.PAYVESSEL_SECRET_KEY);
+
+const wallet = await payvessel.wallets.create({
+  customer_id: 'CUST_12345',
+  currency: 'NGN',
+  wallet_type: 'personal',
+  label: 'Main Account',
+  customer_info: {
+    first_name: 'John',
+    last_name: 'Doe',
+    email: 'john.doe@example.com',
+    phone: '+2348012345678',
+    date_of_birth: '1990-05-15',
+    bvn: '12345678901',
+    address: {
+      street: '15 Victoria Island Road',
+      city: 'Lagos',
+      state: 'Lagos',
+      country: 'NG',
+      postal_code: '101001'
+    }
+  },
+  initial_deposit: '50000',
+  features: {
+    debit_card: true,
+    bill_payments: true,
+    transfers: true
+  },
+  limits: {
+    daily_transaction_limit: '500000',
+    single_transaction_limit: '100000'
+  },
+  metadata: {
+    source: 'mobile_app',
+    customer_segment: 'standard'
+  }
+});
+```
+
+```php PHP
+<?php
+$payvessel = new \Payvessel\Payvessel(getenv('PAYVESSEL_SECRET_KEY'));
+
+$wallet = $payvessel->wallets->create([
+  'customer_id' => 'CUST_12345',
+  'currency' => 'NGN',
+  'wallet_type' => 'personal',
+  'label' => 'Main Account',
+  'customer_info' => [
+    'first_name' => 'John',
+    'last_name' => 'Doe',
+    'email' => 'john.doe@example.com',
+    'phone' => '+2348012345678',
+    'date_of_birth' => '1990-05-15',
+    'bvn' => '12345678901',
+    'address' => [
+      'street' => '15 Victoria Island Road',
+      'city' => 'Lagos',
+      'state' => 'Lagos',
+      'country' => 'NG',
+      'postal_code' => '101001'
+    ]
+  ],
+  'initial_deposit' => '50000',
+  'features' => [
+    'debit_card' => true,
+    'bill_payments' => true,
+    'transfers' => true
+  ]
+]);
+?>
+```
+
+```python Python
+import payvessel
+
+payvessel.api_key = os.environ['PAYVESSEL_SECRET_KEY']
+
+wallet = payvessel.Wallets.create(
+    customer_id='CUST_12345',
+    currency='NGN',
+    wallet_type='personal',
+    label='Main Account',
+    customer_info={
+        'first_name': 'John',
+        'last_name': 'Doe',
+        'email': 'john.doe@example.com',
+        'phone': '+2348012345678',
+        'date_of_birth': '1990-05-15',
+        'bvn': '12345678901',
+        'address': {
+            'street': '15 Victoria Island Road',
+            'city': 'Lagos',
+            'state': 'Lagos',
+            'country': 'NG',
+            'postal_code': '101001'
+        }
+    },
+    initial_deposit='50000',
+    features={
+        'debit_card': True,
+        'bill_payments': True,
+        'transfers': True
+    }
+)
+```
+</CodeGroup>
+
+## Response
+
+<ResponseField name="status" type="string">
+  Request status indicator - `"success"` or `"error"`
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Human-readable message describing the result
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Created wallet data object
+  
+  <Expandable title="Data Object">
+    <ResponseField name="data.wallet_id" type="string">
+      Unique wallet identifier
+    </ResponseField>
+    
+    <ResponseField name="data.account_number" type="string">
+      10-digit account number for the wallet (NGN wallets)
+    </ResponseField>
+    
+    <ResponseField name="data.account_name" type="string">
+      Account name (customer's full name)
+    </ResponseField>
+    
+    <ResponseField name="data.bank_name" type="string">
+      Virtual bank name for the wallet
+    </ResponseField>
+    
+    <ResponseField name="data.bank_code" type="string">
+      Bank code for transfers to this wallet
+    </ResponseField>
+    
+    <ResponseField name="data.customer_id" type="string">
+      Customer identifier who owns the wallet
+    </ResponseField>
+    
+    <ResponseField name="data.currency" type="string">
+      Wallet currency
+    </ResponseField>
+    
+    <ResponseField name="data.wallet_type" type="string">
+      Type of wallet created
+    </ResponseField>
+    
+    <ResponseField name="data.label" type="string">
+      Human-readable wallet label
+    </ResponseField>
+    
+    <ResponseField name="data.balance" type="object">
+      Current wallet balance information
+      
+      <Expandable title="Balance Object">
+        <ResponseField name="data.balance.available" type="string">
+          Available balance in smallest currency unit
+        </ResponseField>
+        
+        <ResponseField name="data.balance.ledger" type="string">
+          Ledger balance in smallest currency unit
+        </ResponseField>
+        
+        <ResponseField name="data.balance.currency" type="string">
+          Balance currency
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="data.status" type="string">
+      Wallet status - `"active"`, `"inactive"`, `"suspended"`, `"closed"`
+    </ResponseField>
+    
+    <ResponseField name="data.features" type="object">
+      Enabled wallet features
+    </ResponseField>
+    
+    <ResponseField name="data.limits" type="object">
+      Transaction limits configuration
+    </ResponseField>
+    
+    <ResponseField name="data.virtual_card" type="object">
+      Virtual debit card details (if enabled)
+      
+      <Expandable title="Virtual Card Object">
+        <ResponseField name="data.virtual_card.card_id" type="string">
+          Unique card identifier
+        </ResponseField>
+        
+        <ResponseField name="data.virtual_card.masked_pan" type="string">
+          Masked card number (e.g., 5399****1234)
+        </ResponseField>
+        
+        <ResponseField name="data.virtual_card.card_type" type="string">
+          Card brand - `"mastercard"`, `"visa"`
+        </ResponseField>
+        
+        <ResponseField name="data.virtual_card.status" type="string">
+          Card status - `"active"`, `"inactive"`, `"blocked"`
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="data.created_at" type="string">
+      ISO 8601 timestamp when wallet was created
+    </ResponseField>
+    
+    <ResponseField name="data.updated_at" type="string">
+      ISO 8601 timestamp when wallet was last updated
+    </ResponseField>
+    
+    <ResponseField name="data.metadata" type="object">
+      Custom metadata attached to the wallet
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Response
+
+<CodeGroup>
+```json 201 Created - Personal Wallet
+{
+  "status": "success",
+  "message": "Wallet created successfully",
+  "data": {
+    "wallet_id": "WLT_xyz789abc123456",
+    "account_number": "1234567890",
+    "account_name": "John Doe",
+    "bank_name": "PayVessel Microfinance Bank",
+    "bank_code": "50746",
+    "customer_id": "CUST_12345",
+    "currency": "NGN",
+    "wallet_type": "personal",
+    "label": "Main Account",
+    "balance": {
+      "available": "50000",
+      "ledger": "50000",
+      "currency": "NGN"
+    },
+    "status": "active",
+    "features": {
+      "debit_card": true,
+      "bill_payments": true,
+      "transfers": true,
+      "savings_interest": false,
+      "overdraft": false
+    },
+    "limits": {
+      "daily_transaction_limit": "500000",
+      "monthly_transaction_limit": "10000000",
+      "single_transaction_limit": "100000",
+      "daily_transaction_count": 50
+    },
+    "virtual_card": {
+      "card_id": "CRD_abc123xyz789",
+      "masked_pan": "5399****1234",
+      "card_type": "mastercard",
+      "status": "active"
+    },
+    "created_at": "2024-01-15T14:30:00Z",
+    "updated_at": "2024-01-15T14:30:00Z",
+    "metadata": {
+      "source": "mobile_app",
+      "customer_segment": "standard"
+    }
+  }
+}
+```
+
+```json 201 Created - Business Wallet
+{
+  "status": "success",
+  "message": "Business wallet created successfully",
+  "data": {
+    "wallet_id": "WLT_business789xyz123",
+    "account_number": "9876543210",
+    "account_name": "Acme Corp Limited",
+    "bank_name": "PayVessel Microfinance Bank",
+    "bank_code": "50746",
+    "customer_id": "CUST_67890",
+    "currency": "NGN",
+    "wallet_type": "business",
+    "label": "Business Operating Account",
+    "balance": {
+      "available": "0",
+      "ledger": "0",
+      "currency": "NGN"
+    },
+    "status": "active",
+    "features": {
+      "debit_card": false,
+      "bill_payments": true,
+      "transfers": true,
+      "savings_interest": false,
+      "overdraft": true
+    },
+    "limits": {
+      "daily_transaction_limit": "5000000",
+      "monthly_transaction_limit": "100000000",
+      "single_transaction_limit": "1000000",
+      "daily_transaction_count": 100
+    },
+    "virtual_card": null,
+    "created_at": "2024-01-15T15:00:00Z",
+    "updated_at": "2024-01-15T15:00:00Z",
+    "metadata": {
+      "business_type": "limited_company",
+      "industry": "technology"
+    }
+  }
+}
+```
+
+```json 400 Bad Request - Validation Error
+{
+  "status": "error",
+  "message": "Validation failed",
+  "errors": {
+    "customer_info.bvn": ["BVN is required for NGN wallets"],
+    "customer_info.email": ["The email format is invalid"],
+    "initial_deposit": ["Initial deposit exceeds available balance"]
+  }
+}
+```
+
+```json 409 Conflict - Duplicate Wallet
+{
+  "status": "error",
+  "message": "Wallet already exists",
+  "error": {
+    "code": "duplicate_wallet",
+    "description": "Customer already has a personal NGN wallet",
+    "existing_wallet_id": "WLT_existing123"
+  }
+}
+```
+</CodeGroup>
+
+## Wallet Types Guide
+
+<Tabs>
+  <Tab title="Personal Wallet">
+    **Individual Customer Accounts**
+    
+    **Features:**
+    - Single currency per wallet
+    - Debit card issuance available
+    - Standard transaction limits
+    - Mobile and web access
+    
+    **Use cases:**
+    - Consumer banking
+    - Digital payments
+    - Savings accounts
+    - Remittance receiving
+    
+    **Limits:**
+    - Daily: ₦500,000
+    - Monthly: ₦10,000,000
+    - Single transaction: ₦100,000
+  </Tab>
+  
+  <Tab title="Business Wallet">
+    **Corporate and SME Accounts**
+    
+    **Features:**
+    - Higher transaction limits
+    - Overdraft facility available
+    - Multi-user access (coming soon)
+    - Detailed reporting
+    
+    **Use cases:**
+    - Business operations
+    - Vendor payments
+    - Payroll processing
+    - Revenue collection
+    
+    **Limits:**
+    - Daily: ₦5,000,000
+    - Monthly: ₦100,000,000
+    - Single transaction: ₦1,000,000
+  </Tab>
+  
+  <Tab title="Savings Wallet">
+    **Interest-Earning Accounts**
+    
+    **Features:**
+    - Interest accrual
+    - Limited withdrawal frequency
+    - Goal-based savings
+    - Automatic transfers
+    
+    **Use cases:**
+    - Emergency funds
+    - Goal savings
+    - Interest earning
+    - Long-term investments
+    
+    **Interest Rate:**
+    - Up to 10% per annum
+    - Daily interest calculation
+    - Monthly interest payment
+  </Tab>
+  
+  <Tab title="Current Wallet">
+    **High-Volume Transaction Accounts**
+    
+    **Features:**
+    - Unlimited transactions
+    - No minimum balance
+    - Overdraft facility
+    - Premium support
+    
+    **Use cases:**
+    - High-frequency trading
+    - Payment processing
+    - Financial services
+    - Corporate treasury
+    
+    **Benefits:**
+    - Zero transaction fees
+    - Priority processing
+    - Dedicated support
+  </Tab>
+</Tabs>
+
+## Currency Support
+
+<AccordionGroup>
+  <Accordion title="Nigerian Naira (NGN)" icon="naira-sign">
+    **Primary Currency**
+    
+    - Full banking features
+    - Virtual account numbers
+    - Debit card issuance
+    - Bill payment integration
+    - USSD access codes
+    
+    **Requirements:**
+    - Valid BVN
+    - Nigerian address
+    - Phone verification
+  </Accordion>
+  
+  <Accordion title="US Dollar (USD)" icon="dollar-sign">
+    **International Currency**
+    
+    - USD account numbers
+    - International transfers
+    - Card payments abroad
+    - Forex services
+    
+    **Features:**
+    - SWIFT transfers
+    - Multi-currency cards
+    - Exchange rate protection
+  </Accordion>
+  
+  <Accordion title="British Pound (GBP)" icon="pound-sign">
+    **UK Currency Support**
+    
+    - GBP virtual accounts
+    - UK bank transfers
+    - European payments
+    - Brexit-compliant
+    
+    **Benefits:**
+    - Competitive exchange rates
+    - Fast UK transfers
+    - Regulatory compliance
+  </Accordion>
+  
+  <Accordion title="West African Currencies" icon="coins">
+    **Regional Support**
+    
+    - **GHS**: Ghana Cedis
+    - **XOF**: West African Francs
+    - **LRD**: Liberian Dollars
+    
+    **Features:**
+    - Local payment methods
+    - Mobile money integration
+    - Cross-border transfers
+  </Accordion>
+</AccordionGroup>
+
+## Integration Patterns
+
+<Tabs>
+  <Tab title="Neobank App">
+    ```javascript
+    // Create customer wallet during onboarding
+    const createCustomerWallet = async (customerData, verificationsCompleted) => {
+      // Ensure KYC is completed
+      if (!verificationsCompleted.bvn || !verificationsCompleted.identity) {
+        throw new Error('KYC verification required');
+      }
+      
+      const wallet = await payvessel.wallets.create({
+        customer_id: customerData.id,
+        currency: 'NGN',
+        wallet_type: 'personal',
+        label: 'Main Account',
+        customer_info: {
+          first_name: customerData.first_name,
+          last_name: customerData.last_name,
+          email: customerData.email,
+          phone: customerData.phone,
+          date_of_birth: customerData.date_of_birth,
+          bvn: customerData.bvn,
+          address: customerData.address
+        },
+        features: {
+          debit_card: true,
+          bill_payments: true,
+          transfers: true
+        },
+        limits: {
+          daily_transaction_limit: customerData.tier === 'premium' ? '1000000' : '500000',
+          single_transaction_limit: '100000'
+        },
+        metadata: {
+          onboarding_source: 'mobile_app',
+          customer_tier: customerData.tier,
+          referral_code: customerData.referral_code
+        }
+      });
+      
+      // Store wallet info in your database
+      await saveCustomerWallet(customerData.id, wallet.data);
+      
+      // Generate virtual debit card if enabled
+      if (wallet.data.virtual_card) {
+        await provisionVirtualCard(customerData.id, wallet.data.virtual_card);
+      }
+      
+      return wallet.data;
+    };
+    ```
+  </Tab>
+  
+  <Tab title="Business Platform">
+    ```javascript
+    // Create business wallet with advanced features
+    const createBusinessWallet = async (businessData) => {
+      const wallet = await payvessel.wallets.create({
+        customer_id: businessData.business_id,
+        currency: 'NGN',
+        wallet_type: 'business',
+        label: `${businessData.business_name} Operating Account`,
+        customer_info: {
+          first_name: businessData.ceo_first_name,
+          last_name: businessData.ceo_last_name,
+          email: businessData.business_email,
+          phone: businessData.business_phone,
+          bvn: businessData.ceo_bvn,
+          address: businessData.business_address
+        },
+        features: {
+          debit_card: false,
+          bill_payments: true,
+          transfers: true,
+          overdraft: businessData.credit_approved
+        },
+        limits: {
+          daily_transaction_limit: businessData.daily_limit || '5000000',
+          monthly_transaction_limit: businessData.monthly_limit || '50000000',
+          single_transaction_limit: '2000000'
+        },
+        metadata: {
+          business_type: businessData.business_type,
+          industry: businessData.industry,
+          registration_number: businessData.cac_number,
+          tax_id: businessData.tin
+        }
+      });
+      
+      // Set up business-specific features
+      await setupBusinessFeatures(businessData.business_id, wallet.data);
+      
+      return wallet.data;
+    };
+    ```
+  </Tab>
+  
+  <Tab title="Savings Platform">
+    ```javascript
+    // Create goal-based savings wallet
+    const createSavingsWallet = async (customerId, savingsGoal) => {
+      const wallet = await payvessel.wallets.create({
+        customer_id: customerId,
+        currency: 'NGN',
+        wallet_type: 'savings',
+        label: savingsGoal.name,
+        customer_info: await getCustomerInfo(customerId),
+        features: {
+          debit_card: false,
+          bill_payments: false,
+          transfers: true,
+          savings_interest: true
+        },
+        limits: {
+          daily_transaction_limit: '100000',
+          single_transaction_limit: '50000',
+          daily_transaction_count: 5
+        },
+        metadata: {
+          goal_amount: savingsGoal.target_amount,
+          goal_date: savingsGoal.target_date,
+          auto_save_amount: savingsGoal.monthly_contribution,
+          goal_type: savingsGoal.category
+        }
+      });
+      
+      // Set up automatic savings
+      if (savingsGoal.auto_save) {
+        await setupAutomaticSavings(customerId, wallet.data.wallet_id, savingsGoal);
+      }
+      
+      return wallet.data;
+    };
+    ```
+  </Tab>
+  
+  <Tab title="Multi-Currency Platform">
+    ```javascript
+    // Create wallets for multiple currencies
+    const createMultiCurrencyWallets = async (customerId, currencies) => {
+      const wallets = [];
+      
+      for (const currency of currencies) {
+        const wallet = await payvessel.wallets.create({
+          customer_id: customerId,
+          currency: currency,
+          wallet_type: 'personal',
+          label: `${currency} Account`,
+          customer_info: await getCustomerInfo(customerId),
+          features: {
+            debit_card: currency === 'NGN',
+            bill_payments: currency === 'NGN',
+            transfers: true
+          },
+          limits: getCurrencyLimits(currency),
+          metadata: {
+            primary_currency: currency === 'NGN',
+            forex_enabled: true,
+            cross_currency_transfers: true
+          }
+        });
+        
+        wallets.push(wallet.data);
+      }
+      
+      // Link wallets for easy currency conversion
+      await linkMultiCurrencyWallets(customerId, wallets);
+      
+      return wallets;
+    };
+    ```
+  </Tab>
+</Tabs>
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="KYC Compliance" icon="shield-check">
+    Always complete customer verification before wallet creation, especially for NGN wallets requiring BVN
+  </Card>
+  
+  <Card title="Appropriate Limits" icon="gauge-high">
+    Set transaction limits based on customer risk profile and business requirements
+  </Card>
+  
+  <Card title="Feature Planning" icon="settings">
+    Enable only necessary features initially. Additional features can be activated later
+  </Card>
+  
+  <Card title="Metadata Usage" icon="tag">
+    Use metadata extensively for customer segmentation, reporting, and business intelligence
+  </Card>
+  
+  <Card title="Error Handling" icon="triangle-exclamation">
+    Implement robust error handling for wallet creation failures and duplicate prevention
+  </Card>
+  
+  <Card title="Status Monitoring" icon="chart-line">
+    Monitor wallet status and handle status changes (suspensions, closures) appropriately
+  </Card>
+</CardGroup>
+
+## Wallet Lifecycle Management
+
+<Steps>
+  <Step title="Creation">
+    Create wallet with appropriate type and features based on customer profile
+  </Step>
+  
+  <Step title="Activation">
+    Activate wallet after successful creation and initial verification
+  </Step>
+  
+  <Step title="Monitoring">
+    Monitor wallet activities, balances, and compliance status
+  </Step>
+  
+  <Step title="Maintenance">
+    Regular limit reviews, feature updates, and compliance checks
+  </Step>
+  
+  <Step title="Closure">
+    Proper wallet closure process when requested or required
+  </Step>
+</Steps>
+
+## Next Steps
+
+After creating a wallet:
+
+<CardGroup cols={2}>
+  <Card title="Fund Wallet" icon="plus-circle" href="/api-reference/wallets/fund-wallet">
+    Add money to the newly created wallet
+  </Card>
+  <Card title="Get Balance" icon="wallet" href="/api-reference/wallets/get-balance">
+    Check current wallet balance and transaction limits
+  </Card>
+  <Card title="Create Virtual Card" icon="credit-card" href="/api-reference/cards/create-card">
+    Issue a virtual debit card for the wallet
+  </Card>
+  <Card title="Set Up Transfers" icon="arrow-right-arrow-left" href="/api-reference/transfers/create-recipient">
+    Enable transfers to and from the wallet
+  </Card>
+</CardGroup>
+
+## Webhook Events
+
+This endpoint triggers the following webhook events:
+
+- `wallet.created` - Wallet successfully created
+- `wallet.activated` - Wallet activated and ready for use
+- `card.issued` - Virtual card issued (if debit_card feature enabled)
+- `account.opened` - Virtual bank account opened (for NGN wallets)
+
+<Tip>
+**Pro Tip**: Use wallet metadata to store business-specific information like customer segments, referral sources, and feature flags for easy filtering and reporting.
+</Tip>

@@ -1,33 +1,193 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: 'API Reference'
+description: 'Complete reference guide for PayVessel API endpoints and integration'
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+# PayVessel API Reference
 
-## Welcome
+**The comprehensive reference for integrating PayVessel's payment infrastructure into your application.**
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+PayVessel's REST API provides programmatic access to accept payments, send money, verify identities, manage wallets, and more. Our API is organized around REST principles with predictable resource-oriented URLs, accepts form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes and authentication.
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
+<CardGroup cols={2}>
+  <Card title="🚀 Getting Started" icon="rocket">
+    **Base URL**: `https://api.payvessel.com`
+    
+    **Sandbox URL**: `https://sandbox.payvessel.com`
+  </Card>
+  <Card title="📊 Rate Limits" icon="gauge-high">
+    **Live**: 100 requests per minute
+    
+    **Sandbox**: 1000 requests per minute
 </Card>
+</CardGroup>
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+All API requests must be authenticated with your **secret API key** using Bearer token authentication. Your API keys carry many privileges, so be sure to keep them secure! Do not share your secret API keys in publicly accessible areas such as GitHub, client-side code, and so forth.
+
+<CodeGroup>
+```bash cURL
+curl https://api.payvessel.com/transaction/initialize \
+  -H "Authorization: Bearer YOUR_SECRET_KEY" \
+  -H "Content-Type: application/json"
+```
+
+```javascript Node.js
+const payvessel = require('payvessel')(YOUR_SECRET_KEY);
+```
+
+```php PHP
+<?php
+$payvessel = new \Payvessel\Payvessel(YOUR_SECRET_KEY);
+?>
+```
+
+```python Python
+import payvessel
+payvessel.api_key = "YOUR_SECRET_KEY"
+```
+</CodeGroup>
+
+<Warning>
+**Keep your API keys secure!** Your secret API key can perform any API request to PayVessel without restriction. Store your secret key securely and never expose it in client-side code.
+</Warning>
+
+## API Categories
+
+Our API is organized into logical groups of functionality:
+
+<AccordionGroup>
+  <Accordion title="💳 Accept Payments" icon="credit-card">
+    Process one-time payments, create payment links, manage customer reserved accounts, handle refunds, and track settlements.
+    
+    **Key Endpoints:**
+    - `POST /transaction/initialize` - Initialize a payment
+    - `GET /transaction/verify/{reference}` - Verify transaction status
+    - `POST /transaction/refund` - Process refunds
+    - `POST /payment-links/create` - Create payment links
+  </Accordion>
+  
+  <Accordion title="💸 Send Money & Payouts" icon="paper-plane">
+    Send money to bank accounts and mobile money users with instant transfers and bulk processing capabilities.
+    
+    **Key Endpoints:**
+    - `POST /transfer/recipient` - Create transfer recipient
+    - `POST /transfer/initiate` - Initialize transfer
+    - `POST /transfer/bulk` - Process bulk transfers
+    - `GET /transfer/verify/{reference}` - Verify transfer status
+  </Accordion>
+  
+  <Accordion title="🛡️ Identity Verification" icon="shield-check">
+    Verify customer identities through BVN, NIN, biometric verification, credit scoring, and compliance checks.
+    
+    **Key Endpoints:**
+    - `POST /verification/bvn` - Verify Bank Verification Number
+    - `POST /verification/nin` - Verify National Identity Number
+    - `POST /verification/face-comparison` - Biometric face comparison
+    - `POST /verification/liveness` - Liveness detection
+  </Accordion>
+  
+  <Accordion title="👛 Wallets" icon="wallet">
+    Create and manage digital wallets, check balances, generate statements, and handle wallet-to-wallet transfers.
+    
+    **Key Endpoints:**
+    - `POST /wallets/create` - Create new wallet
+    - `GET /wallets/{wallet_id}` - Get wallet details
+    - `GET /wallets/{wallet_id}/balance` - Check wallet balance
+    - `GET /wallets/{wallet_id}/statement` - Generate statement
+  </Accordion>
+  
+  <Accordion title="🧾 Bill Payments" icon="receipt">
+    Pay utility bills, airtime, data, and other services with comprehensive biller management.
+    
+    **Key Endpoints:**
+    - `GET /bills/billers` - Get available billers
+    - `GET /bills/products/{biller_id}` - Get biller products
+    - `POST /bills/verify-customer` - Verify customer details
+    - `POST /bills/pay` - Process bill payment
+  </Accordion>
+  
+  <Accordion title="💳 Card Management" icon="id-card">
+    Issue virtual and physical cards, manage cardholders, fund cards, and control card activities.
+    
+    **Key Endpoints:**
+    - `POST /cards/create` - Issue new card
+    - `POST /cards/{card_id}/fund` - Fund card
+    - `POST /cards/{card_id}/freeze` - Freeze card
+    - `GET /cards/{card_id}/transactions` - Get card transactions
+  </Accordion>
+</AccordionGroup>
+
+## Request & Response Format
+
+### Request Headers
+All requests should include these headers:
+
+```http
+Authorization: Bearer YOUR_SECRET_KEY
+Content-Type: application/json
+```
+
+### Response Structure
+All API responses follow a consistent structure:
 
 ```json
-"security": [
-  {
-    "bearerAuth": []
+{
+  "status": "success|error",
+  "message": "Descriptive message",
+  "data": {
+    // Response data here
+  },
+  "meta": {
+    "total": 100,
+    "page": 1,
+    "per_page": 20
   }
-]
+}
 ```
+
+### HTTP Status Codes
+
+| Code | Description |
+|------|-------------|
+| `200` | **OK** - The request was successful |
+| `201` | **Created** - The resource was successfully created |
+| `400` | **Bad Request** - The request was invalid or malformed |
+| `401` | **Unauthorized** - Authentication credentials were missing or invalid |
+| `403` | **Forbidden** - The request is understood, but not authorized |
+| `404` | **Not Found** - The requested resource could not be found |
+| `429` | **Too Many Requests** - Rate limit exceeded |
+| `500` | **Internal Server Error** - An error occurred on PayVessel's servers |
+
+## Idempotency
+
+The PayVessel API supports [idempotency](https://en.wikipedia.org/wiki/Idempotence) for safely retrying requests without accidentally performing the same operation twice. When creating or modifying objects, provide an additional `Idempotency-Key: <key>` header to the request.
+
+<Note>
+**Best Practice**: Use a UUID or other random string as your idempotency key. PayVessel will return the same response for repeated requests with the same key for 24 hours.
+</Note>
+
+## Webhooks
+
+PayVessel uses webhooks to notify your application when events occur in your account. Learn more about webhook integration in our [webhook documentation](/api-basics/webhooks).
+
+Common webhook events:
+- `transaction.success` - Payment completed successfully
+- `transaction.failed` - Payment failed or was declined
+- `transfer.success` - Transfer completed successfully
+- `verification.completed` - Identity verification completed
+
+## Testing
+
+Use our sandbox environment to test your integration without real money. The sandbox mirrors the production API but with test data.
+
+**Sandbox Base URL**: `https://sandbox.payvessel.com`
+
+<Tip>
+Check out our [testing guide](/api-basics/testing) for test card numbers, bank accounts, and complete testing scenarios.
+</Tip>
+
+---
+
+**Ready to start building?** Explore the endpoint documentation below or jump to our [quickstart guide](/quickstart) for step-by-step integration instructions.

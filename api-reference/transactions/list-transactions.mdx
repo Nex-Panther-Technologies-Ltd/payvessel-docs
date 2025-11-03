@@ -1,0 +1,602 @@
+---
+title: "List Transactions"
+description: "Retrieve a paginated list of transactions for your account"
+---
+
+# List Transactions
+
+Retrieve a paginated list of all transactions for your account with optional filtering and sorting capabilities.
+
+## Endpoint
+
+<Badge variant="info">**GET**</Badge> `/transactions`
+
+## Headers
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `Authorization` | string | **Required** | Bearer token with your secret API key |
+| `Content-Type` | string | **Required** | Must be `application/json` |
+
+## Query Parameters
+
+<ParamField query="page" type="integer" default="1">
+  Page number for pagination (starts from 1)
+</ParamField>
+
+<ParamField query="per_page" type="integer" default="50">
+  Number of transactions per page (maximum 100)
+</ParamField>
+
+<ParamField query="status" type="string">
+  Filter transactions by status
+  
+  **Available statuses:** `success`, `failed`, `pending`, `abandoned`, `cancelled`
+</ParamField>
+
+<ParamField query="currency" type="string">
+  Filter transactions by currency code (e.g., `NGN`, `USD`, `GBP`)
+</ParamField>
+
+<ParamField query="channel" type="string">
+  Filter transactions by payment channel
+  
+  **Available channels:** `card`, `bank`, `ussd`, `qr`, `mobile_money`, `bank_transfer`
+</ParamField>
+
+<ParamField query="customer" type="string">
+  Filter transactions by customer email or customer ID
+</ParamField>
+
+<ParamField query="amount" type="string">
+  Filter transactions by exact amount (in smallest currency unit)
+</ParamField>
+
+<ParamField query="from" type="string">
+  Start date for date range filter (ISO 8601 format: `YYYY-MM-DD` or `YYYY-MM-DDTHH:MM:SSZ`)
+</ParamField>
+
+<ParamField query="to" type="string">
+  End date for date range filter (ISO 8601 format: `YYYY-MM-DD` or `YYYY-MM-DDTHH:MM:SSZ`)
+</ParamField>
+
+<ParamField query="sort" type="string" default="created_at">
+  Field to sort by
+  
+  **Available fields:** `created_at`, `amount`, `status`, `paid_at`
+</ParamField>
+
+<ParamField query="order" type="string" default="desc">
+  Sort order - `asc` (ascending) or `desc` (descending)
+</ParamField>
+
+## Example Request
+
+<CodeGroup>
+```bash cURL - Basic Request
+curl -X GET "https://api.payvessel.com/transactions" \
+  -H "Authorization: Bearer sk_test_abc123..." \
+  -H "Content-Type: application/json"
+```
+
+```bash cURL - With Filters
+curl -X GET "https://api.payvessel.com/transactions?status=success&currency=NGN&from=2024-01-01&to=2024-01-31&page=1&per_page=20" \
+  -H "Authorization: Bearer sk_test_abc123..." \
+  -H "Content-Type: application/json"
+```
+
+```javascript Node.js
+const payvessel = require('payvessel')(process.env.PAYVESSEL_SECRET_KEY);
+
+// Basic list
+const transactions = await payvessel.transaction.list();
+
+// With filters
+const filteredTransactions = await payvessel.transaction.list({
+  status: 'success',
+  currency: 'NGN',
+  from: '2024-01-01',
+  to: '2024-01-31',
+  page: 1,
+  per_page: 20
+});
+```
+
+```php PHP
+<?php
+$payvessel = new \Payvessel\Payvessel(getenv('PAYVESSEL_SECRET_KEY'));
+
+// Basic list
+$transactions = $payvessel->transaction->list();
+
+// With filters
+$filteredTransactions = $payvessel->transaction->list([
+  'status' => 'success',
+  'currency' => 'NGN',
+  'from' => '2024-01-01',
+  'to' => '2024-01-31',
+  'page' => 1,
+  'per_page' => 20
+]);
+?>
+```
+
+```python Python
+import payvessel
+
+payvessel.api_key = os.environ['PAYVESSEL_SECRET_KEY']
+
+# Basic list
+transactions = payvessel.Transaction.list()
+
+# With filters
+filtered_transactions = payvessel.Transaction.list(
+    status='success',
+    currency='NGN',
+    from_date='2024-01-01',
+    to_date='2024-01-31',
+    page=1,
+    per_page=20
+)
+```
+</CodeGroup>
+
+## Response
+
+<ResponseField name="status" type="string">
+  Request status indicator - `"success"` or `"error"`
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Human-readable message describing the result
+</ResponseField>
+
+<ResponseField name="data" type="array">
+  Array of transaction objects
+  
+  <Expandable title="Transaction Object">
+    <ResponseField name="data[].id" type="integer">
+      Internal transaction ID
+    </ResponseField>
+    
+    <ResponseField name="data[].reference" type="string">
+      Unique transaction reference
+    </ResponseField>
+    
+    <ResponseField name="data[].amount" type="integer">
+      Transaction amount in smallest currency unit
+    </ResponseField>
+    
+    <ResponseField name="data[].currency" type="string">
+      Transaction currency code
+    </ResponseField>
+    
+    <ResponseField name="data[].status" type="string">
+      Transaction status - `success`, `failed`, `pending`, `abandoned`, `cancelled`
+    </ResponseField>
+    
+    <ResponseField name="data[].gateway_response" type="string">
+      Response message from the payment gateway
+    </ResponseField>
+    
+    <ResponseField name="data[].paid_at" type="string">
+      ISO 8601 timestamp when payment was completed (null if not paid)
+    </ResponseField>
+    
+    <ResponseField name="data[].created_at" type="string">
+      ISO 8601 timestamp when transaction was created
+    </ResponseField>
+    
+    <ResponseField name="data[].channel" type="string">
+      Payment method used - `card`, `bank`, `ussd`, `qr`, `mobile_money`, `bank_transfer`
+    </ResponseField>
+    
+    <ResponseField name="data[].fees" type="integer">
+      Transaction fees charged in smallest currency unit
+    </ResponseField>
+    
+    <ResponseField name="data[].customer" type="object">
+      Customer information object
+    </ResponseField>
+    
+    <ResponseField name="data[].authorization" type="object">
+      Payment authorization details (for successful card payments)
+    </ResponseField>
+    
+    <ResponseField name="data[].metadata" type="object">
+      Custom metadata attached to the transaction
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="meta" type="object">
+  Pagination metadata
+  
+  <Expandable title="Meta Object">
+    <ResponseField name="meta.total" type="integer">
+      Total number of transactions matching the filter criteria
+    </ResponseField>
+    
+    <ResponseField name="meta.page" type="integer">
+      Current page number
+    </ResponseField>
+    
+    <ResponseField name="meta.per_page" type="integer">
+      Number of transactions per page
+    </ResponseField>
+    
+    <ResponseField name="meta.pages" type="integer">
+      Total number of pages
+    </ResponseField>
+    
+    <ResponseField name="meta.has_more" type="boolean">
+      Whether there are more pages available
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Response
+
+<CodeGroup>
+```json 200 Success
+{
+  "status": "success",
+  "message": "Transactions retrieved successfully",
+  "data": [
+    {
+      "id": 123456789,
+      "reference": "TXN_2024_001",
+      "amount": 50000,
+      "currency": "NGN",
+      "status": "success",
+      "gateway_response": "Successful",
+      "paid_at": "2024-01-15T14:35:22Z",
+      "created_at": "2024-01-15T14:30:00Z",
+      "channel": "card",
+      "fees": 750,
+      "customer": {
+        "id": 12345,
+        "email": "customer@example.com",
+        "first_name": "John",
+        "last_name": "Doe",
+        "phone": "+2348012345678"
+      },
+      "authorization": {
+        "authorization_code": "AUTH_xyz789abc",
+        "bin": "408408",
+        "last4": "4081",
+        "card_type": "visa",
+        "bank": "TEST BANK"
+      },
+      "metadata": {
+        "custom_fields": [
+          {
+            "display_name": "Order ID",
+            "variable_name": "order_id",
+            "value": "ORD_001"
+          }
+        ]
+      }
+    },
+    {
+      "id": 123456790,
+      "reference": "TXN_2024_002",
+      "amount": 75000,
+      "currency": "NGN",
+      "status": "pending",
+      "gateway_response": "Processing",
+      "paid_at": null,
+      "created_at": "2024-01-15T15:00:00Z",
+      "channel": "bank",
+      "fees": 0,
+      "customer": {
+        "id": 12346,
+        "email": "customer2@example.com",
+        "first_name": "Jane",
+        "last_name": "Smith",
+        "phone": "+2348012345679"
+      },
+      "authorization": null,
+      "metadata": {}
+    }
+  ],
+  "meta": {
+    "total": 147,
+    "page": 1,
+    "per_page": 50,
+    "pages": 3,
+    "has_more": true
+  }
+}
+```
+
+```json 400 Bad Request
+{
+  "status": "error",
+  "message": "Invalid query parameters",
+  "errors": {
+    "per_page": ["The per_page field must not be greater than 100"],
+    "from": ["The from date format is invalid"]
+  }
+}
+```
+
+```json 401 Unauthorized
+{
+  "status": "error",
+  "message": "Unauthorized. Please check your API key"
+}
+```
+</CodeGroup>
+
+## Filtering Examples
+
+<Tabs>
+  <Tab title="By Status">
+    ```bash
+    # Get all successful transactions
+    curl -X GET "https://api.payvessel.com/transactions?status=success" \
+      -H "Authorization: Bearer sk_test_abc123..."
+    
+    # Get failed transactions
+    curl -X GET "https://api.payvessel.com/transactions?status=failed" \
+      -H "Authorization: Bearer sk_test_abc123..."
+    ```
+  </Tab>
+  
+  <Tab title="By Date Range">
+    ```bash
+    # Get transactions from January 2024
+    curl -X GET "https://api.payvessel.com/transactions?from=2024-01-01&to=2024-01-31" \
+      -H "Authorization: Bearer sk_test_abc123..."
+    
+    # Get transactions from last 7 days
+    curl -X GET "https://api.payvessel.com/transactions?from=2024-01-08&to=2024-01-15" \
+      -H "Authorization: Bearer sk_test_abc123..."
+    ```
+  </Tab>
+  
+  <Tab title="By Payment Method">
+    ```bash
+    # Get card transactions only
+    curl -X GET "https://api.payvessel.com/transactions?channel=card" \
+      -H "Authorization: Bearer sk_test_abc123..."
+    
+    # Get bank transfer transactions
+    curl -X GET "https://api.payvessel.com/transactions?channel=bank" \
+      -H "Authorization: Bearer sk_test_abc123..."
+    ```
+  </Tab>
+  
+  <Tab title="By Customer">
+    ```bash
+    # Get transactions for specific customer
+    curl -X GET "https://api.payvessel.com/transactions?customer=customer@example.com" \
+      -H "Authorization: Bearer sk_test_abc123..."
+    
+    # Get transactions by customer ID
+    curl -X GET "https://api.payvessel.com/transactions?customer=12345" \
+      -H "Authorization: Bearer sk_test_abc123..."
+    ```
+  </Tab>
+  
+  <Tab title="Complex Filters">
+    ```bash
+    # Successful card payments in NGN from January 2024
+    curl -X GET "https://api.payvessel.com/transactions?status=success&channel=card&currency=NGN&from=2024-01-01&to=2024-01-31" \
+      -H "Authorization: Bearer sk_test_abc123..."
+    ```
+  </Tab>
+</Tabs>
+
+## Pagination
+
+PayVessel uses page-based pagination for the transactions list endpoint:
+
+<CardGroup cols={2}>
+  <Card title="Navigate Pages" icon="arrows-left-right">
+    Use `page` parameter to navigate through pages:
+    - `?page=1` - First page
+    - `?page=2` - Second page
+    - etc.
+  </Card>
+  
+  <Card title="Control Page Size" icon="list">
+    Use `per_page` parameter to control results per page:
+    - Default: 50 transactions
+    - Maximum: 100 transactions
+  </Card>
+</CardGroup>
+
+### Pagination Example
+
+```javascript
+// Function to get all transactions
+const getAllTransactions = async () => {
+  let allTransactions = [];
+  let page = 1;
+  let hasMore = true;
+  
+  while (hasMore) {
+    const response = await payvessel.transaction.list({
+      page: page,
+      per_page: 100 // Maximum per page
+    });
+    
+    allTransactions = allTransactions.concat(response.data);
+    hasMore = response.meta.has_more;
+    page++;
+  }
+  
+  return allTransactions;
+};
+```
+
+## Sorting Options
+
+<AccordionGroup>
+  <Accordion title="By Creation Date (Default)" icon="calendar">
+    ```bash
+    # Newest first (default)
+    ?sort=created_at&order=desc
+    
+    # Oldest first
+    ?sort=created_at&order=asc
+    ```
+  </Accordion>
+  
+  <Accordion title="By Amount" icon="dollar-sign">
+    ```bash
+    # Highest amount first
+    ?sort=amount&order=desc
+    
+    # Lowest amount first
+    ?sort=amount&order=asc
+    ```
+  </Accordion>
+  
+  <Accordion title="By Payment Date" icon="clock">
+    ```bash
+    # Most recently paid first
+    ?sort=paid_at&order=desc
+    
+    # Earliest paid first
+    ?sort=paid_at&order=asc
+    ```
+  </Accordion>
+  
+  <Accordion title="By Status" icon="check-circle">
+    ```bash
+    # Sort by status alphabetically
+    ?sort=status&order=asc
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Common Use Cases
+
+<Tabs>
+  <Tab title="Dashboard Analytics">
+    ```javascript
+    // Get successful transactions for revenue calculation
+    const getRevenueData = async (startDate, endDate) => {
+      const transactions = await payvessel.transaction.list({
+        status: 'success',
+        from: startDate,
+        to: endDate,
+        per_page: 100
+      });
+      
+      const revenue = transactions.data.reduce((total, txn) => {
+        return total + (txn.amount - txn.fees);
+      }, 0);
+      
+      return {
+        total_revenue: revenue,
+        transaction_count: transactions.meta.total,
+        average_transaction: revenue / transactions.meta.total
+      };
+    };
+    ```
+  </Tab>
+  
+  <Tab title="Customer Statement">
+    ```javascript
+    // Get transaction history for a specific customer
+    const getCustomerStatement = async (customerEmail, months = 3) => {
+      const threeMonthsAgo = new Date();
+      threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - months);
+      
+      const transactions = await payvessel.transaction.list({
+        customer: customerEmail,
+        from: threeMonthsAgo.toISOString().split('T')[0],
+        sort: 'created_at',
+        order: 'desc'
+      });
+      
+      return transactions.data;
+    };
+    ```
+  </Tab>
+  
+  <Tab title="Failed Payment Analysis">
+    ```javascript
+    // Analyze failed payments to improve success rates
+    const analyzeFailedPayments = async () => {
+      const failedTransactions = await payvessel.transaction.list({
+        status: 'failed',
+        per_page: 100
+      });
+      
+      const failureReasons = {};
+      failedTransactions.data.forEach(txn => {
+        const reason = txn.gateway_response;
+        failureReasons[reason] = (failureReasons[reason] || 0) + 1;
+      });
+      
+      return failureReasons;
+    };
+    ```
+  </Tab>
+  
+  <Tab title="Reconciliation">
+    ```javascript
+    // Daily reconciliation of successful payments
+    const dailyReconciliation = async (date) => {
+      const startOfDay = `${date}T00:00:00Z`;
+      const endOfDay = `${date}T23:59:59Z`;
+      
+      const transactions = await payvessel.transaction.list({
+        status: 'success',
+        from: startOfDay,
+        to: endOfDay,
+        per_page: 100
+      });
+      
+      return {
+        date: date,
+        transaction_count: transactions.meta.total,
+        total_amount: transactions.data.reduce((sum, txn) => sum + txn.amount, 0),
+        total_fees: transactions.data.reduce((sum, txn) => sum + txn.fees, 0)
+      };
+    };
+    ```
+  </Tab>
+</Tabs>
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Efficient Pagination" icon="zap">
+    Use appropriate `per_page` values. Start with 50, increase to 100 only when needed to reduce response times.
+  </Card>
+  
+  <Card title="Date Range Limits" icon="calendar-days">
+    Limit date ranges for better performance. Query large date ranges in smaller chunks for faster responses.
+  </Card>
+  
+  <Card title="Filter Early" icon="filter">
+    Apply filters to reduce the dataset before pagination. This improves performance and reduces bandwidth.
+  </Card>
+  
+  <Card title="Cache Results" icon="database">
+    Cache frequently accessed transaction lists (like daily summaries) to improve application performance.
+  </Card>
+</CardGroup>
+
+## Related Endpoints
+
+<CardGroup cols={2}>
+  <Card title="Verify Transaction" icon="shield-check" href="/api-reference/transactions/verify-payment">
+    Get detailed information about a specific transaction
+  </Card>
+  <Card title="Initialize Payment" icon="play" href="/api-reference/transactions/initialize-payment">
+    Create a new payment transaction
+  </Card>
+  <Card title="Export Transactions" icon="download" href="/api-reference/transactions/export-transactions">
+    Download transaction data as CSV or Excel
+  </Card>
+  <Card title="Transaction Analytics" icon="chart-bar" href="/api-reference/analytics/transaction-analytics">
+    Get aggregated transaction analytics and insights
+  </Card>
+</CardGroup>

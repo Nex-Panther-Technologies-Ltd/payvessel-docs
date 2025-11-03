@@ -1,0 +1,840 @@
+---
+title: "BVN Verification"
+description: "Verify Bank Verification Numbers (BVN) and retrieve customer identity information"
+---
+
+# BVN Verification
+
+Verify Bank Verification Numbers (BVN) to authenticate customer identities and retrieve their registered information from the Nigerian Inter-Bank Settlement System (NIBSS).
+
+<Note>
+BVN verification is essential for KYC compliance in Nigeria and helps verify customer identities against official banking records.
+</Note>
+
+## Endpoint
+
+<Badge variant="success">**POST**</Badge> `/verification/bvn`
+
+## Headers
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `Authorization` | string | **Required** | Bearer token with your secret API key |
+| `Content-Type` | string | **Required** | Must be `application/json` |
+
+## Request Body
+
+<ParamField body="bvn" type="string" required>
+  11-digit Bank Verification Number to verify
+  
+  <Warning>BVN must be exactly 11 digits. Leading zeros are significant.</Warning>
+</ParamField>
+
+<ParamField body="first_name" type="string">
+  Customer's first name to match against BVN records (optional but recommended)
+</ParamField>
+
+<ParamField body="last_name" type="string">
+  Customer's last name to match against BVN records (optional but recommended)
+</ParamField>
+
+<ParamField body="date_of_birth" type="string">
+  Customer's date of birth in YYYY-MM-DD format to match against BVN records
+</ParamField>
+
+<ParamField body="phone_number" type="string">
+  Customer's phone number to match against BVN records (in international format)
+</ParamField>
+
+<ParamField body="reference" type="string">
+  Unique verification reference for tracking purposes
+</ParamField>
+
+<ParamField body="metadata" type="object">
+  Additional information for the verification request
+  
+  ```json
+  {
+    "customer_id": "12345",
+    "verification_type": "account_opening",
+    "ip_address": "192.168.1.1",
+    "user_agent": "Mozilla/5.0..."
+  }
+  ```
+</ParamField>
+
+## Example Request
+
+<CodeGroup>
+```bash cURL - Basic Verification
+curl -X POST https://api.payvessel.com/verification/bvn \
+  -H "Authorization: Bearer sk_test_abc123..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "bvn": "12345678901",
+    "reference": "BVN_VER_2024_001"
+  }'
+```
+
+```bash cURL - Enhanced Verification
+curl -X POST https://api.payvessel.com/verification/bvn \
+  -H "Authorization: Bearer sk_test_abc123..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "bvn": "12345678901",
+    "first_name": "John",
+    "last_name": "Doe",
+    "date_of_birth": "1990-05-15",
+    "phone_number": "+2348012345678",
+    "reference": "BVN_VER_2024_001",
+    "metadata": {
+      "customer_id": "12345",
+      "verification_type": "loan_application"
+    }
+  }'
+```
+
+```javascript Node.js
+const payvessel = require('payvessel')(process.env.PAYVESSEL_SECRET_KEY);
+
+// Basic BVN verification
+const verification = await payvessel.verification.bvn({
+  bvn: '12345678901',
+  reference: 'BVN_VER_2024_001'
+});
+
+// Enhanced verification with matching
+const enhancedVerification = await payvessel.verification.bvn({
+  bvn: '12345678901',
+  first_name: 'John',
+  last_name: 'Doe',
+  date_of_birth: '1990-05-15',
+  phone_number: '+2348012345678',
+  reference: 'BVN_VER_2024_001',
+  metadata: {
+    customer_id: '12345',
+    verification_type: 'loan_application'
+  }
+});
+```
+
+```php PHP
+<?php
+$payvessel = new \Payvessel\Payvessel(getenv('PAYVESSEL_SECRET_KEY'));
+
+// Basic BVN verification
+$verification = $payvessel->verification->bvn([
+  'bvn' => '12345678901',
+  'reference' => 'BVN_VER_2024_001'
+]);
+
+// Enhanced verification
+$enhancedVerification = $payvessel->verification->bvn([
+  'bvn' => '12345678901',
+  'first_name' => 'John',
+  'last_name' => 'Doe',
+  'date_of_birth' => '1990-05-15',
+  'phone_number' => '+2348012345678',
+  'reference' => 'BVN_VER_2024_001',
+  'metadata' => [
+    'customer_id' => '12345',
+    'verification_type' => 'loan_application'
+  ]
+]);
+?>
+```
+
+```python Python
+import payvessel
+
+payvessel.api_key = os.environ['PAYVESSEL_SECRET_KEY']
+
+# Basic BVN verification
+verification = payvessel.Verification.bvn(
+    bvn='12345678901',
+    reference='BVN_VER_2024_001'
+)
+
+# Enhanced verification
+enhanced_verification = payvessel.Verification.bvn(
+    bvn='12345678901',
+    first_name='John',
+    last_name='Doe',
+    date_of_birth='1990-05-15',
+    phone_number='+2348012345678',
+    reference='BVN_VER_2024_001',
+    metadata={
+        'customer_id': '12345',
+        'verification_type': 'loan_application'
+    }
+)
+```
+</CodeGroup>
+
+## Response
+
+<ResponseField name="status" type="string">
+  Request status indicator - `"success"` or `"error"`
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Human-readable message describing the result
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  BVN verification data object
+  
+  <Expandable title="Data Object">
+    <ResponseField name="data.bvn" type="string">
+      The verified BVN (partially masked for security)
+    </ResponseField>
+    
+    <ResponseField name="data.first_name" type="string">
+      Customer's first name from BVN records
+    </ResponseField>
+    
+    <ResponseField name="data.middle_name" type="string">
+      Customer's middle name from BVN records
+    </ResponseField>
+    
+    <ResponseField name="data.last_name" type="string">
+      Customer's last name from BVN records
+    </ResponseField>
+    
+    <ResponseField name="data.full_name" type="string">
+      Customer's full name as registered with NIBSS
+    </ResponseField>
+    
+    <ResponseField name="data.date_of_birth" type="string">
+      Customer's date of birth in YYYY-MM-DD format
+    </ResponseField>
+    
+    <ResponseField name="data.phone_number" type="string">
+      Customer's registered phone number (partially masked)
+    </ResponseField>
+    
+    <ResponseField name="data.gender" type="string">
+      Customer's gender - `"Male"` or `"Female"`
+    </ResponseField>
+    
+    <ResponseField name="data.marital_status" type="string">
+      Customer's marital status - `"Single"`, `"Married"`, `"Divorced"`, `"Widowed"`
+    </ResponseField>
+    
+    <ResponseField name="data.nationality" type="string">
+      Customer's nationality
+    </ResponseField>
+    
+    <ResponseField name="data.state_of_origin" type="string">
+      Customer's state of origin in Nigeria
+    </ResponseField>
+    
+    <ResponseField name="data.lga_of_origin" type="string">
+      Customer's Local Government Area of origin
+    </ResponseField>
+    
+    <ResponseField name="data.state_of_residence" type="string">
+      Customer's current state of residence
+    </ResponseField>
+    
+    <ResponseField name="data.lga_of_residence" type="string">
+      Customer's current Local Government Area of residence
+    </ResponseField>
+    
+    <ResponseField name="data.residential_address" type="string">
+      Customer's residential address
+    </ResponseField>
+    
+    <ResponseField name="data.enrollment_bank" type="string">
+      Bank where the BVN was originally enrolled
+    </ResponseField>
+    
+    <ResponseField name="data.enrollment_branch" type="string">
+      Branch where the BVN was enrolled
+    </ResponseField>
+    
+    <ResponseField name="data.watch_listed" type="boolean">
+      Whether the BVN is on any watch list
+    </ResponseField>
+    
+    <ResponseField name="data.image" type="string">
+      Base64 encoded passport photograph (if available and requested)
+    </ResponseField>
+    
+    <ResponseField name="data.verification_status" type="string">
+      Overall verification status - `"verified"`, `"partial"`, `"failed"`
+    </ResponseField>
+    
+    <ResponseField name="data.match_results" type="object">
+      Results of data matching against provided information
+      
+      <Expandable title="Match Results">
+        <ResponseField name="data.match_results.first_name_match" type="boolean">
+          Whether provided first name matches BVN records
+        </ResponseField>
+        
+        <ResponseField name="data.match_results.last_name_match" type="boolean">
+          Whether provided last name matches BVN records
+        </ResponseField>
+        
+        <ResponseField name="data.match_results.date_of_birth_match" type="boolean">
+          Whether provided date of birth matches BVN records
+        </ResponseField>
+        
+        <ResponseField name="data.match_results.phone_number_match" type="boolean">
+          Whether provided phone number matches BVN records
+        </ResponseField>
+        
+        <ResponseField name="data.match_results.overall_match_score" type="number">
+          Overall matching score (0-100)
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="data.reference" type="string">
+      Your unique verification reference
+    </ResponseField>
+    
+    <ResponseField name="data.verification_id" type="string">
+      PayVessel's internal verification ID
+    </ResponseField>
+    
+    <ResponseField name="data.metadata" type="object">
+      Custom metadata attached to the verification
+    </ResponseField>
+    
+    <ResponseField name="data.created_at" type="string">
+      ISO 8601 timestamp when verification was performed
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Response
+
+<CodeGroup>
+```json 200 Success - Verified
+{
+  "status": "success",
+  "message": "BVN verification successful",
+  "data": {
+    "bvn": "1234567****",
+    "first_name": "JOHN",
+    "middle_name": "MICHAEL",
+    "last_name": "DOE",
+    "full_name": "JOHN MICHAEL DOE",
+    "date_of_birth": "1990-05-15",
+    "phone_number": "+2348012***678",
+    "gender": "Male",
+    "marital_status": "Single",
+    "nationality": "Nigerian",
+    "state_of_origin": "Lagos",
+    "lga_of_origin": "Lagos Island",
+    "state_of_residence": "Lagos",
+    "lga_of_residence": "Victoria Island",
+    "residential_address": "15 Victoria Island Road, Lagos",
+    "enrollment_bank": "First Bank of Nigeria",
+    "enrollment_branch": "Victoria Island",
+    "watch_listed": false,
+    "image": null,
+    "verification_status": "verified",
+    "match_results": {
+      "first_name_match": true,
+      "last_name_match": true,
+      "date_of_birth_match": true,
+      "phone_number_match": false,
+      "overall_match_score": 85
+    },
+    "reference": "BVN_VER_2024_001",
+    "verification_id": "VER_bvn_xyz789abc123",
+    "metadata": {
+      "customer_id": "12345",
+      "verification_type": "loan_application"
+    },
+    "created_at": "2024-01-15T14:30:00Z"
+  }
+}
+```
+
+```json 200 Success - Partial Match
+{
+  "status": "success",
+  "message": "BVN verification completed with partial match",
+  "data": {
+    "bvn": "1234567****",
+    "first_name": "JANE",
+    "middle_name": "MARY",
+    "last_name": "SMITH",
+    "full_name": "JANE MARY SMITH",
+    "date_of_birth": "1985-12-20",
+    "phone_number": "+2348098***456",
+    "gender": "Female",
+    "marital_status": "Married",
+    "nationality": "Nigerian",
+    "state_of_origin": "Ogun",
+    "lga_of_origin": "Abeokuta North",
+    "state_of_residence": "Lagos",
+    "lga_of_residence": "Ikeja",
+    "residential_address": "22 Ikeja GRA, Lagos",
+    "enrollment_bank": "Access Bank",
+    "enrollment_branch": "Ikeja",
+    "watch_listed": false,
+    "image": null,
+    "verification_status": "partial",
+    "match_results": {
+      "first_name_match": false,
+      "last_name_match": false,
+      "date_of_birth_match": true,
+      "phone_number_match": true,
+      "overall_match_score": 45
+    },
+    "reference": "BVN_VER_2024_002",
+    "verification_id": "VER_bvn_abc123xyz789",
+    "metadata": {},
+    "created_at": "2024-01-15T15:00:00Z"
+  }
+}
+```
+
+```json 400 Bad Request - Invalid BVN
+{
+  "status": "error",
+  "message": "Invalid BVN format",
+  "errors": {
+    "bvn": ["BVN must be exactly 11 digits"]
+  }
+}
+```
+
+```json 404 Not Found - BVN Not Found
+{
+  "status": "error",
+  "message": "BVN not found in NIBSS records",
+  "error": {
+    "code": "bvn_not_found",
+    "description": "The provided BVN does not exist in the database"
+  }
+}
+```
+
+```json 429 Rate Limited
+{
+  "status": "error",
+  "message": "Rate limit exceeded",
+  "error": {
+    "code": "rate_limit_exceeded",
+    "retry_after": 60
+  }
+}
+```
+</CodeGroup>
+
+## Verification Status Guide
+
+<AccordionGroup>
+  <Accordion title="verified" icon="check-circle">
+    **Complete Verification**
+    
+    The BVN exists and all provided data matches the records.
+    
+    **Characteristics:**
+    - Valid BVN found in NIBSS database
+    - High match score (typically > 80%)
+    - All provided fields match BVN records
+    - Customer identity is confirmed
+    
+    **Use cases:**
+    - Account opening approval
+    - Loan application processing
+    - High-value transaction approval
+  </Accordion>
+  
+  <Accordion title="partial" icon="exclamation-triangle">
+    **Partial Verification**
+    
+    The BVN exists but some provided data doesn't match the records.
+    
+    **Characteristics:**
+    - Valid BVN found in NIBSS database
+    - Some fields match, others don't
+    - Match score between 30-80%
+    - Manual review may be required
+    
+    **Common causes:**
+    - Name variations (nicknames, abbreviations)
+    - Updated phone number not reflected in BVN
+    - Data entry errors
+    
+    **Recommendations:**
+    - Request customer to provide correct information
+    - Consider additional verification methods
+    - Implement manual review process
+  </Accordion>
+  
+  <Accordion title="failed" icon="x-circle">
+    **Verification Failed**
+    
+    The BVN could not be verified or doesn't exist.
+    
+    **Characteristics:**
+    - BVN not found in NIBSS database
+    - Technical error during verification
+    - Invalid BVN format
+    
+    **Common causes:**
+    - Incorrect BVN provided
+    - BVN deactivated or blocked
+    - System downtime
+    
+    **Next steps:**
+    - Ask customer to verify BVN number
+    - Try alternative verification methods
+    - Contact support if issue persists
+  </Accordion>
+</AccordionGroup>
+
+## Match Score Interpretation
+
+The `overall_match_score` helps you understand verification confidence:
+
+<Tabs>
+  <Tab title="90-100% - Excellent">
+    **High Confidence Match**
+    
+    - All or most provided data matches exactly
+    - Very low fraud risk
+    - Proceed with confidence
+    
+    **Typical scenarios:**
+    - Exact name, DOB, and phone matches
+    - Minor variations in address only
+    - High-quality data input
+  </Tab>
+  
+  <Tab title="70-89% - Good">
+    **Good Match with Minor Discrepancies**
+    
+    - Most important data matches
+    - Some variations in secondary fields
+    - Generally acceptable for most use cases
+    
+    **Common variations:**
+    - Shortened names (John vs Jonathan)
+    - Updated phone numbers
+    - Address changes
+  </Tab>
+  
+  <Tab title="50-69% - Fair">
+    **Moderate Match - Review Recommended**
+    
+    - Some key data matches
+    - Significant discrepancies present
+    - Manual review advised
+    
+    **Considerations:**
+    - Request additional documentation
+    - Implement step-up verification
+    - Consider risk tolerance
+  </Tab>
+  
+  <Tab title="0-49% - Poor">
+    **Low Match - High Risk**
+    
+    - Major discrepancies in key fields
+    - Potential fraud indicator
+    - Reject or require extensive verification
+    
+    **Red flags:**
+    - Name completely different
+    - DOB doesn't match
+    - Multiple field mismatches
+  </Tab>
+</Tabs>
+
+## Integration Patterns
+
+<Tabs>
+  <Tab title="Account Opening">
+    ```javascript
+    // KYC verification during account opening
+    const performKycVerification = async (customerData) => {
+      try {
+        const bvnVerification = await payvessel.verification.bvn({
+          bvn: customerData.bvn,
+          first_name: customerData.first_name,
+          last_name: customerData.last_name,
+          date_of_birth: customerData.date_of_birth,
+          phone_number: customerData.phone_number,
+          reference: `KYC_${customerData.id}_${Date.now()}`,
+          metadata: {
+            customer_id: customerData.id,
+            verification_type: 'account_opening',
+            ip_address: customerData.ip_address
+          }
+        });
+        
+        const result = bvnVerification.data;
+        
+        // Evaluate verification results
+        if (result.verification_status === 'verified' && result.match_results.overall_match_score >= 80) {
+          await approveAccount(customerData.id);
+          return { status: 'approved', verification: result };
+        } else if (result.verification_status === 'partial' && result.match_results.overall_match_score >= 60) {
+          await flagForManualReview(customerData.id, result);
+          return { status: 'review_required', verification: result };
+        } else {
+          await rejectAccount(customerData.id, 'KYC verification failed');
+          return { status: 'rejected', verification: result };
+        }
+      } catch (error) {
+        await handleVerificationError(customerData.id, error);
+        throw error;
+      }
+    };
+    ```
+  </Tab>
+  
+  <Tab title="Loan Application">
+    ```javascript
+    // Enhanced verification for loan applications
+    const verifyLoanApplicant = async (loanApplication) => {
+      const verification = await payvessel.verification.bvn({
+        bvn: loanApplication.bvn,
+        first_name: loanApplication.first_name,
+        last_name: loanApplication.last_name,
+        date_of_birth: loanApplication.date_of_birth,
+        reference: `LOAN_${loanApplication.id}_${Date.now()}`,
+        metadata: {
+          loan_application_id: loanApplication.id,
+          loan_amount: loanApplication.amount,
+          verification_type: 'loan_application'
+        }
+      });
+      
+      const result = verification.data;
+      
+      // Check for watch list status
+      if (result.watch_listed) {
+        await rejectLoanApplication(loanApplication.id, 'Applicant on watch list');
+        return { status: 'rejected', reason: 'watch_list' };
+      }
+      
+      // Store verified customer data
+      await updateCustomerProfile(loanApplication.customer_id, {
+        bvn_verified: true,
+        full_name: result.full_name,
+        date_of_birth: result.date_of_birth,
+        address: result.residential_address,
+        verification_score: result.match_results.overall_match_score
+      });
+      
+      return { status: 'verified', data: result };
+    };
+    ```
+  </Tab>
+  
+  <Tab title="Transaction Monitoring">
+    ```javascript
+    // BVN verification for suspicious transactions
+    const verifyHighValueTransaction = async (transaction) => {
+      if (transaction.amount > 1000000) { // > ₦10,000
+        const customer = await getCustomer(transaction.customer_id);
+        
+        if (!customer.bvn_verified) {
+          const verification = await payvessel.verification.bvn({
+            bvn: customer.bvn,
+            first_name: customer.first_name,
+            last_name: customer.last_name,
+            reference: `TXN_VER_${transaction.id}`,
+            metadata: {
+              transaction_id: transaction.id,
+              transaction_amount: transaction.amount,
+              verification_trigger: 'high_value_transaction'
+            }
+          });
+          
+          if (verification.data.verification_status !== 'verified') {
+            await flagTransaction(transaction.id, 'BVN verification failed');
+            await pauseTransaction(transaction.id);
+            return false;
+          }
+          
+          await markCustomerAsVerified(customer.id);
+        }
+      }
+      
+      return true;
+    };
+    ```
+  </Tab>
+  
+  <Tab title="Batch Verification">
+    ```javascript
+    // Verify multiple BVNs for compliance
+    const batchVerifyCustomers = async (customers) => {
+      const results = [];
+      const batchSize = 10; // Process in batches to respect rate limits
+      
+      for (let i = 0; i < customers.length; i += batchSize) {
+        const batch = customers.slice(i, i + batchSize);
+        const batchPromises = batch.map(async (customer) => {
+          try {
+            const verification = await payvessel.verification.bvn({
+              bvn: customer.bvn,
+              first_name: customer.first_name,
+              last_name: customer.last_name,
+              reference: `BATCH_${customer.id}_${Date.now()}`,
+              metadata: {
+                customer_id: customer.id,
+                batch_verification: true
+              }
+            });
+            
+            return {
+              customer_id: customer.id,
+              status: 'success',
+              verification: verification.data
+            };
+          } catch (error) {
+            return {
+              customer_id: customer.id,
+              status: 'error',
+              error: error.message
+            };
+          }
+        });
+        
+        const batchResults = await Promise.all(batchPromises);
+        results.push(...batchResults);
+        
+        // Rate limiting delay between batches
+        if (i + batchSize < customers.length) {
+          await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+      }
+      
+      return results;
+    };
+    ```
+  </Tab>
+</Tabs>
+
+## Compliance & Security
+
+<CardGroup cols={2}>
+  <Card title="Data Protection" icon="shield-lock">
+    **PII Masking**: Sensitive data like BVN and phone numbers are automatically masked in responses for security
+  </Card>
+  
+  <Card title="Regulatory Compliance" icon="scale-balanced">
+    **CBN Compliance**: Adheres to Central Bank of Nigeria guidelines for BVN usage and data handling
+  </Card>
+  
+  <Card title="Rate Limiting" icon="gauge-high">
+    **API Limits**: 100 requests per minute to prevent abuse and ensure system stability
+  </Card>
+  
+  <Card title="Audit Trail" icon="file-lines">
+    **Verification Logs**: All verifications are logged with timestamps and references for audit purposes
+  </Card>
+</CardGroup>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Input Validation" icon="check-double">
+    **Validate Before Sending**
+    
+    - Ensure BVN is exactly 11 digits
+    - Validate date formats (YYYY-MM-DD)
+    - Clean phone numbers (international format)
+    - Trim whitespace from names
+    
+    ```javascript
+    const validateBvn = (bvn) => {
+      return /^\d{11}$/.test(bvn);
+    };
+    
+    const formatPhoneNumber = (phone) => {
+      // Convert 08012345678 to +2348012345678
+      if (phone.startsWith('0') && phone.length === 11) {
+        return '+234' + phone.substring(1);
+      }
+      return phone;
+    };
+    ```
+  </Accordion>
+  
+  <Accordion title="Error Handling" icon="triangle-exclamation">
+    **Graceful Error Management**
+    
+    - Handle network timeouts gracefully
+    - Implement retry logic for temporary failures
+    - Log errors for debugging
+    - Provide meaningful user feedback
+    
+    ```javascript
+    const verifyBvnWithRetry = async (bvnData, maxRetries = 3) => {
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          return await payvessel.verification.bvn(bvnData);
+        } catch (error) {
+          if (attempt === maxRetries || error.status === 400) {
+            throw error; // Don't retry validation errors
+          }
+          await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+        }
+      }
+    };
+    ```
+  </Accordion>
+  
+  <Accordion title="Performance Optimization" icon="gauge-high">
+    **Efficient Verification**
+    
+    - Cache verification results (with expiration)
+    - Batch process when possible
+    - Respect rate limits
+    - Use appropriate timeouts
+    
+    ```javascript
+    const verificationCache = new Map();
+    
+    const getCachedVerification = (bvn, expiryMinutes = 60) => {
+      const cached = verificationCache.get(bvn);
+      if (cached && Date.now() - cached.timestamp < expiryMinutes * 60 * 1000) {
+        return cached.data;
+      }
+      return null;
+    };
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Related Endpoints
+
+<CardGroup cols={2}>
+  <Card title="NIN Verification" icon="id-card" href="/api-reference/verification/nin-verification">
+    Verify National Identity Numbers for enhanced KYC
+  </Card>
+  <Card title="Face Comparison" icon="user-check" href="/api-reference/verification/face-comparison">
+    Compare customer photos with BVN records
+  </Card>
+  <Card title="Liveness Detection" icon="camera" href="/api-reference/verification/liveness-detection">
+    Ensure customer photos are from live subjects
+  </Card>
+  <Card title="Phone Verification" icon="phone" href="/api-reference/verification/phone-verification">
+    Verify phone numbers via SMS or voice calls
+  </Card>
+</CardGroup>
+
+## Webhook Events
+
+This endpoint triggers the following webhook events:
+
+- `verification.bvn.completed` - BVN verification completed (success or failure)
+- `verification.bvn.match_found` - High confidence match detected
+- `verification.bvn.watchlist_hit` - BVN found on watch list
+
+<Warning>
+**Rate Limits**: BVN verification is limited to 100 requests per minute. Exceeding this limit will result in HTTP 429 responses. Plan your verification flows accordingly.
+</Warning>
