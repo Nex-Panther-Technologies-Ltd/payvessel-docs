@@ -1,0 +1,69 @@
+---
+title: "Webhook Events"
+description: "Reference for Payvessel webhook event types and when they fire."
+---
+
+# Supported Webhook Events
+
+Payvessel emits structured events to help you react to changes across payments, transfers, wallets, and identity workflows. Subscribe to the events you need in the Dashboard and build handlers that map directly to the `event` field in the webhook payload.
+
+<Tip>
+Always verify the signature and implement idempotency before acting on an event. See [Verifying Webhooks](/api-reference/webhook/verifying-webhooks) for implementation guidance.
+</Tip>
+
+## Payment & Transaction Events
+
+| Event | Description | Typical Trigger |
+|-------|-------------|-----------------|
+| `transaction.pending` | Payment initialized and awaiting customer action | [Initialize Payment](/api-reference/transactions/initialize-payment) |
+| `transaction.success` | Payment completed successfully | Customer finishes checkout or transfer hits reserved account |
+| `transaction.failed` | Payment failed or was declined | Bank decline, authentication failure, or timeout |
+
+## Transfer Events
+
+| Event | Description | Typical Trigger |
+|-------|-------------|-----------------|
+| `transfer.pending` | Transfer created and awaiting bank processing | [Initiate Transfer](/api-reference/transfers/initiate-transfer) |
+| `transfer.success` | Funds delivered to the recipient | Receiving bank confirms settlement |
+| `transfer.failed` | Transfer rejected or reversed by partner bank | Invalid recipient, insufficient funds, or compliance hold |
+| `transfer.reversed` | Previously successful transfer has been reversed | Manual reversal or partner clawback |
+
+## Recipient Events
+
+| Event | Description | Typical Trigger |
+|-------|-------------|-----------------|
+| `recipient.created` | Recipient passed compliance checks and is ready for payouts | [Create Recipient](/api-reference/transfers/create-recipient) |
+| `recipient.verification_failed` | Recipient verification failed | Invalid bank details or KYC mismatch |
+
+## Virtual Account Events
+
+| Event | Description | Typical Trigger |
+|-------|-------------|-----------------|
+| `reserved_account.credit` | Customer transfer received into a virtual account | Incoming bank transfer to STATIC or DYNAMIC account |
+| `reserved_account.debit` | Funds moved out of a reserved account | Merchant withdrawals or automated sweeps |
+| `reserved_account.low_balance` | Available balance dropped below configured threshold | Balance monitoring alert |
+
+## Wallet & Card Events
+
+| Event | Description | Typical Trigger |
+|-------|-------------|-----------------|
+| `wallet.created` | Wallet successfully provisioned | [Create Wallet](/api-reference/wallets/create-wallet) |
+| `wallet.activated` | Wallet verified and active for transactions | KYC checks completed |
+| `card.issued` | Virtual card created for a wallet | Debit card feature enabled during wallet creation |
+| `account.opened` | Bank account number allocated to the wallet | NGN wallets with virtual account support |
+
+## Identity Verification Events
+
+| Event | Description | Typical Trigger |
+|-------|-------------|-----------------|
+| `verification.bvn.completed` | BVN verification finished (success or failure) | [BVN Verification](/api-reference/verification/bvn-verification) |
+| `verification.bvn.match_found` | BVN matched a customer record | Identity match at required confidence |
+| `verification.bvn.watchlist_hit` | BVN found on a compliance watch list | Sanctions or blacklist match |
+
+## Event Handling Checklist
+
+- Log the `event`, `transaction.reference`, and timestamp for auditing.
+- Queue long-running operations to avoid response timeouts.
+- Provide manual replay tooling so operations teams can reprocess specific events.
+- Monitor for event bursts—throttle downstream systems as needed.
+

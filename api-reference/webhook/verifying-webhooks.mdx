@@ -1,0 +1,343 @@
+---
+title: "Verifying Webhooks"
+description: "Secure your Payvessel webhook endpoints by validating signatures, IP addresses, and duplicate deliveries."
+---
+
+# Verifying Webhooks
+
+Every Payvessel webhook is signed with your secret key and sent from a known IP address. Always verify both signals—and prevent duplicate processing—before performing irreversible business actions.
+
+## Signature Verification
+
+1. Read the raw request body exactly as received.
+2. Compute an HMAC using SHA-512 with your secret (`PVSECRET-`) as the key.
+3. Compare the result with the `HTTP_PAYVESSEL_HTTP_SIGNATURE` header using a constant-time comparison.
+
+<Warning>
+Parsing JSON before calculating the signature can change whitespace and break verification. Always hash the raw payload first.
+</Warning>
+
+## IP Allowlist
+
+Accept webhook requests only from the following Payvessel IP addresses:
+
+- `3.255.23.38`
+- `162.246.254.36`
+
+When hosting behind a proxy or load balancer, read the left-most entry from the `X-Forwarded-For` header; otherwise, fall back to the connection's remote address.
+
+## Duplicate Prevention
+
+- Store processed `transaction.reference` (or `trackingReference`) values in persistent storage.
+- Wrap webhook logic in idempotent database transactions.
+- Return `200 OK` only after your state changes succeed; otherwise Payvessel will retry.
+
+## End-to-End Examples
+
+The following implementations verify signature, validate IP addresses, guard against duplicates, and respond with appropriate status codes.
+
+<CodeGroup>
+```javascript Node.js (Express)
+import crypto from 'crypto';
+import express from 'express';
+
+const app = express();
+const SECRET = process.env.PAYVESSEL_SECRET || 'PVSECRET-';
+const TRUSTED_IPS = ['3.255.23.38', '162.246.254.36'];
+
+app.post('/webhooks/payvessel', express.raw({ type: 'application/json' }), async (req, res) => {
+  const signature = req.header('HTTP_PAYVESSEL_HTTP_SIGNATURE');
+  const payload = req.body; // Buffer
+  const hash = crypto.createHmac('sha512', SECRET).update(payload).digest('hex');
+
+  // Determine caller IP (supports proxies)
+  const ip =
+    req.headers['x-forwarded-for']?.toString().split(',')[0].trim() ??
+    req.socket.remoteAddress;
+
+  if (signature !== hash || !TRUSTED_IPS.includes(ip)) {
+    return res.status(400).json({ message: 'Invalid signature or IP' });
+  }
+
+  const data = JSON.parse(payload.toString());
+  const reference = data.transaction.reference;
+
+  if (await hasProcessed(reference)) {
+    return res.status(200).json({ message: 'Already processed' });
+  }
+
+  await markProcessed(reference);
+  await handleBusinessLogic(data);
+
+  return res.status(200).json({ message: 'success' });
+});
+```
+
+```python Python (Django)
+import hashlib
+import hmac
+import json
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+
+SECRET = b"PVSECRET-"
+TRUSTED_IPS = {"3.255.23.38", "162.246.254.36"}
+
+@csrf_exempt
+@require_POST
+def payvessel_webhook(request):
+    payload = request.body
+    signature = request.META.get("HTTP_PAYVESSEL_HTTP_SIGNATURE")
+    ip_address = request.META.get("HTTP_X_FORWARDED_FOR", request.META.get("REMOTE_ADDR", ""))
+    ip = ip_address.split(",")[0].strip() if ip_address else ""
+
+    digest = hmac.new(SECRET, payload, hashlib.sha512).hexdigest()
+
+    if signature != digest or ip not in TRUSTED_IPS:
+        return JsonResponse({"message": "Invalid signature or IP"}, status=400)
+
+    data = json.loads(payload)
+    reference = data["transaction"]["reference"]
+
+    if PaymentEvent.objects.filter(reference=reference).exists():
+        return JsonResponse({"message": "Already processed"})
+
+    PaymentEvent.objects.create(reference=reference, payload=data)
+    process_payment(data)
+
+    return JsonResponse({"message": "success"})
+```
+
+```php PHP (Laravel)
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Str;
+
+Route::post('/webhooks/payvessel', function (Request $request) {
+    $secret = env('PAYVESSEL_SECRET', 'PVSECRET-');
+    $trustedIps = ['3.255.23.38', '162.246.254.36'];
+
+    $payload = $request->getContent();
+    $signature = $request->header('HTTP_PAYVESSEL_HTTP_SIGNATURE');
+    $hash = hash_hmac('sha512', $payload, $secret);
+
+    $ip = $request->headers->get('x-forwarded-for', $request->ip());
+    $ip = Str::of($ip)->explode(',')->first();
+
+    if ($signature !== $hash || !in_array(trim($ip), $trustedIps, true)) {
+        return Response::json(['message' => 'Invalid signature or IP'], 400);
+    }
+
+    $data = json_decode($payload, true, 512, JSON_THROW_ON_ERROR);
+    $reference = $data['transaction']['reference'];
+
+    if (PaymentEvent::where('reference', $reference)->exists()) {
+        return ['message' => 'Already processed'];
+    }
+
+    PaymentEvent::create([
+        'reference' => $reference,
+        'payload' => $data,
+    ]);
+
+    dispatch(new ProcessPayvesselWebhook($data));
+
+    return ['message' => 'success'];
+});
+```
+
+```ruby Ruby on Rails
+class PayvesselWebhooksController < ApplicationController
+  skip_before_action :verify_authenticity_token
+
+  SECRET = ENV.fetch('PAYVESSEL_SECRET', 'PVSECRET-')
+  TRUSTED_IPS = ['3.255.23.38', '162.246.254.36']
+
+  def receive
+    raw_body = request.raw_post
+    signature = request.headers['HTTP_PAYVESSEL_HTTP_SIGNATURE']
+    hash = OpenSSL::HMAC.hexdigest('SHA512', SECRET, raw_body)
+    ip = request.headers['X-Forwarded-For']&.split(',')&.first&.strip || request.remote_ip
+
+    unless signature == hash && TRUSTED_IPS.include?(ip)
+      return render json: { message: 'Invalid signature or IP' }, status: :bad_request
+    end
+
+    payload = JSON.parse(raw_body)
+    reference = payload.dig('transaction', 'reference')
+
+    return render json: { message: 'Already processed' } if WebhookEvent.exists?(reference: reference)
+
+    WebhookEvent.create!(reference: reference, payload: payload)
+    HandlePayvesselWebhookJob.perform_later(payload)
+
+    render json: { message: 'success' }
+  end
+end
+```
+
+```java Java (Spring Boot)
+@RestController
+@RequestMapping("/webhooks")
+public class PayvesselWebhookController {
+
+  private static final String SECRET = "PVSECRET-";
+  private static final Set<String> TRUSTED_IPS = Set.of("3.255.23.38", "162.246.254.36");
+
+  @PostMapping("/payvessel")
+  public ResponseEntity<Map<String, String>> handle(HttpServletRequest request, @RequestBody byte[] payload) {
+    String signature = request.getHeader("HTTP_PAYVESSEL_HTTP_SIGNATURE");
+    String ip = Optional.ofNullable(request.getHeader("X-Forwarded-For"))
+        .map(value -> value.split(",")[0].trim())
+        .orElse(request.getRemoteAddr());
+
+    String hash = computeHmac(payload, SECRET);
+
+    if (!Objects.equals(signature, hash) || !TRUSTED_IPS.contains(ip)) {
+      return ResponseEntity.badRequest().body(Map.of("message", "Invalid signature or IP"));
+    }
+
+    ObjectMapper mapper = new ObjectMapper();
+    JsonNode data = mapper.readTree(payload);
+    String reference = data.get("transaction").get("reference").asText();
+
+    if (paymentService.hasProcessed(reference)) {
+      return ResponseEntity.ok(Map.of("message", "Already processed"));
+    }
+
+    paymentService.record(reference, data);
+    paymentService.handle(data);
+
+    return ResponseEntity.ok(Map.of("message", "success"));
+  }
+
+  private String computeHmac(byte[] payload, String secret) {
+    Mac mac = Mac.getInstance("HmacSHA512");
+    mac.init(new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA512"));
+    byte[] digest = mac.doFinal(payload);
+    StringBuilder sb = new StringBuilder();
+    for (byte b : digest) {
+      sb.append(String.format("%02x", b));
+    }
+    return sb.toString();
+  }
+}
+```
+
+```csharp C# (.NET 7 Minimal API)
+var app = WebApplication.CreateBuilder(args).Build();
+
+const string SECRET = "PVSECRET-";
+var trustedIps = new HashSet<string> { "3.255.23.38", "162.246.254.36" };
+
+app.MapPost("/webhooks/payvessel", async (HttpRequest request) =>
+{
+    using var reader = new StreamReader(request.Body, Encoding.UTF8);
+    var body = await reader.ReadToEndAsync();
+    var signature = request.Headers["HTTP_PAYVESSEL_HTTP_SIGNATURE"].ToString();
+
+    var hash = ComputeHmac(body, SECRET);
+    var ip = request.Headers["X-Forwarded-For"].FirstOrDefault()?.Split(',')[0].Trim()
+             ?? request.HttpContext.Connection.RemoteIpAddress?.ToString();
+
+    if (!string.Equals(signature, hash, StringComparison.OrdinalIgnoreCase) || !trustedIps.Contains(ip ?? string.Empty))
+    {
+        return Results.Json(new { message = "Invalid signature or IP" }, statusCode: 400);
+    }
+
+    var payload = JsonNode.Parse(body)!;
+    var reference = payload["transaction"]?["reference"]?.ToString();
+
+    if (await HasProcessed(reference))
+    {
+        return Results.Json(new { message = "Already processed" });
+    }
+
+    await RecordAndProcess(payload);
+    return Results.Json(new { message = "success" });
+});
+
+app.Run();
+```
+
+```go Go (net/http)
+package main
+
+import (
+  "crypto/hmac"
+  "crypto/sha512"
+  "encoding/hex"
+  "encoding/json"
+  "io"
+  "log"
+  "net/http"
+  "strings"
+)
+
+var (
+  secret      = []byte("PVSECRET-")
+  trustedIPs  = map[string]struct{}{"3.255.23.38": {}, "162.246.254.36": {}}
+)
+
+func main() {
+  http.HandleFunc("/webhooks/payvessel", handleWebhook)
+  log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+func handleWebhook(w http.ResponseWriter, r *http.Request) {
+  payload, _ := io.ReadAll(r.Body)
+  signature := r.Header.Get("HTTP_PAYVESSEL_HTTP_SIGNATURE")
+  hash := computeHMAC(payload)
+
+  ip := r.Header.Get("X-Forwarded-For")
+  if ip == "" {
+    ip = r.RemoteAddr
+  } else {
+    ip = strings.Split(ip, ",")[0]
+  }
+
+  if signature != hash || !isTrustedIP(strings.TrimSpace(ip)) {
+    http.Error(w, `{"message":"Invalid signature or IP"}`, http.StatusBadRequest)
+    return
+  }
+
+  var data struct {
+    Transaction struct {
+      Reference string `json:"reference"`
+    } `json:"transaction"`
+  }
+  json.Unmarshal(payload, &data)
+
+  if hasProcessed(data.Transaction.Reference) {
+    w.Write([]byte(`{"message":"Already processed"}`))
+    return
+  }
+
+  recordReference(data.Transaction.Reference)
+  processPayload(payload)
+  w.Write([]byte(`{"message":"success"}`))
+}
+
+func computeHMAC(payload []byte) string {
+  mac := hmac.New(sha512.New, secret)
+  mac.Write(payload)
+  return hex.EncodeToString(mac.Sum(nil))
+}
+
+func isTrustedIP(ip string) bool {
+  _, ok := trustedIPs[ip]
+  return ok
+}
+```
+</CodeGroup>
+
+## Failure Handling
+
+- Respond with `4xx` for security violations (invalid signature, unknown IP).
+- Respond with `5xx` when internal processing fails so Payvessel retries automatically.
+- Implement alerting for repeated failures and monitor retry logs.
+

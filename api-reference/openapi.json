@@ -96,6 +96,331 @@
         }
       }
     },
+    "/pms/api/external/request/customerReservedAccount/": {
+      "post": {
+        "summary": "Create Virtual Account",
+        "description": "Create a reserved virtual bank account for a customer. Each reserved account is unique per customer, supports static and dynamic modes, and triggers notifications when funded. Use static accounts for recurring funding and dynamic accounts for one-time payments.",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Bearer token with your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVirtualAccountRequest"
+              },
+              "examples": {
+                "static": {
+                  "summary": "Static virtual account",
+                  "value": {
+                    "email": "johndoe@gmail.com",
+                    "name": "JOHN DOE",
+                    "phoneNumber": "09012345672",
+                    "bankcode": [
+                      "999991",
+                      "120001"
+                    ],
+                    "account_type": "STATIC",
+                    "businessid": "061C074E2F91F944B93993B4",
+                    "bvn": "22345678901",
+                    "nin": "12345678901"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Virtual account created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateVirtualAccountResponse"
+                },
+                "examples": {
+                  "success": {
+                    "summary": "Static account created",
+                    "value": {
+                      "status": true,
+                      "service": "CREATE_VIRTUAL_ACCOUNT",
+                      "business": "061C074E2F91F944B93993B4",
+                      "banks": [
+                        {
+                          "bankName": "9Payment Service Bank",
+                          "accountNumber": "5030200545",
+                          "accountName": "Payvessel-Merchant",
+                          "account_type": "STATIC",
+                          "expire_date": "2024-01-04T11:29:32.6522498+01:00",
+                          "trackingReference": "40HTTGT96CDF360C3DRVGV3J"
+                        },
+                        {
+                          "bankName": "PalmPay",
+                          "accountNumber": "6030200545",
+                          "accountName": "Payvessel-Merchant",
+                          "account_type": "STATIC",
+                          "expire_date": "2024-01-04T11:29:32.6522498+01:00",
+                          "trackingReference": "50HTTGT96CDF360C3DRVGV3J"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Virtual account created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateVirtualAccountResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateVirtualAccountError"
+                },
+                "examples": {
+                  "validation": {
+                    "summary": "Missing required fields",
+                    "value": {
+                      "status": false,
+                      "service": "CREATE_VIRTUAL_ACCOUNT",
+                      "message": "Invalid payload",
+                      "errors": {
+                        "bankcode": [
+                          "At least one partner bank code is required"
+                        ],
+                        "bvn": [
+                          "BVN is mandatory for STATIC accounts"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "unauthorized": {
+                    "summary": "Invalid credentials",
+                    "value": {
+                      "error": 401,
+                      "message": "Unauthorized. Please check your API key."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Endpoint not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Virtual Accounts"
+        ]
+      }
+    },
+    "/pms/api/external/request/virtual-account/{businessid}/{account}/": {
+      "get": {
+        "summary": "Get Single Virtual Account",
+        "description": "Fetch details of a specific virtual account using its business ID and account number.",
+        "parameters": [
+          {
+            "name": "businessid",
+            "in": "path",
+            "description": "Merchant business ID associated with the virtual account",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "account",
+            "in": "path",
+            "description": "Virtual account number to retrieve",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Bearer token with your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Virtual account retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualAccountDetails"
+                },
+                "examples": {
+                  "success": {
+                    "summary": "Static virtual account",
+                    "value": {
+                      "bankCode": "120001",
+                      "bankName": "9Payment Service Bank",
+                      "accountNumber": "53663632517",
+                      "accountName": "ADE OLA",
+                      "account_type": "STATIC",
+                      "expire_date": null,
+                      "trackingReference": "DdGJDGJGJUGYF1038YKXAOE"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Virtual account not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Virtual Accounts"
+        ]
+      }
+    },
     "/plants/{id}": {
       "delete": {
         "description": "Deletes a single plant based on the ID supplied",
@@ -203,6 +528,223 @@
           },
           "message": {
             "type": "string"
+          }
+        }
+      },
+      "CreateVirtualAccountRequest": {
+        "type": "object",
+        "required": [
+          "email",
+          "name",
+          "phoneNumber",
+          "bankcode",
+          "account_type",
+          "businessid"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Customer email address"
+          },
+          "name": {
+            "type": "string",
+            "description": "Customer full name (first name and last name)"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "Customer phone number in international format"
+          },
+          "bankcode": {
+            "type": "array",
+            "description": "List of partner bank codes to provision the virtual account with",
+            "items": {
+              "type": "string",
+              "enum": [
+                "999991",
+                "120001"
+              ]
+            },
+            "example": [
+              "999991",
+              "120001"
+            ]
+          },
+          "account_type": {
+            "type": "string",
+            "description": "Type of virtual account to create",
+            "enum": [
+              "STATIC",
+              "DYNAMIC"
+            ]
+          },
+          "businessid": {
+            "type": "string",
+            "description": "Merchant business ID supplied by Payvessel"
+          },
+          "bvn": {
+            "type": "string",
+            "description": "Customer Bank Verification Number (required for STATIC accounts)"
+          },
+          "nin": {
+            "type": "string",
+            "description": "Customer National Identification Number (use when BVN is unavailable)"
+          }
+        }
+      },
+      "CreateVirtualAccountResponse": {
+        "type": "object",
+        "required": [
+          "status",
+          "service",
+          "business",
+          "banks"
+        ],
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Indicates whether the request succeeded"
+          },
+          "service": {
+            "type": "string",
+            "description": "Operation identifier",
+            "example": "CREATE_VIRTUAL_ACCOUNT"
+          },
+          "business": {
+            "type": "string",
+            "description": "Merchant business ID"
+          },
+          "banks": {
+            "type": "array",
+            "description": "Generated virtual bank accounts",
+            "items": {
+              "$ref": "#/components/schemas/VirtualAccountBank"
+            }
+          }
+        }
+      },
+      "VirtualAccountBank": {
+        "type": "object",
+        "required": [
+          "bankName",
+          "accountNumber",
+          "accountName",
+          "account_type",
+          "trackingReference"
+        ],
+        "properties": {
+          "bankName": {
+            "type": "string",
+            "description": "Name of partner bank"
+          },
+          "accountNumber": {
+            "type": "string",
+            "description": "Account number assigned to the customer"
+          },
+          "accountName": {
+            "type": "string",
+            "description": "Account display name"
+          },
+          "account_type": {
+            "type": "string",
+            "description": "Virtual account type",
+            "enum": [
+              "STATIC",
+              "DYNAMIC"
+            ]
+          },
+          "expire_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Expiration timestamp (dynamic accounts only)"
+          },
+          "trackingReference": {
+            "type": "string",
+            "description": "Reference used to track transactions on this account"
+          }
+        }
+      },
+      "CreateVirtualAccountError": {
+        "type": "object",
+        "required": [
+          "status",
+          "service",
+          "message",
+          "errors"
+        ],
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Request outcome flag",
+            "example": false
+          },
+          "service": {
+            "type": "string",
+            "description": "Operation identifier",
+            "example": "CREATE_VIRTUAL_ACCOUNT"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error summary"
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Validation errors keyed by field name"
+          }
+        }
+      },
+      "VirtualAccountDetails": {
+        "type": "object",
+        "required": [
+          "bankCode",
+          "bankName",
+          "accountNumber",
+          "accountName",
+          "account_type",
+          "trackingReference"
+        ],
+        "properties": {
+          "bankCode": {
+            "type": "string",
+            "description": "Partner bank code associated with the account"
+          },
+          "bankName": {
+            "type": "string",
+            "description": "Partner bank name"
+          },
+          "accountNumber": {
+            "type": "string",
+            "description": "Virtual account number"
+          },
+          "accountName": {
+            "type": "string",
+            "description": "Account name assigned to the customer"
+          },
+          "account_type": {
+            "type": "string",
+            "description": "Virtual account type",
+            "enum": [
+              "STATIC",
+              "DYNAMIC"
+            ]
+          },
+          "expire_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Expiration date for dynamic accounts; null for static accounts"
+          },
+          "trackingReference": {
+            "type": "string",
+            "description": "Tracking reference for payments made to this account"
           }
         }
       }

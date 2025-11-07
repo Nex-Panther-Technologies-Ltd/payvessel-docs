@@ -118,9 +118,9 @@
           {
             "group": "Webhook",
             "pages": [
-              "webhook/overview",
-              "webhook/verifying-webhooks",
-              "webhook/supported-events"
+              "api-reference/webhook/overview",
+              "api-reference/webhook/verifying-webhooks",
+              "api-reference/webhook/supported-events"
             ]
           }
           
@@ -160,6 +160,21 @@
             "group": "Wallets",
             "pages": [
               "api-reference/wallets/create-wallet"
+            ]
+          },
+          {
+            "group": "Virtual Accounts",
+            "pages": [
+              "api-reference/virtual-accounts/create-virtual-account",
+              "api-reference/virtual-accounts/get-virtual-account"
+            ]
+          },
+          {
+            "group": "Webhook",
+            "pages": [
+              "api-reference/webhook/overview",
+              "api-reference/webhook/verifying-webhooks",
+              "api-reference/webhook/supported-events"
             ]
           },
           {

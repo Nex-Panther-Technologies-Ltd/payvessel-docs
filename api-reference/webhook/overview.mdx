@@ -1,0 +1,123 @@
+---
+title: "Webhook Overview"
+description: "Understand how Payvessel webhooks deliver real-time payment notifications and how to integrate them safely."
+---
+
+# Webhook Overview
+
+Payvessel uses webhooks to deliver real-time notifications when events occur on your account—such as successful payments, wallet funding, or virtual account credits. This allows you to trigger business workflows instantly without polling the API.
+
+<Note>
+Configure webhook endpoints in the Payvessel Dashboard and verify each notification before updating customer balances or order status.
+</Note>
+
+## Delivery Workflow
+
+<Steps>
+  <Step title="Event Occurs">
+    A transaction, payout, verification, or account update happens inside Payvessel.
+  </Step>
+  <Step title="Webhook Sent">
+    Payvessel signs the JSON payload with your secret key and sends it to your registered endpoint.
+  </Step>
+  <Step title="Verify &amp; Process">
+    Your server verifies the signature, checks the sender IP, prevents duplicates, and runs business logic.
+  </Step>
+  <Step title="Acknowledge">
+    Return an HTTP <code>200</code> response to stop retries. Payvessel retries failed deliveries with exponential backoff.
+  </Step>
+</Steps>
+
+## Security Essentials
+
+<CardGroup cols={3}>
+  <Card title="Hash Verification" icon="shield-check" href="/api-reference/webhook/verifying-webhooks#signature-verification">
+    Compute an HMAC SHA-512 hash with your secret (`PVSECRET-`) and compare with the `HTTP_PAYVESSEL_HTTP_SIGNATURE` header.
+  </Card>
+  <Card title="Trusted IPs" icon="location-dot" href="/api-reference/webhook/verifying-webhooks#ip-allowlist">
+    Accept requests only from Payvessel IPs <code>3.255.23.38</code> and <code>162.246.254.36</code>.
+  </Card>
+  <Card title="Duplicate Protection" icon="rotate" href="/api-reference/webhook/verifying-webhooks#duplicate-prevention">
+    Make webhook handlers idempotent and store processed references.
+  </Card>
+</CardGroup>
+
+## Headers You Will Receive
+
+| Header | Description |
+|--------|-------------|
+| `HTTP_PAYVESSEL_HTTP_SIGNATURE` | HMAC SHA-512 hash of the payload generated with your Payvessel secret |
+| `Content-Type` | Always `application/json` |
+| `X-Forwarded-For` | Present when your infrastructure sits behind a proxy—use it to determine the originating IP |
+
+## Webhook Payload Anatomy
+
+Payvessel webhook payloads are JSON objects that include high-level order information and nested objects for the specific resource that changed. A typical transaction notification looks like this:
+
+```json
+{
+  "event": "transaction.success",
+  "order": {
+    "amount": "50000",
+    "settlement_amount": "48500",
+    "fee": "1500",
+    "currency": "NGN",
+    "description": "Order #INV-2094",
+    "status": "completed"
+  },
+  "transaction": {
+    "reference": "TXN_2024_001",
+    "channel": "bank_transfer",
+    "status": "success",
+    "customer_email": "customer@example.com",
+    "paid_at": "2024-02-14T10:36:42Z"
+  },
+  "metadata": {
+    "customer_id": "CUST_2983",
+    "order_id": "INV-2094"
+  }
+}
+```
+
+<Tip>
+Use the `event` field to route requests to dedicated handlers. See the [Supported Events](/api-reference/webhook/supported-events) catalog for the complete list.
+</Tip>
+
+## Delivery Guarantees & Retries
+
+- **At-least-once delivery:** Implement idempotency to safely handle duplicates.
+- **Retry schedule:** Payvessel retries failed deliveries for up to 24 hours with exponential backoff.
+- **Timeouts:** Respond within 10 seconds; otherwise, the attempt is considered failed and retried.
+
+## Testing Webhooks Locally
+
+<Tabs>
+  <Tab title="Ngrok">
+    ```bash
+    ngrok http 3000
+    ```
+    Configure the generated HTTPS URL as your webhook endpoint in the Payvessel Dashboard.
+  </Tab>
+  <Tab title="Local Tunnel">
+    ```bash
+    lt --port 3000 --subdomain payvessel-webhooks
+    ```
+  </Tab>
+  <Tab title="Mock Payloads">
+    Use the Dashboard webhook tester or send stored JSON payloads with <code>curl</code>:
+    ```bash
+    curl -X POST https://your-app.ngrok.io/payvessel-webhook \
+      -H "Content-Type: application/json" \
+      -H "HTTP_PAYVESSEL_HTTP_SIGNATURE: <computed-hash>" \
+      -d @payload.json
+    ```
+  </Tab>
+</Tabs>
+
+## Operational Best Practices
+
+- Log every incoming request body and headers for traceability.
+- Send alerts when webhook deliveries fail repeatedly.
+- Wrap handlers in background jobs if business logic takes longer than a few seconds.
+- Version your webhook handlers together with the API contract.
+
