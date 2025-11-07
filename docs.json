@@ -131,9 +131,7 @@
         "groups": [
           {
             "group": "Getting Started",
-            "pages": [
-              "api-reference/introduction"
-            ]
+            "pages": ["api-reference/introduction"]
           },
           {
             "group": "Transactions",
@@ -152,21 +150,38 @@
           },
           {
             "group": "Identity Verification",
-            "pages": [
-              "api-reference/verification/bvn-verification"
-            ]
+            "pages": ["api-reference/verification/bvn-verification"]
           },
           {
             "group": "Wallets",
-            "pages": [
-              "api-reference/wallets/create-wallet"
-            ]
+            "pages": ["api-reference/wallets/create-wallet"]
           },
           {
             "group": "Virtual Accounts",
             "pages": [
               "api-reference/virtual-accounts/create-virtual-account",
               "api-reference/virtual-accounts/get-virtual-account"
+            ]
+          },
+          {
+            "group": "Card",
+            "pages": [
+              "api-reference/card/charge",
+              "api-reference/card/confirm-status",
+              "api-reference/card/public-key",
+              "api-reference/card/resend-otp",
+              "api-reference/card/resolve-bin",
+              "api-reference/card/simulate-3ds-callback",
+              "api-reference/card/validate-otp",
+              "api-reference/card/validate-phone",
+              "api-reference/card/validate-pin"
+            ]
+          },
+          {
+            "group": "Checkout",
+            "pages": [
+              "api-reference/checkout/confirm-transaction",
+              "api-reference/checkout/initialize-transaction"
             ]
           },
           {
@@ -179,15 +194,11 @@
           },
           {
             "group": "Bill Payments",
-            "pages": [
-              "api-reference/endpoint/create"
-            ]
+            "pages": ["api-reference/endpoint/create"]
           },
           {
             "group": "Card Management",
-            "pages": [
-              "api-reference/endpoint/get"
-            ]
+            "pages": ["api-reference/endpoint/get"]
           }
         ]
       }

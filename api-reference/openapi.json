@@ -96,6 +96,39 @@
         }
       }
     },
+    "/plants/{id}": {
+      "delete": {
+        "description": "Deletes a single plant based on the ID supplied",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of plant to delete",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Plant deleted",
+            "content": {}
+          },
+          "400": {
+            "description": "unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/pms/api/external/request/customerReservedAccount/": {
       "post": {
         "summary": "Create Virtual Account",
@@ -127,9 +160,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": [
-                "application/json"
-              ]
+              "enum": ["application/json"]
             },
             "example": "application/json"
           }
@@ -148,10 +179,7 @@
                     "email": "johndoe@gmail.com",
                     "name": "JOHN DOE",
                     "phoneNumber": "09012345672",
-                    "bankcode": [
-                      "999991",
-                      "120001"
-                    ],
+                    "bankcode": ["999991", "120001"],
                     "account_type": "STATIC",
                     "businessid": "061C074E2F91F944B93993B4",
                     "bvn": "22345678901",
@@ -229,9 +257,7 @@
                         "bankcode": [
                           "At least one partner bank code is required"
                         ],
-                        "bvn": [
-                          "BVN is mandatory for STATIC accounts"
-                        ]
+                        "bvn": ["BVN is mandatory for STATIC accounts"]
                       }
                     }
                   }
@@ -289,9 +315,7 @@
             }
           }
         },
-        "tags": [
-          "Virtual Accounts"
-        ]
+        "tags": ["Virtual Accounts"]
       }
     },
     "/pms/api/external/request/virtual-account/{businessid}/{account}/": {
@@ -343,9 +367,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": [
-                "application/json"
-              ]
+              "enum": ["application/json"]
             },
             "example": "application/json"
           }
@@ -416,33 +438,78 @@
             }
           }
         },
-        "tags": [
-          "Virtual Accounts"
-        ]
+        "tags": ["Virtual Accounts"]
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
+    "/pms/checkout/card-payment/charge/": {
+      "post": {
+        "summary": "Card Payment Charge",
+        "description": "Process a card payment by charging the customer's card. This endpoint initiates the payment flow and may require additional authentication steps like OTP or PIN validation.",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Bearer token with your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["application/json"]
+            },
+            "example": "application/json"
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CardChargeRequest"
+              },
+              "examples": {
+                "card_charge": {
+                  "summary": "Card payment charge",
+                  "value": {
+                    "cardData": "encrypted_card_data_string",
+                    "key": "encryption_key_string",
+                    "reference": "txn_12345"
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
+          "200": {
+            "description": "Card charge initiated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CardChargeResponse"
+                }
+              }
+            }
           },
           "400": {
-            "description": "unexpected error",
+            "description": "Invalid request payload",
             "content": {
               "application/json": {
                 "schema": {
@@ -451,7 +518,560 @@
               }
             }
           }
-        }
+        },
+        "tags": ["Card"]
+      }
+    },
+    "/pms/checkout/card-payment/confirm-status/": {
+      "get": {
+        "summary": "Confirm Payment Status",
+        "description": "Check the final status of a card payment transaction. Use this to confirm whether a payment was successful after authentication steps.",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Bearer token with your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["application/json"]
+            },
+            "example": "application/json"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment status retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentStatusResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Card"]
+      }
+    },
+    "/pms/checkout/card-payment/public-key/": {
+      "get": {
+        "summary": "Get Public Key",
+        "description": "Retrieve the public encryption key for securing sensitive card data during transmission.",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublicKeyResponse"
+              },
+              "examples": {
+                "card_charge": {
+                  "summary": "Card payment charge",
+                  "value": {
+                    "cardData": "encrypted_card_data_string",
+                    "key": "encryption_key_string",
+                    "reference": "txn_12345"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Public key retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicKeyResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Card"]
+      }
+    },
+    "/pms/checkout/card-payment/resend-otp/": {
+      "post": {
+        "summary": "Resend OTP",
+        "description": "Resend the one-time password (OTP) for card payment authentication when the initial OTP was not received or expired.",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Bearer token with your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["application/json"]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResendOtpRequest"
+              },
+              "examples": {
+                "resend_otp": {
+                  "summary": "Resend OTP request",
+                  "value": {
+                    "transactionRef": "txn_12345",
+                    "amount": "10000"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP resent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OtpResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Card"]
+      }
+    },
+    "/pms/checkout/card-payment/resolve-bin/{bin}/": {
+      "get": {
+        "summary": "Resolve BIN",
+        "description": "Resolve card Bank Identification Number (BIN) to get card type, bank information, and other card metadata.",
+        "parameters": [
+          {
+            "name": "bin",
+            "in": "path",
+            "description": "First 6-8 digits of the card number (Bank Identification Number)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BIN resolved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BinResolveResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Card"]
+      }
+    },
+    "/pms/checkout/card-payment/simulate-3ds-callback/": {
+      "get": {
+        "summary": "Simulate 3DS Callback (For Testing purposes only)",
+        "description": "Simulate a 3D Secure authentication callback for testing purposes in the sandbox environment.",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "3DS authentication status (success/failed)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["success", "failed"]
+            }
+          },
+          {
+            "name": "transactionId",
+            "in": "query",
+            "description": "Transaction ID for 3DS authentication",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "3DS callback simulated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Simulate3DSResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Card"]
+      }
+    },
+    "/pms/checkout/card-payment/validate-otp/": {
+      "post": {
+        "summary": "Validate OTP",
+        "description": "Validate the one-time password (OTP) provided by the customer for card payment authentication.",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Bearer token with your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["application/json"]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateOtpRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP validated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OtpValidationResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Card"]
+      }
+    },
+    "/pms/checkout/card-payment/validate-phone/": {
+      "post": {
+        "summary": "Validate Phone",
+        "description": "Validate the customer's phone number for card payment authentication and OTP delivery.",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Bearer token with your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["application/json"]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidatePhoneRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Phone number validated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhoneValidationResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Card"]
+      }
+    },
+    "/pms/checkout/card-payment/validate-pin/": {
+      "post": {
+        "summary": "Validate PIN",
+        "description": "Validate the customer's card PIN for payment authentication when required by the card issuer.",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Bearer token with your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["application/json"]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidatePinRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PIN validated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PinValidationResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Card"]
+      }
+    },
+    "/pms/transactions/{reference}/confirm/": {
+      "get": {
+        "summary": "Confirm Transaction",
+        "description": "Retrieve detailed information about a specific transaction using its reference. This endpoint provides comprehensive transaction data including status, amounts, fees, and associated entities.",
+        "parameters": [
+          {
+            "name": "reference",
+            "in": "path",
+            "description": "Transaction reference to confirm",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Bearer token with your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfirmTransactionResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Checkout"]
+      }
+    },
+    "/pms/transactions/initialize/": {
+      "post": {
+        "summary": "Initialize Transaction",
+        "description": "Initialize a new payment transaction with customer details, amount, and payment channels. This creates a transaction session that can be used for payment processing.",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Bearer token with your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["application/json"]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InitializeTransactionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Transaction initialized successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitializeTransactionResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Checkout"]
       }
     }
   },
@@ -480,9 +1100,7 @@
   "components": {
     "schemas": {
       "Plant": {
-        "required": [
-          "name"
-        ],
+        "required": ["name"],
         "type": "object",
         "properties": {
           "name": {
@@ -501,9 +1119,7 @@
             "$ref": "#/components/schemas/Plant"
           },
           {
-            "required": [
-              "id"
-            ],
+            "required": ["id"],
             "type": "object",
             "properties": {
               "id": {
@@ -516,10 +1132,7 @@
         ]
       },
       "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
+        "required": ["error", "message"],
         "type": "object",
         "properties": {
           "error": {
@@ -560,23 +1173,14 @@
             "description": "List of partner bank codes to provision the virtual account with",
             "items": {
               "type": "string",
-              "enum": [
-                "999991",
-                "120001"
-              ]
+              "enum": ["999991", "120001"]
             },
-            "example": [
-              "999991",
-              "120001"
-            ]
+            "example": ["999991", "120001"]
           },
           "account_type": {
             "type": "string",
             "description": "Type of virtual account to create",
-            "enum": [
-              "STATIC",
-              "DYNAMIC"
-            ]
+            "enum": ["STATIC", "DYNAMIC"]
           },
           "businessid": {
             "type": "string",
@@ -594,12 +1198,7 @@
       },
       "CreateVirtualAccountResponse": {
         "type": "object",
-        "required": [
-          "status",
-          "service",
-          "business",
-          "banks"
-        ],
+        "required": ["status", "service", "business", "banks"],
         "properties": {
           "status": {
             "type": "boolean",
@@ -648,10 +1247,7 @@
           "account_type": {
             "type": "string",
             "description": "Virtual account type",
-            "enum": [
-              "STATIC",
-              "DYNAMIC"
-            ]
+            "enum": ["STATIC", "DYNAMIC"]
           },
           "expire_date": {
             "type": "string",
@@ -666,12 +1262,7 @@
       },
       "CreateVirtualAccountError": {
         "type": "object",
-        "required": [
-          "status",
-          "service",
-          "message",
-          "errors"
-        ],
+        "required": ["status", "service", "message", "errors"],
         "properties": {
           "status": {
             "type": "boolean",
@@ -729,22 +1320,806 @@
           "account_type": {
             "type": "string",
             "description": "Virtual account type",
-            "enum": [
-              "STATIC",
-              "DYNAMIC"
-            ]
+            "enum": ["STATIC", "DYNAMIC"]
           },
           "expire_date": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "format": "date-time",
             "description": "Expiration date for dynamic accounts; null for static accounts"
           },
           "trackingReference": {
             "type": "string",
             "description": "Tracking reference for payments made to this account"
+          }
+        }
+      },
+      "CardChargeRequest": {
+        "type": "object",
+        "required": ["cardData", "key", "reference"],
+        "properties": {
+          "cardData": {
+            "type": "string",
+            "description": "Encrypted card data containing payment information"
+          },
+          "key": {
+            "type": "string",
+            "description": "Encryption key for the card data"
+          },
+          "reference": {
+            "type": "string",
+            "description": "Unique transaction reference"
+          }
+        }
+      },
+      "CardDetails": {
+        "type": "object",
+        "required": ["number", "cvv", "expiry_month", "expiry_year"],
+        "properties": {
+          "number": {
+            "type": "string",
+            "description": "Card number (PAN)"
+          },
+          "cvv": {
+            "type": "string",
+            "description": "Card verification value"
+          },
+          "expiry_month": {
+            "type": "string",
+            "description": "Card expiry month (MM)"
+          },
+          "expiry_year": {
+            "type": "string",
+            "description": "Card expiry year (YYYY)"
+          }
+        }
+      },
+      "CardChargeResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Transaction initiation status"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "reference": {
+                "type": "string",
+                "description": "Transaction reference"
+              },
+              "status": {
+                "type": "string",
+                "description": "Current transaction status"
+              },
+              "message": {
+                "type": "string",
+                "description": "Transaction status message"
+              },
+              "amount": {
+                "type": "number",
+                "description": "Transaction amount"
+              },
+              "currency": {
+                "type": "string",
+                "description": "Transaction currency"
+              },
+              "redirect_url": {
+                "type": "string",
+                "description": "URL to redirect customer for authentication"
+              },
+              "gateway_response": {
+                "type": "object",
+                "description": "Additional response data from payment gateway",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ConfirmStatusRequest": {
+        "type": "object",
+        "required": ["transactionRef"],
+        "properties": {
+          "transactionRef": {
+            "type": "string",
+            "description": "Transaction reference to check status for"
+          }
+        }
+      },
+      "PaymentStatusResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Request status"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "statusCode": {
+                "type": "string",
+                "description": "Status code from payment gateway"
+              },
+              "message": {
+                "type": "string",
+                "description": "Status message from payment gateway"
+              },
+              "data": {
+                "type": "object",
+                "description": "Additional payment gateway response data",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PublicKeyResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Request status"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "public_key": {
+                "type": "string",
+                "description": "Public encryption key"
+              }
+            }
+          }
+        }
+      },
+      "ResendOtpRequest": {
+        "type": "object",
+        "required": ["transactionRef", "amount"],
+        "properties": {
+          "transactionRef": {
+            "type": "string",
+            "description": "Transaction reference to resend OTP for"
+          },
+          "amount": {
+            "type": "string",
+            "description": "Transaction amount"
+          }
+        }
+      },
+      "OtpResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Request status"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "statusCode": {
+                "type": "string",
+                "description": "Status code from payment gateway"
+              },
+              "message": {
+                "type": "string",
+                "description": "Status message from payment gateway"
+              },
+              "data": {
+                "type": "object",
+                "description": "Additional payment gateway response data",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "BinResolveResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Request status"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "bin": {
+                "type": "string",
+                "description": "Bank Identification Number"
+              },
+              "brand": {
+                "type": "string",
+                "description": "Card brand (visa, mastercard, etc.)"
+              },
+              "sub_brand": {
+                "type": "string",
+                "description": "Card sub-brand or specific product type"
+              },
+              "country_code": {
+                "type": "string",
+                "description": "ISO country code of the issuing country"
+              },
+              "country_name": {
+                "type": "string",
+                "description": "Full name of the issuing country"
+              },
+              "card_type": {
+                "type": "string",
+                "description": "Card type (debit, credit, prepaid)"
+              },
+              "bank": {
+                "type": "string",
+                "description": "Issuing bank name"
+              },
+              "currency": {
+                "type": "string",
+                "description": "Primary currency for the card"
+              },
+              "linked_bank_id": {
+                "type": "integer",
+                "description": "Internal bank identifier"
+              }
+            }
+          }
+        }
+      },
+      "Simulate3DSResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "3DS simulation status"
+          },
+          "message": {
+            "type": "string",
+            "description": "Simulation result message"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "statusCode": {
+                "type": "string",
+                "description": "Status code from payment gateway"
+              },
+              "message": {
+                "type": "string",
+                "description": "Status message from payment gateway"
+              },
+              "data": {
+                "type": "object",
+                "description": "Additional payment gateway response data",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "SimulationResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Simulation status"
+          },
+          "message": {
+            "type": "string",
+            "description": "Simulation result message"
+          }
+        }
+      },
+      "ValidateOtpRequest": {
+        "type": "object",
+        "required": ["reference", "otp"],
+        "properties": {
+          "reference": {
+            "type": "string",
+            "description": "Transaction reference"
+          },
+          "otp": {
+            "type": "string",
+            "description": "One-time password provided by customer"
+          }
+        }
+      },
+      "OtpValidationResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Validation status"
+          },
+          "message": {
+            "type": "string",
+            "description": "Validation result message"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "statusCode": {
+                "type": "string",
+                "description": "Status code from payment gateway"
+              },
+              "message": {
+                "type": "string",
+                "description": "Status message from payment gateway"
+              },
+              "data": {
+                "type": "object",
+                "description": "Additional payment gateway response data",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ValidatePhoneRequest": {
+        "type": "object",
+        "required": ["reference", "phone"],
+        "properties": {
+          "reference": {
+            "type": "string",
+            "description": "Transaction reference"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Customer phone number"
+          }
+        }
+      },
+      "PhoneValidationResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Validation status"
+          },
+          "message": {
+            "type": "string",
+            "description": "Validation result message"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "transaction_id": {
+                "type": "string",
+                "description": "Transaction identifier"
+              },
+              "status": {
+                "type": "string",
+                "description": "Transaction status"
+              },
+              "message": {
+                "type": "string",
+                "description": "Transaction status message"
+              }
+            }
+          }
+        }
+      },
+      "ValidatePinRequest": {
+        "type": "object",
+        "required": ["reference", "pin"],
+        "properties": {
+          "reference": {
+            "type": "string",
+            "description": "Transaction reference"
+          },
+          "pin": {
+            "type": "string",
+            "description": "Customer card PIN"
+          }
+        }
+      },
+      "PinValidationResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Validation status"
+          },
+          "message": {
+            "type": "string",
+            "description": "Validation result message"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "transaction_id": {
+                "type": "string",
+                "description": "Transaction identifier"
+              },
+              "status": {
+                "type": "string",
+                "description": "Transaction status"
+              },
+              "message": {
+                "type": "string",
+                "description": "Transaction status message"
+              }
+            }
+          }
+        }
+      },
+      "InitializeTransactionRequest": {
+        "type": "object",
+        "required": [
+          "amount",
+          "channels",
+          "currency",
+          "customer_name",
+          "customer_email",
+          "customer_phone_number"
+        ],
+        "properties": {
+          "amount": {
+            "type": "string",
+            "description": "Transaction amount in kobo (for NGN) or minor currency units"
+          },
+          "channels": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["BANK_TRANSFER", "CARD", "USSD"]
+            },
+            "description": "Payment channels to enable for this transaction"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Transaction currency code",
+            "enum": ["NGN"]
+          },
+          "metadata": {
+            "type": "string",
+            "description": "Additional information about the transaction"
+          },
+          "customer_name": {
+            "type": "string",
+            "description": "Customer's full name"
+          },
+          "customer_email": {
+            "type": "string",
+            "format": "email",
+            "description": "Customer's email address"
+          },
+          "customer_phone_number": {
+            "type": "string",
+            "description": "Customer's phone number"
+          },
+          "redirect_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL to redirect customer after payment completion"
+          },
+          "webhook_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL to receive payment notifications"
+          },
+          "reference": {
+            "type": "string",
+            "description": "Unique transaction reference (optional - auto-generated if not provided)"
+          }
+        }
+      },
+      "InitializeTransactionResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Transaction initialization status"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "string",
+                "description": "Transaction amount"
+              },
+              "channels": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Enabled payment channels"
+              },
+              "currency": {
+                "type": "string",
+                "description": "Transaction currency"
+              },
+              "metadata": {
+                "type": "string",
+                "description": "Transaction metadata"
+              },
+              "customer_name": {
+                "type": "string",
+                "description": "Customer name"
+              },
+              "customer_email": {
+                "type": "string",
+                "description": "Customer email"
+              },
+              "customer_phone_number": {
+                "type": "string",
+                "description": "Customer phone number"
+              },
+              "redirect_url": {
+                "type": "string",
+                "description": "Redirect URL"
+              },
+              "webhook_url": {
+                "type": "string",
+                "description": "Webhook URL"
+              },
+              "reference": {
+                "type": "string",
+                "description": "Transaction reference"
+              }
+            }
+          }
+        }
+      },
+      "ConfirmTransactionResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Request status"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "description": "Transaction unique identifier"
+              },
+              "business_id": {
+                "type": "string",
+                "format": "uuid",
+                "description": "Business identifier"
+              },
+              "transaction_ref": {
+                "type": "string",
+                "description": "Transaction reference"
+              },
+              "amount": {
+                "type": "string",
+                "description": "Transaction amount"
+              },
+              "fee": {
+                "type": "string",
+                "description": "Transaction fee"
+              },
+              "status": {
+                "type": "string",
+                "enum": ["PENDING", "SUCCESS", "FAILED", "CANCELLED"],
+                "description": "Transaction status"
+              },
+              "transaction_type": {
+                "type": "string",
+                "enum": ["CREDIT", "DEBIT"],
+                "description": "Type of transaction"
+              },
+              "channel": {
+                "type": "string",
+                "description": "Payment channel used"
+              },
+              "payment_processor": {
+                "type": "string",
+                "description": "Payment processor identifier"
+              },
+              "access_code": {
+                "type": "string",
+                "description": "Transaction access code"
+              },
+              "checkout_url": {
+                "type": "string",
+                "description": "Checkout URL"
+              },
+              "api_key": {
+                "type": "string",
+                "description": "API key used"
+              },
+              "payment_link": {
+                "type": "string",
+                "format": "uuid",
+                "description": "Payment link identifier"
+              },
+              "description": {
+                "type": "string",
+                "description": "Transaction description"
+              },
+              "metadata": {
+                "type": "string",
+                "description": "Transaction metadata"
+              },
+              "business_profile": {
+                "$ref": "#/components/schemas/BusinessProfile"
+              },
+              "order": {
+                "$ref": "#/components/schemas/OrderDetails"
+              },
+              "virtual_account": {
+                "$ref": "#/components/schemas/VirtualAccountInfo"
+              },
+              "logs": {
+                "type": "string",
+                "description": "Transaction logs"
+              },
+              "created_datetime": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Creation timestamp"
+              },
+              "updated_datetime": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Last update timestamp"
+              }
+            }
+          }
+        }
+      },
+      "BusinessProfile": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Business profile ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "Business name"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Business email"
+          },
+          "business_logo": {
+            "type": "string",
+            "description": "Business logo URL"
+          }
+        }
+      },
+      "OrderDetails": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Order ID"
+          },
+          "channels": {
+            "type": "string",
+            "description": "Payment channels"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Order currency"
+          },
+          "redirect_url": {
+            "type": "string",
+            "description": "Redirect URL"
+          },
+          "webhook_url": {
+            "type": "string",
+            "description": "Webhook URL"
+          },
+          "customer_name": {
+            "type": "string",
+            "description": "Customer name"
+          },
+          "customer_email": {
+            "type": "string",
+            "format": "email",
+            "description": "Customer email"
+          },
+          "customer_phone_number": {
+            "type": "string",
+            "description": "Customer phone number"
+          },
+          "metadata": {
+            "type": "string",
+            "description": "Order metadata"
+          },
+          "created_datetime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation timestamp"
+          },
+          "updated_datetime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last update timestamp"
+          }
+        }
+      },
+      "VirtualAccountInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Virtual account ID"
+          },
+          "bank_code": {
+            "type": "string",
+            "description": "Bank code"
+          },
+          "bank_name": {
+            "type": "string",
+            "description": "Bank name"
+          },
+          "account_number": {
+            "type": "string",
+            "description": "Account number"
+          },
+          "account_name": {
+            "type": "string",
+            "description": "Account name"
+          },
+          "account_type": {
+            "type": "string",
+            "enum": ["STATIC", "DYNAMIC"],
+            "description": "Account type"
+          },
+          "expire_datetime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Expiration timestamp"
+          },
+          "tracking_reference": {
+            "type": "string",
+            "description": "Tracking reference"
+          },
+          "created_datetime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation timestamp"
+          },
+          "updated_datetime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last update timestamp"
           }
         }
       }
