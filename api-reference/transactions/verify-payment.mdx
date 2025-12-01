@@ -1,0 +1,520 @@
+---
+title: "Verify Payment"
+description: "Verify the status of a payment transaction by reference"
+---
+
+# Verify Payment
+
+Verify the status and details of a payment transaction using its unique reference. This endpoint should be called after payment completion to confirm the transaction status.
+
+<Warning>
+**Always verify payments!** Never rely solely on frontend callbacks or webhook notifications. Always verify transaction status on your backend for security.
+</Warning>
+
+## Endpoint
+
+<Badge variant="info">**GET**</Badge> `/transaction/verify/{reference}`
+
+## Path Parameters
+
+<ParamField path="reference" type="string" required>
+  The unique transaction reference returned when the payment was initialized
+</ParamField>
+
+## Headers
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `Authorization` | string | **Required** | Bearer token with your secret API key |
+| `Content-Type` | string | **Required** | Must be `application/json` |
+
+## Example Request
+
+<CodeGroup>
+```bash cURL
+curl -X GET https://api.payvessel.com/transaction/verify/TXN_2024_001 \
+  -H "Authorization: Bearer sk_test_abc123..." \
+  -H "Content-Type: application/json"
+```
+
+```javascript Node.js
+const payvessel = require('payvessel')(process.env.PAYVESSEL_SECRET_KEY);
+
+const transaction = await payvessel.transaction.verify('TXN_2024_001');
+```
+
+```php PHP
+<?php
+$payvessel = new \Payvessel\Payvessel(getenv('PAYVESSEL_SECRET_KEY'));
+
+$transaction = $payvessel->transaction->verify('TXN_2024_001');
+?>
+```
+
+```python Python
+import payvessel
+
+payvessel.api_key = os.environ['PAYVESSEL_SECRET_KEY']
+
+transaction = payvessel.Transaction.verify('TXN_2024_001')
+```
+</CodeGroup>
+
+## Response
+
+<ResponseField name="status" type="string">
+  Request status indicator - `"success"` or `"error"`
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Human-readable message describing the result
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Transaction verification data
+  
+  <Expandable title="Data Object">
+    <ResponseField name="data.id" type="integer">
+      Internal transaction ID
+    </ResponseField>
+    
+    <ResponseField name="data.reference" type="string">
+      Unique transaction reference
+    </ResponseField>
+    
+    <ResponseField name="data.amount" type="integer">
+      Transaction amount in smallest currency unit
+    </ResponseField>
+    
+    <ResponseField name="data.currency" type="string">
+      Transaction currency code
+    </ResponseField>
+    
+    <ResponseField name="data.status" type="string">
+      Transaction status
+      
+      **Possible values:**
+      - `success` - Payment completed successfully
+      - `failed` - Payment failed or was declined  
+      - `pending` - Payment is still processing
+      - `abandoned` - Payment was started but not completed
+      - `cancelled` - Payment was cancelled
+    </ResponseField>
+    
+    <ResponseField name="data.gateway_response" type="string">
+      Response message from the payment gateway
+    </ResponseField>
+    
+    <ResponseField name="data.paid_at" type="string">
+      ISO 8601 timestamp when payment was completed (null if not paid)
+    </ResponseField>
+    
+    <ResponseField name="data.created_at" type="string">
+      ISO 8601 timestamp when transaction was created
+    </ResponseField>
+    
+    <ResponseField name="data.channel" type="string">
+      Payment method used - `card`, `bank`, `ussd`, `qr`, `mobile_money`, `bank_transfer`
+    </ResponseField>
+    
+    <ResponseField name="data.fees" type="integer">
+      Transaction fees charged in smallest currency unit
+    </ResponseField>
+    
+    <ResponseField name="data.customer" type="object">
+      Customer information
+      
+      <Expandable title="Customer Object">
+        <ResponseField name="data.customer.id" type="integer">
+          Customer ID in PayVessel system
+        </ResponseField>
+        
+        <ResponseField name="data.customer.email" type="string">
+          Customer's email address
+        </ResponseField>
+        
+        <ResponseField name="data.customer.first_name" type="string">
+          Customer's first name
+        </ResponseField>
+        
+        <ResponseField name="data.customer.last_name" type="string">
+          Customer's last name
+        </ResponseField>
+        
+        <ResponseField name="data.customer.phone" type="string">
+          Customer's phone number
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="data.authorization" type="object">
+      Payment authorization details (for card payments)
+      
+      <Expandable title="Authorization Object">
+        <ResponseField name="data.authorization.authorization_code" type="string">
+          Authorization code for future charges
+        </ResponseField>
+        
+        <ResponseField name="data.authorization.bin" type="string">
+          First 6 digits of the card number
+        </ResponseField>
+        
+        <ResponseField name="data.authorization.last4" type="string">
+          Last 4 digits of the card number
+        </ResponseField>
+        
+        <ResponseField name="data.authorization.exp_month" type="string">
+          Card expiry month
+        </ResponseField>
+        
+        <ResponseField name="data.authorization.exp_year" type="string">
+          Card expiry year
+        </ResponseField>
+        
+        <ResponseField name="data.authorization.channel" type="string">
+          Authorization channel used
+        </ResponseField>
+        
+        <ResponseField name="data.authorization.card_type" type="string">
+          Type of card - `visa`, `mastercard`, `american express`, etc.
+        </ResponseField>
+        
+        <ResponseField name="data.authorization.bank" type="string">
+          Issuing bank name
+        </ResponseField>
+        
+        <ResponseField name="data.authorization.country_code" type="string">
+          Country code of the issuing bank
+        </ResponseField>
+        
+        <ResponseField name="data.authorization.brand" type="string">
+          Card brand
+        </ResponseField>
+        
+        <ResponseField name="data.authorization.reusable" type="boolean">
+          Whether the authorization can be reused for future payments
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="data.metadata" type="object">
+      Custom metadata attached to the transaction
+    </ResponseField>
+    
+    <ResponseField name="data.log" type="object">
+      Transaction processing log and history
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Response
+
+<CodeGroup>
+```json 200 Success - Successful Payment
+{
+  "status": "success",
+  "message": "Transaction verification successful",
+  "data": {
+    "id": 123456789,
+    "reference": "TXN_2024_001",
+    "amount": 50000,
+    "currency": "NGN",
+    "status": "success",
+    "gateway_response": "Successful",
+    "paid_at": "2024-01-15T14:35:22Z",
+    "created_at": "2024-01-15T14:30:00Z",
+    "channel": "card",
+    "fees": 750,
+    "customer": {
+      "id": 12345,
+      "email": "customer@example.com",
+      "first_name": "John",
+      "last_name": "Doe",
+      "phone": "+2348012345678"
+    },
+    "authorization": {
+      "authorization_code": "AUTH_xyz789abc",
+      "bin": "408408",
+      "last4": "4081",
+      "exp_month": "12",
+      "exp_year": "2027",
+      "channel": "card",
+      "card_type": "visa",
+      "bank": "TEST BANK",
+      "country_code": "NG",
+      "brand": "visa",
+      "reusable": true
+    },
+    "metadata": {
+      "custom_fields": [
+        {
+          "display_name": "Order ID",
+          "variable_name": "order_id",
+          "value": "ORD_001"
+        }
+      ]
+    },
+    "log": {
+      "start_time": 1705329000,
+      "time_spent": 322,
+      "attempts": 1,
+      "errors": 0,
+      "success": true,
+      "mobile": false,
+      "input": [],
+      "history": [
+        {
+          "type": "action",
+          "message": "Attempted to pay with card",
+          "time": 15
+        },
+        {
+          "type": "success",
+          "message": "Successfully paid with card",
+          "time": 322
+        }
+      ]
+    }
+  }
+}
+```
+
+```json 200 Success - Failed Payment
+{
+  "status": "success",
+  "message": "Transaction verification successful",
+  "data": {
+    "id": 123456790,
+    "reference": "TXN_2024_002",
+    "amount": 50000,
+    "currency": "NGN",
+    "status": "failed",
+    "gateway_response": "Insufficient Funds",
+    "paid_at": null,
+    "created_at": "2024-01-15T15:00:00Z",
+    "channel": "card",
+    "fees": 0,
+    "customer": {
+      "id": 12346,
+      "email": "customer2@example.com",
+      "first_name": "Jane",
+      "last_name": "Smith",
+      "phone": "+2348012345679"
+    },
+    "authorization": null,
+    "metadata": {},
+    "log": {
+      "start_time": 1705330800,
+      "time_spent": 45,
+      "attempts": 1,
+      "errors": 1,
+      "success": false,
+      "mobile": false,
+      "input": [],
+      "history": [
+        {
+          "type": "action",
+          "message": "Attempted to pay with card",
+          "time": 10
+        },
+        {
+          "type": "error",
+          "message": "Payment failed: Insufficient Funds",
+          "time": 45
+        }
+      ]
+    }
+  }
+}
+```
+
+```json 404 Not Found
+{
+  "status": "error",
+  "message": "Transaction not found"
+}
+```
+
+```json 401 Unauthorized
+{
+  "status": "error", 
+  "message": "Unauthorized. Please check your API key"
+}
+```
+</CodeGroup>
+
+## Transaction Status Guide
+
+Understanding transaction statuses is crucial for proper payment handling:
+
+<AccordionGroup>
+  <Accordion title="success" icon="check-circle">
+    **Payment Completed Successfully**
+    
+    The payment has been processed and funds have been collected. You can proceed with order fulfillment.
+    
+    - `paid_at` timestamp will be populated
+    - `authorization` object will contain card details (for card payments)
+    - Funds will be settled to your account based on your settlement schedule
+  </Accordion>
+  
+  <Accordion title="failed" icon="x-circle">
+    **Payment Failed**
+    
+    The payment attempt was unsuccessful. Common reasons include:
+    - Insufficient funds
+    - Invalid card details
+    - Bank decline
+    - Network timeout
+    
+    - `paid_at` will be null
+    - `authorization` will be null
+    - Check `gateway_response` for specific failure reason
+  </Accordion>
+  
+  <Accordion title="pending" icon="clock">
+    **Payment Processing**
+    
+    The payment is still being processed. This is common with:
+    - Bank transfers
+    - USSD payments
+    - Some mobile money transactions
+    
+    - Keep checking status periodically
+    - You'll receive a webhook when status changes
+  </Accordion>
+  
+  <Accordion title="abandoned" icon="pause-circle">
+    **Payment Started but Not Completed**
+    
+    Customer initiated payment but didn't complete it:
+    - Closed browser before entering details
+    - Session timeout
+    - Customer changed mind
+    
+    - No funds were collected
+    - Payment can potentially still be completed if session is still valid
+  </Accordion>
+  
+  <Accordion title="cancelled" icon="ban">
+    **Payment Cancelled**
+    
+    Payment was explicitly cancelled by customer or system:
+    - Customer clicked cancel
+    - Multiple failed attempts triggered cancellation
+    - System timeout
+    
+    - Payment cannot be completed
+    - Customer needs to initiate a new payment
+  </Accordion>
+</AccordionGroup>
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Always Verify" icon="shield-check">
+    **Verify every transaction** on your backend before order fulfillment, even after webhook notifications
+  </Card>
+  
+  <Card title="Handle All Status" icon="list-check">
+    **Implement logic** for all possible transaction statuses in your application
+  </Card>
+  
+  <Card title="Store Authorization" icon="save">
+    **Save authorization codes** for successful card payments to enable future recurring charges
+  </Card>
+  
+  <Card title="Monitor Logs" icon="chart-line">
+    **Use transaction logs** to debug payment issues and improve user experience
+  </Card>
+</CardGroup>
+
+## Common Integration Patterns
+
+<Tabs>
+  <Tab title="E-commerce Checkout">
+    ```javascript
+    // After customer returns from payment
+    app.get('/payment/callback', async (req, res) => {
+      const reference = req.query.reference;
+      
+      try {
+        const verification = await payvessel.transaction.verify(reference);
+        
+        if (verification.data.status === 'success') {
+          // Payment successful - fulfill order
+          await fulfillOrder(verification.data);
+          res.redirect('/order/success');
+        } else {
+          // Payment failed - show error
+          res.redirect('/order/failed');
+        }
+      } catch (error) {
+        // Handle verification error
+        res.redirect('/order/error');
+      }
+    });
+    ```
+  </Tab>
+  
+  <Tab title="Subscription Service">
+    ```javascript
+    // Verify subscription payment
+    const verifySubscriptionPayment = async (reference) => {
+      const verification = await payvessel.transaction.verify(reference);
+      
+      if (verification.data.status === 'success') {
+        // Save authorization for future charges
+        await saveCustomerAuthorization({
+          customer_id: verification.data.customer.id,
+          authorization_code: verification.data.authorization.authorization_code,
+          card_type: verification.data.authorization.card_type,
+          last4: verification.data.authorization.last4
+        });
+        
+        // Activate subscription
+        await activateSubscription(verification.data.customer.id);
+      }
+      
+      return verification.data.status;
+    };
+    ```
+  </Tab>
+  
+  <Tab title="Webhook Handler">
+    ```javascript
+    // Webhook endpoint for real-time updates
+    app.post('/webhook/payvessel', async (req, res) => {
+      const event = req.body;
+      
+      if (event.event === 'transaction.success') {
+        // Always verify the transaction
+        const verification = await payvessel.transaction.verify(event.data.reference);
+        
+        if (verification.data.status === 'success') {
+          await processSuccessfulPayment(verification.data);
+        }
+      }
+      
+      res.status(200).send('OK');
+    });
+    ```
+  </Tab>
+</Tabs>
+
+## Related Endpoints
+
+<CardGroup cols={2}>
+  <Card title="Initialize Payment" icon="play" href="/api-reference/transactions/initialize-payment">
+    Create a new payment transaction
+  </Card>
+  <Card title="List Transactions" icon="list" href="/api-reference/transactions/list-transactions">
+    Retrieve transaction history
+  </Card>
+  <Card title="Create Refund" icon="rotate-left" href="/api-reference/transactions/create-refund">
+    Process refunds for successful transactions  
+  </Card>
+  <Card title="Charge Authorization" icon="repeat" href="/api-reference/transactions/charge-authorization">
+    Charge a saved authorization for recurring payments
+  </Card>
+</CardGroup>

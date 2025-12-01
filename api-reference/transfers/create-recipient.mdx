@@ -1,0 +1,629 @@
+---
+title: "Create Transfer Recipient"
+description: "Create a transfer recipient for bank account or mobile money transfers"
+---
+
+# Create Transfer Recipient
+
+Create a transfer recipient to enable money transfers to bank accounts, mobile money wallets, or other supported channels. Recipients must be created before initiating transfers.
+
+<Note>
+All transfer recipients are verified against the recipient's bank or mobile money provider to ensure valid account details before creation.
+</Note>
+
+## Endpoint
+
+<Badge variant="success">**POST**</Badge> `/transfer/recipient`
+
+## Headers
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `Authorization` | string | **Required** | Bearer token with your secret API key |
+| `Content-Type` | string | **Required** | Must be `application/json` |
+| `Idempotency-Key` | string | Optional | Unique key to prevent duplicate recipients |
+
+## Request Body
+
+<ParamField body="type" type="string" required>
+  Type of recipient account
+  
+  **Available types:**
+  - `nuban` - Nigerian bank account (NUBAN)
+  - `mobile_money` - Mobile money account
+  - `ghana_mobile_money` - Ghana mobile money
+  - `kenya_mobile_money` - Kenya mobile money
+  - `bvn` - Bank Verification Number (Nigeria)
+</ParamField>
+
+<ParamField body="name" type="string" required>
+  Full name of the recipient as registered with their bank or mobile money provider
+  
+  <Warning>Name must match the account holder's registered name exactly</Warning>
+</ParamField>
+
+<ParamField body="account_number" type="string" required>
+  Account number, phone number, or identifier based on recipient type
+  
+  **Format by type:**
+  - `nuban`: 10-digit Nigerian bank account number
+  - `mobile_money`: Phone number in international format (e.g., +2348012345678)
+  - `bvn`: 11-digit Bank Verification Number
+</ParamField>
+
+<ParamField body="bank_code" type="string">
+  Bank or provider code (required for `nuban` and some mobile money types)
+  
+  <Note>Use the [List Banks](/api-reference/transfers/list-banks) endpoint to get valid bank codes</Note>
+</ParamField>
+
+<ParamField body="currency" type="string" default="NGN">
+  Currency for transfers to this recipient
+  
+  **Supported currencies:** `NGN`, `GHS`, `KES`, `USD`, `GBP`, `EUR`
+</ParamField>
+
+<ParamField body="email" type="string">
+  Recipient's email address for transfer notifications (optional but recommended)
+</ParamField>
+
+<ParamField body="phone" type="string">
+  Recipient's phone number for SMS notifications (required for mobile money)
+</ParamField>
+
+<ParamField body="metadata" type="object">
+  Additional information about the recipient in key-value pairs
+  
+  ```json
+  {
+    "notes": "Monthly salary recipient",
+    "employee_id": "EMP001",
+    "department": "Engineering"
+  }
+  ```
+</ParamField>
+
+## Example Request
+
+<CodeGroup>
+```bash cURL - Bank Account
+curl -X POST https://api.payvessel.com/transfer/recipient \
+  -H "Authorization: Bearer sk_test_abc123..." \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: recipient_2024_001" \
+  -d '{
+    "type": "nuban",
+    "name": "John Doe",
+    "account_number": "0123456789",
+    "bank_code": "058",
+    "currency": "NGN",
+    "email": "john.doe@example.com",
+    "metadata": {
+      "notes": "Salary recipient",
+      "employee_id": "EMP001"
+    }
+  }'
+```
+
+```bash cURL - Mobile Money
+curl -X POST https://api.payvessel.com/transfer/recipient \
+  -H "Authorization: Bearer sk_test_abc123..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "mobile_money",
+    "name": "Jane Smith",
+    "account_number": "+2348012345678",
+    "phone": "+2348012345678",
+    "currency": "NGN",
+    "email": "jane.smith@example.com"
+  }'
+```
+
+```javascript Node.js
+const payvessel = require('payvessel')(process.env.PAYVESSEL_SECRET_KEY);
+
+// Create bank account recipient
+const bankRecipient = await payvessel.transfer.recipient.create({
+  type: 'nuban',
+  name: 'John Doe',
+  account_number: '0123456789',
+  bank_code: '058',
+  currency: 'NGN',
+  email: 'john.doe@example.com',
+  metadata: {
+    notes: 'Salary recipient',
+    employee_id: 'EMP001'
+  }
+});
+
+// Create mobile money recipient
+const mobileRecipient = await payvessel.transfer.recipient.create({
+  type: 'mobile_money',
+  name: 'Jane Smith',
+  account_number: '+2348012345678',
+  phone: '+2348012345678',
+  currency: 'NGN',
+  email: 'jane.smith@example.com'
+});
+```
+
+```php PHP
+<?php
+$payvessel = new \Payvessel\Payvessel(getenv('PAYVESSEL_SECRET_KEY'));
+
+// Create bank account recipient
+$bankRecipient = $payvessel->transfer->recipient->create([
+  'type' => 'nuban',
+  'name' => 'John Doe',
+  'account_number' => '0123456789',
+  'bank_code' => '058',
+  'currency' => 'NGN',
+  'email' => 'john.doe@example.com',
+  'metadata' => [
+    'notes' => 'Salary recipient',
+    'employee_id' => 'EMP001'
+  ]
+]);
+?>
+```
+
+```python Python
+import payvessel
+
+payvessel.api_key = os.environ['PAYVESSEL_SECRET_KEY']
+
+# Create bank account recipient
+bank_recipient = payvessel.Transfer.Recipient.create(
+    type='nuban',
+    name='John Doe',
+    account_number='0123456789',
+    bank_code='058',
+    currency='NGN',
+    email='john.doe@example.com',
+    metadata={
+        'notes': 'Salary recipient',
+        'employee_id': 'EMP001'
+    }
+)
+```
+</CodeGroup>
+
+## Response
+
+<ResponseField name="status" type="string">
+  Request status indicator - `"success"` or `"error"`
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Human-readable message describing the result
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Created recipient data object
+  
+  <Expandable title="Data Object">
+    <ResponseField name="data.id" type="integer">
+      Unique recipient ID
+    </ResponseField>
+    
+    <ResponseField name="data.recipient_code" type="string">
+      Unique recipient code for use in transfers
+    </ResponseField>
+    
+    <ResponseField name="data.type" type="string">
+      Recipient account type
+    </ResponseField>
+    
+    <ResponseField name="data.name" type="string">
+      Recipient's full name
+    </ResponseField>
+    
+    <ResponseField name="data.account_number" type="string">
+      Recipient's account number or phone number
+    </ResponseField>
+    
+    <ResponseField name="data.bank_code" type="string">
+      Bank or provider code
+    </ResponseField>
+    
+    <ResponseField name="data.bank_name" type="string">
+      Full name of the bank or mobile money provider
+    </ResponseField>
+    
+    <ResponseField name="data.currency" type="string">
+      Transfer currency for this recipient
+    </ResponseField>
+    
+    <ResponseField name="data.email" type="string">
+      Recipient's email address
+    </ResponseField>
+    
+    <ResponseField name="data.phone" type="string">
+      Recipient's phone number
+    </ResponseField>
+    
+    <ResponseField name="data.active" type="boolean">
+      Whether the recipient is active and can receive transfers
+    </ResponseField>
+    
+    <ResponseField name="data.verified" type="boolean">
+      Whether the recipient's account details have been verified
+    </ResponseField>
+    
+    <ResponseField name="data.verification_status" type="string">
+      Account verification status - `verified`, `pending`, `failed`
+    </ResponseField>
+    
+    <ResponseField name="data.metadata" type="object">
+      Custom metadata attached to the recipient
+    </ResponseField>
+    
+    <ResponseField name="data.created_at" type="string">
+      ISO 8601 timestamp when recipient was created
+    </ResponseField>
+    
+    <ResponseField name="data.updated_at" type="string">
+      ISO 8601 timestamp when recipient was last updated
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Response
+
+<CodeGroup>
+```json 201 Created - Bank Account
+{
+  "status": "success",
+  "message": "Transfer recipient created successfully",
+  "data": {
+    "id": 98765,
+    "recipient_code": "RCP_xyz789abc123",
+    "type": "nuban",
+    "name": "John Doe",
+    "account_number": "0123456789",
+    "bank_code": "058",
+    "bank_name": "Guaranty Trust Bank",
+    "currency": "NGN",
+    "email": "john.doe@example.com",
+    "phone": null,
+    "active": true,
+    "verified": true,
+    "verification_status": "verified",
+    "metadata": {
+      "notes": "Salary recipient",
+      "employee_id": "EMP001"
+    },
+    "created_at": "2024-01-15T14:30:00Z",
+    "updated_at": "2024-01-15T14:30:00Z"
+  }
+}
+```
+
+```json 201 Created - Mobile Money
+{
+  "status": "success",
+  "message": "Transfer recipient created successfully",
+  "data": {
+    "id": 98766,
+    "recipient_code": "RCP_abc123xyz789",
+    "type": "mobile_money",
+    "name": "Jane Smith",
+    "account_number": "+2348012345678",
+    "bank_code": "MOBILE_MONEY",
+    "bank_name": "Mobile Money Provider",
+    "currency": "NGN",
+    "email": "jane.smith@example.com",
+    "phone": "+2348012345678",
+    "active": true,
+    "verified": true,
+    "verification_status": "verified",
+    "metadata": {},
+    "created_at": "2024-01-15T14:35:00Z",
+    "updated_at": "2024-01-15T14:35:00Z"
+  }
+}
+```
+
+```json 400 Bad Request - Invalid Account
+{
+  "status": "error",
+  "message": "Account verification failed",
+  "errors": {
+    "account_number": ["Account number does not exist with the specified bank"],
+    "name": ["Account name does not match the provided name"]
+  }
+}
+```
+
+```json 400 Bad Request - Validation Error
+{
+  "status": "error",
+  "message": "Validation failed",
+  "errors": {
+    "name": ["The name field is required"],
+    "account_number": ["The account number must be exactly 10 digits"],
+    "bank_code": ["The selected bank code is invalid"]
+  }
+}
+```
+</CodeGroup>
+
+## Recipient Types Guide
+
+<Tabs>
+  <Tab title="Nigerian Bank (NUBAN)">
+    **Requirements:**
+    - `type`: `"nuban"`
+    - `name`: Exact account holder name
+    - `account_number`: 10-digit account number
+    - `bank_code`: Valid Nigerian bank code
+    
+    **Verification Process:**
+    - Account number validation with bank
+    - Name verification against bank records
+    - Real-time verification (usually instant)
+    
+    ```json
+    {
+      "type": "nuban",
+      "name": "John Doe",
+      "account_number": "0123456789",
+      "bank_code": "058",
+      "currency": "NGN"
+    }
+    ```
+  </Tab>
+  
+  <Tab title="Mobile Money">
+    **Requirements:**
+    - `type`: `"mobile_money"`
+    - `name`: Account holder name
+    - `account_number`: Phone number in international format
+    - `phone`: Same as account_number
+    
+    **Supported Providers:**
+    - Nigeria: Airtel Money, MTN MoMo
+    - Ghana: MTN MoMo, Vodafone Cash, AirtelTigo Money
+    - Kenya: M-Pesa, Airtel Money
+    
+    ```json
+    {
+      "type": "mobile_money",
+      "name": "Jane Smith",
+      "account_number": "+2348012345678",
+      "phone": "+2348012345678",
+      "currency": "NGN"
+    }
+    ```
+  </Tab>
+  
+  <Tab title="International Bank">
+    **Requirements:**
+    - `type`: `"nuban"` (for supported countries)
+    - `name`: Account holder name
+    - `account_number`: Local account number format
+    - `bank_code`: International bank code
+    - `currency`: Target currency
+    
+    **Supported Countries:**
+    - Ghana: GHS transfers
+    - Kenya: KES transfers
+    - South Africa: ZAR transfers
+    
+    ```json
+    {
+      "type": "nuban",
+      "name": "Kwame Asante",
+      "account_number": "1234567890123",
+      "bank_code": "GCB_BANK",
+      "currency": "GHS"
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Bank Codes Reference
+
+Common Nigerian bank codes for reference:
+
+<AccordionGroup>
+  <Accordion title="Major Nigerian Banks" icon="bank">
+    | Bank Name | Code |
+    |-----------|------|
+    | Access Bank | `044` |
+    | Guaranty Trust Bank | `058` |
+    | United Bank for Africa | `033` |
+    | Zenith Bank | `057` |
+    | First Bank | `011` |
+    | Fidelity Bank | `070` |
+    | Union Bank | `032` |
+    | Sterling Bank | `232` |
+    | Stanbic IBTC | `221` |
+    | FCMB | `214` |
+  </Accordion>
+  
+  <Accordion title="Digital Banks" icon="mobile">
+    | Bank Name | Code |
+    |-----------|------|
+    | Kuda Bank | `50211` |
+    | VFD Microfinance Bank | `566` |
+    | Rubies Bank | `125` |
+    | Carbon | `565` |
+    | ALAT by Wema | `035` |
+  </Accordion>
+  
+  <Accordion title="Get All Banks">
+    Use the [List Banks](/api-reference/transfers/list-banks) endpoint to get the complete, up-to-date list of supported banks and their codes.
+    
+    ```bash
+    curl -X GET https://api.payvessel.com/transfer/banks \
+      -H "Authorization: Bearer sk_test_abc123..."
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Verification Process
+
+PayVessel performs real-time account verification during recipient creation:
+
+<Steps>
+  <Step title="Account Number Validation">
+    Validates account number format and checks if it exists with the specified bank
+  </Step>
+  
+  <Step title="Name Verification">
+    Compares provided name against the account holder's registered name
+  </Step>
+  
+  <Step title="Account Status Check">
+    Verifies the account is active and can receive transfers
+  </Step>
+  
+  <Step title="Compliance Screening">
+    Performs basic compliance checks against restricted account lists
+  </Step>
+</Steps>
+
+<Warning>
+**Verification Failures**: If verification fails, the recipient will not be created. Common failures include:
+- Invalid account number
+- Name mismatch
+- Inactive account
+- Invalid bank code
+</Warning>
+
+## Integration Patterns
+
+<Tabs>
+  <Tab title="Bulk Payroll">
+    ```javascript
+    // Create multiple recipients for payroll
+    const createPayrollRecipients = async (employees) => {
+      const recipients = [];
+      
+      for (const employee of employees) {
+        try {
+          const recipient = await payvessel.transfer.recipient.create({
+            type: 'nuban',
+            name: employee.full_name,
+            account_number: employee.account_number,
+            bank_code: employee.bank_code,
+            currency: 'NGN',
+            email: employee.email,
+            metadata: {
+              employee_id: employee.id,
+              department: employee.department,
+              salary_grade: employee.grade
+            }
+          });
+          
+          recipients.push(recipient.data);
+        } catch (error) {
+          console.error(`Failed to create recipient for ${employee.full_name}:`, error);
+        }
+      }
+      
+      return recipients;
+    };
+    ```
+  </Tab>
+  
+  <Tab title="Customer Payouts">
+    ```javascript
+    // Create recipient for customer payout
+    const createCustomerRecipient = async (customerId, bankDetails) => {
+      const recipient = await payvessel.transfer.recipient.create({
+        type: 'nuban',
+        name: bankDetails.account_name,
+        account_number: bankDetails.account_number,
+        bank_code: bankDetails.bank_code,
+        currency: 'NGN',
+        email: bankDetails.email,
+        metadata: {
+          customer_id: customerId,
+          payout_type: 'withdrawal',
+          created_by: 'customer_request'
+        }
+      });
+      
+      // Store recipient code for future use
+      await saveRecipientToCustomer(customerId, recipient.data.recipient_code);
+      
+      return recipient.data;
+    };
+    ```
+  </Tab>
+  
+  <Tab title="Vendor Payments">
+    ```javascript
+    // Create recipient for vendor payment
+    const createVendorRecipient = async (vendorData) => {
+      const recipient = await payvessel.transfer.recipient.create({
+        type: 'nuban',
+        name: vendorData.business_name,
+        account_number: vendorData.account_number,
+        bank_code: vendorData.bank_code,
+        currency: vendorData.currency || 'NGN',
+        email: vendorData.contact_email,
+        metadata: {
+          vendor_id: vendorData.id,
+          business_type: vendorData.type,
+          tax_id: vendorData.tax_identification
+        }
+      });
+      
+      return recipient.data;
+    };
+    ```
+  </Tab>
+</Tabs>
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Verify Before Transfer" icon="shield-check">
+    Always create and verify recipients before initiating transfers to avoid failed transactions
+  </Card>
+  
+  <Card title="Store Recipient Codes" icon="save">
+    Save the `recipient_code` for future transfers to avoid recreating recipients
+  </Card>
+  
+  <Card title="Handle Verification Failures" icon="exclamation-triangle">
+    Implement proper error handling for account verification failures
+  </Card>
+  
+  <Card title="Use Metadata" icon="tag">
+    Add relevant metadata to recipients for easier management and reporting
+  </Card>
+</CardGroup>
+
+## Next Steps
+
+After creating a recipient:
+
+<CardGroup cols={2}>
+  <Card title="Initiate Transfer" icon="paper-plane" href="/api-reference/transfers/initiate-transfer">
+    Send money to the created recipient
+  </Card>
+  <Card title="List Recipients" icon="list" href="/api-reference/transfers/list-recipients">
+    View all your transfer recipients
+  </Card>
+  <Card title="Update Recipient" icon="edit" href="/api-reference/transfers/update-recipient">
+    Modify recipient details
+  </Card>
+  <Card title="Bulk Transfers" icon="users" href="/api-reference/transfers/bulk-transfer">
+    Send money to multiple recipients at once
+  </Card>
+</CardGroup>
+
+## Webhook Events
+
+This endpoint triggers the following webhook events:
+
+- `recipient.created` - Recipient successfully created and verified
+- `recipient.verification_failed` - Recipient verification failed during creation
+
+<Tip>
+**Pro Tip**: Create recipients during off-peak hours when possible, as bank verification APIs may have slower response times during peak business hours.
+</Tip>

@@ -1,0 +1,803 @@
+---
+title: "Initiate Transfer"
+description: "Send money to a transfer recipient via bank transfer or mobile money"
+---
+
+# Initiate Transfer
+
+Send money to an existing transfer recipient through bank transfer, mobile money, or other supported channels. Recipients must be created before initiating transfers.
+
+<Warning>
+**Transfers are irreversible!** Always verify recipient details and transfer amounts before initiating. Failed transfers may take 1-5 business days to reverse depending on the channel.
+</Warning>
+
+## Endpoint
+
+<Badge variant="success">**POST**</Badge> `/transfer/initiate`
+
+## Headers
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `Authorization` | string | **Required** | Bearer token with your secret API key |
+| `Content-Type` | string | **Required** | Must be `application/json` |
+| `Idempotency-Key` | string | **Recommended** | Unique key to prevent duplicate transfers |
+
+## Request Body
+
+<ParamField body="source" type="string" default="balance">
+  Source of funds for the transfer
+  
+  **Available sources:**
+  - `balance` - Transfer from your PayVessel wallet balance
+  - `card` - Charge a saved card authorization (coming soon)
+</ParamField>
+
+<ParamField body="amount" type="string" required>
+  Transfer amount in the smallest currency unit (kobo for NGN, pesewas for GHS, etc.)
+  
+  <Note>For ₦1,000.00, send `"100000"` (1000 × 100 kobo)</Note>
+</ParamField>
+
+<ParamField body="recipient" type="string" required>
+  Recipient code from the [Create Recipient](/api-reference/transfers/create-recipient) endpoint response
+</ParamField>
+
+<ParamField body="reason" type="string">
+  Reason for the transfer (optional but recommended for compliance)
+  
+  **Common reasons:** `salary`, `bonus`, `refund`, `payment`, `gift`, `loan_repayment`, `business_payment`
+</ParamField>
+
+<ParamField body="reference" type="string">
+  Unique transfer reference. If not provided, PayVessel will generate one automatically
+  
+  <Warning>Must be unique across all your transfers</Warning>
+</ParamField>
+
+<ParamField body="currency" type="string">
+  Transfer currency (must match recipient's currency)
+  
+  **Supported currencies:** `NGN`, `GHS`, `KES`, `ZAR`, `USD`, `GBP`, `EUR`
+</ParamField>
+
+<ParamField body="narration" type="string">
+  Description that appears on the recipient's bank statement (max 100 characters)
+</ParamField>
+
+<ParamField body="metadata" type="object">
+  Additional information about the transfer in key-value pairs
+  
+  ```json
+  {
+    "order_id": "ORD_2024_001",
+    "customer_id": "12345",
+    "invoice_number": "INV-001",
+    "department": "HR"
+  }
+  ```
+</ParamField>
+
+## Example Request
+
+<CodeGroup>
+```bash cURL
+curl -X POST https://api.payvessel.com/transfer/initiate \
+  -H "Authorization: Bearer sk_test_abc123..." \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: transfer_2024_001" \
+  -d '{
+    "source": "balance",
+    "amount": "100000",
+    "recipient": "RCP_xyz789abc123",
+    "reason": "salary",
+    "reference": "TRF_2024_001",
+    "currency": "NGN",
+    "narration": "January 2024 Salary",
+    "metadata": {
+      "employee_id": "EMP001",
+      "payroll_batch": "JAN2024",
+      "department": "Engineering"
+    }
+  }'
+```
+
+```javascript Node.js
+const payvessel = require('payvessel')(process.env.PAYVESSEL_SECRET_KEY);
+
+const transfer = await payvessel.transfer.initiate({
+  source: 'balance',
+  amount: '100000',
+  recipient: 'RCP_xyz789abc123',
+  reason: 'salary',
+  reference: 'TRF_2024_001',
+  currency: 'NGN',
+  narration: 'January 2024 Salary',
+  metadata: {
+    employee_id: 'EMP001',
+    payroll_batch: 'JAN2024',
+    department: 'Engineering'
+  }
+});
+```
+
+```php PHP
+<?php
+$payvessel = new \Payvessel\Payvessel(getenv('PAYVESSEL_SECRET_KEY'));
+
+$transfer = $payvessel->transfer->initiate([
+  'source' => 'balance',
+  'amount' => '100000',
+  'recipient' => 'RCP_xyz789abc123',
+  'reason' => 'salary',
+  'reference' => 'TRF_2024_001',
+  'currency' => 'NGN',
+  'narration' => 'January 2024 Salary',
+  'metadata' => [
+    'employee_id' => 'EMP001',
+    'payroll_batch' => 'JAN2024',
+    'department' => 'Engineering'
+  ]
+]);
+?>
+```
+
+```python Python
+import payvessel
+
+payvessel.api_key = os.environ['PAYVESSEL_SECRET_KEY']
+
+transfer = payvessel.Transfer.initiate(
+    source='balance',
+    amount='100000',
+    recipient='RCP_xyz789abc123',
+    reason='salary',
+    reference='TRF_2024_001',
+    currency='NGN',
+    narration='January 2024 Salary',
+    metadata={
+        'employee_id': 'EMP001',
+        'payroll_batch': 'JAN2024',
+        'department': 'Engineering'
+    }
+)
+```
+</CodeGroup>
+
+## Response
+
+<ResponseField name="status" type="string">
+  Request status indicator - `"success"` or `"error"`
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Human-readable message describing the result
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Transfer data object
+  
+  <Expandable title="Data Object">
+    <ResponseField name="data.id" type="integer">
+      Internal transfer ID
+    </ResponseField>
+    
+    <ResponseField name="data.reference" type="string">
+      Unique transfer reference
+    </ResponseField>
+    
+    <ResponseField name="data.amount" type="integer">
+      Transfer amount in smallest currency unit
+    </ResponseField>
+    
+    <ResponseField name="data.currency" type="string">
+      Transfer currency code
+    </ResponseField>
+    
+    <ResponseField name="data.source" type="string">
+      Source of funds used for the transfer
+    </ResponseField>
+    
+    <ResponseField name="data.reason" type="string">
+      Reason for the transfer
+    </ResponseField>
+    
+    <ResponseField name="data.status" type="string">
+      Transfer status
+      
+      **Possible values:**
+      - `pending` - Transfer initiated and being processed
+      - `otp` - OTP required (for certain transfer types)
+      - `success` - Transfer completed successfully
+      - `failed` - Transfer failed
+      - `reversed` - Transfer was reversed
+    </ResponseField>
+    
+    <ResponseField name="data.transfer_code" type="string">
+      Unique transfer code for tracking
+    </ResponseField>
+    
+    <ResponseField name="data.titan_code" type="string">
+      Internal processing code (for support purposes)
+    </ResponseField>
+    
+    <ResponseField name="data.recipient" type="object">
+      Recipient information object
+      
+      <Expandable title="Recipient Object">
+        <ResponseField name="data.recipient.recipient_code" type="string">
+          Recipient code used for the transfer
+        </ResponseField>
+        
+        <ResponseField name="data.recipient.type" type="string">
+          Recipient account type
+        </ResponseField>
+        
+        <ResponseField name="data.recipient.name" type="string">
+          Recipient's name
+        </ResponseField>
+        
+        <ResponseField name="data.recipient.account_number" type="string">
+          Recipient's account number
+        </ResponseField>
+        
+        <ResponseField name="data.recipient.bank_name" type="string">
+          Recipient's bank name
+        </ResponseField>
+        
+        <ResponseField name="data.recipient.bank_code" type="string">
+          Recipient's bank code
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="data.session" type="object">
+      Transfer session information (for OTP-required transfers)
+    </ResponseField>
+    
+    <ResponseField name="data.fees" type="integer">
+      Transfer fees charged in smallest currency unit
+    </ResponseField>
+    
+    <ResponseField name="data.fees_breakdown" type="object">
+      Detailed breakdown of fees
+      
+      <Expandable title="Fees Breakdown">
+        <ResponseField name="data.fees_breakdown.payvessel_fee" type="integer">
+          PayVessel processing fee
+        </ResponseField>
+        
+        <ResponseField name="data.fees_breakdown.bank_fee" type="integer">
+          Bank or provider fee
+        </ResponseField>
+        
+        <ResponseField name="data.fees_breakdown.total" type="integer">
+          Total fees charged
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="data.narration" type="string">
+      Transfer narration/description
+    </ResponseField>
+    
+    <ResponseField name="data.metadata" type="object">
+      Custom metadata attached to the transfer
+    </ResponseField>
+    
+    <ResponseField name="data.created_at" type="string">
+      ISO 8601 timestamp when transfer was created
+    </ResponseField>
+    
+    <ResponseField name="data.updated_at" type="string">
+      ISO 8601 timestamp when transfer was last updated
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Response
+
+<CodeGroup>
+```json 201 Created - Successful Transfer
+{
+  "status": "success",
+  "message": "Transfer initiated successfully",
+  "data": {
+    "id": 567890,
+    "reference": "TRF_2024_001",
+    "amount": 100000,
+    "currency": "NGN",
+    "source": "balance",
+    "reason": "salary",
+    "status": "success",
+    "transfer_code": "TRF_xyz789abc123",
+    "titan_code": "TITAN_001234567",
+    "recipient": {
+      "recipient_code": "RCP_xyz789abc123",
+      "type": "nuban",
+      "name": "John Doe",
+      "account_number": "0123456789",
+      "bank_name": "Guaranty Trust Bank",
+      "bank_code": "058"
+    },
+    "session": null,
+    "fees": 2650,
+    "fees_breakdown": {
+      "payvessel_fee": 2500,
+      "bank_fee": 150,
+      "total": 2650
+    },
+    "narration": "January 2024 Salary",
+    "metadata": {
+      "employee_id": "EMP001",
+      "payroll_batch": "JAN2024",
+      "department": "Engineering"
+    },
+    "created_at": "2024-01-15T14:30:00Z",
+    "updated_at": "2024-01-15T14:30:05Z"
+  }
+}
+```
+
+```json 201 Created - OTP Required
+{
+  "status": "success",
+  "message": "Transfer initiated. OTP required to complete",
+  "data": {
+    "id": 567891,
+    "reference": "TRF_2024_002",
+    "amount": 500000,
+    "currency": "NGN",
+    "source": "balance",
+    "reason": "payment",
+    "status": "otp",
+    "transfer_code": "TRF_abc123xyz789",
+    "titan_code": "TITAN_001234568",
+    "recipient": {
+      "recipient_code": "RCP_abc123xyz789",
+      "type": "nuban",
+      "name": "Jane Smith",
+      "account_number": "9876543210",
+      "bank_name": "Access Bank",
+      "bank_code": "044"
+    },
+    "session": {
+      "provider": "payvessel",
+      "id": "SESSION_001234"
+    },
+    "fees": 2650,
+    "fees_breakdown": {
+      "payvessel_fee": 2500,
+      "bank_fee": 150,
+      "total": 2650
+    },
+    "narration": "Business Payment",
+    "metadata": {},
+    "created_at": "2024-01-15T15:00:00Z",
+    "updated_at": "2024-01-15T15:00:02Z"
+  }
+}
+```
+
+```json 400 Bad Request - Insufficient Balance
+{
+  "status": "error",
+  "message": "Insufficient balance",
+  "error": {
+    "code": "insufficient_balance",
+    "details": {
+      "available_balance": 50000,
+      "required_amount": 102650,
+      "shortage": 52650
+    }
+  }
+}
+```
+
+```json 400 Bad Request - Invalid Recipient
+{
+  "status": "error",
+  "message": "Invalid recipient",
+  "errors": {
+    "recipient": ["The selected recipient is invalid or inactive"]
+  }
+}
+```
+
+```json 422 Unprocessable Entity - Validation Error
+{
+  "status": "error",
+  "message": "Validation failed",
+  "errors": {
+    "amount": ["The amount must be at least ₦100"],
+    "recipient": ["The recipient field is required"],
+    "currency": ["Currency mismatch with recipient currency"]
+  }
+}
+```
+</CodeGroup>
+
+## Transfer Status Guide
+
+Understanding transfer statuses is crucial for proper transfer management:
+
+<AccordionGroup>
+  <Accordion title="pending" icon="clock">
+    **Transfer Processing**
+    
+    The transfer has been initiated and is being processed by the bank or payment provider.
+    
+    **What to expect:**
+    - Processing time: 0-30 minutes for most transfers
+    - Bank transfers: Can take up to 24 hours
+    - Mobile money: Usually instant to 15 minutes
+    
+    **Next steps:**
+    - Monitor status via webhooks or verification endpoint
+    - No action required from your side
+  </Accordion>
+  
+  <Accordion title="otp" icon="key">
+    **OTP Required**
+    
+    Transfer requires OTP verification to complete (usually for high-value transfers).
+    
+    **What to do:**
+    - Use the [Complete OTP Transfer](/api-reference/transfers/complete-otp) endpoint
+    - OTP will be sent to your registered phone number
+    - OTP expires in 10 minutes
+    
+    **Requirements:**
+    - Transfer amount > ₦100,000
+    - First-time recipient transfers
+    - Flagged by fraud detection
+  </Accordion>
+  
+  <Accordion title="success" icon="check-circle">
+    **Transfer Completed**
+    
+    The transfer has been successfully processed and funds delivered to the recipient.
+    
+    **Confirmation:**
+    - Funds debited from your balance
+    - Recipient has received the money
+    - Transfer is final and cannot be reversed
+    
+    **Timeline:**
+    - Instant transfers: Immediate
+    - Regular bank transfers: 0-30 minutes
+    - Inter-bank transfers: Up to 24 hours
+  </Accordion>
+  
+  <Accordion title="failed" icon="x-circle">
+    **Transfer Failed**
+    
+    The transfer could not be completed. Common reasons include:
+    - Invalid recipient account
+    - Recipient account issues
+    - Network timeout
+    - Compliance restrictions
+    
+    **What happens:**
+    - Funds are automatically refunded to your balance
+    - Refund typically takes 5-10 minutes
+    - Check `gateway_response` for specific failure reason
+  </Accordion>
+  
+  <Accordion title="reversed" icon="rotate-left">
+    **Transfer Reversed**
+    
+    A previously successful transfer has been reversed by the bank or payment provider.
+    
+    **Common causes:**
+    - Recipient account closed
+    - Fraud detection
+    - Bank reversal
+    - Compliance issues
+    
+    **Resolution:**
+    - Funds automatically refunded to your balance
+    - Contact support for detailed reversal reason
+  </Accordion>
+</AccordionGroup>
+
+## Fee Structure
+
+PayVessel charges competitive fees for transfers based on amount and destination:
+
+<Tabs>
+  <Tab title="Nigerian Banks (NGN)">
+    | Amount Range | Fee |
+    |--------------|-----|
+    | ₦100 - ₦5,000 | ₦10 |
+    | ₦5,001 - ₦50,000 | ₦25 |
+    | ₦50,001 - ₦100,000 | ₦50 |
+    | Above ₦100,000 | ₦100 |
+    
+    **Additional charges:**
+    - Bank stamp duty: ₦50 (for transfers > ₦10,000)
+    - VAT: 7.5% of PayVessel fee
+  </Tab>
+  
+  <Tab title="Mobile Money">
+    | Amount Range | Fee |
+    |--------------|-----|
+    | ₦100 - ₦10,000 | ₦20 |
+    | ₦10,001 - ₦50,000 | ₦50 |
+    | Above ₦50,000 | ₦100 |
+    
+    **Notes:**
+    - Fees may vary by mobile money provider
+    - Some providers charge additional fees
+    - Cross-border mobile money may have higher fees
+  </Tab>
+  
+  <Tab title="International">
+    | Currency | Fee |
+    |----------|-----|
+    | USD | $2.50 + 1.5% |
+    | GBP | £2.00 + 1.5% |
+    | EUR | €2.50 + 1.5% |
+    | GHS | GH₵15 + 1% |
+    | KES | KES 300 + 1% |
+    
+    **Additional charges:**
+    - Correspondent bank fees may apply
+    - Exchange rate spread: 0.5-2%
+    - Minimum fee applies
+  </Tab>
+</Tabs>
+
+## Integration Patterns
+
+<Tabs>
+  <Tab title="Salary Payments">
+    ```javascript
+    // Process monthly salary payments
+    const processSalaryPayments = async (employees) => {
+      const results = {
+        successful: [],
+        failed: [],
+        pending: []
+      };
+      
+      for (const employee of employees) {
+        try {
+          const transfer = await payvessel.transfer.initiate({
+            source: 'balance',
+            amount: employee.salary_amount,
+            recipient: employee.recipient_code,
+            reason: 'salary',
+            reference: `SAL_${employee.id}_${new Date().getMonth() + 1}_2024`,
+            narration: `${new Date().toLocaleString('default', { month: 'long' })} 2024 Salary`,
+            metadata: {
+              employee_id: employee.id,
+              payroll_batch: `${new Date().getMonth() + 1}_2024`,
+              department: employee.department
+            }
+          });
+          
+          if (transfer.data.status === 'success') {
+            results.successful.push(transfer.data);
+          } else {
+            results.pending.push(transfer.data);
+          }
+        } catch (error) {
+          results.failed.push({
+            employee_id: employee.id,
+            error: error.message
+          });
+        }
+      }
+      
+      return results;
+    };
+    ```
+  </Tab>
+  
+  <Tab title="Customer Refunds">
+    ```javascript
+    // Process customer refund
+    const processRefund = async (orderId, customerId, amount) => {
+      // Get customer's recipient code
+      const recipient = await getCustomerRecipient(customerId);
+      
+      const transfer = await payvessel.transfer.initiate({
+        source: 'balance',
+        amount: amount,
+        recipient: recipient.recipient_code,
+        reason: 'refund',
+        reference: `REFUND_${orderId}_${Date.now()}`,
+        narration: `Refund for Order #${orderId}`,
+        metadata: {
+          order_id: orderId,
+          customer_id: customerId,
+          refund_type: 'order_cancellation',
+          processed_by: 'system'
+        }
+      });
+      
+      // Update order status
+      await updateOrderStatus(orderId, 'refunded');
+      
+      return transfer.data;
+    };
+    ```
+  </Tab>
+  
+  <Tab title="Vendor Payments">
+    ```javascript
+    // Pay vendor for services
+    const payVendor = async (invoiceId, vendorId, amount) => {
+      const vendor = await getVendor(vendorId);
+      
+      const transfer = await payvessel.transfer.initiate({
+        source: 'balance',
+        amount: amount,
+        recipient: vendor.recipient_code,
+        reason: 'business_payment',
+        reference: `VENDOR_${invoiceId}_${Date.now()}`,
+        narration: `Payment for Invoice #${invoiceId}`,
+        metadata: {
+          invoice_id: invoiceId,
+          vendor_id: vendorId,
+          payment_type: 'invoice_settlement',
+          approved_by: 'finance_team'
+        }
+      });
+      
+      // Mark invoice as paid
+      await markInvoiceAsPaid(invoiceId, transfer.data.reference);
+      
+      return transfer.data;
+    };
+    ```
+  </Tab>
+  
+  <Tab title="Withdrawal Processing">
+    ```javascript
+    // Process user withdrawal request
+    const processWithdrawal = async (userId, withdrawalAmount, recipientCode) => {
+      // Verify user has sufficient balance
+      const userBalance = await getUserBalance(userId);
+      if (userBalance < withdrawalAmount) {
+        throw new Error('Insufficient balance');
+      }
+      
+      const transfer = await payvessel.transfer.initiate({
+        source: 'balance',
+        amount: withdrawalAmount,
+        recipient: recipientCode,
+        reason: 'withdrawal',
+        reference: `WDL_${userId}_${Date.now()}`,
+        narration: 'Account Withdrawal',
+        metadata: {
+          user_id: userId,
+          withdrawal_type: 'user_request',
+          requested_at: new Date().toISOString()
+        }
+      });
+      
+      // Deduct from user balance
+      await deductUserBalance(userId, withdrawalAmount);
+      
+      // Log withdrawal
+      await logWithdrawal(userId, transfer.data);
+      
+      return transfer.data;
+    };
+    ```
+  </Tab>
+</Tabs>
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Check Balance First" icon="wallet">
+    Always verify sufficient balance before initiating transfers to avoid failures
+  </Card>
+  
+  <Card title="Use Idempotency Keys" icon="key">
+    Implement idempotency keys to prevent accidental duplicate transfers
+  </Card>
+  
+  <Card title="Handle OTP Flows" icon="mobile">
+    Implement proper OTP handling for high-value transfers
+  </Card>
+  
+  <Card title="Monitor Status" icon="chart-line">
+    Use webhooks or verification endpoints to track transfer status
+  </Card>
+  
+  <Card title="Meaningful References" icon="tag">
+    Use descriptive, unique references for easier tracking and reconciliation
+  </Card>
+  
+  <Card title="Store Metadata" icon="database">
+    Include relevant metadata for audit trails and reporting
+  </Card>
+</CardGroup>
+
+## Error Handling
+
+<AccordionGroup>
+  <Accordion title="Insufficient Balance" icon="wallet">
+    **Error Code:** `insufficient_balance`
+    
+    **Solution:**
+    - Check your wallet balance using the [Get Balance](/api-reference/wallets/get-balance) endpoint
+    - Fund your wallet before retrying the transfer
+    - Consider the fees in your balance calculation
+    
+    ```javascript
+    if (error.code === 'insufficient_balance') {
+      const shortage = error.details.shortage;
+      console.log(`Need additional ₦${shortage / 100} to complete transfer`);
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Invalid Recipient" icon="user-x">
+    **Error Code:** `invalid_recipient`
+    
+    **Solution:**
+    - Verify the recipient code exists and is active
+    - Check if recipient account is still valid
+    - Recreate recipient if account details changed
+    
+    ```javascript
+    if (error.code === 'invalid_recipient') {
+      // Verify and potentially recreate recipient
+      await verifyRecipient(recipientCode);
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Transfer Limits" icon="exclamation-triangle">
+    **Error Code:** `transfer_limit_exceeded`
+    
+    **Solution:**
+    - Check your account transfer limits
+    - Consider breaking large transfers into smaller amounts
+    - Contact support to increase limits if needed
+    
+    ```javascript
+    if (error.code === 'transfer_limit_exceeded') {
+      const limit = error.details.daily_limit;
+      console.log(`Daily transfer limit: ₦${limit / 100}`);
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+After initiating a transfer:
+
+<CardGroup cols={2}>
+  <Card title="Verify Transfer" icon="shield-check" href="/api-reference/transfers/verify-transfer">
+    Check the status and details of your transfer
+  </Card>
+  <Card title="Complete OTP" icon="key" href="/api-reference/transfers/complete-otp">
+    Complete OTP verification for pending transfers
+  </Card>
+  <Card title="List Transfers" icon="list" href="/api-reference/transfers/list-transfers">
+    View all your transfer history
+  </Card>
+  <Card title="Bulk Transfers" icon="users" href="/api-reference/transfers/bulk-transfer">
+    Send money to multiple recipients at once
+  </Card>
+</CardGroup>
+
+## Webhook Events
+
+This endpoint triggers the following webhook events:
+
+- `transfer.pending` - Transfer initiated and processing
+- `transfer.success` - Transfer completed successfully
+- `transfer.failed` - Transfer failed
+- `transfer.reversed` - Transfer was reversed
+
+<Tip>
+**Real-time Updates**: Use webhooks to get real-time transfer status updates instead of polling the verification endpoint repeatedly.
+</Tip>

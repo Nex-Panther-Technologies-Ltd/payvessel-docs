@@ -1,0 +1,355 @@
+---
+title: "Initialize Payment"
+description: "Initialize a new payment transaction to collect money from customers"
+---
+
+# Initialize Payment
+
+Initialize a new payment transaction to collect money from customers via cards, bank transfers, or mobile wallets.
+
+<Note>
+This endpoint creates a payment session and returns a checkout URL where customers can complete their payment securely.
+</Note>
+
+## Endpoint
+
+<Badge variant="success">**POST**</Badge> `/transaction/initialize`
+
+## Headers
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `Authorization` | string | **Required** | Bearer token with your secret API key |
+| `Content-Type` | string | **Required** | Must be `application/json` |
+| `Idempotency-Key` | string | Optional | Unique key to prevent duplicate transactions |
+
+## Request Body
+
+<ParamField body="email" type="string" required>
+  Customer's email address for transaction receipt and notifications
+</ParamField>
+
+<ParamField body="amount" type="string" required>
+  Transaction amount in kobo (NGN) or the smallest currency unit
+  
+  <Note>For ₦500.00, send `"50000"` (500 × 100 kobo)</Note>
+</ParamField>
+
+<ParamField body="currency" type="string" default="NGN">
+  Three-letter ISO currency code
+  
+  **Supported currencies:** `NGN`, `USD`, `GBP`, `EUR`, `GHS`, `KES`, `ZAR`
+</ParamField>
+
+<ParamField body="reference" type="string">
+  Unique transaction reference. If not provided, PayVessel will generate one automatically
+  
+  <Warning>Must be unique across all your transactions</Warning>
+</ParamField>
+
+<ParamField body="callback_url" type="string">
+  URL to redirect customers after payment completion
+</ParamField>
+
+<ParamField body="metadata" type="object">
+  Additional information about the transaction in key-value pairs
+  
+  ```json
+  {
+    "custom_fields": [
+      {
+        "display_name": "Cart ID",
+        "variable_name": "cart_id", 
+        "value": "8393"
+      }
+    ],
+    "customer_id": "12345",
+    "order_id": "ORD-2024-001"
+  }
+  ```
+</ParamField>
+
+<ParamField body="channels" type="array">
+  Payment methods to allow for this transaction
+  
+  **Available channels:** `card`, `bank`, `ussd`, `qr`, `mobile_money`, `bank_transfer`
+  
+  <Note>If not specified, all available channels will be enabled</Note>
+</ParamField>
+
+<ParamField body="customer" type="object">
+  Customer information object
+  
+  <Expandable title="Customer Object">
+    <ParamField body="customer.email" type="string">
+      Customer's email address (alternative to root-level email)
+    </ParamField>
+    
+    <ParamField body="customer.first_name" type="string">
+      Customer's first name
+    </ParamField>
+    
+    <ParamField body="customer.last_name" type="string">
+      Customer's last name
+    </ParamField>
+    
+    <ParamField body="customer.phone" type="string">
+      Customer's phone number in international format
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Example Request
+
+<CodeGroup>
+```bash cURL
+curl -X POST https://api.payvessel.com/transaction/initialize \
+  -H "Authorization: Bearer sk_test_abc123..." \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: txn_2024_001" \
+  -d '{
+    "email": "customer@example.com",
+    "amount": "50000",
+    "currency": "NGN",
+    "reference": "TXN_2024_001",
+    "callback_url": "https://yourapp.com/payment/callback",
+    "channels": ["card", "bank", "ussd"],
+    "customer": {
+      "first_name": "John",
+      "last_name": "Doe", 
+      "phone": "+2348012345678"
+    },
+    "metadata": {
+      "custom_fields": [
+        {
+          "display_name": "Order ID",
+          "variable_name": "order_id",
+          "value": "ORD_001"
+        }
+      ]
+    }
+  }'
+```
+
+```javascript Node.js
+const payvessel = require('payvessel')(process.env.PAYVESSEL_SECRET_KEY);
+
+const transaction = await payvessel.transaction.initialize({
+  email: 'customer@example.com',
+  amount: '50000',
+  currency: 'NGN',
+  reference: 'TXN_2024_001',
+  callback_url: 'https://yourapp.com/payment/callback',
+  channels: ['card', 'bank', 'ussd'],
+  customer: {
+    first_name: 'John',
+    last_name: 'Doe',
+    phone: '+2348012345678'
+  },
+  metadata: {
+    custom_fields: [
+      {
+        display_name: 'Order ID',
+        variable_name: 'order_id',
+        value: 'ORD_001'
+      }
+    ]
+  }
+});
+```
+
+```php PHP
+<?php
+$payvessel = new \Payvessel\Payvessel(getenv('PAYVESSEL_SECRET_KEY'));
+
+$transaction = $payvessel->transaction->initialize([
+  'email' => 'customer@example.com',
+  'amount' => '50000',
+  'currency' => 'NGN',
+  'reference' => 'TXN_2024_001',
+  'callback_url' => 'https://yourapp.com/payment/callback',
+  'channels' => ['card', 'bank', 'ussd'],
+  'customer' => [
+    'first_name' => 'John',
+    'last_name' => 'Doe',
+    'phone' => '+2348012345678'
+  ],
+  'metadata' => [
+    'custom_fields' => [
+      [
+        'display_name' => 'Order ID',
+        'variable_name' => 'order_id',
+        'value' => 'ORD_001'
+      ]
+    ]
+  ]
+]);
+?>
+```
+
+```python Python
+import payvessel
+
+payvessel.api_key = os.environ['PAYVESSEL_SECRET_KEY']
+
+transaction = payvessel.Transaction.initialize(
+    email='customer@example.com',
+    amount='50000',
+    currency='NGN',
+    reference='TXN_2024_001',
+    callback_url='https://yourapp.com/payment/callback',
+    channels=['card', 'bank', 'ussd'],
+    customer={
+        'first_name': 'John',
+        'last_name': 'Doe',
+        'phone': '+2348012345678'
+    },
+    metadata={
+        'custom_fields': [
+            {
+                'display_name': 'Order ID',
+                'variable_name': 'order_id',
+                'value': 'ORD_001'
+            }
+        ]
+    }
+)
+```
+</CodeGroup>
+
+## Response
+
+<ResponseField name="status" type="string">
+  Request status indicator - `"success"` or `"error"`
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Human-readable message describing the result
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Transaction data object
+  
+  <Expandable title="Data Object">
+    <ResponseField name="data.authorization_url" type="string">
+      Secure checkout URL where customers complete payment
+    </ResponseField>
+    
+    <ResponseField name="data.access_code" type="string">
+      Access code for the transaction session
+    </ResponseField>
+    
+    <ResponseField name="data.reference" type="string">
+      Unique transaction reference
+    </ResponseField>
+    
+    <ResponseField name="data.amount" type="integer">
+      Transaction amount in the smallest currency unit
+    </ResponseField>
+    
+    <ResponseField name="data.currency" type="string">
+      Transaction currency code
+    </ResponseField>
+    
+    <ResponseField name="data.status" type="string">
+      Current transaction status - `"pending"`
+    </ResponseField>
+    
+    <ResponseField name="data.created_at" type="string">
+      ISO 8601 timestamp when transaction was created
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Response
+
+<CodeGroup>
+```json 200 Success
+{
+  "status": "success",
+  "message": "Transaction initialized successfully",
+  "data": {
+    "authorization_url": "https://checkout.payvessel.com/TXN_2024_001",
+    "access_code": "rk_live_abc123xyz789",
+    "reference": "TXN_2024_001",
+    "amount": 50000,
+    "currency": "NGN",
+    "status": "pending",
+    "created_at": "2024-01-15T14:30:00Z"
+  }
+}
+```
+
+```json 400 Bad Request
+{
+  "status": "error",
+  "message": "Validation failed",
+  "errors": {
+    "email": ["The email field is required"],
+    "amount": ["The amount must be a positive number"]
+  }
+}
+```
+
+```json 401 Unauthorized  
+{
+  "status": "error",
+  "message": "Unauthorized. Please check your API key"
+}
+```
+</CodeGroup>
+
+## Integration Flow
+
+<Steps>
+  <Step title="Initialize Transaction">
+    Make a POST request to `/transaction/initialize` with transaction details
+  </Step>
+  
+  <Step title="Redirect Customer">
+    Redirect your customer to the `authorization_url` from the response
+  </Step>
+  
+  <Step title="Customer Completes Payment">
+    Customer enters payment details and completes the transaction
+  </Step>
+  
+  <Step title="Handle Callback">
+    Customer is redirected to your `callback_url` with transaction status
+  </Step>
+  
+  <Step title="Verify Transaction">
+    Use the [Verify Transaction](/api-reference/transactions/verify-payment) endpoint to confirm payment status
+  </Step>
+</Steps>
+
+## Next Steps
+
+After initializing a payment:
+
+<CardGroup cols={2}>
+  <Card title="Verify Payment" icon="check-circle" href="/api-reference/transactions/verify-payment">
+    Confirm transaction status after payment
+  </Card>
+  <Card title="Handle Webhooks" icon="webhook" href="/api-basics/webhooks">
+    Receive real-time payment notifications
+  </Card>
+  <Card title="Process Refunds" icon="rotate-left" href="/api-reference/transactions/create-refund">
+    Handle refund requests when needed
+  </Card>
+  <Card title="View Transactions" icon="list" href="/api-reference/transactions/list-transactions">
+    Retrieve transaction history
+  </Card>
+</CardGroup>
+
+## Webhook Events
+
+This endpoint triggers the following webhook events:
+
+- `transaction.pending` - Transaction created and pending payment
+- `transaction.success` - Payment completed successfully  
+- `transaction.failed` - Payment failed or was declined
+
+<Tip>
+**Best Practice**: Always verify transaction status using the verification endpoint, even after receiving webhook notifications, to ensure data integrity.
+</Tip>
