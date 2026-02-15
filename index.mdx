@@ -3,6 +3,10 @@ title: "Payvessel Developer Hub"
 description: "Welcome to the Payvessel Developer Hub, your launchpad for building seamless and secure financial experiences with the Payvessel API."
 ---
 
+<Note>
+**Guides** (this tab) explain concepts, flows, and when to use each feature. For **code samples, request/response payloads, and endpoint reference**, use the **API reference** tab.
+</Note>
+
 ## Quick Start Guides
 
 <Columns cols={2}>
@@ -36,41 +40,7 @@ description: "Welcome to the Payvessel Developer Hub, your launchpad for buildin
   </Card>
 </Columns>
 
-## Core API Workflows
 
-### Accept a Payment
-
-Here's your guide to using the Payvessel API to accept a single payment.
-
-**Before you begin:** All Payvessel API requests must be authenticated with your secret API keys.
-
-**Next Step:** `POST api.payvessel.com/transaction/initialize`
-
-```bash
-# cURL Example
-curl https://api.payvessel.com/transaction/initialize \
-  -H "Authorization: Bearer YOUR_SECRET_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"amount": "500000", "email": "customer@email.com"}' \
-  -X POST
-```
-
-### Initiate a Transfer
-
-Here's how quickly you can send money programmatically with Payvessel.
-
-**Before you begin:** All Payvessel API requests must be authenticated with your secret API keys.
-
-**Next Step:** `POST api.payvessel.com/transfer/recipient`
-
-```bash
-# cURL Example
-curl https://api.payvessel.com/transfer/recipient \
-  -H "Authorization: Bearer YOUR_SECRET_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"type": "nuban", "name": "John Doe", "account_number": "0001234567", "bank_code": "058"}' \
-  -X POST
-```
 
 ## Explore Our Code Demos
 

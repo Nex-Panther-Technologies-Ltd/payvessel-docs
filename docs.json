@@ -37,25 +37,21 @@
             "pages": [
               "api-basics/authentication",
               "api-basics/environments",
-              "api-basics/webhooks",
-              "api-basics/testing",
-              "api-basics/errors"
+              "api-basics/webhooks"
             ]
           },
           {
             "group": "Accept Payment",
             "pages": [
-              "accept-payment/one-time-payment",
+              "accept-payment/checkout",
               "accept-payment/customer-reserved-account",
-              "accept-payment/invoice",
-              "accept-payment/refunds",
-              "accept-payment/settlement",
-              "accept-payment/payment-links"
+              "accept-payment/settlement"
             ]
           },
           {
             "group": "Send Money & Payouts",
             "pages": [
+              "transfer-payout/payout-external-wallet",
               "transfer-payout/single-transfers",
               "transfer-payout/bulk-transfers"
             ]
@@ -63,6 +59,7 @@
           {
             "group": "Wallets",
             "pages": [
+              "wallets/overview",
               "wallets/create-wallet",
               "wallets/wallet-balance",
               "wallets/get-wallets",
@@ -95,32 +92,10 @@
             ]
           },
           {
-            "group": "Cardholders",
-            "pages": [
-              "cardholders/enroll-cardholder",
-              "cardholders/get-cardholders",
-              "cardholders/get-cardholder-by-id"
-            ]
-          },
-          {
-            "group": "Card Issuance",
-            "pages": [
-              "card-issuance/create-card",
-              "card-issuance/get-all-cards",
-              "card-issuance/get-a-card",
-              "card-issuance/fund-card",
-              "card-issuance/withdraw-from-card",
-              "card-issuance/freeze-card",
-              "card-issuance/unfreeze-card",
-              "card-issuance/terminate-card"
-            ]
-          },
-          {
             "group": "Webhook",
             "pages": [
               "api-reference/webhook/overview",
-              "api-reference/webhook/verifying-webhooks",
-              "api-reference/webhook/supported-events"
+              "api-reference/webhook/verifying-webhooks"
             ]
           }
           
@@ -154,7 +129,12 @@
           },
           {
             "group": "Wallets",
-            "pages": ["api-reference/wallets/create-wallet"]
+            "pages": [
+              "api-reference/wallets/create-wallet",
+              "api-reference/wallets/wallet-balance",
+              "api-reference/wallets/get-wallets",
+              "api-reference/wallets/wallet-statement"
+            ]
           },
           {
             "group": "Virtual Accounts",
@@ -166,6 +146,7 @@
           {
             "group": "Card",
             "pages": [
+              "api-reference/card/overview",
               "api-reference/card/charge",
               "api-reference/card/confirm-status",
               "api-reference/card/public-key",
@@ -188,35 +169,12 @@
             "group": "Webhook",
             "pages": [
               "api-reference/webhook/overview",
-              "api-reference/webhook/verifying-webhooks",
-              "api-reference/webhook/supported-events"
+              "api-reference/webhook/verifying-webhooks"
             ]
-          },
-          {
-            "group": "Bill Payments",
-            "pages": ["api-reference/endpoint/create"]
-          },
-          {
-            "group": "Card Management",
-            "pages": ["api-reference/endpoint/get"]
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Dashboard",
-          "href": "https://app.payvessel.com",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://blog.payvessel.com",
-          "icon": "newspaper"
-        }
-      ]
-    }
+    ]
   },
   "logo": {
     "light": "https://www.payvessel.com/payvessel-light-logo.png",

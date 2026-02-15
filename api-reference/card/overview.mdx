@@ -1,0 +1,177 @@
+---
+title: "Card Payment Overview"
+description: "Accept card payments with 3DS, OTP, and PIN support — production-ready integration guide"
+---
+
+**Accept debit and credit card payments** through Payvessel's card payment APIs. Card flows support 3D Secure (3DS), OTP, and PIN authentication depending on the issuer.
+
+<CardGroup cols={2}>
+  <Card title="Public key" icon="key" href="/api-reference/card/public-key">
+    Fetch encryption key for card data
+  </Card>
+  <Card title="Charge" icon="credit-card" href="/api-reference/card/charge">
+    Submit encrypted card and charge
+  </Card>
+  <Card title="Confirm status" icon="circle-check" href="/api-reference/card/confirm-status">
+    Check final transaction status
+  </Card>
+  <Card title="Validate OTP / PIN / Phone" icon="shield-check" href="/api-reference/card/validate-otp">
+    Complete issuer authentication
+  </Card>
+</CardGroup>
+
+***
+
+## Base URLs
+
+| Environment | Base URL |
+|-------------|----------|
+| **Production** | `https://api.payvessel.com` |
+| **Sandbox** | `https://sandbox.payvessel.com` |
+
+All card endpoints live under `/pms/checkout/card-payment/`.
+
+## Authentication
+
+Every request must include:
+
+| Header | Required | Description |
+|--------|----------|-------------|
+| `api-key` | Yes | Your Payvessel **public** API key (safe for frontend) |
+| `api-secret` | Yes (for charge/validate) | `Bearer YOUR_SECRET_KEY` — **never** expose in client-side code |
+| `Content-Type` | Yes | `application/json` |
+
+<Warning>
+**Security:** Use the public key only to encrypt card data. Never send the secret key from the browser. Charge and validate calls must be made from your backend.
+</Warning>
+
+***
+
+## Typical flow (production-ready)
+
+1. **Get public key** (frontend or backend) → encrypt card details.
+2. **Charge** (backend only) → send encrypted card + key; may return `pending` for 3DS/OTP/PIN.
+3. **Validate OTP / PIN / Phone** (backend) when required.
+4. **Confirm status** (backend) → poll or callback to get final success/failure.
+
+Below is **production-style** code with comments for a minimal backend charge + confirm flow. Replace with your own error handling, logging, and idempotency as needed.
+
+```javascript
+// =============================================================================
+// CARD PAYMENT — BACKEND (Node.js). Never expose API secret to the client.
+// =============================================================================
+
+const PAYVESSEL_BASE = process.env.PAYVESSEL_BASE_URL || 'https://api.payvessel.com';
+const API_KEY = process.env.PAYVESSEL_API_KEY;
+const API_SECRET = process.env.PAYVESSEL_API_SECRET;
+
+const headers = {
+  'Content-Type': 'application/json',
+  'api-key': API_KEY,
+  'api-secret': `Bearer ${API_SECRET}`,
+};
+
+/**
+ * Step 1 — Charge the card with encrypted payload from your frontend.
+ * Frontend must encrypt card using the public key from GET /pms/checkout/card-payment/public-key/
+ */
+async function chargeCard(encryptedCardData, encryptionKey, reference) {
+  const res = await fetch(`${PAYVESSEL_BASE}/pms/checkout/card-payment/charge/`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      cardData: encryptedCardData,  // from your frontend (encrypted with public key)
+      key: encryptionKey,
+      reference,                    // unique per transaction, e.g. txn_xxx
+    }),
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.message || 'Charge failed');
+  }
+  return data;
+}
+
+/**
+ * Step 2 — If the issuer requires OTP, call this after the customer submits OTP.
+ */
+async function validateOtp(transactionRef, otp) {
+  const res = await fetch(`${PAYVESSEL_BASE}/pms/checkout/card-payment/validate-otp/`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      transactionRef,
+      otp,
+    }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || 'OTP validation failed');
+  return data;
+}
+
+/**
+ * Step 3 — If the issuer requires PIN, call this with the card PIN.
+ */
+async function validatePin(transactionRef, pin) {
+  const res = await fetch(`${PAYVESSEL_BASE}/pms/checkout/card-payment/validate-pin/`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      transactionRef,
+      pin,
+    }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || 'PIN validation failed');
+  return data;
+}
+
+/**
+ * Step 4 — Confirm final status (poll or call after redirect/callback).
+ */
+async function confirmPaymentStatus(transactionRef) {
+  const res = await fetch(
+    `${PAYVESSEL_BASE}/pms/checkout/card-payment/confirm-status/?reference=${encodeURIComponent(transactionRef)}`,
+    { headers }
+  );
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || 'Confirm status failed');
+  return data;
+}
+
+// Example usage (pseudo): charge → then if pending, validate OTP or PIN → then confirm status
+// const chargeResult = await chargeCard(cardData, key, 'txn_123');
+// if (chargeResult.status === 'pending' && chargeResult.requiresOtp) {
+//   await validateOtp(chargeResult.transactionRef, userEnteredOtp);
+// }
+// const final = await confirmPaymentStatus(chargeResult.transactionRef);
+```
+
+***
+
+## Endpoints quick reference
+
+| Action | Method | Endpoint |
+|--------|--------|----------|
+| Get public key | `GET` | `/pms/checkout/card-payment/public-key/` |
+| Charge | `POST` | `/pms/checkout/card-payment/charge/` |
+| Confirm status | `GET` | `/pms/checkout/card-payment/confirm-status/` |
+| Resend OTP | `POST` | `/pms/checkout/card-payment/resend-otp/` |
+| Resolve BIN | `GET` | `/pms/checkout/card-payment/resolve-bin/{bin}/` |
+| Validate OTP | `POST` | `/pms/checkout/card-payment/validate-otp/` |
+| Validate phone | `POST` | `/pms/checkout/card-payment/validate-phone/` |
+| Validate PIN | `POST` | `/pms/checkout/card-payment/validate-pin/` |
+| Simulate 3DS (sandbox only) | `GET` | `/pms/checkout/card-payment/simulate-3ds-callback/` |
+
+***
+
+## Testing (sandbox)
+
+- Use **sandbox** base URL and sandbox API keys.
+- Use test card numbers and OTP/PIN values from the [Testing](/api-basics/testing) guide.
+- Simulate 3DS: `GET .../simulate-3ds-callback/?status=success&transactionId=YOUR_TXN_ID` (sandbox only).
+
+<Tip>
+For a ready-made hosted checkout (cards + bank transfer), use [Payvessel Checkout](/accept-payment/checkout) and the [payvessel-checkout](https://www.npmjs.com/package/payvessel-checkout) npm package.
+</Tip>

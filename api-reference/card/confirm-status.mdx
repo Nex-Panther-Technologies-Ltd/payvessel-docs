@@ -1,4 +1,11 @@
 ---
 title: "Confirm Payment Status"
-openapi: "POST /pms/checkout/card-payment/confirm-status/"
+openapi: "GET /pms/checkout/card-payment/confirm-status/"
 ---
+
+<!--
+  Card Payment — Confirm status: Get final success/failure after charge and any OTP/PIN/3DS.
+  Flow and code: /api-reference/card/overview. Pass reference as query param.
+-->
+
+Check the final status of a card payment (after charge and any OTP/PIN/3DS steps). Call from your backend with the transaction reference.

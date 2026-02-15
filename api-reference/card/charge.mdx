@@ -2,3 +2,11 @@
 title: "Card Payment Charge"
 openapi: "POST /pms/checkout/card-payment/charge/"
 ---
+
+<!--
+  Card Payment — Charge: Submit encrypted card data to initiate a charge.
+  Full flow and production-ready code: see Card Payment Overview (/api-reference/card/overview).
+  Backend only; requires api-key + api-secret. Never send secret from frontend.
+-->
+
+Initiate a card payment by sending encrypted card data (encrypted with the [public key](/api-reference/card/public-key)). Use from your **backend** only. If the issuer requires 3DS/OTP/PIN, follow up with the validate endpoints and then [confirm status](/api-reference/card/confirm-status).

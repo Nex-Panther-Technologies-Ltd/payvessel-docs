@@ -1,0 +1,40 @@
+---
+title: "Get Wallets"
+description: "List or retrieve external dedicated wallets — request/response and code"
+---
+
+**Endpoint, parameters, response, and code samples** for listing or retrieving one or more external dedicated wallets.
+
+## Full API reference (Swagger)
+
+Request/response schemas and try-it-out are in the Payvessel PMS Swagger under **External Dedicated Wallet**:
+
+**[External Dedicated Wallet — Swagger](https://api.payvessel.com/pms/api/docs/swagger/#/External%20Dedicated%20Wallet)**
+
+Locate the **list wallets** or **get wallet(s)** operation for the exact path, method (typically `GET`), query/path parameters, and response body.
+
+## Base URL and headers
+
+| Environment | Base URL |
+|-------------|----------|
+| **Production** | `https://api.payvessel.com` |
+| **Sandbox** | `https://sandbox.payvessel.com` |
+
+| Header | Required | Description |
+|--------|----------|-------------|
+| `api-key` | Yes | Your Payvessel public API key |
+| `api-secret` | Yes | `Bearer YOUR_SECRET_KEY` |
+
+## Example (generic)
+
+After you have the path from Swagger (e.g. `GET /pms/api/.../wallets` or `.../wallet/{id}`):
+
+```bash
+curl -X GET "https://api.payvessel.com/pms/api/.../wallets" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: Bearer YOUR_SECRET"
+```
+
+Replace the path and any query parameters with the values from the Swagger definition. Response shape is documented there.
+
+For the **conceptual guide**, see [Get Wallets (guide)](/wallets/get-wallets).

@@ -2,3 +2,49 @@
 title: "Initialize Transaction"
 openapi: "POST /pms/transactions/initialize/"
 ---
+
+**Initialize payment** for the Checkout flow: create a checkout session with customer details, amount, and channels. Returns a `checkout_url` to redirect the customer. This is the API reference (code and payload) for the [Checkout guide](/accept-payment/checkout). Request/response schema is documented above via OpenAPI.
+
+## npm package (payvessel-checkout) — code sample
+
+For a ready-made UI, use the [payvessel-checkout](https://www.npmjs.com/package/payvessel-checkout) package:
+
+```bash
+npm install payvessel-checkout
+```
+
+```javascript
+import { Checkout } from 'payvessel-checkout';
+
+const init = Checkout({ api_key: 'YOUR_PUBLIC_API_KEY' });
+
+await init.initializeCheckout({
+  customer_email: 'customer@example.com',
+  customer_phone_number: '08012345678',
+  customer_name: 'Customer Name',
+  amount: '100',
+  currency: 'NGN',
+  metadata: { order_id: 'ORD-2024-001' },
+  channels: ['BANK_TRANSFER', 'CARD'],
+  onError: (error) => console.error(error),
+  onSuccess: (response) => console.log(response),
+  onSuccessfulOrder: (orderDetails) => console.log(orderDetails),
+  onClose: (orderReference) => console.log(orderReference),
+});
+```
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `api_key` | string | Yes | Your public API key |
+| `customer_email` | string | Yes | Customer email |
+| `customer_phone_number` | string | Yes | Customer phone |
+| `customer_name` | string | Yes | Full name |
+| `amount` | string | Yes | Amount (e.g. `"100"`) |
+| `currency` | string | Yes | e.g. `"NGN"` |
+| `metadata` | object | Yes | Custom data (e.g. order_id) |
+| `channels` | array | No | `["BANK_TRANSFER", "CARD"]` |
+| `reference` | string | No | Unique transaction reference |
+| `redirect_url` | string | No | URL after payment confirmation |
+| `onError` / `onSuccess` / `onSuccessfulOrder` / `onClose` | function | No | Callbacks |
+
+For the **conceptual guide**, see [Payvessel Checkout](/accept-payment/checkout).
