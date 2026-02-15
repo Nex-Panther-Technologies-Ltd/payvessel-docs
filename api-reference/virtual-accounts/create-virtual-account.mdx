@@ -3,3 +3,72 @@ title: "Create Virtual Account"
 openapi: "POST /pms/api/external/request/customerReservedAccount/"
 ---
 
+Create a reserved virtual bank account (STATIC or DYNAMIC). Headers: `api-key`, `api-secret` (Bearer), `Content-Type: application/json`.
+
+**Example request body (STATIC):**
+
+```json
+{
+  "email": "johndoe@gmail.com",
+  "name": "JOHN DOE",
+  "phoneNumber": "09012345672",
+  "bankcode": ["999991", "120001"],
+  "account_type": "STATIC",
+  "businessid": "061C074E2F91F944B93993B4",
+  "bvn": "22345678901",
+  "nin": "12345678901"
+}
+```
+
+**Example request body (DYNAMIC):**
+
+```json
+{
+  "email": "customer@example.com",
+  "name": "JANE DOE",
+  "phoneNumber": "08012345678",
+  "bankcode": ["999991", "120001"],
+  "account_type": "DYNAMIC",
+  "businessid": "061C074E2F91F944B93993B4"
+}
+```
+
+**Example response (201):**
+
+```json
+{
+  "status": true,
+  "service": "CREATE_VIRTUAL_ACCOUNT",
+  "business": "061C074E2F91F944B93993B4",
+  "banks": [
+    {
+      "bankName": "9Payment Service Bank",
+      "accountNumber": "5030200545",
+      "accountName": "Payvessel-Merchant",
+      "account_type": "STATIC",
+      "expire_date": "2024-01-04T11:29:32.6522498+01:00",
+      "trackingReference": "40HTTGT96CDF360C3DRVGV3J"
+    },
+    {
+      "bankName": "PalmPay",
+      "accountNumber": "6030200545",
+      "accountName": "Payvessel-Merchant",
+      "account_type": "STATIC",
+      "expire_date": "2024-01-04T11:29:32.6522498+01:00",
+      "trackingReference": "50HTTGT96CDF360C3DRVGV3J"
+    }
+  ]
+}
+```
+
+**cURL:**
+
+```bash
+curl -X POST "https://api.payvessel.com/pms/api/external/request/customerReservedAccount/" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: Bearer YOUR_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"email":"johndoe@gmail.com","name":"JOHN DOE","phoneNumber":"09012345672","bankcode":["999991","120001"],"account_type":"STATIC","businessid":"YOUR_BUSINESS_ID","bvn":"22345678901"}'
+```
+
+For concepts and when to use STATIC vs DYNAMIC, see the [Customer Reserved Account](/accept-payment/customer-reserved-account) guide.

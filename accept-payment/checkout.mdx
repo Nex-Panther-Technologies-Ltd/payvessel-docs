@@ -1,0 +1,41 @@
+---
+title: "Payvessel Checkout"
+description: "Hosted checkout for cards and bank transfer — integrate with the payvessel-checkout npm package or Merchant Checkout API"
+---
+
+# Payvessel Checkout
+
+**Accept payments with minimal integration** using Payvessel's hosted checkout. Customers can pay with **card** or **bank transfer** in a single modal. Ideal for e-commerce, donations, and subscriptions.
+
+<CardGroup cols={2}>
+  <Card title="Initialize Transaction" icon="play" href="/api-reference/checkout/initialize-transaction">
+    Create a checkout session (API)
+  </Card>
+  <Card title="Confirm Transaction" icon="circle-check" href="/api-reference/checkout/confirm-transaction">
+    Verify payment status (API)
+  </Card>
+</CardGroup>
+
+***
+
+## Option 1: npm package (recommended for frontend)
+
+Use the **payvessel-checkout** package for a ready-made UI. It handles the checkout modal, channels (card + bank transfer), and callbacks.
+
+- **Install:** `npm install payvessel-checkout` or `yarn add payvessel-checkout`
+- **Package docs:** [payvessel-checkout on npm](https://www.npmjs.com/package/payvessel-checkout)
+
+For **code samples, parameters, and request/response payloads**, see the **API reference** tab: [Initialize Transaction](/api-reference/checkout/initialize-transaction) and [Confirm Transaction](/api-reference/checkout/confirm-transaction).
+
+## Option 2: Merchant Checkout API
+
+For custom UIs or server-only flows, use the REST API: **Initialize** a transaction, redirect the customer to the returned `checkout_url`, then **Confirm** by reference. For endpoint details, request/response bodies, and code samples, see the **API reference** tab:
+
+<CardGroup cols={2}>
+  <Card title="Initialize Transaction" icon="play" href="/api-reference/checkout/initialize-transaction">
+    Request/response and code samples
+  </Card>
+  <Card title="Confirm Transaction" icon="circle-check" href="/api-reference/checkout/confirm-transaction">
+    Request/response and code samples
+  </Card>
+</CardGroup>
