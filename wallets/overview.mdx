@@ -1,11 +1,11 @@
 ---
 title: "Wallets Overview"
-description: "External Dedicated Wallet API — create wallets, check balance, list wallets, and get statements for payouts"
+description: "External Dedicated Wallet API — create wallets, check balance, list wallets, and get statements for transfers"
 ---
 
 # Wallets (External Dedicated Wallet)
 
-Use the **External Dedicated Wallet** API to manage wallets for your users: create wallets, check balances, list wallets, and retrieve transaction statements. This supports payout flows and wallet-based operations.
+Use the **External Dedicated Wallet** API to manage wallets for your users: create wallets, check balances, list wallets, and retrieve transaction statements. This supports transfer flows and wallet-based operations.
 
 <CardGroup cols={2}>
   <Card title="Create wallet" icon="plus" href="/api-reference/wallets/create-wallet">
@@ -61,9 +61,9 @@ See [API Basics — Authentication](/api-basics/authentication) for details.
 
 Details and example usage for each are in the linked pages above; for exact fields and responses, use the [Swagger documentation](https://api.payvessel.com/pms/api/docs/swagger/#/External%20Dedicated%20Wallet).
 
-## Payouts and wallets
+## Transfers and wallets
 
-Wallet APIs are used together with [Payouts (External Dedicated Wallet)](/transfer-payout/payout-external-wallet) to send money to wallets and to manage recipient wallets. For payout-specific flows (e.g. initiating a payout to a wallet), see the Payouts section and the same Swagger tag.
+Wallet APIs are used together with [Transfers](/transfer-payout/transfer-external-wallet) to send money to wallets and to manage recipient wallets. For transfer-specific flows (e.g. initiating a transfer to a wallet), see the Transfers section.
 
 ## Next steps
 
@@ -71,8 +71,8 @@ Wallet APIs are used together with [Payouts (External Dedicated Wallet)](/transf
   <Card title="Create wallet (API)" icon="plus" href="/api-reference/wallets/create-wallet">
     Endpoint, payload, code samples
   </Card>
-  <Card title="Payouts" icon="paper-plane" href="/transfer-payout/payout-external-wallet">
-    Payout guide
+  <Card title="Transfers" icon="paper-plane" href="/transfer-payout/transfer-external-wallet">
+    Transfer guide
   </Card>
   <Card title="API reference" icon="book" href="/api-reference/introduction">
     All endpoints and code samples

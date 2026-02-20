@@ -1,17 +1,68 @@
----
-title: "Get Wallets"
-description: "List or retrieve external dedicated wallets — request/response and code"
----
+# Get Wallets
 
-**Endpoint, parameters, response, and code samples** for listing or retrieving one or more external dedicated wallets.
+**Retrieve all managed wallets** associated with your account. This is useful for monitoring fund distribution and reconciling transfers across multiple sub-wallets.
 
-## Full API reference (Swagger)
+## Endpoint
 
-Request/response schemas and try-it-out are in the Payvessel PMS Swagger under **External Dedicated Wallet**:
+<Badge variant="success">**GET**</Badge> `/pms/wallets`
 
-**[External Dedicated Wallet — Swagger](https://api.payvessel.com/pms/api/docs/swagger/#/External%20Dedicated%20Wallet)**
+## Headers
 
-Locate the **list wallets** or **get wallet(s)** operation for the exact path, method (typically `GET`), query/path parameters, and response body.
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `Authorization` | string | **Required** | Bearer token with your secret API key |
+
+## Response
+
+<ResponseField name="status" type="string">
+  Request status - `"success"` or `"error"`.
+</ResponseField>
+
+<ResponseField name="data" type="array">
+  <Expandable title="Wallet Object">
+    <ResponseField name="id" type="string">
+      Unique wallet ID.
+    </ResponseField>
+    <ResponseField name="name" type="string">
+      Custom name given to the wallet.
+    </ResponseField>
+    <ResponseField name="balance" type="string">
+      Current balance.
+    </ResponseField>
+    <ResponseField name="currency" type="string">
+      Wallet currency.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X GET https://api.payvessel.com/pms/wallets \
+  -H "Authorization: Bearer sk_test_..."
+```
+
+## Example Response
+
+```json
+{
+  "status": "success",
+  "data": [
+    {
+      "id": "WLT_1",
+      "name": "Main Settlements",
+      "balance": "1000000",
+      "currency": "NGN"
+    },
+    {
+      "id": "WLT_2",
+      "name": "Refunds Wallet",
+      "balance": "50000",
+      "currency": "NGN"
+    }
+  ]
+}
+```
 
 ## Base URL and headers
 

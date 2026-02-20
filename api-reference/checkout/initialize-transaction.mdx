@@ -1,50 +1,101 @@
----
-title: "Initialize Transaction"
-openapi: "POST /pms/transactions/initialize/"
----
+# Initialize Transaction
 
-**Initialize payment** for the Checkout flow: create a checkout session with customer details, amount, and channels. Returns a `checkout_url` to redirect the customer. This is the API reference (code and payload) for the [Checkout guide](/accept-payment/checkout). Request/response schema is documented above via OpenAPI.
+**Initialize a payment session** for the Checkout flow. This endpoint creates a temporary session and returns a `checkout_url` where you can redirect your customer to complete their payment.
 
-## npm package (payvessel-checkout) — code sample
+## Endpoint
 
-For a ready-made UI, use the [payvessel-checkout](https://www.npmjs.com/package/payvessel-checkout) package:
+<Badge variant="success">**POST**</Badge> `/pms/transactions/initialize`
+
+## Headers
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `Authorization` | string | **Required** | Bearer token with your secret API key |
+| `Content-Type` | string | **Required** | Must be `application/json` |
+
+## Request Body
+
+<ParamField body="customer_email" type="string" required>
+  The customer's email address.
+</ParamField>
+
+<ParamField body="customer_name" type="string" required>
+  The customer's full name.
+</ParamField>
+
+<ParamField body="customer_phone_number" type="string" required>
+  The customer's phone number.
+</ParamField>
+
+<ParamField body="amount" type="string" required>
+  Amount to charge in the smallest currency unit (e.g., `"10000"` for ₦100.00).
+</ParamField>
+
+<ParamField body="currency" type="string" default="NGN">
+  Currency code for the transaction.
+</ParamField>
+
+<ParamField body="channels" type="array">
+  List of enabled payment methods. Options: `["BANK_TRANSFER", "CARD"]`.
+</ParamField>
+
+<ParamField body="reference" type="string">
+  Your unique transaction reference. If not provided, PayVessel will generate one.
+</ParamField>
+
+<ParamField body="redirect_url" type="string">
+  The URL users should be redirected to after payment.
+</ParamField>
+
+<ParamField body="metadata" type="object">
+  Additional data you want to store with the transaction.
+</ParamField>
+
+## Response
+
+<ResponseField name="status" type="string">
+  Request status - `"success"` or `"error"`.
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Description of the result.
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="Data Object">
+    <ResponseField name="data.reference" type="string">
+      The transaction reference.
+    </ResponseField>
+    <ResponseField name="data.checkout_url" type="string">
+      The URL to redirect the customer to.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
 
 ```bash
-npm install payvessel-checkout
+curl -X POST https://api.payvessel.com/pms/transactions/initialize \
+  -H "Authorization: Bearer sk_test_..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "customer_email": "customer@example.com",
+    "customer_name": "John Doe",
+    "amount": "500000",
+    "currency": "NGN",
+    "channels": ["CARD", "BANK_TRANSFER"]
+  }'
 ```
 
-```javascript
-import { Checkout } from 'payvessel-checkout';
+## Example Response
 
-const init = Checkout({ api_key: 'YOUR_PUBLIC_API_KEY' });
-
-await init.initializeCheckout({
-  customer_email: 'customer@example.com',
-  customer_phone_number: '08012345678',
-  customer_name: 'Customer Name',
-  amount: '100',
-  currency: 'NGN',
-  metadata: { order_id: 'ORD-2024-001' },
-  channels: ['BANK_TRANSFER', 'CARD'],
-  onError: (error) => console.error(error),
-  onSuccess: (response) => console.log(response),
-  onSuccessfulOrder: (orderDetails) => console.log(orderDetails),
-  onClose: (orderReference) => console.log(orderReference),
-});
+```json
+{
+  "status": "success",
+  "message": "Checkout initialized",
+  "data": {
+    "reference": "PV_123456789",
+    "checkout_url": "https://payvessel.com/checkout/PV_123456789"
+  }
+}
 ```
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `api_key` | string | Yes | Your public API key |
-| `customer_email` | string | Yes | Customer email |
-| `customer_phone_number` | string | Yes | Customer phone |
-| `customer_name` | string | Yes | Full name |
-| `amount` | string | Yes | Amount (e.g. `"100"`) |
-| `currency` | string | Yes | e.g. `"NGN"` |
-| `metadata` | object | Yes | Custom data (e.g. order_id) |
-| `channels` | array | No | `["BANK_TRANSFER", "CARD"]` |
-| `reference` | string | No | Unique transaction reference |
-| `redirect_url` | string | No | URL after payment confirmation |
-| `onError` / `onSuccess` / `onSuccessfulOrder` / `onClose` | function | No | Callbacks |
-
-For the **conceptual guide**, see [Payvessel Checkout](/accept-payment/checkout).

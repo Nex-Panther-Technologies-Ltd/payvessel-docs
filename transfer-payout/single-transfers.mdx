@@ -1,16 +1,42 @@
----
-title: "Single Transfers"
-description: "Send money to a single recipient — documentation in progress"
----
-
 # Single Transfers
 
-**Send payouts or transfers to a single recipient** (e.g. bank account or wallet).
+**Send money to a single bank account or mobile money wallet** with a simple API call. Single transfers are ideal for instant refunds, user withdrawals, and on-demand payouts.
 
-<Note>
-**This section is not fully documented yet.** For the full list of transfer/payout endpoints and request/response schemas, use the Payvessel Payment Management Service (PMS) Swagger:
-- [PMS Swagger](https://api.payvessel.com/pms/api/docs/swagger/)
-- [External Dedicated Wallet (payouts)](https://api.payvessel.com/pms/api/docs/swagger/#/External%20Dedicated%20Wallet) — [doc page](/transfer-payout/payout-external-wallet)
-</Note>
+## How it Works
 
-We will expand this page with step-by-step guides and production-ready examples. If you need details now, refer to the Swagger UI or [contact support](mailto:support@payvessel.com).
+1.  **Select or Create a Recipient:** Ensure the recipient is registered with a `recipient_code`. See [Create Recipient](/api-reference/transfers/create-recipient).
+2.  **Ensure Sufficient Balance:** Transfers are debited from your managed wallet balance immediately.
+3.  **Trigger the Transfer:** Call the [Initiate Transfer](/api-reference/transfers/initiate-transfer) endpoint.
+4.  **Confirm Delivery:** Monitor the status via webhooks (`transfer.success` or `transfer.failed`).
+
+---
+
+## Key Considerations
+
+### Idempotency
+Always send an `Idempotency-Key` header. This ensures that if your network fails and you retry the request, Payvessel will not process the same transfer twice.
+
+### Transfer Statuses
+- **pending:** The transfer is being processed by the banking network.
+- **success:** The recipient's bank has acknowledged receipt of funds.
+- **failed:** The transfer could not be completed (e.g., invalid account).
+- **reversed:** Funds were sent but subsequently returned by the receiving bank.
+
+---
+
+## Sample Integration Flow
+
+```javascript
+// 1. Register the recipient
+const recipient = await payvessel.transfer.recipient.create({ ... });
+
+// 2. Send the money
+const transfer = await payvessel.transfer.initiate({
+  amount: "500000", // ₦5,000.00
+  recipient: recipient.data.recipient_code,
+  reason: "Account Withdrawal",
+  reference: "ORDER_REF_9988",
+});
+```
+
+For the full technical specification, see the [Initiate Transfer](/api-reference/transfers/initiate-transfer) API reference.

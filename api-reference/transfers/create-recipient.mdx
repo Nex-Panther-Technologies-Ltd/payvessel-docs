@@ -526,9 +526,9 @@ PayVessel performs real-time account verification during recipient creation:
     ```
   </Tab>
   
-  <Tab title="Customer Payouts">
+  <Tab title="Customer Transfers">
     ```javascript
-    // Create recipient for customer payout
+    // Create recipient for customer transfer
     const createCustomerRecipient = async (customerId, bankDetails) => {
       const recipient = await payvessel.transfer.recipient.create({
         type: 'nuban',
@@ -539,7 +539,7 @@ PayVessel performs real-time account verification during recipient creation:
         email: bankDetails.email,
         metadata: {
           customer_id: customerId,
-          payout_type: 'withdrawal',
+          transfer_type: 'withdrawal',
           created_by: 'customer_request'
         }
       });

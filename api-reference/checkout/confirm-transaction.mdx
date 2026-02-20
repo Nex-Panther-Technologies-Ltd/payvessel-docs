@@ -1,8 +1,87 @@
----
-title: "Confirm Transaction"
-openapi: "GET /pms/transactions/{reference}/confirm/"
----
+# Confirm Transaction
 
-<!-- Merchant Checkout: get final transaction details by reference. See /accept-payment/checkout. -->
+**Retrieve final transaction details and status** using the transaction reference. This is typically used after a customer is redirected back from the checkout page or when processing high-value transactions that require manual confirmation.
 
-Retrieve final transaction details and status using the transaction reference (e.g. after the customer completes payment or from a webhook).
+## Endpoint
+
+<Badge variant="success">**GET**</Badge> `/pms/transactions/{reference}/confirm`
+
+## Path Parameters
+
+<ParamField path="reference" type="string" required>
+  The unique transaction reference returned during initialization or received via webhook.
+</ParamField>
+
+## Headers
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `Authorization` | string | **Required** | Bearer token with your secret API key |
+
+## Response
+
+<ResponseField name="status" type="string">
+  Request status - `"success"` or `"error"`.
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Description of the result.
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="Data Object">
+    <ResponseField name="data.id" type="integer">
+      Internal transaction ID.
+    </ResponseField>
+    <ResponseField name="data.reference" type="string">
+      Unique transaction reference.
+    </ResponseField>
+    <ResponseField name="data.amount" type="string">
+      Transaction amount in smallest currency unit.
+    </ResponseField>
+    <ResponseField name="data.currency" type="string">
+      Transaction currency.
+    </ResponseField>
+    <ResponseField name="data.status" type="string">
+      Final payment status: `success`, `failed`, or `pending`.
+    </ResponseField>
+    <ResponseField name="data.customer" type="object">
+      Details of the customer.
+    </ResponseField>
+    <ResponseField name="data.payment_method" type="string">
+      Method used (e.g., `card`, `bank_transfer`).
+    </ResponseField>
+    <ResponseField name="data.paid_at" type="string">
+      ISO 8601 timestamp of payment completion.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X GET https://api.payvessel.com/pms/transactions/PV_123456789/confirm \
+  -H "Authorization: Bearer sk_test_..."
+```
+
+## Example Response
+
+```json
+{
+  "status": "success",
+  "message": "Transaction retrieved",
+  "data": {
+    "id": 1024,
+    "reference": "PV_123456789",
+    "amount": "500000",
+    "currency": "NGN",
+    "status": "success",
+    "customer": {
+      "email": "customer@example.com",
+      "name": "John Doe"
+    },
+    "payment_method": "card",
+    "paid_at": "2024-02-20T10:00:00Z"
+  }
+}
+```
