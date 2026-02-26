@@ -36,8 +36,7 @@
             "group": "API Basics",
             "pages": [
               "api-basics/authentication",
-              "api-basics/environments",
-              "api-basics/webhooks"
+              "api-basics/environments"
             ]
           },
           {
@@ -49,9 +48,9 @@
             ]
           },
           {
-            "group": "Send Money & Payouts",
+            "group": "Transfers",
             "pages": [
-              "transfer-payout/payout-external-wallet",
+              "transfer-payout/transfer-external-wallet",
               "transfer-payout/single-transfers",
               "transfer-payout/bulk-transfers"
             ]
@@ -67,38 +66,12 @@
             ]
           },
           {
-            "group": "Verify Identities",
-            "pages": [
-              "verification-apis/verifying-your-customers",
-              "verification-apis/bvn-verification",
-              "verification-apis/nin-verification",
-              "verification-apis/liveness-detections",
-              "verification-apis/face-comparison",
-              "verification-apis/credit-score-service",
-              "verification-apis/blacklist-check",
-              "verification-apis/loan-features"
-            ]
-          },
-          {
-            "group": "Bill Payments",
-            "pages": [
-              "bill-payments/get-billers-information",
-              "bill-payments/get-biller-products",
-              "bill-payments/verify-customer",
-              "bill-payments/create-bill-payment",
-              "bill-payments/get-bill-payments-history",
-              "bill-payments/get-bill-payment-details",
-              "bill-payments/requery-payment"
-            ]
-          },
-          {
             "group": "Webhook",
             "pages": [
               "api-reference/webhook/overview",
               "api-reference/webhook/verifying-webhooks"
             ]
           }
-          
         ]
       },
       {
@@ -106,7 +79,9 @@
         "groups": [
           {
             "group": "Getting Started",
-            "pages": ["api-reference/introduction"]
+            "pages": [
+              "api-reference/introduction"
+            ]
           },
           {
             "group": "Transactions",
@@ -124,10 +99,6 @@
             ]
           },
           {
-            "group": "Identity Verification",
-            "pages": ["api-reference/verification/bvn-verification"]
-          },
-          {
             "group": "Wallets",
             "pages": [
               "api-reference/wallets/create-wallet",
@@ -141,21 +112,6 @@
             "pages": [
               "api-reference/virtual-accounts/create-virtual-account",
               "api-reference/virtual-accounts/get-virtual-account"
-            ]
-          },
-          {
-            "group": "Card",
-            "pages": [
-              "api-reference/card/overview",
-              "api-reference/card/charge",
-              "api-reference/card/confirm-status",
-              "api-reference/card/public-key",
-              "api-reference/card/resend-otp",
-              "api-reference/card/resolve-bin",
-              "api-reference/card/simulate-3ds-callback",
-              "api-reference/card/validate-otp",
-              "api-reference/card/validate-phone",
-              "api-reference/card/validate-pin"
             ]
           },
           {
@@ -195,15 +151,15 @@
   },
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
   },
   "footer": {
     "socials": {

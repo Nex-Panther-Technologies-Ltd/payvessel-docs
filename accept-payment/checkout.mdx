@@ -7,35 +7,169 @@ description: "Hosted checkout for cards and bank transfer — integrate with the
 
 **Accept payments with minimal integration** using Payvessel's hosted checkout. Customers can pay with **card** or **bank transfer** in a single modal. Ideal for e-commerce, donations, and subscriptions.
 
+## Overview
+
+Payvessel Checkout provides a secure, conversion-optimized payment interface. You can integrate it in two ways:
+
+1.  **npm package (Recommended):** A lightweight frontend SDK that handles the modal UI and payment channels.
+2.  **Merchant Checkout API:** A server-side integration for custom redirects or backend-driven flows.
+
+---
+
+## Integrating with `payvessel-checkout`
+
+The `payvessel-checkout` package is the fastest way to add payment capabilities to your web application.
+
+### Installation
+
+Install the package via npm or Yarn:
+
+```bash
+npm install payvessel-checkout
+# or
+yarn add payvessel-checkout
+```
+
+### Usage Examples
+
+<Tabs>
+  <Tab title="Vanilla JavaScript">
+    Include the SDK via CDN or bundle it with your app.
+
+    ```html
+    <!-- Via CDN -->
+    <script src="https://unpkg.com/payvessel-checkout@latest/dist/index.umd.js"></script>
+
+    <script>
+      const openCheckout = async () => {
+        const init = PayvesselCheckout.Checkout({
+          api_key: "YOUR_PUBLIC_API_KEY",
+        });
+
+        await init.initializeCheckout({
+          customer_email: "customer@example.com",
+          customer_name: "John Doe",
+          customer_phone_number: "08012345678",
+          amount: "5000",
+          currency: "NGN",
+          channels: ["BANK_TRANSFER", "CARD"],
+          onSuccess: (response) => {
+            console.log("Initialization Successful", response);
+          },
+          onSuccessfulOrder: (orderDetails) => {
+            console.log("Payment Successful", orderDetails);
+            // Verify payment on your server
+          },
+          onError: (error) => {
+            console.error("Checkout Error", error);
+          },
+          onClose: () => {
+            console.log("Checkout Closed");
+          }
+        });
+      };
+    </script>
+
+    <button onclick="openCheckout()">Pay Now</button>
+    ```
+  </Tab>
+  <Tab title="React">
+    ```jsx
+    import { Checkout } from 'payvessel-checkout';
+
+    function PaymentButton() {
+      const handlePayment = async () => {
+        const init = Checkout({
+          api_key: 'YOUR_PUBLIC_API_KEY',
+        });
+
+        await init.initializeCheckout({
+          customer_email: 'user@example.com',
+          customer_name: 'Jane Smith',
+          amount: '1000',
+          currency: 'NGN',
+          onSuccessfulOrder: (data) => {
+            alert('Payment received!');
+            console.log(data);
+          },
+          onClose: () => console.log('User closed the modal'),
+        });
+      };
+
+      return (
+        <button onClick={handlePayment}>
+          Checkout with Payvessel
+        </button>
+      );
+    }
+    ```
+  </Tab>
+  <Tab title="Next.js (App Router)">
+    Ensure you use the `"use client"` directive for the payment component.
+
+    ```tsx
+    "use client";
+
+    import { Checkout } from 'payvessel-checkout';
+
+    export default function CheckoutComponent() {
+      const startPayment = async () => {
+        const init = Checkout({
+          api_key: process.env.NEXT_PUBLIC_PAYVESSEL_KEY!,
+        });
+
+        await init.initializeCheckout({
+          customer_email: 'customer@email.com',
+          customer_name: 'Customer Name',
+          amount: '2500',
+          currency: 'NGN',
+          onSuccessfulOrder: (response) => {
+            // Handle success
+          },
+        });
+      };
+
+      return (
+        <button onClick={startPayment}>
+          Pay Now
+        </button>
+      );
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### Essential Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `api_key` | string | Yes | Your Public API Key from the dashboard. |
+| `customer_email` | string | Yes | The customer's email address. |
+| `amount` | string | Yes | Amount to charge in kobo (e.g., "10000" for ₦100.00). |
+| `currency` | string | Yes | Currency code, default is `NGN`. |
+| `channels` | array | No | Payment methods: `["BANK_TRANSFER", "CARD"]`. |
+| `reference` | string | No | Your unique transaction reference. |
+
+---
+
+## Server-Side Verification
+
+After a successful payment, always verify the transaction on your server before providing value to the customer.
+
+1.  Listen for webhooks from Payvessel.
+2.  Or use the **Verify Transaction** API to check the status manually.
+
+For technical details, see the [Confirm Transaction](/api-reference/checkout/confirm-transaction) API reference.
+
+---
+
+## Next Steps
+
 <CardGroup cols={2}>
-  <Card title="Initialize Transaction" icon="play" href="/api-reference/checkout/initialize-transaction">
-    Create a checkout session (API)
+  <Card title="Initialize API Reference" icon="code" href="/api-reference/checkout/initialize-transaction">
+    Request/response schemas for server-side integration.
   </Card>
-  <Card title="Confirm Transaction" icon="circle-check" href="/api-reference/checkout/confirm-transaction">
-    Verify payment status (API)
-  </Card>
-</CardGroup>
-
-***
-
-## Option 1: npm package (recommended for frontend)
-
-Use the **payvessel-checkout** package for a ready-made UI. It handles the checkout modal, channels (card + bank transfer), and callbacks.
-
-- **Install:** `npm install payvessel-checkout` or `yarn add payvessel-checkout`
-- **Package docs:** [payvessel-checkout on npm](https://www.npmjs.com/package/payvessel-checkout)
-
-For **code samples, parameters, and request/response payloads**, see the **API reference** tab: [Initialize Transaction](/api-reference/checkout/initialize-transaction) and [Confirm Transaction](/api-reference/checkout/confirm-transaction).
-
-## Option 2: Merchant Checkout API
-
-For custom UIs or server-only flows, use the REST API: **Initialize** a transaction, redirect the customer to the returned `checkout_url`, then **Confirm** by reference. For endpoint details, request/response bodies, and code samples, see the **API reference** tab:
-
-<CardGroup cols={2}>
-  <Card title="Initialize Transaction" icon="play" href="/api-reference/checkout/initialize-transaction">
-    Request/response and code samples
-  </Card>
-  <Card title="Confirm Transaction" icon="circle-check" href="/api-reference/checkout/confirm-transaction">
-    Request/response and code samples
+  <Card title="Verify API Reference" icon="shield-check" href="/api-reference/checkout/confirm-transaction">
+    How to confirm payments accurately.
   </Card>
 </CardGroup>

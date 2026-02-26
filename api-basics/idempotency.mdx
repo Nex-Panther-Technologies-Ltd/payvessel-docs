@@ -7,7 +7,7 @@ description: "Ensure safe retry logic and prevent duplicate transactions"
 
 **Prevent duplicate transactions and ensure safe retry logic with Payvessel's idempotency system.**
 
-Idempotency is crucial for payment processing to ensure that retrying a request doesn't create duplicate charges or unintended side effects.
+Idempotency is particularly important for operations that move money, such as **transfers** or **transaction initializations**, to prevent accidental double-charging or double-spending.tended side effects.
 
 <CardGroup cols={2}>
   <Card title="🔄 Safe Retries" icon="rotate">

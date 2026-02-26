@@ -1,40 +1,68 @@
----
-title: "Wallet Balance"
-description: "Get the current balance of an external dedicated wallet — request/response and code"
----
+# Wallet Balance
 
-**Endpoint, parameters, response, and code samples** for retrieving the current balance of an external dedicated wallet.
+**Retrieve the current balance** for a managed wallet. Always verify the available balance before initiating transfers to avoid transaction failures.
 
-## Full API reference (Swagger)
+## Endpoint
 
-Request/response schemas and try-it-out are in the Payvessel PMS Swagger under **External Dedicated Wallet**:
+<Badge variant="success">**GET**</Badge> `/pms/wallets/{wallet_id}/balance`
 
-**[External Dedicated Wallet — Swagger](https://api.payvessel.com/pms/api/docs/swagger/#/External%20Dedicated%20Wallet)**
+## Path Parameters
 
-Locate the **balance** (or equivalent) operation for the exact path, method (typically `GET`), and response body.
+<ParamField path="wallet_id" type="string" required>
+  The unique identifier of the wallet.
+</ParamField>
 
-## Base URL and headers
+## Headers
 
-| Environment | Base URL |
-|-------------|----------|
-| **Production** | `https://api.payvessel.com` |
-| **Sandbox** | `https://sandbox.payvessel.com` |
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `Authorization` | string | **Required** | Bearer token with your secret API key |
 
-| Header | Required | Description |
-|--------|----------|-------------|
-| `api-key` | Yes | Your Payvessel public API key |
-| `api-secret` | Yes | `Bearer YOUR_SECRET_KEY` |
+## Response
 
-## Example (generic)
+<ResponseField name="status" type="string">
+  Request status - `"success"` or `"error"`.
+</ResponseField>
 
-After you have the path from Swagger (e.g. `GET /pms/api/.../wallet/{id}/balance`):
+<ResponseField name="message" type="string">
+  Description of the result.
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="Data Object">
+    <ResponseField name="data.wallet_id" type="string">
+      The unique ID of the wallet.
+    </ResponseField>
+    <ResponseField name="data.balance" type="string">
+      The current balance in smallest currency unit (e.g., kobo for NGN).
+    </ResponseField>
+    <ResponseField name="data.currency" type="string">
+      The currency of the wallet (e.g., `NGN`, `USD`).
+    </ResponseField>
+    <ResponseField name="data.available_balance" type="string">
+      Funds available for immediate transfer.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
 
 ```bash
-curl -X GET "https://api.payvessel.com/pms/api/.../wallet/WALLET_ID/balance" \
-  -H "api-key: YOUR_API_KEY" \
-  -H "api-secret: Bearer YOUR_SECRET"
+curl -X GET https://api.payvessel.com/pms/wallets/WLT_123456/balance \
+  -H "Authorization: Bearer sk_test_..."
 ```
 
-Replace the path and `WALLET_ID` with the values from the Swagger definition. Response shape (e.g. `balance`, `currency`) is documented there.
+## Example Response
 
-For the **conceptual guide**, see [Wallet Balance (guide)](/wallets/wallet-balance).
+```json
+{
+  "status": "success",
+  "message": "Balance retrieved",
+  "data": {
+    "wallet_id": "WLT_123456",
+    "balance": "500000",
+    "available_balance": "495000",
+    "currency": "NGN"
+  }
+}
+```

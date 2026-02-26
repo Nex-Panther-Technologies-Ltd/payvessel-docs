@@ -1,0 +1,58 @@
+
+# Transfer to External Wallet
+
+**Send money to external bank accounts or wallets** securely using Payvessel's Transfer APIs. This guide covers the end-to-end flow for moving funds from your managed wallet to a recipient.
+
+## Integration Flow
+
+To complete a transfer successfully, you must follow these three steps:
+
+### 1. Create a Recipient
+Before you can send money, you must register the recipient's details (bank account or mobile money wallet) and verify them. Payvessel automatically validates the account details during this step.
+
+- **Action:** Call the [Create Recipient](/api-reference/transfers/create-recipient) endpoint.
+- **Result:** You will receive a `recipient_code` (e.g., `RCP_xyz789...`).
+
+### 2. Initiate the Transfer
+Once you have a recipient code, you can trigger the fund movement.
+
+- **Action:** Call the [Initiate Transfer](/api-reference/transfers/initiate-transfer) endpoint using the `recipient_code`.
+- **Idempotency:** We highly recommend using an `Idempotency-Key` header to prevent duplicate transfers in case of network retries.
+
+### 3. Track Status
+Transfers can be instant or take some time depending on the channel.
+
+- **Webhook (Recommended):** Configure a [Webhook](/api-reference/webhook/overview) to receive real-time updates when the status changes to `success`, `failed`, or `reversed`.
+- **Polling:** Alternatively, you can use the [Verify Transfer](/api-reference/transfers/verify-transfer) endpoint to check the status manually.
+
+---
+
+## Technical Reference
+
+| Item | Details |
+|------|---------|
+| **Base URLs** | `https://api.payvessel.com` (Prod) <br/> `https://sandbox.payvessel.com` (Test) |
+| **Authentication** | Bearer Token (Secret Key) |
+| **Supported Channels** | NUBAN (Bank), Mobile Money |
+| **Currencies** | NGN, GHS, KES, ZAR, USD, GBP, EUR |
+
+---
+
+## Best Practices
+
+- **Verify Balance:** Check your managed wallet balance before initiating transfers to avoid `insufficient_balance` errors.
+- **Handle OTP:** Some high-value transfers may require an OTP for security. Be prepared to handle the `otp` status response.
+- **Detailed Narrations:** Use clear narrations (e.g., "Invoice #1234") to help your customers reconcile their bank statements.
+
+---
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Create Recipient" icon="user-plus" href="/api-reference/transfers/create-recipient">
+    Register bank/wallet details.
+  </Card>
+  <Card title="Initiate Transfer" icon="paper-plane" href="/api-reference/transfers/initiate-transfer">
+    Send money to recipients.
+  </Card>
+</CardGroup>

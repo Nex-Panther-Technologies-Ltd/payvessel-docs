@@ -6,7 +6,13 @@ description: 'Endpoint reference, request/response payloads, code samples, and p
 **Code samples, request/response payloads, and endpoint reference.** Use this tab for HTTP methods, headers, body schemas, and example code. For concepts, integration flows, and when-to-use guidance, see the **Guides** tab.
 
 <Note>
-**Documentation status:** Card payment and Merchant Checkout are documented with production-ready examples. Payouts (External Dedicated Wallet) and some other sections link to the [PMS Swagger](https://api.payvessel.com/pms/api/docs/swagger/) for full request/response details. If a section is unclear or missing, [contact support](mailto:support@payvessel.com).
+**Documentation status:**
+<Accordion title="Send Money & Transfers">
+    Detailed endpoints for moving funds to recipients:
+    - [Create Recipient](/api-reference/transfers/create-recipient)
+    - [Initiate Transfer](/api-reference/transfers/initiate-transfer)
+  </Accordion>
+If a section is unclear or missing, [contact support](mailto:support@payvessel.com).
 </Note>
 
 PayVessel's REST API provides programmatic access to accept payments, send money, verify identities, manage wallets, and more. Our API is organized around REST principles with predictable resource-oriented URLs, accepts form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes and authentication.
@@ -57,68 +63,51 @@ payvessel.api_key = "YOUR_SECRET_KEY"
 
 ## API Categories
 
-Our API is organized into logical groups of functionality:
+Our API is organized into logical groups of functionality, matching the navigation:
 
 <AccordionGroup>
-  <Accordion title="💳 Accept Payments" icon="credit-card">
-    Process one-time payments, create payment links, manage customer reserved accounts, handle refunds, and track settlements.
+  <Accordion title="💳 Transactions" icon="credit-card">
+    Initialize and verify payments, and retrieve transaction lists.
     
     **Key Endpoints:**
     - `POST /transaction/initialize` - Initialize a payment
     - `GET /transaction/verify/{reference}` - Verify transaction status
-    - `POST /transaction/refund` - Process refunds
-    - `POST /payment-links/create` - Create payment links
+    - `GET /transaction/list` - List transactions
   </Accordion>
   
-  <Accordion title="💸 Send Money & Payouts" icon="paper-plane">
-    Send money to bank accounts and mobile money users with instant transfers and bulk processing capabilities.
+  <Accordion title="💸 Send Money & Transfers" icon="paper-plane">
+    Send money to bank accounts and mobile money users with instant transfers.
     
     **Key Endpoints:**
     - `POST /transfer/recipient` - Create transfer recipient
     - `POST /transfer/initiate` - Initialize transfer
-    - `POST /transfer/bulk` - Process bulk transfers
-    - `GET /transfer/verify/{reference}` - Verify transfer status
-  </Accordion>
-  
-  <Accordion title="🛡️ Identity Verification" icon="shield-check">
-    Verify customer identities through BVN, NIN, biometric verification, credit scoring, and compliance checks.
-    
-    **Key Endpoints:**
-    - `POST /verification/bvn` - Verify Bank Verification Number
-    - `POST /verification/nin` - Verify National Identity Number
-    - `POST /verification/face-comparison` - Biometric face comparison
-    - `POST /verification/liveness` - Liveness detection
   </Accordion>
   
   <Accordion title="👛 Wallets" icon="wallet">
-    Create and manage digital wallets, check balances, generate statements, and handle wallet-to-wallet transfers.
+    Create and manage digital wallets, check balances, and generate statements.
     
     **Key Endpoints:**
     - `POST /wallets/create` - Create new wallet
-    - `GET /wallets/{wallet_id}` - Get wallet details
     - `GET /wallets/{wallet_id}/balance` - Check wallet balance
     - `GET /wallets/{wallet_id}/statement` - Generate statement
   </Accordion>
   
-  <Accordion title="🧾 Bill Payments" icon="receipt">
-    Pay utility bills, airtime, data, and other services with comprehensive biller management.
+  <Accordion title="🏦 Virtual Accounts" icon="building-columns">
+    Create and manage reserved virtual accounts for automated collections.
     
     **Key Endpoints:**
-    - `GET /bills/billers` - Get available billers
-    - `GET /bills/products/{biller_id}` - Get biller products
-    - `POST /bills/verify-customer` - Verify customer details
-    - `POST /bills/pay` - Process bill payment
+    - `POST /reserved-account/create` - Create virtual account
+    - `GET /reserved-account/{account_number}` - Get account details
   </Accordion>
-  
-  <Accordion title="💳 Card Management" icon="id-card">
-    Issue virtual and physical cards, manage cardholders, fund cards, and control card activities.
+
+  <Accordion title="🔗 Checkout" icon="cart-shopping">
+    PayVessel Hosted Checkout operations for verifying and confirming transactions.
     
     **Key Endpoints:**
-    - `POST /cards/create` - Issue new card
-    - `POST /cards/{card_id}/fund` - Fund card
-    - `POST /cards/{card_id}/freeze` - Freeze card
-    - `GET /cards/{card_id}/transactions` - Get card transactions
+    - `POST /checkout/initialize` - Initialize hosted checkout
+    - `POST /checkout/confirm` - Confirm transaction
   </Accordion>
+
 </AccordionGroup>
 
 ## Request & Response Format

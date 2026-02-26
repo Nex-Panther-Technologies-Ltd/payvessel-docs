@@ -3,15 +3,68 @@ title: "Wallet Statement"
 description: "Get transaction history for an external dedicated wallet — request/response and code"
 ---
 
-**Endpoint, parameters, response, and code samples** for retrieving transaction history or a statement for an external dedicated wallet.
+# Wallet Statement
 
-## Full API reference (Swagger)
+**Generate a detailed transaction history** for a specific managed wallet. The statement includes all inflows (payments, funding) and transfers, along with their final statuses.
 
-Request/response schemas and try-it-out are in the Payvessel PMS Swagger under **External Dedicated Wallet**:
+## Endpoint
 
-**[External Dedicated Wallet — Swagger](https://api.payvessel.com/pms/api/docs/swagger/#/External%20Dedicated%20Wallet)**
+<Badge variant="success">**GET**</Badge> `/pms/wallets/{wallet_id}/statement`
 
-Locate the **statement** or **transaction history** operation for the exact path, method (typically `GET`), query parameters (e.g. date range, pagination), and response body.
+## Path Parameters
+
+<ParamField path="wallet_id" type="string" required>
+  The unique identifier of the wallet.
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="from" type="string">
+  Start date in ISO 8601 format (e.g., `2024-01-01`).
+</ParamField>
+
+<ParamField query="to" type="string">
+  End date in ISO 8601 format (e.g., `2024-01-31`).
+</ParamField>
+
+## Headers
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `Authorization` | string | **Required** | Bearer token with your secret API key |
+
+## Response
+
+<ResponseField name="status" type="string">
+  Request status.
+</ResponseField>
+
+<ResponseField name="data" type="array">
+  <Expandable title="Transaction Item">
+    <ResponseField name="id" type="string">
+      Transaction ID.
+    </ResponseField>
+    <ResponseField name="amount" type="string">
+      Amount moved.
+    </ResponseField>
+    <ResponseField name="type" type="string">
+      `credit` or `debit`.
+    </ResponseField>
+    <ResponseField name="description" type="string">
+      Narration or reason.
+    </ResponseField>
+    <ResponseField name="created_at" type="string">
+      Timestamp.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X GET "https://api.payvessel.com/pms/wallets/WLT_123456/statement?from=2024-02-01" \
+  -H "Authorization: Bearer sk_test_..."
+```
 
 ## Base URL and headers
 

@@ -1,16 +1,38 @@
----
-title: "Bulk Transfers"
-description: "Send money to multiple recipients — documentation in progress"
----
-
 # Bulk Transfers
 
-**Process multiple payouts or transfers in one request** (bulk disbursements).
+**Process multiple transfers in a single request** to save time and reduce integration complexity. Bulk transfers are perfect for payroll, multi-vendor settlements, and promotional disbursements.
 
-<Note>
-**This section is not fully documented yet.** For the full list of transfer/payout endpoints and request/response schemas, use the Payvessel Payment Management Service (PMS) Swagger:
-- [PMS Swagger](https://api.payvessel.com/pms/api/docs/swagger/)
-- [External Dedicated Wallet (payouts)](https://api.payvessel.com/pms/api/docs/swagger/#/External%20Dedicated%20Wallet) — [doc page](/transfer-payout/payout-external-wallet)
-</Note>
+## Ways to Process Bulk Transfers
 
-We will expand this page with step-by-step guides and production-ready examples. If you need details now, refer to the Swagger UI or [contact support](mailto:support@payvessel.com).
+### 1. Programmatic API (Bulk Transfer)
+Use our API to send an array of transfer instructions. This is the preferred method for automated systems.
+
+-   **Workflow:** Prepare a list of recipients and amounts, then send them in one `POST` request.
+-   **Reference:** See [Bulk Transfer](/api-reference/transfers/bulk-transfer) API reference.
+
+### 2. Dashboard Bulk Upload
+If you prefer a no-code solution, you can upload a CSV file directly in the Payvessel Dashboard.
+
+-   **Workflow:** Download the template, fill in the details, and upload.
+-   **Format:** Standard CSV with headers: `account_number`, `bank_code`, `amount`, `reference`.
+
+---
+
+## Best Practices
+
+-   **Batch Limits:** We recommend batches of 50-100 transfers per request for optimal processing speed.
+-   **Validation:** Verify all recipients before adding them to a bulk batch to minimize failures.
+-   **Reporting:** Use the [List Transfers](/api-reference/transfers/list-transfers) endpoint to reconcile your bulk batches later.
+
+---
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Bulk Transfer API" icon="code" href="/api-reference/transfers/bulk-transfer">
+    Technical details and code samples.
+  </Card>
+  <Card title="Create Recipients" icon="user-plus" href="/api-reference/transfers/create-recipient">
+    Register multiple recipients first.
+  </Card>
+</CardGroup>
