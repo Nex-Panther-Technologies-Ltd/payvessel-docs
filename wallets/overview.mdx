@@ -1,80 +1,37 @@
 ---
 title: "Wallets Overview"
-description: "External Dedicated Wallet API — create wallets, check balance, list wallets, and get statements for transfers"
+description: "Managed external wallets for holding and moving funds"
 ---
 
-# Wallets (External Dedicated Wallet)
+Use managed wallets to **hold balances for your business**, fund transfers, and reconcile payouts. A typical flow is:
 
-Use the **External Dedicated Wallet** API to manage wallets for your users: create wallets, check balances, list wallets, and retrieve transaction statements. This supports transfer flows and wallet-based operations.
+1. Get or create your business wallet.
+2. Check wallet balance before funding transfers.
+3. Send single or bulk transfers from the wallet.
+4. Query wallet transactions for reconciliation and reporting.
 
 <CardGroup cols={2}>
-  <Card title="Create wallet" icon="plus" href="/api-reference/wallets/create-wallet">
-    API reference: create wallet
+  <Card title="Create wallet" icon="plus" href="/wallets/create-wallet">
+    When and why to create a wallet
   </Card>
-  <Card title="Wallet balance" icon="wallet" href="/api-reference/wallets/wallet-balance">
-    API reference: wallet balance
+  <Card title="Wallet balance" icon="wallet" href="/wallets/wallet-balance">
+    How to read available and ledger balances
   </Card>
-  <Card title="Get wallets" icon="list" href="/api-reference/wallets/get-wallets">
-    API reference: get wallets
+  <Card title="Get wallets" icon="list" href="/wallets/get-wallets">
+    Working with multiple wallets
   </Card>
-  <Card title="Wallet statement" icon="file-lines" href="/api-reference/wallets/wallet-statement">
-    API reference: wallet statement
+  <Card title="Wallet statement" icon="file-lines" href="/wallets/wallet-statement">
+    Understanding wallet transaction history
   </Card>
 </CardGroup>
 
 ***
 
-## API reference (Swagger)
+## Key concepts
 
-All **External Dedicated Wallet** endpoints, request/response schemas, and try-it-out requests are in the Payvessel PMS Swagger:
+- **Business wallet**: primary wallet linked to your merchant account, used for most payouts.
+- **Available balance**: funds you can spend immediately.
+- **Ledger balance**: available balance plus pending transactions.
+- **Transactions**: credits (funding, incoming payments) and debits (transfers, fees).
 
-**[External Dedicated Wallet — Swagger](https://api.payvessel.com/pms/api/docs/swagger/#/External%20Dedicated%20Wallet)**
-
-Use the Swagger UI to:
-
-- See the exact path, method, and parameters for each operation
-- View request and response body schemas
-- Test calls with your sandbox credentials
-
-## Base URL and authentication
-
-| Environment | Base URL |
-|-------------|----------|
-| **Production** | `https://api.payvessel.com` |
-| **Sandbox** | `https://sandbox.payvessel.com` |
-
-Authenticate with:
-
-- **api-key** — Your Payvessel public API key
-- **api-secret** — `Bearer YOUR_SECRET_KEY`
-
-See [API Basics — Authentication](/api-basics/authentication) for details.
-
-## Common operations
-
-| Operation | Purpose |
-|-----------|---------|
-| **Create wallet** | Register a new external dedicated wallet for a user or entity |
-| **Wallet balance** | Get the current balance of a wallet |
-| **Get wallets** | List or fetch one or more wallets (e.g. by customer or business) |
-| **Wallet statement** | Retrieve transaction history or statement for a wallet |
-
-Details and example usage for each are in the linked pages above; for exact fields and responses, use the [Swagger documentation](https://api.payvessel.com/pms/api/docs/swagger/#/External%20Dedicated%20Wallet).
-
-## Transfers and wallets
-
-Wallet APIs are used together with [Transfers](/transfer-payout/transfer-external-wallet) to send money to wallets and to manage recipient wallets. For transfer-specific flows (e.g. initiating a transfer to a wallet), see the Transfers section.
-
-## Next steps
-
-<CardGroup cols={2}>
-  <Card title="Create wallet (API)" icon="plus" href="/api-reference/wallets/create-wallet">
-    Endpoint, payload, code samples
-  </Card>
-  <Card title="Transfers" icon="paper-plane" href="/transfer-payout/transfer-external-wallet">
-    Transfer guide
-  </Card>
-  <Card title="API reference" icon="book" href="/api-reference/introduction">
-    All endpoints and code samples
-  </Card>
-</CardGroup>
+For request/response payloads and code samples, use the **API reference → Wallets** section. For payout flows that use wallets, see **Send Money & Payouts → Transfers**.

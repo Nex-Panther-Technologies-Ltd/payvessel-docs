@@ -1,42 +1,41 @@
-# Single Transfers
 
-**Send money to a single bank account or mobile money wallet** with a simple API call. Single transfers are ideal for instant refunds, user withdrawals, and on-demand payouts.
 
-## How it Works
+**Send money from your managed wallet to a single bank account** using the wallet transfer APIs. Single transfers are ideal for withdrawals, refunds, and one‑off payouts.
 
-1.  **Select or Create a Recipient:** Ensure the recipient is registered with a `recipient_code`. See [Create Recipient](/api-reference/transfers/create-recipient).
-2.  **Ensure Sufficient Balance:** Transfers are debited from your managed wallet balance immediately.
-3.  **Trigger the Transfer:** Call the [Initiate Transfer](/api-reference/transfers/initiate-transfer) endpoint.
-4.  **Confirm Delivery:** Monitor the status via webhooks (`transfer.success` or `transfer.failed`).
+## How it works
+
+1. **Get or create your wallet**  
+   Use the wallet API to get the business wallet for your integration. This gives you the wallet ID, account number, and current balances.
+
+2. **Check available balance**  
+   Call the wallet‑balance endpoint to ensure you have enough **available_balance** to cover the transfer amount and any fees.
+
+3. **Validate the destination account (optional but recommended)**  
+   Use the **validate‑account** endpoint (name enquiry) to confirm the destination bank account number and name before sending funds.
+
+4. **Initiate the transfer**  
+   Call the **Initiate Transfer** API under **Transfers** with:
+   - amount
+   - destination account number
+   - bank code
+   - narration / description
+   - a unique reference
+   - OTP or any required extra fields (depending on your risk settings)
+
+5. **Check transfer status**  
+   After you receive the initial response, use the **transfer‑status** endpoint (or webhooks, if enabled) to confirm whether the transfer is `pending`, `success`, or `failed`.
+
+6. **Reconcile wallet transactions**  
+   Use the **wallet‑transactions** endpoint to fetch a history of debits and credits for the wallet and reconcile payouts with your internal records.
 
 ---
 
-## Key Considerations
+## Key considerations
 
-### Idempotency
-Always send an `Idempotency-Key` header. This ensures that if your network fails and you retry the request, Payvessel will not process the same transfer twice.
-
-### Transfer Statuses
-- **pending:** The transfer is being processed by the banking network.
-- **success:** The recipient's bank has acknowledged receipt of funds.
-- **failed:** The transfer could not be completed (e.g., invalid account).
-- **reversed:** Funds were sent but subsequently returned by the receiving bank.
+- **Idempotency**: always send a unique reference per transfer so you can safely retry without doubling payouts.
+- **Limits and fees**: design your UI to reflect any daily limits or per‑transfer caps enforced by your business rules.
+- **User experience**: clearly communicate `pending` vs `success` to end‑users and surface clear error messages when a transfer fails.
 
 ---
 
-## Sample Integration Flow
-
-```javascript
-// 1. Register the recipient
-const recipient = await payvessel.transfer.recipient.create({ ... });
-
-// 2. Send the money
-const transfer = await payvessel.transfer.initiate({
-  amount: "500000", // ₦5,000.00
-  recipient: recipient.data.recipient_code,
-  reason: "Account Withdrawal",
-  reference: "ORDER_REF_9988",
-});
-```
-
-For the full technical specification, see the [Initiate Transfer](/api-reference/transfers/initiate-transfer) API reference.
+For API payloads, headers, and response examples, see the **[Initiate Transfer](/api-reference/transfers/initiate-transfer)** reference and the wallet API references under **Wallets**.

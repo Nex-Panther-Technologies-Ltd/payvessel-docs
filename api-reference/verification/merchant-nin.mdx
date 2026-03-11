@@ -1,0 +1,91 @@
+---
+title: "Merchant NIN KYC"
+description: "Basic and enhanced NIN verification for merchants"
+---
+
+Use these endpoints to **verify a customer’s National Identification Number (NIN)** during onboarding.
+
+Base paths:
+
+- **Sandbox**: `https://sandbox.payvessel.com/kyc`
+- **Production**: `https://api.payvessel.com/kyc`
+
+All paths below are relative to the base URL.
+
+## Basic NIN verification
+
+<Badge variant="success">**POST**</Badge> `/api/v1/merchant/nin/basic`
+
+Send a NIN and minimal identity details to confirm that the NIN is valid and belongs to the customer.
+
+Typical request body fields:
+
+- `nin` – NIN to verify  
+- Optional identity fields such as name, date of birth, and phone number  
+- `reference` – unique verification reference
+
+## Enhanced NIN verification
+
+<Badge variant="success">**POST**</Badge> `/api/v1/merchant/nin/enhanced`
+
+Enhanced verification returns deeper profile information for stricter KYC checks.
+
+Typical request body fields:
+
+- `nin` – NIN to verify  
+- Additional KYC attributes depending on your requirements  
+- `reference` – unique verification reference
+
+Use enhanced NIN when you need a full identity profile and stronger regulatory assurance.
+
+## Example (basic NIN)
+
+<CodeGroup>
+```bash cURL
+curl -X POST "https://sandbox.payvessel.com/kyc/api/v1/merchant/nin/basic" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "nin": "12345678901",
+    "reference": "NIN_BASIC_2026_001"
+  }'
+```
+
+```json Response
+{
+  "status": true,
+  "message": "NIN verified",
+  "data": {
+    "nin": "12345678901",
+    "first_name": "JOHN",
+    "last_name": "DOE"
+  }
+}
+```
+</CodeGroup>
+
+## Example (enhanced NIN)
+
+<CodeGroup>
+```bash cURL
+curl -X POST "https://sandbox.payvessel.com/kyc/api/v1/merchant/nin/enhanced" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "nin": "12345678901",
+    "reference": "NIN_ENH_2026_001"
+  }'
+```
+
+```json Response
+{
+  "status": true,
+  "message": "Enhanced NIN verified",
+  "data": {
+    "nin": "12345678901",
+    "first_name": "JOHN",
+    "last_name": "DOE",
+    "additional_info": {}
+  }
+}
+```
+</CodeGroup>
+

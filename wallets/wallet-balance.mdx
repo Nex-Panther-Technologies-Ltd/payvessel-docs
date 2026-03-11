@@ -1,18 +1,22 @@
 ---
 title: "Wallet Balance"
-description: "Guide: checking balance for an external dedicated wallet"
+description: "Guide: understanding wallet balances"
 ---
 
-# Wallet Balance (guide)
 
-**Retrieve the current balance** of an external dedicated wallet to display in your app or validate before transfers.
+Use the wallet balance endpoint to see **how much money is available** in a managed wallet before triggering payouts.
 
-This is a **conceptual guide**. For the **endpoint, parameters, response, and code samples**, see the **API reference** tab:
+Key fields you’ll see in responses:
 
-**[Wallet Balance — API reference](/api-reference/wallets/wallet-balance)**
+- **available_balance**: funds you can spend immediately.
+- **ledger_balance**: available balance plus pending debits/credits.
+- **currency**: currency of the wallet (e.g. `NGN`).
 
-You can also use the [External Dedicated Wallet Swagger](https://api.payvessel.com/pms/api/docs/swagger/#/External%20Dedicated%20Wallet) for the exact schema and try-it-out.
+Typical flow:
 
-<Card title="Wallets overview" icon="circle-info" href="/wallets/overview">
-  Back to wallets overview
-</Card>
+1. Call the wallet‑balance endpoint for your wallet.
+2. Compare `available_balance` to the amount you plan to move.
+3. Block or allow the transfer based on your own rules and limits.
+
+For the exact endpoint path, headers, and JSON schema, see **API reference → Wallets → Wallet Balance**.
+
