@@ -43,8 +43,7 @@
             "group": "Accept Payment",
             "pages": [
               "accept-payment/checkout",
-              "accept-payment/customer-reserved-account",
-              "accept-payment/settlement"
+              "accept-payment/customer-reserved-account"
             ]
           },
           {
@@ -53,6 +52,19 @@
               "transfer-payout/transfer-external-wallet",
               "transfer-payout/single-transfers",
               "transfer-payout/bulk-transfers"
+            ]
+          },
+          {
+            "group": "Verify Identities",
+            "pages": [
+              "kyc/overview",
+              "kyc/merchant-bvn",
+              "kyc/merchant-nin",
+              "kyc/merchant-documents",
+              "kyc/merchant-face",
+              "kyc/merchant-bank-account",
+              "kyc/merchant-liveness",
+              "kyc/merchant-risk"
             ]
           },
           {
@@ -94,8 +106,21 @@
           {
             "group": "Transfers",
             "pages": [
-              "api-reference/transfers/create-recipient",
-              "api-reference/transfers/initiate-transfer"
+              "api-reference/transfers/initiate-transfer",
+              "api-reference/transfers/bulk-transfer",
+              "api-reference/transfers/transfer-status"
+            ]
+          },
+          {
+            "group": "KYC & Risk",
+            "pages": [
+              "api-reference/verification/merchant-bvn",
+              "api-reference/verification/merchant-nin",
+              "api-reference/verification/merchant-documents",
+              "api-reference/verification/merchant-face",
+              "api-reference/verification/merchant-bank-account",
+              "api-reference/verification/merchant-liveness",
+              "api-reference/verification/merchant-risk"
             ]
           },
           {
@@ -117,8 +142,8 @@
           {
             "group": "Checkout",
             "pages": [
-              "api-reference/checkout/confirm-transaction",
-              "api-reference/checkout/initialize-transaction"
+              "api-reference/checkout/initialize-transaction",
+              "api-reference/checkout/confirm-transaction"
             ]
           },
           {

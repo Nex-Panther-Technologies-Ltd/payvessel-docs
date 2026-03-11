@@ -1,0 +1,117 @@
+---
+title: "Bulk Transfer"
+description: "Initiate multiple wallet transfers in a single batch"
+---
+
+Use this endpoint to **send multiple payouts from your business wallet in one request**. Each transfer in the batch debits your wallet and credits a different beneficiary account.
+
+<Warning>
+Bulk transfers are powerful: always validate input (bank codes, account numbers, amounts) before sending a batch, and use unique references for each row.
+</Warning>
+
+## Endpoint
+
+<Badge variant="success">**POST**</Badge> `/pms/api/external/request/wallet/bulk-transfer/`
+
+## Headers
+
+| Name | Location | Type | Required | Description |
+|------|----------|------|----------|-------------|
+| `api-key` | header | string | Yes | Business API key |
+| `api-secret` | header | string | Yes | Business API secret |
+| `Content-Type` | header | string | Yes | Must be `application/json` |
+
+## Request body
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `batch_reference` | string | Yes | Unique reference for this bulk batch (for reconciliation) |
+| `transfers` | array of objects | Yes | List of individual transfers in the batch |
+
+Each item in `transfers`:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `amount` | string | Yes | Amount to send for this row (e.g. `"15000.00"`) |
+| `account_number` | string | Yes | Destination bank account number |
+| `bank_code` | string | Yes | Destination bank code |
+| `account_name` | string | No | Optional account name for your own records |
+| `narration` | string | No | Description that may appear on the beneficiary’s statement |
+| `reference` | string | Yes | Unique reference for this specific transfer in the batch |
+
+### Example request
+
+```json
+{
+  "batch_reference": "PAYROLL_2026_03",
+  "transfers": [
+    {
+      "amount": "15000.00",
+      "account_number": "0123456789",
+      "bank_code": "999991",
+      "account_name": "John Doe",
+      "narration": "March salary",
+      "reference": "PAYROLL_2026_03_EMP001"
+    },
+    {
+      "amount": "20000.00",
+      "account_number": "0987654321",
+      "bank_code": "120001",
+      "account_name": "Jane Smith",
+      "narration": "March salary",
+      "reference": "PAYROLL_2026_03_EMP002"
+    }
+  ]
+}
+```
+
+### Example cURL
+
+```bash
+curl -X POST "https://api.payvessel.com/pms/api/external/request/wallet/bulk-transfer/" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_API_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "batch_reference": "PAYROLL_2026_03",
+    "transfers": [
+      {
+        "amount": "15000.00",
+        "account_number": "0123456789",
+        "bank_code": "999991",
+        "account_name": "John Doe",
+        "narration": "March salary",
+        "reference": "PAYROLL_2026_03_EMP001"
+      },
+      {
+        "amount": "20000.00",
+        "account_number": "0987654321",
+        "bank_code": "120001",
+        "account_name": "Jane Smith",
+        "narration": "March salary",
+        "reference": "PAYROLL_2026_03_EMP002"
+      }
+    ]
+  }'
+```
+
+## Response
+
+On success you receive high‑level information about the batch:
+
+```json
+{
+  "status": true,
+  "message": "Bulk transfer initiated",
+  "data": {
+    "batch_reference": "PAYROLL_2026_03",
+    "total_count": 2,
+    "successful_count": 2,
+    "failed_count": 0,
+    "total_amount": "35000.00"
+  }
+}
+```
+
+For detailed per‑transfer status, use the **transfer status** and **wallet transactions** endpoints.
+

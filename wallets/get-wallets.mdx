@@ -1,18 +1,19 @@
 ---
 title: "Get Wallets"
-description: "Guide: listing or retrieving external dedicated wallets"
+description: "Guide: listing and retrieving wallets"
 ---
 
-# Get Wallets (guide)
+Use the wallets listing endpoints when you have **multiple managed wallets** and need to:
 
-**List or retrieve one or more external dedicated wallets** for a user, customer, or business.
+- Show all wallets and balances in an internal dashboard.
+- Find a specific wallet by ID or business identifier.
+- Reconcile transfers across several wallets.
 
-This is a **conceptual guide**. For the **endpoint, parameters, response, and code samples**, see the **API reference** tab:
+Typical usage:
 
-**[Get Wallets — API reference](/api-reference/wallets/get-wallets)**
+1. List all wallets for your business.
+2. Filter in your application by currency, label, or purpose.
+3. Drill down into a specific wallet using its ID in the balance or statement endpoints.
 
-You can also use the [External Dedicated Wallet Swagger](https://api.payvessel.com/pms/api/docs/swagger/#/External%20Dedicated%20Wallet) for the exact schema and try-it-out.
+For the technical details and code samples, use **API reference → Wallets → Get Wallets**.
 
-<Card title="Wallets overview" icon="circle-info" href="/wallets/overview">
-  Back to wallets overview
-</Card>

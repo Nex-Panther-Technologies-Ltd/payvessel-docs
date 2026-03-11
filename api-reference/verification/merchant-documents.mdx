@@ -1,0 +1,83 @@
+---
+title: "Merchant Document Verification"
+description: "Verify government-issued identity documents for merchants"
+---
+
+Use these endpoints to **verify customer identity documents** issued by government authorities.
+
+Base paths:
+
+- **Sandbox**: `https://sandbox.payvessel.com/kyc`
+- **Production**: `https://api.payvessel.com/kyc`
+
+All paths below are relative to the base URL.
+
+## Driver’s licence
+
+<Badge variant="success">**POST**</Badge> `/api/v1/merchant/documents/drivers-license`
+
+Verify a Nigerian driver’s licence.
+
+Typical request body fields:
+
+- `license_number` – driver’s licence number  
+- `first_name`, `last_name` – as printed on the document  
+- `date_of_birth` – optional extra check  
+- `reference` – unique verification reference
+
+## Voter’s card
+
+<Badge variant="success">**POST**</Badge> `/api/v1/merchant/documents/voters-card`
+
+Verify a voter’s card.
+
+Typical request body fields:
+
+- `vin` – voter identification number  
+- `first_name`, `last_name` – document names  
+- `reference` – unique verification reference
+
+## International passport
+
+<Badge variant="success">**POST**</Badge> `/api/v1/merchant/documents/international-passport`
+
+Verify an international passport.
+
+Typical request body fields:
+
+- `passport_number` – passport number  
+- `country_code` – issuing country  
+- `first_name`, `last_name` – as printed on passport  
+- `date_of_birth` – passport DOB  
+- `reference` – unique verification reference
+
+Use document verification in combination with BVN / NIN checks for stronger KYC coverage.
+
+## Example (driver’s licence)
+
+<CodeGroup>
+```bash cURL
+curl -X POST "https://sandbox.payvessel.com/kyc/api/v1/merchant/documents/drivers-license" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "license_number": "D1234567",
+    "first_name": "JOHN",
+    "last_name": "DOE",
+    "reference": "DL_VERIFY_2026_001"
+  }'
+```
+
+```json Response
+{
+  "status": true,
+  "message": "Driver's licence verified",
+  "data": {
+    "license_number": "D1234567",
+    "first_name": "JOHN",
+    "last_name": "DOE",
+    "is_valid": true
+  }
+}
+```
+</CodeGroup>
+

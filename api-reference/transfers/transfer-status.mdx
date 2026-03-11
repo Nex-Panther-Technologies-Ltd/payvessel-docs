@@ -1,0 +1,71 @@
+---
+title: "Transfer Status"
+description: "Check the status of a previously initiated transfer"
+---
+
+Use this endpoint to **check the final status of a transfer** you created with either **Initiate Transfer** or **Bulk Transfer**.
+
+## Endpoint
+
+<Badge variant="success">**POST**</Badge> `/pms/api/external/request/wallet/transfer-status/`
+
+## Headers
+
+| Name | Location | Type | Required | Description |
+|------|----------|------|----------|-------------|
+| `api-key` | header | string | Yes | Business API key |
+| `api-secret` | header | string | Yes | Business API secret |
+| `Content-Type` | header | string | Yes | Must be `application/json` |
+
+## Request body
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `reference` | string | Yes | Transfer reference you passed when initiating the transfer |
+| `session_id` | string | Yes | Session ID returned in the initial transfer response |
+
+### Example request
+
+```json
+{
+  "reference": "PAYOUT_2026_0001",
+  "session_id": "SESSION_123456789"
+}
+```
+
+### Example cURL
+
+```bash
+curl -X POST "https://api.payvessel.com/pms/api/external/request/wallet/transfer-status/" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_API_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "reference": "PAYOUT_2026_0001",
+    "session_id": "SESSION_123456789"
+  }'
+```
+
+## Response
+
+```json
+{
+  "status": true,
+  "message": "Transfer status retrieved",
+  "data": {
+    "reference": "PAYOUT_2026_0001",
+    "session_id": "SESSION_123456789",
+    "amount": "15000.00",
+    "status": "success",
+    "destination_account_number": "0123456789",
+    "destination_bank_code": "999991",
+    "destination_account_name": "John Doe",
+    "completed_at": "2026-03-11T13:04:35.988Z"
+  }
+}
+```
+
+The `status` field in `data` tells you whether the transfer is `pending`, `success`, or `failed`.
+
+Use this endpoint together with **Initiate Transfer**, **Bulk Transfer**, and wallet transaction history for full payout reconciliation.
+

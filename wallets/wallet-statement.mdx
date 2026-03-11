@@ -1,18 +1,21 @@
 ---
 title: "Wallet Statement"
-description: "Guide: transaction history for an external dedicated wallet"
+description: "Guide: wallet transaction history and reconciliation"
 ---
 
-# Wallet Statement (guide)
+Wallet statements let you **inspect every credit and debit** in a managed wallet for a given period.
 
-**Retrieve transaction history or a statement** for an external dedicated wallet for receipts and reconciliation.
+Common use cases:
 
-This is a **conceptual guide**. For the **endpoint, parameters (e.g. date range), response, and code samples**, see the **API reference** tab:
+- Reconcile payouts and incoming funds with your internal ledger.
+- Investigate disputes or unexpected balance changes.
+- Build reporting dashboards for finance and operations teams.
 
-**[Wallet Statement — API reference](/api-reference/wallets/wallet-statement)**
+Typical flow:
 
-You can also use the [External Dedicated Wallet Swagger](https://api.payvessel.com/pms/api/docs/swagger/#/External%20Dedicated%20Wallet) for the exact schema and try-it-out.
+1. Choose a wallet and a date range.
+2. Call the wallet‑statement / transactions endpoint.
+3. Group transactions by type (credits, debits, fees) and match them to internal records (orders, payouts, refunds).
 
-<Card title="Wallets overview" icon="circle-info" href="/wallets/overview">
-  Back to wallets overview
-</Card>
+For the exact endpoint, query parameters (date range, pagination), and response schema, see **API reference → Wallets → Wallet Statement**.
+

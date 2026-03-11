@@ -1,11 +1,11 @@
 ---
 title: "Wallet Statement"
-description: "Get transaction history for an external dedicated wallet — request/response and code"
+description: "Get transaction history for a managed wallet"
 ---
 
-# Wallet Statement
 
-**Generate a detailed transaction history** for a specific managed wallet. The statement includes all inflows (payments, funding) and transfers, along with their final statuses.
+
+Generate a **transaction history** for a specific wallet over a given period.
 
 ## Endpoint
 
@@ -14,17 +14,17 @@ description: "Get transaction history for an external dedicated wallet — reque
 ## Path Parameters
 
 <ParamField path="wallet_id" type="string" required>
-  The unique identifier of the wallet.
+  Unique ID of the wallet.
 </ParamField>
 
 ## Query Parameters
 
 <ParamField query="from" type="string">
-  Start date in ISO 8601 format (e.g., `2024-01-01`).
+  Start date in ISO 8601 format (e.g. `2024-01-01`).
 </ParamField>
 
 <ParamField query="to" type="string">
-  End date in ISO 8601 format (e.g., `2024-01-31`).
+  End date in ISO 8601 format (e.g. `2024-01-31`).
 </ParamField>
 
 ## Headers
@@ -62,32 +62,7 @@ description: "Get transaction history for an external dedicated wallet — reque
 ## Example Request
 
 ```bash
-curl -X GET "https://api.payvessel.com/pms/wallets/WLT_123456/statement?from=2024-02-01" \
+curl -X GET "https://api.payvessel.com/pms/wallets/WLT_123456/statement?from=2024-02-01&to=2024-02-29" \
   -H "Authorization: Bearer sk_test_..."
 ```
 
-## Base URL and headers
-
-| Environment | Base URL |
-|-------------|----------|
-| **Production** | `https://api.payvessel.com` |
-| **Sandbox** | `https://sandbox.payvessel.com` |
-
-| Header | Required | Description |
-|--------|----------|-------------|
-| `api-key` | Yes | Your Payvessel public API key |
-| `api-secret` | Yes | `Bearer YOUR_SECRET_KEY` |
-
-## Example (generic)
-
-After you have the path from Swagger (e.g. `GET /pms/api/.../wallet/{id}/statement`):
-
-```bash
-curl -X GET "https://api.payvessel.com/pms/api/.../wallet/WALLET_ID/statement?from=2024-01-01&to=2024-01-31" \
-  -H "api-key: YOUR_API_KEY" \
-  -H "api-secret: Bearer YOUR_SECRET"
-```
-
-Replace the path, `WALLET_ID`, and query parameters with the values from the Swagger definition. Response shape (e.g. list of transactions) is documented there.
-
-For the **conceptual guide**, see [Wallet Statement (guide)](/wallets/wallet-statement).

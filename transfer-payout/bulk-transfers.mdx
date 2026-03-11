@@ -1,38 +1,35 @@
-# Bulk Transfers
 
-**Process multiple transfers in a single request** to save time and reduce integration complexity. Bulk transfers are perfect for payroll, multi-vendor settlements, and promotional disbursements.
 
-## Ways to Process Bulk Transfers
+**Send multiple payouts from your managed wallet in a single request.** Bulk transfers are perfect for payroll, vendor settlements, refunds, and other multi‑recipient disbursements.
 
-### 1. Programmatic API (Bulk Transfer)
-Use our API to send an array of transfer instructions. This is the preferred method for automated systems.
+## How bulk transfers work
 
--   **Workflow:** Prepare a list of recipients and amounts, then send them in one `POST` request.
--   **Reference:** See [Bulk Transfer](/api-reference/transfers/bulk-transfer) API reference.
+1. **Prepare your batch**  
+   Build an array of transfer instructions (amount, destination account number, bank code, narration, unique reference for each row).
 
-### 2. Dashboard Bulk Upload
-If you prefer a no-code solution, you can upload a CSV file directly in the Payvessel Dashboard.
+2. **Validate accounts (optional, recommended)**  
+   Optionally run account‑number + bank‑code pairs through the **validate‑account** endpoint before including them in the batch.
 
--   **Workflow:** Download the template, fill in the details, and upload.
--   **Format:** Standard CSV with headers: `account_number`, `bank_code`, `amount`, `reference`.
+3. **Call the bulk transfer endpoint**  
+   Use the **Bulk Transfer** operation under **Transfers** to submit the entire batch in one API call from your business wallet.
 
----
+4. **Track batch result**  
+   The response returns:
+   - a `batch_reference`
+   - counts for `successful_count`, `failed_count`, and `total_count`
+   - the `total_amount` processed
 
-## Best Practices
-
--   **Batch Limits:** We recommend batches of 50-100 transfers per request for optimal processing speed.
--   **Validation:** Verify all recipients before adding them to a bulk batch to minimize failures.
--   **Reporting:** Use the [List Transfers](/api-reference/transfers/list-transfers) endpoint to reconcile your bulk batches later.
+5. **Reconcile individual transfers**  
+   Use the **transfer‑status** and **wallet‑transactions** endpoints to drill into each transfer in the batch and reconcile them with your internal records.
 
 ---
 
-## Next Steps
+## Best practices
 
-<CardGroup cols={2}>
-  <Card title="Bulk Transfer API" icon="code" href="/api-reference/transfers/bulk-transfer">
-    Technical details and code samples.
-  </Card>
-  <Card title="Create Recipients" icon="user-plus" href="/api-reference/transfers/create-recipient">
-    Register multiple recipients first.
-  </Card>
-</CardGroup>
+- **Batch sizing:** start with batches of 50–100 transfers per call to balance speed and observability.
+- **Idempotent references:** ensure each row in a batch has a unique reference so you can safely retry if there is a network error.
+- **Monitoring:** log and alert on high `failed_count` for a batch and surface reasons back to your operations dashboard.
+
+---
+
+For detailed request/response payloads and code examples, use the **Transfers** API reference for the bulk‑transfer and transfer‑status endpoints, plus the **Wallets** API for balance and transactions.

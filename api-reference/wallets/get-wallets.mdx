@@ -1,6 +1,10 @@
-# Get Wallets
+---
+title: "Get Wallets"
+description: "List or retrieve managed wallets for your business"
+---
 
-**Retrieve all managed wallets** associated with your account. This is useful for monitoring fund distribution and reconciling transfers across multiple sub-wallets.
+
+**Retrieve all managed wallets** associated with your business. This is useful for monitoring balances across multiple wallets and reconciling transfers.
 
 ## Endpoint
 
@@ -24,13 +28,16 @@
       Unique wallet ID.
     </ResponseField>
     <ResponseField name="name" type="string">
-      Custom name given to the wallet.
+      Custom name or label for the wallet.
     </ResponseField>
-    <ResponseField name="balance" type="string">
-      Current balance.
+    <ResponseField name="balance.available_balance" type="string">
+      Available balance.
+    </ResponseField>
+    <ResponseField name="balance.ledger_balance" type="string">
+      Ledger balance.
     </ResponseField>
     <ResponseField name="currency" type="string">
-      Wallet currency.
+      Wallet currency (e.g. `NGN`).
     </ResponseField>
   </Expandable>
 </ResponseField>
@@ -38,7 +45,7 @@
 ## Example Request
 
 ```bash
-curl -X GET https://api.payvessel.com/pms/wallets \
+curl -X GET "https://api.payvessel.com/pms/wallets" \
   -H "Authorization: Bearer sk_test_..."
 ```
 
@@ -51,41 +58,22 @@ curl -X GET https://api.payvessel.com/pms/wallets \
     {
       "id": "WLT_1",
       "name": "Main Settlements",
-      "balance": "1000000",
+      "balance": {
+        "available_balance": "1000000.00",
+        "ledger_balance": "1000000.00"
+      },
       "currency": "NGN"
     },
     {
       "id": "WLT_2",
       "name": "Refunds Wallet",
-      "balance": "50000",
+      "balance": {
+        "available_balance": "50000.00",
+        "ledger_balance": "50000.00"
+      },
       "currency": "NGN"
     }
   ]
 }
 ```
 
-## Base URL and headers
-
-| Environment | Base URL |
-|-------------|----------|
-| **Production** | `https://api.payvessel.com` |
-| **Sandbox** | `https://sandbox.payvessel.com` |
-
-| Header | Required | Description |
-|--------|----------|-------------|
-| `api-key` | Yes | Your Payvessel public API key |
-| `api-secret` | Yes | `Bearer YOUR_SECRET_KEY` |
-
-## Example (generic)
-
-After you have the path from Swagger (e.g. `GET /pms/api/.../wallets` or `.../wallet/{id}`):
-
-```bash
-curl -X GET "https://api.payvessel.com/pms/api/.../wallets" \
-  -H "api-key: YOUR_API_KEY" \
-  -H "api-secret: Bearer YOUR_SECRET"
-```
-
-Replace the path and any query parameters with the values from the Swagger definition. Response shape is documented there.
-
-For the **conceptual guide**, see [Get Wallets (guide)](/wallets/get-wallets).
