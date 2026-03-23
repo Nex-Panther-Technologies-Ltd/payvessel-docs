@@ -4,7 +4,7 @@
 
 ## Endpoint
 
-<Badge variant="success">**GET**</Badge> `/pms/transactions/{reference}/confirm`
+<Badge variant="success">**GET**</Badge> `/pms/transactions/{reference}/confirm/`
 
 ## Path Parameters
 
@@ -16,12 +16,13 @@
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `Authorization` | string | **Required** | Bearer token with your secret API key |
+| `api-key` | string | **Required** | Business API key |
+| `api-secret` | string | **Required** | Business API secret |
 
 ## Response
 
-<ResponseField name="status" type="string">
-  Request status - `"success"` or `"error"`.
+<ResponseField name="status" type="boolean">
+  Request status - `true` or `false`.
 </ResponseField>
 
 <ResponseField name="message" type="string">
@@ -30,7 +31,7 @@
 
 <ResponseField name="data" type="object">
   <Expandable title="Data Object">
-    <ResponseField name="data.id" type="integer">
+    <ResponseField name="data.id" type="string">
       Internal transaction ID.
     </ResponseField>
     <ResponseField name="data.reference" type="string">
@@ -60,18 +61,19 @@
 ## Example Request
 
 ```bash
-curl -X GET https://api.payvessel.com/pms/transactions/PV_123456789/confirm \
-  -H "Authorization: Bearer sk_test_..."
+curl -X GET https://api.payvessel.com/pms/transactions/PV_123456789/confirm/ \
+  -H "api-key: your_api_key" \
+  -H "api-secret: your_api_secret"
 ```
 
 ## Example Response
 
 ```json
 {
-  "status": "success",
+  "status": true,
   "message": "Transaction retrieved",
   "data": {
-    "id": 1024,
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     "reference": "PV_123456789",
     "amount": "500000",
     "currency": "NGN",
