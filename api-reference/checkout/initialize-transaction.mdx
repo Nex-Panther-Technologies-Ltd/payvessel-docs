@@ -1,31 +1,20 @@
 
 
-**Initialize a payment session** for the Checkout flow. This endpoint creates a temporary session and returns a `checkout_url` where you can redirect your customer to complete their payment.
+**Initialize a checkout transaction** for the Checkout flow. This endpoint creates a temporary session and returns a `checkout_url` where you can redirect your customer to complete their payment.
 
 ## Endpoint
 
-<Badge variant="success">**POST**</Badge> `/pms/transactions/initialize`
+<Badge variant="success">**POST**</Badge> `/pms/transactions/initialize/`
 
 ## Headers
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `Authorization` | string | **Required** | Bearer token with your secret API key |
+| `api-key` | string | **Required** | Business API key |
+| `api-secret` | string | **Required** | Business API secret |
 | `Content-Type` | string | **Required** | Must be `application/json` |
 
 ## Request Body
-
-<ParamField body="customer_email" type="string" required>
-  The customer's email address.
-</ParamField>
-
-<ParamField body="customer_name" type="string" required>
-  The customer's full name.
-</ParamField>
-
-<ParamField body="customer_phone_number" type="string" required>
-  The customer's phone number.
-</ParamField>
 
 <ParamField body="amount" type="string" required>
   Amount to charge in the smallest currency unit (e.g., `"10000"` for ₦100.00).
@@ -39,6 +28,18 @@
   List of enabled payment methods. Options: `["BANK_TRANSFER", "CARD"]`.
 </ParamField>
 
+<ParamField body="customer_name" type="string" required>
+  The customer's full name.
+</ParamField>
+
+<ParamField body="customer_email" type="string" required>
+  The customer's email address.
+</ParamField>
+
+<ParamField body="customer_phone_number" type="string" required>
+  The customer's phone number.
+</ParamField>
+
 <ParamField body="reference" type="string">
   Your unique transaction reference. If not provided, PayVessel will generate one.
 </ParamField>
@@ -47,14 +48,18 @@
   The URL users should be redirected to after payment.
 </ParamField>
 
-<ParamField body="metadata" type="object">
+<ParamField body="webhook_url" type="string">
+  The URL to receive webhook notifications about the transaction.
+</ParamField>
+
+<ParamField body="metadata" type="string">
   Additional data you want to store with the transaction.
 </ParamField>
 
 ## Response
 
-<ResponseField name="status" type="string">
-  Request status - `"success"` or `"error"`.
+<ResponseField name="status" type="boolean">
+  Request status - `true` or `false`.
 </ResponseField>
 
 <ResponseField name="message" type="string">
@@ -63,11 +68,73 @@
 
 <ResponseField name="data" type="object">
   <Expandable title="Data Object">
-    <ResponseField name="data.reference" type="string">
+    <ResponseField name="data.id" type="string">
+      Unique transaction ID.
+    </ResponseField>
+    <ResponseField name="data.transaction_ref" type="string">
       The transaction reference.
+    </ResponseField>
+    <ResponseField name="data.amount" type="string">
+      Transaction amount in the smallest currency unit.
+    </ResponseField>
+    <ResponseField name="data.status" type="string">
+      Transaction status - `"PENDING"`.
+    </ResponseField>
+    <ResponseField name="data.access_code" type="string">
+      Access code for the transaction session.
     </ResponseField>
     <ResponseField name="data.checkout_url" type="string">
       The URL to redirect the customer to.
+    </ResponseField>
+    <ResponseField name="data.api_key" type="string">
+      API key used for the transaction.
+    </ResponseField>
+    <ResponseField name="data.payment_link" type="string">
+      Payment link identifier.
+    </ResponseField>
+    <ResponseField name="data.order" type="object">
+      Order details object.
+      <Expandable title="Order Object">
+        <ResponseField name="data.order.id" type="string">
+          Order ID.
+        </ResponseField>
+        <ResponseField name="data.order.channels" type="string">
+          Enabled payment channels.
+        </ResponseField>
+        <ResponseField name="data.order.currency" type="string">
+          Transaction currency.
+        </ResponseField>
+        <ResponseField name="data.order.redirect_url" type="string">
+          Redirect URL after payment.
+        </ResponseField>
+        <ResponseField name="data.order.webhook_url" type="string">
+          Webhook URL for notifications.
+        </ResponseField>
+        <ResponseField name="data.order.customer_name" type="string">
+          Customer's name.
+        </ResponseField>
+        <ResponseField name="data.order.customer_email" type="string">
+          Customer's email.
+        </ResponseField>
+        <ResponseField name="data.order.customer_phone_number" type="string">
+          Customer's phone number.
+        </ResponseField>
+        <ResponseField name="data.order.metadata" type="string">
+          Additional metadata.
+        </ResponseField>
+        <ResponseField name="data.order.created_datetime" type="string">
+          ISO 8601 timestamp of order creation.
+        </ResponseField>
+        <ResponseField name="data.order.updated_datetime" type="string">
+          ISO 8601 timestamp of last update.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="data.created_datetime" type="string">
+      ISO 8601 timestamp of transaction creation.
+    </ResponseField>
+    <ResponseField name="data.updated_datetime" type="string">
+      ISO 8601 timestamp of last update.
     </ResponseField>
   </Expandable>
 </ResponseField>
@@ -75,15 +142,19 @@
 ## Example Request
 
 ```bash
-curl -X POST https://api.payvessel.com/pms/transactions/initialize \
-  -H "Authorization: Bearer sk_test_..." \
+curl -X POST https://api.payvessel.com/pms/transactions/initialize/ \
+  -H "api-key: your_api_key" \
+  -H "api-secret: your_api_secret" \
   -H "Content-Type: application/json" \
   -d '{
-    "customer_email": "customer@example.com",
-    "customer_name": "John Doe",
     "amount": "500000",
     "currency": "NGN",
-    "channels": ["CARD", "BANK_TRANSFER"]
+    "channels": ["BANK_TRANSFER"],
+    "customer_name": "John Doe",
+    "customer_email": "customer@example.com",
+    "customer_phone_number": "+2348012345678",
+    "redirect_url": "https://yourapp.com/payment/callback",
+    "webhook_url": "https://yourapp.com/webhook"
   }'
 ```
 
@@ -91,11 +162,32 @@ curl -X POST https://api.payvessel.com/pms/transactions/initialize \
 
 ```json
 {
-  "status": "success",
+  "status": true,
   "message": "Checkout initialized",
   "data": {
-    "reference": "PV_123456789",
-    "checkout_url": "https://payvessel.com/checkout/PV_123456789"
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "transaction_ref": "PV_123456789",
+    "amount": "500000",
+    "status": "PENDING",
+    "access_code": "access_code_123",
+    "checkout_url": "https://payvessel.com/checkout/PV_123456789",
+    "api_key": "your_api_key",
+    "payment_link": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "order": {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "channels": "BANK_TRANSFER",
+      "currency": "NGN",
+      "redirect_url": "https://yourapp.com/payment/callback",
+      "webhook_url": "https://yourapp.com/webhook",
+      "customer_name": "John Doe",
+      "customer_email": "customer@example.com",
+      "customer_phone_number": "+2348012345678",
+      "metadata": "",
+      "created_datetime": "2024-02-20T10:00:00Z",
+      "updated_datetime": "2024-02-20T10:00:00Z"
+    },
+    "created_datetime": "2024-02-20T10:00:00Z",
+    "updated_datetime": "2024-02-20T10:00:00Z"
   }
 }
 ```
