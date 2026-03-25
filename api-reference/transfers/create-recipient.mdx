@@ -17,7 +17,7 @@ All transfer recipients are verified against the recipient's bank or mobile mone
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `Authorization` | string | **Required** | Bearer token with your secret API key |
+| `api-key` | string | **Required** | Your API key |
 | `Content-Type` | string | **Required** | Must be `application/json` |
 | `Idempotency-Key` | string | Optional | Unique key to prevent duplicate recipients |
 
@@ -86,7 +86,8 @@ All transfer recipients are verified against the recipient's bank or mobile mone
 <CodeGroup>
 ```bash cURL - Bank Account
 curl -X POST https://api.payvessel.com/transfer/recipient \
-  -H "Authorization: Bearer sk_test_abc123..." \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET" \
   -H "Content-Type: application/json" \
   -H "Idempotency-Key: recipient_2024_001" \
   -d '{
@@ -105,7 +106,8 @@ curl -X POST https://api.payvessel.com/transfer/recipient \
 
 ```bash cURL - Mobile Money
 curl -X POST https://api.payvessel.com/transfer/recipient \
-  -H "Authorization: Bearer sk_test_abc123..." \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET" \
   -H "Content-Type: application/json" \
   -d '{
     "type": "mobile_money",
@@ -455,7 +457,8 @@ Common Nigerian bank codes for reference:
     
     ```bash
     curl -X GET https://api.payvessel.com/transfer/banks \
-      -H "Authorization: Bearer sk_test_abc123..."
+      -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET"
     ```
   </Accordion>
 </AccordionGroup>

@@ -13,7 +13,7 @@ Retrieve a paginated list of all transactions for your account with optional fil
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `Authorization` | string | **Required** | Bearer token with your secret API key |
+| `api-key` | string | **Required** | Your API key |
 | `Content-Type` | string | **Required** | Must be `application/json` |
 
 ## Query Parameters
@@ -73,13 +73,15 @@ Retrieve a paginated list of all transactions for your account with optional fil
 <CodeGroup>
 ```bash cURL - Basic Request
 curl -X GET "https://api.payvessel.com/transactions" \
-  -H "Authorization: Bearer sk_test_abc123..." \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET" \
   -H "Content-Type: application/json"
 ```
 
 ```bash cURL - With Filters
 curl -X GET "https://api.payvessel.com/transactions?status=success&currency=NGN&from=2024-01-01&to=2024-01-31&page=1&per_page=20" \
-  -H "Authorization: Bearer sk_test_abc123..." \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET" \
   -H "Content-Type: application/json"
 ```
 
@@ -334,11 +336,13 @@ filtered_transactions = payvessel.Transaction.list(
     ```bash
     # Get all successful transactions
     curl -X GET "https://api.payvessel.com/transactions?status=success" \
-      -H "Authorization: Bearer sk_test_abc123..."
+      -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET"
     
     # Get failed transactions
     curl -X GET "https://api.payvessel.com/transactions?status=failed" \
-      -H "Authorization: Bearer sk_test_abc123..."
+      -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET"
     ```
   </Tab>
   
@@ -346,11 +350,13 @@ filtered_transactions = payvessel.Transaction.list(
     ```bash
     # Get transactions from January 2024
     curl -X GET "https://api.payvessel.com/transactions?from=2024-01-01&to=2024-01-31" \
-      -H "Authorization: Bearer sk_test_abc123..."
+      -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET"
     
     # Get transactions from last 7 days
     curl -X GET "https://api.payvessel.com/transactions?from=2024-01-08&to=2024-01-15" \
-      -H "Authorization: Bearer sk_test_abc123..."
+      -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET"
     ```
   </Tab>
   
@@ -358,11 +364,13 @@ filtered_transactions = payvessel.Transaction.list(
     ```bash
     # Get card transactions only
     curl -X GET "https://api.payvessel.com/transactions?channel=card" \
-      -H "Authorization: Bearer sk_test_abc123..."
+      -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET"
     
     # Get bank transfer transactions
     curl -X GET "https://api.payvessel.com/transactions?channel=bank" \
-      -H "Authorization: Bearer sk_test_abc123..."
+      -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET"
     ```
   </Tab>
   
@@ -370,11 +378,13 @@ filtered_transactions = payvessel.Transaction.list(
     ```bash
     # Get transactions for specific customer
     curl -X GET "https://api.payvessel.com/transactions?customer=customer@example.com" \
-      -H "Authorization: Bearer sk_test_abc123..."
+      -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET"
     
     # Get transactions by customer ID
     curl -X GET "https://api.payvessel.com/transactions?customer=12345" \
-      -H "Authorization: Bearer sk_test_abc123..."
+      -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET"
     ```
   </Tab>
   
@@ -382,7 +392,8 @@ filtered_transactions = payvessel.Transaction.list(
     ```bash
     # Successful card payments in NGN from January 2024
     curl -X GET "https://api.payvessel.com/transactions?status=success&channel=card&currency=NGN&from=2024-01-01&to=2024-01-31" \
-      -H "Authorization: Bearer sk_test_abc123..."
+      -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET"
     ```
   </Tab>
 </Tabs>

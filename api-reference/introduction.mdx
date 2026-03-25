@@ -32,12 +32,13 @@ PayVessel's REST API provides programmatic access to accept payments, send money
 
 ## Authentication
 
-All API requests must be authenticated with your **secret API key** using Bearer token authentication. Your API keys carry many privileges, so be sure to keep them secure! Do not share your secret API keys in publicly accessible areas such as GitHub, client-side code, and so forth.
+All API requests must be authenticated with your **API key** and **secret key**. Your API keys carry many privileges, so be sure to keep them secure! Do not share your secret API keys in publicly accessible areas such as GitHub, client-side code, and so forth.
 
 <CodeGroup>
 ```bash cURL
 curl https://api.payvessel.com/transaction/initialize \
-  -H "Authorization: Bearer YOUR_SECRET_KEY" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY" \
   -H "Content-Type: application/json"
 ```
 
@@ -116,7 +117,8 @@ Our API is organized into logical groups of functionality, matching the navigati
 All requests should include these headers:
 
 ```http
-Authorization: Bearer YOUR_SECRET_KEY
+api-key: YOUR_API_KEY
+api-secret: YOUR_SECRET_KEY
 Content-Type: application/json
 ```
 

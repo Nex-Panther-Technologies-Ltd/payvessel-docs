@@ -1,22 +1,20 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
+    "title": "PayVessel API",
+    "description": "PayVessel API for accepting payments, sending money, verifying identities, and managing wallets",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
+      "url": "https://api.payvessel.com"
+    },
+    {
+      "url": "https://sandbox.payvessel.com"
     }
   ],
   "security": [
-    {
-      "bearerAuth": []
-    }
+    {}
   ],
   "paths": {
     "/plants": {
@@ -146,12 +144,12 @@
           {
             "name": "api-secret",
             "in": "header",
-            "description": "Bearer token with your Payvessel secret",
+            "description": "Your Payvessel secret",
             "required": true,
             "schema": {
               "type": "string"
             },
-            "example": "Bearer PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
           },
           {
             "name": "Content-Type",
@@ -353,12 +351,12 @@
           {
             "name": "api-secret",
             "in": "header",
-            "description": "Bearer token with your Payvessel secret",
+            "description": "Your Payvessel secret",
             "required": true,
             "schema": {
               "type": "string"
             },
-            "example": "Bearer PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
           },
           {
             "name": "Content-Type",
@@ -458,12 +456,12 @@
           {
             "name": "api-secret",
             "in": "header",
-            "description": "Bearer token with your Payvessel secret",
+            "description": "Your Payvessel secret",
             "required": true,
             "schema": {
               "type": "string"
             },
-            "example": "Bearer PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
           },
           {
             "name": "Content-Type",
@@ -539,12 +537,12 @@
           {
             "name": "api-secret",
             "in": "header",
-            "description": "Bearer token with your Payvessel secret",
+            "description": "Your Payvessel secret",
             "required": true,
             "schema": {
               "type": "string"
             },
-            "example": "Bearer PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
           },
           {
             "name": "Content-Type",
@@ -640,12 +638,12 @@
           {
             "name": "api-secret",
             "in": "header",
-            "description": "Bearer token with your Payvessel secret",
+            "description": "Your Payvessel secret",
             "required": true,
             "schema": {
               "type": "string"
             },
-            "example": "Bearer PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
           },
           {
             "name": "Content-Type",
@@ -798,12 +796,12 @@
           {
             "name": "api-secret",
             "in": "header",
-            "description": "Bearer token with your Payvessel secret",
+            "description": "Your Payvessel secret",
             "required": true,
             "schema": {
               "type": "string"
             },
-            "example": "Bearer PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
           },
           {
             "name": "Content-Type",
@@ -859,12 +857,12 @@
           {
             "name": "api-secret",
             "in": "header",
-            "description": "Bearer token with your Payvessel secret",
+            "description": "Your Payvessel secret",
             "required": true,
             "schema": {
               "type": "string"
             },
-            "example": "Bearer PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
           },
           {
             "name": "Content-Type",
@@ -920,12 +918,12 @@
           {
             "name": "api-secret",
             "in": "header",
-            "description": "Bearer token with your Payvessel secret",
+            "description": "Your Payvessel secret",
             "required": true,
             "schema": {
               "type": "string"
             },
-            "example": "Bearer PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
           },
           {
             "name": "Content-Type",
@@ -990,12 +988,12 @@
           {
             "name": "api-secret",
             "in": "header",
-            "description": "Bearer token with your Payvessel secret",
+            "description": "Your Payvessel secret",
             "required": true,
             "schema": {
               "type": "string"
             },
-            "example": "Bearer PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
           }
         ],
         "responses": {
@@ -1030,12 +1028,12 @@
           {
             "name": "api-secret",
             "in": "header",
-            "description": "Bearer token with your Payvessel secret",
+            "description": "Your Payvessel secret",
             "required": true,
             "schema": {
               "type": "string"
             },
-            "example": "Bearer PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
           },
           {
             "name": "Content-Type",
@@ -2125,9 +2123,9 @@
       }
     },
     "securitySchemes": {
-      "bearerAuth": {
+      "apiKeyAuth": {
         "type": "http",
-        "scheme": "bearer"
+        "scheme": "apiKey"
       }
     }
   }

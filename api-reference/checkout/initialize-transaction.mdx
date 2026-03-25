@@ -75,7 +75,7 @@
       The transaction reference.
     </ResponseField>
     <ResponseField name="data.amount" type="string">
-      Transaction amount in the smallest currency unit.
+      Transaction amount.
     </ResponseField>
     <ResponseField name="data.status" type="string">
       Transaction status - `"PENDING"`.
@@ -86,55 +86,8 @@
     <ResponseField name="data.checkout_url" type="string">
       The URL to redirect the customer to.
     </ResponseField>
-    <ResponseField name="data.api_key" type="string">
-      API key used for the transaction.
-    </ResponseField>
-    <ResponseField name="data.payment_link" type="string">
-      Payment link identifier.
-    </ResponseField>
-    <ResponseField name="data.order" type="object">
-      Order details object.
-      <Expandable title="Order Object">
-        <ResponseField name="data.order.id" type="string">
-          Order ID.
-        </ResponseField>
-        <ResponseField name="data.order.channels" type="string">
-          Enabled payment channels.
-        </ResponseField>
-        <ResponseField name="data.order.currency" type="string">
-          Transaction currency.
-        </ResponseField>
-        <ResponseField name="data.order.redirect_url" type="string">
-          Redirect URL after payment.
-        </ResponseField>
-        <ResponseField name="data.order.webhook_url" type="string">
-          Webhook URL for notifications.
-        </ResponseField>
-        <ResponseField name="data.order.customer_name" type="string">
-          Customer's name.
-        </ResponseField>
-        <ResponseField name="data.order.customer_email" type="string">
-          Customer's email.
-        </ResponseField>
-        <ResponseField name="data.order.customer_phone_number" type="string">
-          Customer's phone number.
-        </ResponseField>
-        <ResponseField name="data.order.metadata" type="string">
-          Additional metadata.
-        </ResponseField>
-        <ResponseField name="data.order.created_datetime" type="string">
-          ISO 8601 timestamp of order creation.
-        </ResponseField>
-        <ResponseField name="data.order.updated_datetime" type="string">
-          ISO 8601 timestamp of last update.
-        </ResponseField>
-      </Expandable>
-    </ResponseField>
     <ResponseField name="data.created_datetime" type="string">
       ISO 8601 timestamp of transaction creation.
-    </ResponseField>
-    <ResponseField name="data.updated_datetime" type="string">
-      ISO 8601 timestamp of last update.
     </ResponseField>
   </Expandable>
 </ResponseField>
@@ -149,7 +102,7 @@ curl -X POST https://api.payvessel.com/pms/transactions/initialize/ \
   -d '{
     "amount": "500000",
     "currency": "NGN",
-    "channels": ["BANK_TRANSFER"],
+    "channels": ["BANK_TRANSFER", "CARD"],
     "customer_name": "John Doe",
     "customer_email": "customer@example.com",
     "customer_phone_number": "+2348012345678",
@@ -162,32 +115,16 @@ curl -X POST https://api.payvessel.com/pms/transactions/initialize/ \
 
 ```json
 {
-  "status": true,
-  "message": "Checkout initialized",
-  "data": {
-    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "transaction_ref": "PV_123456789",
-    "amount": "500000",
-    "status": "PENDING",
-    "access_code": "access_code_123",
-    "checkout_url": "https://payvessel.com/checkout/PV_123456789",
-    "api_key": "your_api_key",
-    "payment_link": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "order": {
-      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "channels": "BANK_TRANSFER",
-      "currency": "NGN",
-      "redirect_url": "https://yourapp.com/payment/callback",
-      "webhook_url": "https://yourapp.com/webhook",
-      "customer_name": "John Doe",
-      "customer_email": "customer@example.com",
-      "customer_phone_number": "+2348012345678",
-      "metadata": "",
-      "created_datetime": "2024-02-20T10:00:00Z",
-      "updated_datetime": "2024-02-20T10:00:00Z"
-    },
-    "created_datetime": "2024-02-20T10:00:00Z",
-    "updated_datetime": "2024-02-20T10:00:00Z"
-  }
+    "status": true,
+    "message": "Checkout transaction successfully initialized",
+    "data": {
+        "id": "21d0c799-fbb5-473e-856d-1b2f9ada9d8a",
+        "transaction_ref": "<string>",
+        "amount": "5000.00",
+        "status": "PENDING",
+        "access_code": "ABC-I77VVH-EROP40XN-TCGOTP-ABCD",
+        "checkout_url": "https://checkout.payvessel.com/ACS-I77VVH-EROP40XN-ABCD-XCN4",
+        "created_datetime": "2026-03-25T16:39:25.872400"
+    }
 }
 ```

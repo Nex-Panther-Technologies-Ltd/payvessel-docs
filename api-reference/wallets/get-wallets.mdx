@@ -14,7 +14,7 @@ description: "List or retrieve managed wallets for your business"
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `Authorization` | string | **Required** | Bearer token with your secret API key |
+| `api-key` | string | **Required** | Your API key |
 
 ## Response
 
@@ -46,7 +46,8 @@ description: "List or retrieve managed wallets for your business"
 
 ```bash
 curl -X GET "https://api.payvessel.com/pms/wallets" \
-  -H "Authorization: Bearer sk_test_..."
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET"
 ```
 
 ## Example Response

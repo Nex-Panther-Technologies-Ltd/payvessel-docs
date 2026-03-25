@@ -38,7 +38,7 @@ Every request must include:
 | Header | Required | Description |
 |--------|----------|-------------|
 | `api-key` | Yes | Your Payvessel **public** API key (safe for frontend) |
-| `api-secret` | Yes (for charge/validate) | `Bearer YOUR_SECRET_KEY` — **never** expose in client-side code |
+| `api-secret` | Yes (for charge/validate) | `YOUR_SECRET_KEY` — **never** expose in client-side code |
 | `Content-Type` | Yes | `application/json` |
 
 <Warning>
@@ -68,7 +68,7 @@ const API_SECRET = process.env.PAYVESSEL_API_SECRET;
 const headers = {
   'Content-Type': 'application/json',
   'api-key': API_KEY,
-  'api-secret': `Bearer ${API_SECRET}`,
+  'api-secret': API_SECRET,
 };
 
 /**

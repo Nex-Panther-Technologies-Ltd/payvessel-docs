@@ -34,26 +34,140 @@
     <ResponseField name="data.id" type="string">
       Internal transaction ID.
     </ResponseField>
-    <ResponseField name="data.reference" type="string">
+    <ResponseField name="data.business_id" type="string">
+      Business identifier.
+    </ResponseField>
+    <ResponseField name="data.transaction_ref" type="string">
       Unique transaction reference.
     </ResponseField>
     <ResponseField name="data.amount" type="string">
-      Transaction amount in smallest currency unit.
+      Transaction amount.
     </ResponseField>
-    <ResponseField name="data.currency" type="string">
-      Transaction currency.
+    <ResponseField name="data.fee" type="string">
+      Transaction fee.
     </ResponseField>
     <ResponseField name="data.status" type="string">
-      Final payment status: `success`, `failed`, or `pending`.
+      Transaction status: `PENDING`, `SUCCESS`, `FAILED`.
     </ResponseField>
-    <ResponseField name="data.customer" type="object">
-      Details of the customer.
+    <ResponseField name="data.transaction_type" type="string">
+      Type of transaction: `CREDIT` or `DEBIT`.
     </ResponseField>
-    <ResponseField name="data.payment_method" type="string">
-      Method used (e.g., `card`, `bank_transfer`).
+    <ResponseField name="data.channel" type="string">
+      Payment channel used.
     </ResponseField>
-    <ResponseField name="data.paid_at" type="string">
-      ISO 8601 timestamp of payment completion.
+    <ResponseField name="data.payment_processor" type="string">
+      Payment processor identifier.
+    </ResponseField>
+    <ResponseField name="data.access_code" type="string">
+      Access code for payment.
+    </ResponseField>
+    <ResponseField name="data.checkout_url" type="string">
+      URL to redirect customer for payment.
+    </ResponseField>
+    <ResponseField name="data.api_key" type="string">
+      API key used for the transaction.
+    </ResponseField>
+    <ResponseField name="data.payment_link" type="string">
+      Payment link identifier.
+    </ResponseField>
+    <ResponseField name="data.description" type="string">
+      Transaction description.
+    </ResponseField>
+    <ResponseField name="data.metadata" type="string">
+      Additional metadata.
+    </ResponseField>
+    <ResponseField name="data.business_profile" type="object">
+      Business profile information.
+    </ResponseField>
+    <ResponseField name="data.business_profile.id" type="string">
+      Business profile ID.
+    </ResponseField>
+    <ResponseField name="data.business_profile.name" type="string">
+      Business name.
+    </ResponseField>
+    <ResponseField name="data.business_profile.email" type="string">
+      Business email.
+    </ResponseField>
+    <ResponseField name="data.business_profile.business_logo" type="string">
+      Business logo URL.
+    </ResponseField>
+    <ResponseField name="data.order" type="object">
+      Order details.
+    </ResponseField>
+    <ResponseField name="data.order.id" type="string">
+      Order ID.
+    </ResponseField>
+    <ResponseField name="data.order.channels" type="string">
+      Payment channels.
+    </ResponseField>
+    <ResponseField name="data.order.currency" type="string">
+      Currency code.
+    </ResponseField>
+    <ResponseField name="data.order.redirect_url" type="string">
+      Redirect URL after payment.
+    </ResponseField>
+    <ResponseField name="data.order.webhook_url" type="string">
+      Webhook URL for notifications.
+    </ResponseField>
+    <ResponseField name="data.order.customer_name" type="string">
+      Customer name.
+    </ResponseField>
+    <ResponseField name="data.order.customer_email" type="string">
+      Customer email.
+    </ResponseField>
+    <ResponseField name="data.order.customer_phone_number" type="string">
+      Customer phone number.
+    </ResponseField>
+    <ResponseField name="data.order.metadata" type="string">
+      Order metadata.
+    </ResponseField>
+    <ResponseField name="data.order.created_datetime" type="string">
+      Order creation timestamp.
+    </ResponseField>
+    <ResponseField name="data.order.updated_datetime" type="string">
+      Order last update timestamp.
+    </ResponseField>
+    <ResponseField name="data.virtual_account" type="object">
+      Virtual account details (for bank transfer payments).
+    </ResponseField>
+    <ResponseField name="data.virtual_account.id" type="string">
+      Virtual account ID.
+    </ResponseField>
+    <ResponseField name="data.virtual_account.bank_code" type="string">
+      Bank code.
+    </ResponseField>
+    <ResponseField name="data.virtual_account.bank_name" type="string">
+      Bank name.
+    </ResponseField>
+    <ResponseField name="data.virtual_account.account_number" type="string">
+      Virtual account number.
+    </ResponseField>
+    <ResponseField name="data.virtual_account.account_name" type="string">
+      Account name.
+    </ResponseField>
+    <ResponseField name="data.virtual_account.account_type" type="string">
+      Account type: `STATIC` or `DYNAMIC`.
+    </ResponseField>
+    <ResponseField name="data.virtual_account.expire_datetime" type="string">
+      Account expiration timestamp.
+    </ResponseField>
+    <ResponseField name="data.virtual_account.tracking_reference" type="string">
+      Tracking reference.
+    </ResponseField>
+    <ResponseField name="data.virtual_account.created_datetime" type="string">
+      Account creation timestamp.
+    </ResponseField>
+    <ResponseField name="data.virtual_account.updated_datetime" type="string">
+      Account last update timestamp.
+    </ResponseField>
+    <ResponseField name="data.logs" type="string">
+      Transaction logs.
+    </ResponseField>
+    <ResponseField name="data.created_datetime" type="string">
+      Transaction creation timestamp.
+    </ResponseField>
+    <ResponseField name="data.updated_datetime" type="string">
+      Transaction last update timestamp.
     </ResponseField>
   </Expandable>
 </ResponseField>
@@ -71,19 +185,57 @@ curl -X GET https://api.payvessel.com/pms/transactions/PV_123456789/confirm/ \
 ```json
 {
   "status": true,
-  "message": "Transaction retrieved",
+  "message": "string",
   "data": {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "reference": "PV_123456789",
-    "amount": "500000",
-    "currency": "NGN",
-    "status": "success",
-    "customer": {
-      "email": "customer@example.com",
-      "name": "John Doe"
+    "business_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "transaction_ref": "string",
+    "amount": "457.93",
+    "fee": "-3370087",
+    "status": "PENDING",
+    "transaction_type": "CREDIT",
+    "channel": "string",
+    "payment_processor": "9psb",
+    "access_code": "string",
+    "checkout_url": "string",
+    "api_key": "string",
+    "payment_link": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "description": "string",
+    "metadata": "string",
+    "business_profile": {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "name": "string",
+      "email": "user@example.com",
+      "business_logo": "string"
     },
-    "payment_method": "card",
-    "paid_at": "2024-02-20T10:00:00Z"
+    "order": {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "channels": "string",
+      "currency": "str",
+      "redirect_url": "string",
+      "webhook_url": "string",
+      "customer_name": "string",
+      "customer_email": "user@example.com",
+      "customer_phone_number": "string",
+      "metadata": "string",
+      "created_datetime": "2026-03-25T15:52:38.091Z",
+      "updated_datetime": "2026-03-25T15:52:38.091Z"
+    },
+    "virtual_account": {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "bank_code": "string",
+      "bank_name": "string",
+      "account_number": "string",
+      "account_name": "string",
+      "account_type": "STATIC",
+      "expire_datetime": "2026-03-25T15:52:38.091Z",
+      "tracking_reference": "string",
+      "created_datetime": "2026-03-25T15:52:38.091Z",
+      "updated_datetime": "2026-03-25T15:52:38.091Z"
+    },
+    "logs": "string",
+    "created_datetime": "2026-03-25T15:52:38.091Z",
+    "updated_datetime": "2026-03-25T15:52:38.091Z"
   }
 }
 ```
