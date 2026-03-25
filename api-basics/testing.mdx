@@ -29,8 +29,8 @@ Use Payvessel's sandbox for safe testing:
 // Sandbox configuration
 const testConfig = {
   baseUrl: 'https://sandbox.payvessel.com',
-  apiKey: 'PVKEY-3ZO1QOSQH83C5Q3PBCVUT1',
-  apiSecret: 'Bearer PVSECRET-OZJD0SZ2F2WOTXAF'
+  apiKey: 'YOUR_API_KEY',
+  apiSecret: 'YOUR_SECRET'
 };
 
 // Test client setup
@@ -349,8 +349,8 @@ const loadTestConfig = {
           post: {
             url: '/api/v1/payments',
             headers: {
-              'api-key': 'PVKEY-3ZO1QOSQH83C5Q3PBCVUT1',
-              'api-secret': 'Bearer PVSECRET-OZJD0SZ2F2WOTXAF',
+              'api-key': 'YOUR_API_KEY',
+              'api-secret': 'YOUR_SECRET',
               'Content-Type': 'application/json'
             },
             json: {

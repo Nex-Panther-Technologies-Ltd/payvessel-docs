@@ -71,8 +71,8 @@ https://sandbox.payvessel.com
 Example sandbox request:
 ```bash
 curl https://sandbox.payvessel.com/api/v1/payments \
-  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
-  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET" \
   -H "Content-Type: application/json" \
   -d '{
     "amount": 1000,
@@ -116,7 +116,7 @@ Example production request:
 ```bash
 curl https://api.payvessel.com/api/v1/payments \
   -H "api-key: PVKEY-[your-production-key]" \
-  -H "api-secret: Bearer PVSECRET-[your-production-secret]" \
+  -H "api-secret: PVSECRET-[your-production-secret]" \
   -H "Content-Type: application/json" \
   -d '{
     "amount": 1000,

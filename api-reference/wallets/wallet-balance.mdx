@@ -19,7 +19,7 @@ description: "Retrieve the current balance for a managed wallet"
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `Authorization` | string | **Required** | Bearer token with your secret API key |
+| `api-key` | string | **Required** | Your API key |
 
 ## Response
 
@@ -52,7 +52,8 @@ description: "Retrieve the current balance for a managed wallet"
 
 ```bash
 curl -X GET https://api.payvessel.com/pms/wallets/WLT_123456/balance \
-  -H "Authorization: Bearer sk_test_..."
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET"
 ```
 
 ## Example Response

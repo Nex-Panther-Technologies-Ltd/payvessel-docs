@@ -31,7 +31,7 @@ Generate a **transaction history** for a specific wallet over a given period.
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `Authorization` | string | **Required** | Bearer token with your secret API key |
+| `api-key` | string | **Required** | Your API key |
 
 ## Response
 
@@ -63,6 +63,7 @@ Generate a **transaction history** for a specific wallet over a given period.
 
 ```bash
 curl -X GET "https://api.payvessel.com/pms/wallets/WLT_123456/statement?from=2024-02-01&to=2024-02-29" \
-  -H "Authorization: Bearer sk_test_..."
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET"
 ```
 

@@ -11,13 +11,14 @@ This endpoint creates a payment session and returns a checkout URL where custome
 
 ## Endpoint
 
-<Badge variant="success">**POST**</Badge> `/transaction/initialize`
+<Badge variant="success">**POST**</Badge> `/pms/transactions/initialize/`
 
 ## Headers
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `Authorization` | string | **Required** | Bearer token with your secret API key |
+| `api-key` | string | **Required** | Your API key |
+| `api-secret` | string | **Required** | Your API secret |
 | `Content-Type` | string | **Required** | Must be `application/json` |
 | `Idempotency-Key` | string | Optional | Unique key to prevent duplicate transactions |
 
@@ -101,32 +102,25 @@ This endpoint creates a payment session and returns a checkout URL where custome
 
 <CodeGroup>
 ```bash cURL
-curl -X POST https://api.payvessel.com/transaction/initialize \
-  -H "Authorization: Bearer sk_test_abc123..." \
+curl -X POST https://sandbox.payvessel.com/pms/transactions/initialize/ \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET" \
   -H "Content-Type: application/json" \
-  -H "Idempotency-Key: txn_2024_001" \
   -d '{
-    "email": "customer@example.com",
-    "amount": "50000",
+    "customer_email": "test@example.com",
+    "customer_name": "Test Customer",
+    "customer_phone_number": "08012345678",
+    "amount": "5000",
     "currency": "NGN",
-    "reference": "TXN_2024_001",
-    "callback_url": "https://yourapp.com/payment/callback",
-    "channels": ["card", "bank", "ussd"],
-    "customer": {
-      "first_name": "John",
-      "last_name": "Doe", 
-      "phone": "+2348012345678"
-    },
+    "channels": [
+        "CARD",
+        "BANK_TRANSFER"
+    ],
     "metadata": {
-      "custom_fields": [
-        {
-          "display_name": "Order ID",
-          "variable_name": "order_id",
-          "value": "ORD_001"
-        }
-      ]
+        "source": "payvessel_test_platform",
+        "platform": "web"
     }
-  }'
+}'
 ```
 
 ```javascript Node.js
@@ -264,16 +258,16 @@ transaction = payvessel.Transaction.initialize(
 <CodeGroup>
 ```json 200 Success
 {
-  "status": "success",
-  "message": "Transaction initialized successfully",
+  "status": true,
+  "message": "Checkout transaction successfully initialized",
   "data": {
-    "authorization_url": "https://checkout.payvessel.com/TXN_2024_001",
-    "access_code": "rk_live_abc123xyz789",
-    "reference": "TXN_2024_001",
-    "amount": 50000,
-    "currency": "NGN",
-    "status": "pending",
-    "created_at": "2024-01-15T14:30:00Z"
+    "id": "21d0c799-fbb5-473e-856d-1b2f9ada9d8a",
+    "transaction_ref": "AEEB469A686141D28C0D361E9FE0250F",
+    "amount": "5000.00",
+    "status": "PENDING",
+    "access_code": "ACS-I77VVH-EROP40XN-TCGOTP-XCN4",
+    "checkout_url": "https://checkout.payvessel.com/ACS-I77VVH-EROP40XN-TCGOTP-XCN4",
+    "created_datetime": "2026-03-25T16:39:25.872400"
   }
 }
 ```

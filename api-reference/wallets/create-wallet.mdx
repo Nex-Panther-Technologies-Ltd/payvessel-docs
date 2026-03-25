@@ -17,7 +17,7 @@ Digital wallets enable you to build comprehensive fintech solutions with account
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `Authorization` | string | **Required** | Bearer token with your secret API key |
+| `api-key` | string | **Required** | Your API key |
 | `Content-Type` | string | **Required** | Must be `application/json` |
 | `Idempotency-Key` | string | **Recommended** | Unique key to prevent duplicate wallet creation |
 
@@ -177,7 +177,8 @@ Digital wallets enable you to build comprehensive fintech solutions with account
 <CodeGroup>
 ```bash cURL - Personal Wallet
 curl -X POST https://api.payvessel.com/wallets/create \
-  -H "Authorization: Bearer sk_test_abc123..." \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET" \
   -H "Content-Type: application/json" \
   -H "Idempotency-Key: wallet_2024_001" \
   -d '{

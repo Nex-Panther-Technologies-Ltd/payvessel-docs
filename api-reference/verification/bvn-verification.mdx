@@ -17,7 +17,7 @@ BVN verification is essential for KYC compliance in Nigeria and helps verify cus
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `Authorization` | string | **Required** | Bearer token with your secret API key |
+| `api-key` | string | **Required** | Your API key |
 | `Content-Type` | string | **Required** | Must be `application/json` |
 
 ## Request Body
@@ -66,7 +66,8 @@ BVN verification is essential for KYC compliance in Nigeria and helps verify cus
 <CodeGroup>
 ```bash cURL - Basic Verification
 curl -X POST https://api.payvessel.com/verification/bvn \
-  -H "Authorization: Bearer sk_test_abc123..." \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET" \
   -H "Content-Type: application/json" \
   -d '{
     "bvn": "12345678901",
@@ -76,7 +77,8 @@ curl -X POST https://api.payvessel.com/verification/bvn \
 
 ```bash cURL - Enhanced Verification
 curl -X POST https://api.payvessel.com/verification/bvn \
-  -H "Authorization: Bearer sk_test_abc123..." \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET" \
   -H "Content-Type: application/json" \
   -d '{
     "bvn": "12345678901",
