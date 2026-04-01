@@ -1,0 +1,374 @@
+---
+title: "Best Practices"
+description: "Essential guidelines for building robust payment integrations"
+---
+
+# Best Practices
+
+**Build secure, reliable, and efficient payment integrations with these proven best practices.**
+
+Following these guidelines will help you create a robust payment system that provides excellent user experience while maintaining security and reliability.
+
+<CardGroup cols={2}>
+  <Card title="🔒 Security First" icon="shield-check">
+    Implement comprehensive security measures
+  </Card>
+  <Card title="⚡ Performance Optimized" icon="bolt">
+    Ensure fast and efficient payment processing
+  </Card>
+</CardGroup>
+
+***
+
+## Security Best Practices
+
+### 🔐 API Key Management
+
+<AccordionGroup>
+  <Accordion icon="key" title="Secure Storage">
+    **Do:**
+    - Store API keys in environment variables
+    - Use secure key management services (AWS KMS, Azure Key Vault)
+    - Rotate keys regularly (every 90 days)
+    - Use different keys for each environment
+    
+    **Don't:**
+    - Hard-code keys in source code
+    - Store keys in version control
+    - Share keys via email or chat
+    - Use production keys in development
+  </Accordion>
+  <Accordion icon="shield" title="Access Control">
+    **Implement:**
+    - Role-based access control (RBAC)
+    - Principle of least privilege
+    - API key scoping and permissions
+    - Regular access reviews and audits
+  </Accordion>
+</AccordionGroup>
+
+### 🌐 Network Security
+
+```javascript
+// Always use HTTPS
+const client = new PayvesselClient({
+  baseUrl: 'https://api.payvessel.com', // Always HTTPS
+  apiKey: process.env.PAYVESSEL_API_KEY,
+  timeout: 30000
+});
+
+// Implement request signing for extra security
+const signature = crypto
+  .createHmac('sha256', secretKey)
+  .update(requestBody)
+  .digest('hex');
+
+headers['X-Signature'] = signature;
+```
+
+### 🔒 Data Protection
+
+<CardGroup cols={2}>
+  <Card title="🗃️ Data Handling" icon="database">
+    - Never store full card numbers
+    - Use tokenization for sensitive data
+    - Implement PCI DSS requirements
+    - Encrypt data at rest and in transit
+  </Card>
+  <Card title="📝 Logging" icon="file-text">
+    - Never log sensitive payment data
+    - Mask PII in application logs
+    - Implement structured logging
+    - Regular log retention policies
+  </Card>
+</CardGroup>
+
+## Error Handling
+
+### 🔄 Retry Logic
+
+Implement intelligent retry mechanisms:
+
+```javascript
+class PaymentService {
+  async processPayment(paymentData, maxRetries = 3) {
+    const idempotencyKey = this.generateIdempotencyKey(paymentData);
+    
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        const response = await this.makePaymentRequest(paymentData, idempotencyKey);
+        return response;
+        
+      } catch (error) {
+        // Don't retry on client errors (4xx)
+        if (error.status >= 400 && error.status < 500) {
+          throw error;
+        }
+        
+        // Don't retry on final attempt
+        if (attempt === maxRetries) {
+          throw error;
+        }
+        
+        // Exponential backoff with jitter
+        const delay = this.calculateBackoff(attempt);
+        await this.sleep(delay);
+      }
+    }
+  }
+  
+  calculateBackoff(attempt) {
+    const baseDelay = 1000; // 1 second
+    const maxDelay = 30000;  // 30 seconds
+    const jitter = Math.random() * 1000;
+    
+    return Math.min(maxDelay, baseDelay * Math.pow(2, attempt) + jitter);
+  }
+}
+```
+
+### ⚠️ Error Classification
+
+Handle different error types appropriately:
+
+<AccordionGroup>
+  <Accordion icon="user-times" title="Client Errors (4xx)">
+    **Don't retry these errors:**
+    - 400 Bad Request - Fix request format
+    - 401 Unauthorized - Check API credentials
+    - 403 Forbidden - Verify permissions
+    - 404 Not Found - Check endpoint URL
+    - 429 Too Many Requests - Implement rate limiting
+  </Accordion>
+  <Accordion icon="server" title="Server Errors (5xx)">
+    **Safe to retry with backoff:**
+    - 500 Internal Server Error
+    - 502 Bad Gateway
+    - 503 Service Unavailable
+    - 504 Gateway Timeout
+  </Accordion>
+</AccordionGroup>
+
+## Performance Optimization
+
+### ⚡ Request Optimization
+
+<CardGroup cols={2}>
+  <Card title="🔄 Connection Reuse" icon="link">
+    - Use HTTP/2 when available
+    - Implement connection pooling
+    - Keep-alive connections
+    - Reduce DNS lookups
+  </Card>
+  <Card title="📦 Payload Optimization" icon="box">
+    - Minimize request/response size
+    - Use appropriate HTTP methods
+    - Implement request compression
+    - Remove unnecessary fields
+  </Card>
+</CardGroup>
+
+### 📊 Monitoring and Alerting
+
+```javascript
+// Implement comprehensive monitoring
+class PaymentMonitor {
+  constructor() {
+    this.metrics = {
+      totalRequests: 0,
+      successfulRequests: 0,
+      failedRequests: 0,
+      averageResponseTime: 0
+    };
+  }
+  
+  recordRequest(success, responseTime) {
+    this.metrics.totalRequests++;
+    
+    if (success) {
+      this.metrics.successfulRequests++;
+    } else {
+      this.metrics.failedRequests++;
+      this.alertOnFailure();
+    }
+    
+    this.updateAverageResponseTime(responseTime);
+  }
+  
+  alertOnFailure() {
+    const failureRate = this.metrics.failedRequests / this.metrics.totalRequests;
+    
+    if (failureRate > 0.05) { // Alert if failure rate > 5%
+      this.sendAlert('High payment failure rate detected');
+    }
+  }
+}
+```
+
+## User Experience
+
+### 🎯 Payment Flow Design
+
+<Steps>
+  <Step title="Clear Pricing">
+    Display all costs upfront including taxes and fees
+  </Step>
+  <Step title="Multiple Payment Methods">
+    Offer various payment options for customer preference
+  </Step>
+  <Step title="Progress Indicators">
+    Show clear progress through the payment process
+  </Step>
+  <Step title="Immediate Feedback">
+    Provide instant confirmation and receipt
+  </Step>
+</Steps>
+
+### 📱 Mobile Optimization
+
+```javascript
+// Mobile-optimized payment form
+const paymentForm = {
+  // Use appropriate input types
+  cardNumber: { type: 'tel', pattern: '[0-9]*' },
+  expiryDate: { type: 'tel', pattern: '[0-9]*' },
+  cvv: { type: 'tel', pattern: '[0-9]*' },
+  
+  // Enable autofill
+  autocomplete: {
+    cardNumber: 'cc-number',
+    expiryDate: 'cc-exp',
+    cvv: 'cc-csc',
+    name: 'cc-name'
+  },
+  
+  // Touch-friendly design
+  minButtonSize: '44px', // iOS minimum
+  spacing: '16px'
+};
+```
+
+## Testing Strategy
+
+### 🧪 Test Coverage
+
+<AccordionGroup>
+  <Accordion icon="check-circle" title="Happy Path Testing">
+    - Successful payment processing
+    - Various payment methods
+    - Different currencies and amounts
+    - Subscription and recurring payments
+  </Accordion>
+  <Accordion icon="exclamation-triangle" title="Error Scenario Testing">
+    - Declined payments
+    - Network timeouts
+    - Invalid input data
+    - Insufficient funds
+    - Expired cards
+  </Accordion>
+  <Accordion icon="shield-check" title="Security Testing">
+    - Input validation
+    - SQL injection attempts
+    - XSS prevention
+    - CSRF protection
+  </Accordion>
+</AccordionGroup>
+
+### 📋 Go-Live Checklist
+
+Before deploying to production:
+
+<Steps>
+  <Step title="Security Review">
+    ✅ API keys secured
+    ✅ HTTPS everywhere
+    ✅ Input validation implemented
+    ✅ Error handling tested
+  </Step>
+  <Step title="Performance Testing">
+    ✅ Load testing completed
+    ✅ Response times optimized
+    ✅ Error rates acceptable
+    ✅ Monitoring in place
+  </Step>
+  <Step title="Business Readiness">
+    ✅ Payment flows tested
+    ✅ Customer support trained
+    ✅ Refund processes ready
+    ✅ Compliance verified
+  </Step>
+  <Step title="Operational Readiness">
+    ✅ Monitoring configured
+    ✅ Alerting setup
+    ✅ Incident response plan
+    ✅ Backup procedures tested
+  </Step>
+</Steps>
+
+## Compliance and Legal
+
+### 📋 Regulatory Requirements
+
+<CardGroup cols={2}>
+  <Card title="🌍 Global Compliance" icon="globe">
+    - PCI DSS certification
+    - GDPR compliance (EU)
+    - CCPA compliance (California)
+    - Local payment regulations
+  </Card>
+  <Card title="📄 Documentation" icon="file-text">
+    - Terms of service updates
+    - Privacy policy compliance
+    - Payment processing agreements
+    - Data retention policies
+  </Card>
+</CardGroup>
+
+### 🔒 PCI DSS Compliance
+
+Key requirements for payment processing:
+
+- **Secure Network:** Firewall protection and encryption
+- **Protect Data:** Never store full PAN or sensitive auth data
+- **Vulnerability Management:** Regular security updates
+- **Access Control:** Restrict access on business need-to-know
+- **Monitor Networks:** Track access to payment data
+- **Security Policies:** Maintain information security policies
+
+## Maintenance and Updates
+
+### 🔄 Regular Maintenance
+
+<AccordionGroup>
+  <Accordion icon="sync" title="API Updates">
+    - Monitor API changelog
+    - Test new features in sandbox
+    - Plan migration schedules
+    - Maintain backward compatibility
+  </Accordion>
+  <Accordion icon="chart-line" title="Performance Monitoring">
+    - Track key metrics
+    - Analyze failure patterns
+    - Optimize slow operations
+    - Scale based on usage
+  </Accordion>
+</AccordionGroup>
+
+<Warning>
+**Stay Updated:** Payment regulations and security requirements evolve constantly. Subscribe to Payvessel updates and industry security bulletins.
+</Warning>
+
+<div style={{textAlign: 'center', marginTop: '2rem'}}>
+
+**Ready to implement these best practices?**
+
+<CardGroup cols={2}>
+  <Card title="🔒 Security Guide" icon="shield-check" href="/api-basics/encryption">
+    Learn about encryption and security
+  </Card>
+  <Card title="🧪 Testing Guide" icon="flask" href="/api-basics/testing">
+    Comprehensive testing strategies
+  </Card>
+</CardGroup>
+
+</div>
