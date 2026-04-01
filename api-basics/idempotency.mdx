@@ -3,11 +3,10 @@ title: "Idempotency"
 description: "Ensure safe retry logic and prevent duplicate transactions"
 ---
 
-# Idempotency
 
 **Prevent duplicate transactions and ensure safe retry logic with Payvessel's idempotency system.**
 
-Idempotency is crucial for payment processing to ensure that retrying a request doesn't create duplicate charges or unintended side effects.
+Idempotency is particularly important for operations that move money, such as **transfers** or **transaction initializations**, to prevent accidental double-charging or double-spending.tended side effects.
 
 <CardGroup cols={2}>
   <Card title="🔄 Safe Retries" icon="rotate">
@@ -30,8 +29,8 @@ Include an `Idempotency-Key` header with a unique value for each request:
 
 ```bash
 curl https://api.payvessel.com/api/v1/payments \
-  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
-  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET" \
   -H "Content-Type: application/json" \
   -H "Idempotency-Key: payment_12345_20241027_001" \
   -d '{
@@ -180,8 +179,8 @@ const paymentRequest = {
 };
 
 const headers = {
-  'api-key': 'PVKEY-3ZO1QOSQH83C5Q3PBCVUT1',
-  'api-secret': 'Bearer PVSECRET-OZJD0SZ2F2WOTXAF',
+  'api-key': 'YOUR_API_KEY',
+  'api-secret': 'YOUR_SECRET',
   'Content-Type': 'application/json',
   'Idempotency-Key': `payment_cust_12345_${Date.now()}`
 };
@@ -247,8 +246,8 @@ async function safePaymentRequest(paymentData, maxRetries = 3) {
       const response = await fetch('https://sandbox.payvessel.com/api/v1/payments', {
         method: 'POST',
         headers: {
-          'api-key': 'PVKEY-3ZO1QOSQH83C5Q3PBCVUT1',
-          'api-secret': 'Bearer PVSECRET-OZJD0SZ2F2WOTXAF',
+          'api-key': 'YOUR_API_KEY',
+          'api-secret': 'YOUR_SECRET',
           'Content-Type': 'application/json',
           'Idempotency-Key': idempotencyKey
         },

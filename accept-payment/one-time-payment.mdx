@@ -72,8 +72,8 @@ Modern payment methods:
 
 ```bash
 curl https://api.payvessel.com/api/v1/payments \
-  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
-  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET" \
   -H "Content-Type: application/json" \
   -H "Idempotency-Key: payment_12345_20241027" \
   -d '{
@@ -149,7 +149,7 @@ curl https://api.payvessel.com/api/v1/payments \
 ### 🟨 Node.js Implementation
 
 ```javascript
-const payvessel = require('payvessel')('PVKEY-3ZO1QOSQH83C5Q3PBCVUT1');
+const payvessel = require('payvessel')('YOUR_API_KEY');
 
 async function createOneTimePayment(paymentData) {
   try {
@@ -201,7 +201,7 @@ const paymentResult = await createOneTimePayment({
 ```python
 import payvessel
 
-payvessel.api_key = "PVKEY-3ZO1QOSQH83C5Q3PBCVUT1"
+payvessel.api_key = "YOUR_API_KEY"
 
 def create_one_time_payment(payment_data):
     try:
@@ -252,7 +252,7 @@ payment_result = create_one_time_payment({
 <?php
 require_once('vendor/autoload.php');
 
-\Payvessel\Payvessel::setApiKey("PVKEY-3ZO1QOSQH83C5Q3PBCVUT1");
+\Payvessel\Payvessel::setApiKey("YOUR_API_KEY");
 
 function createOneTimePayment($paymentData) {
     try {

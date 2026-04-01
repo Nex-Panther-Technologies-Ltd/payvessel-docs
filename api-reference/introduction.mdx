@@ -1,33 +1,186 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: 'API Reference'
+description: 'Endpoint reference, request/response payloads, code samples, and parameters for PayVessel APIs'
 ---
 
+**Code samples, request/response payloads, and endpoint reference.** Use this tab for HTTP methods, headers, body schemas, and example code. For concepts, integration flows, and when-to-use guidance, see the **Guides** tab.
+
 <Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
+**Documentation status:**
+<Accordion title="Send Money & Transfers">
+    Detailed endpoints for moving funds to recipients:
+    - [Create Recipient](/api-reference/transfers/create-recipient)
+    - [Initiate Transfer](/api-reference/transfers/initiate-transfer)
+  </Accordion>
+If a section is unclear or missing, [contact support](mailto:support@payvessel.com).
 </Note>
 
-## Welcome
+PayVessel's REST API provides programmatic access to accept payments, send money, verify identities, manage wallets, and more. Our API is organized around REST principles with predictable resource-oriented URLs, accepts form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes and authentication.
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
-
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
+<CardGroup cols={2}>
+  <Card title="🚀 Getting Started" icon="rocket">
+    **Base URL**: `https://api.payvessel.com`
+    
+    **Sandbox URL**: `https://sandbox.payvessel.com`
+  </Card>
+  <Card title="📊 Rate Limits" icon="gauge-high">
+    **Live**: 100 requests per minute
+    
+    **Sandbox**: 1000 requests per minute
 </Card>
+</CardGroup>
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+All API requests must be authenticated with your **API key** and **secret key**. Your API keys carry many privileges, so be sure to keep them secure! Do not share your secret API keys in publicly accessible areas such as GitHub, client-side code, and so forth.
+
+<CodeGroup>
+```bash cURL
+curl https://api.payvessel.com/transaction/initialize \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY" \
+  -H "Content-Type: application/json"
+```
+
+```javascript Node.js
+const payvessel = require('payvessel')(YOUR_SECRET_KEY);
+```
+
+```php PHP
+<?php
+$payvessel = new \Payvessel\Payvessel(YOUR_SECRET_KEY);
+?>
+```
+
+```python Python
+import payvessel
+payvessel.api_key = "YOUR_SECRET_KEY"
+```
+</CodeGroup>
+
+<Warning>
+**Keep your API keys secure!** Your secret API key can perform any API request to PayVessel without restriction. Store your secret key securely and never expose it in client-side code.
+</Warning>
+
+## API Categories
+
+Our API is organized into logical groups of functionality, matching the navigation:
+
+<AccordionGroup>
+  <Accordion title="💳 Transactions" icon="credit-card">
+    Initialize and verify payments, and retrieve transaction lists.
+    
+    **Key Endpoints:**
+    - `POST /transaction/initialize` - Initialize a payment
+    - `GET /transaction/verify/{reference}` - Verify transaction status
+    - `GET /transaction/list` - List transactions
+  </Accordion>
+  
+  <Accordion title="💸 Send Money & Transfers" icon="paper-plane">
+    Send money to bank accounts and mobile money users with instant transfers.
+    
+    **Key Endpoints:**
+    - `POST /transfer/recipient` - Create transfer recipient
+    - `POST /transfer/initiate` - Initialize transfer
+  </Accordion>
+  
+  <Accordion title="👛 Wallets" icon="wallet">
+    Create and manage digital wallets, check balances, and generate statements.
+    
+    **Key Endpoints:**
+    - `POST /wallets/create` - Create new wallet
+    - `GET /wallets/{wallet_id}/balance` - Check wallet balance
+    - `GET /wallets/{wallet_id}/statement` - Generate statement
+  </Accordion>
+  
+  <Accordion title="🏦 Virtual Accounts" icon="building-columns">
+    Create and manage reserved virtual accounts for automated collections.
+    
+    **Key Endpoints:**
+    - `POST /reserved-account/create` - Create virtual account
+    - `GET /reserved-account/{account_number}` - Get account details
+  </Accordion>
+
+  <Accordion title="🔗 Checkout" icon="cart-shopping">
+    PayVessel Hosted Checkout operations for verifying and confirming transactions.
+    
+    **Key Endpoints:**
+    - `POST /checkout/initialize` - Initialize hosted checkout
+    - `POST /checkout/confirm` - Confirm transaction
+  </Accordion>
+
+</AccordionGroup>
+
+## Request & Response Format
+
+### Request Headers
+All requests should include these headers:
+
+```http
+api-key: YOUR_API_KEY
+api-secret: YOUR_SECRET_KEY
+Content-Type: application/json
+```
+
+### Response Structure
+All API responses follow a consistent structure:
 
 ```json
-"security": [
-  {
-    "bearerAuth": []
+{
+  "status": "success|error",
+  "message": "Descriptive message",
+  "data": {
+    // Response data here
+  },
+  "meta": {
+    "total": 100,
+    "page": 1,
+    "per_page": 20
   }
-]
+}
 ```
+
+### HTTP Status Codes
+
+| Code | Description |
+|------|-------------|
+| `200` | **OK** - The request was successful |
+| `201` | **Created** - The resource was successfully created |
+| `400` | **Bad Request** - The request was invalid or malformed |
+| `401` | **Unauthorized** - Authentication credentials were missing or invalid |
+| `403` | **Forbidden** - The request is understood, but not authorized |
+| `404` | **Not Found** - The requested resource could not be found |
+| `429` | **Too Many Requests** - Rate limit exceeded |
+| `500` | **Internal Server Error** - An error occurred on PayVessel's servers |
+
+## Idempotency
+
+The PayVessel API supports [idempotency](https://en.wikipedia.org/wiki/Idempotence) for safely retrying requests without accidentally performing the same operation twice. When creating or modifying objects, provide an additional `Idempotency-Key: <key>` header to the request.
+
+<Note>
+**Best Practice**: Use a UUID or other random string as your idempotency key. PayVessel will return the same response for repeated requests with the same key for 24 hours.
+</Note>
+
+## Webhooks
+
+PayVessel uses webhooks to notify your application when events occur in your account. Learn more about webhook integration in our [webhook documentation](/api-basics/webhooks).
+
+Common webhook events:
+- `transaction.success` - Payment completed successfully
+- `transaction.failed` - Payment failed or was declined
+- `transfer.success` - Transfer completed successfully
+- `verification.completed` - Identity verification completed
+
+## Testing
+
+Use our sandbox environment to test your integration without real money. The sandbox mirrors the production API but with test data.
+
+**Sandbox Base URL**: `https://sandbox.payvessel.com`
+
+<Tip>
+Check out our [testing guide](/api-basics/testing) for test card numbers, bank accounts, and complete testing scenarios.
+</Tip>
+
+---
+
+**Ready to start building?** Explore the endpoint documentation below or jump to our [quickstart guide](/quickstart) for step-by-step integration instructions.

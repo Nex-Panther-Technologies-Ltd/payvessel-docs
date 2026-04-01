@@ -62,8 +62,8 @@ Create professional payment pages with customizable branding, multiple payment m
 
 ```bash
 curl https://api.payvessel.com/api/v1/payment_links \
-  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
-  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET" \
   -H "Content-Type: application/json" \
   -d '{
     "amount": 25000,
@@ -170,7 +170,7 @@ curl https://api.payvessel.com/api/v1/payment_links \
 ### 🟨 Node.js Implementation
 
 ```javascript
-const payvessel = require('payvessel')('PVKEY-3ZO1QOSQH83C5Q3PBCVUT1');
+const payvessel = require('payvessel')('YOUR_API_KEY');
 
 async function createPaymentLink(linkData) {
   try {
@@ -316,7 +316,7 @@ const flexibleLink = await createFlexibleAmountLink({
 import payvessel
 from datetime import datetime, timedelta
 
-payvessel.api_key = "PVKEY-3ZO1QOSQH83C5Q3PBCVUT1"
+payvessel.api_key = "YOUR_API_KEY"
 
 def create_payment_link(link_data):
     try:
@@ -479,7 +479,7 @@ recurring_link = create_recurring_payment_link({
 <?php
 require_once('vendor/autoload.php');
 
-\Payvessel\Payvessel::setApiKey("PVKEY-3ZO1QOSQH83C5Q3PBCVUT1");
+\Payvessel\Payvessel::setApiKey("YOUR_API_KEY");
 
 function createPaymentLink($linkData) {
     try {
@@ -856,8 +856,8 @@ const smartLink = await payvessel.paymentLinks.create({
 
 ```bash
 curl "https://api.payvessel.com/api/v1/payment_links?limit=25&status=active" \
-  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
-  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF"
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET"
 ```
 
 ### 📊 Performance Dashboard
@@ -894,8 +894,8 @@ curl "https://api.payvessel.com/api/v1/payment_links?limit=25&status=active" \
 
 ```bash
 curl -X POST https://api.payvessel.com/api/v1/payment_links/plink_1234567890abcdef \
-  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
-  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET" \
   -H "Content-Type: application/json" \
   -d '{
     "description": "Updated Photography Session Package",

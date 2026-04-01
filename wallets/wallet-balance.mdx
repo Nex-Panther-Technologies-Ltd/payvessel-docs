@@ -1,0 +1,22 @@
+---
+title: "Wallet Balance"
+description: "Guide: understanding wallet balances"
+---
+
+
+Use the wallet balance endpoint to see **how much money is available** in a managed wallet before triggering payouts.
+
+Key fields you’ll see in responses:
+
+- **available_balance**: funds you can spend immediately.
+- **ledger_balance**: available balance plus pending debits/credits.
+- **currency**: currency of the wallet (e.g. `NGN`).
+
+Typical flow:
+
+1. Call the wallet‑balance endpoint for your wallet.
+2. Compare `available_balance` to the amount you plan to move.
+3. Block or allow the transfer based on your own rules and limits.
+
+For the exact endpoint path, headers, and JSON schema, see **API reference → Wallets → Wallet Balance**.
+

@@ -1,0 +1,72 @@
+---
+title: "Wallet Balance"
+description: "Retrieve the current balance for a managed wallet"
+---
+
+**Retrieve the current balance** for a managed wallet. Always verify the available balance before initiating transfers to avoid transaction failures.
+
+## Endpoint
+
+<Badge variant="success">**GET**</Badge> `/pms/wallets/{wallet_id}/balance`
+
+## Path Parameters
+
+<ParamField path="wallet_id" type="string" required>
+  The unique identifier of the wallet.
+</ParamField>
+
+## Headers
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `api-key` | string | **Required** | Your API key |
+
+## Response
+
+<ResponseField name="status" type="string">
+  Request status - `"success"` or `"error"`.
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Description of the result.
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="Data Object">
+    <ResponseField name="data.wallet_id" type="string">
+      The unique ID of the wallet.
+    </ResponseField>
+    <ResponseField name="data.balance" type="string">
+      The current balance in smallest currency unit (e.g., kobo for NGN).
+    </ResponseField>
+    <ResponseField name="data.currency" type="string">
+      The currency of the wallet (e.g., `NGN`, `USD`).
+    </ResponseField>
+    <ResponseField name="data.available_balance" type="string">
+      Funds available for immediate transfer.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X GET https://api.payvessel.com/pms/wallets/WLT_123456/balance \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET"
+```
+
+## Example Response
+
+```json
+{
+  "status": "success",
+  "message": "Balance retrieved",
+  "data": {
+    "wallet_id": "WLT_123456",
+    "balance": "500000",
+    "available_balance": "495000",
+    "currency": "NGN"
+  }
+}
+```

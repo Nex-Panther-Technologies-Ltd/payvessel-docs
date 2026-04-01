@@ -1,0 +1,14 @@
+---
+title: "Bank Account Verification (Guide)"
+description: "Verifying payout accounts before sending money"
+---
+
+Before you send payouts, always **verify bank account details** to avoid failed transfers and mis‑directed funds.
+
+Recommended pattern:
+
+1. Collect bank account number and bank code from the user.
+2. Call the bank‑account verification endpoint in **API reference → KYC & Risk → Merchant Bank Account Verification**.
+3. Show the resolved account name to the user for confirmation.
+4. Save the verified account (and verification reference) as the customer’s payout destination.
+

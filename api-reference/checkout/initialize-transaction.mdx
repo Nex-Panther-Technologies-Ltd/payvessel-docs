@@ -1,0 +1,130 @@
+
+
+**Initialize a checkout transaction** for the Checkout flow. This endpoint creates a temporary session and returns a `checkout_url` where you can redirect your customer to complete their payment.
+
+## Endpoint
+
+<Badge variant="success">**POST**</Badge> `/pms/transactions/initialize/`
+
+## Headers
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `api-key` | string | **Required** | Business API key |
+| `api-secret` | string | **Required** | Business API secret |
+| `Content-Type` | string | **Required** | Must be `application/json` |
+
+## Request Body
+
+<ParamField body="amount" type="string" required>
+  Amount to charge in the smallest currency unit (e.g., `"10000"` for ₦100.00).
+</ParamField>
+
+<ParamField body="currency" type="string" default="NGN">
+  Currency code for the transaction.
+</ParamField>
+
+<ParamField body="channels" type="array">
+  List of enabled payment methods. Options: `["BANK_TRANSFER", "CARD"]`.
+</ParamField>
+
+<ParamField body="customer_name" type="string" required>
+  The customer's full name.
+</ParamField>
+
+<ParamField body="customer_email" type="string" required>
+  The customer's email address.
+</ParamField>
+
+<ParamField body="customer_phone_number" type="string" required>
+  The customer's phone number.
+</ParamField>
+
+<ParamField body="reference" type="string">
+  Your unique transaction reference. If not provided, PayVessel will generate one.
+</ParamField>
+
+<ParamField body="redirect_url" type="string">
+  The URL users should be redirected to after payment.
+</ParamField>
+
+<ParamField body="webhook_url" type="string">
+  The URL to receive webhook notifications about the transaction.
+</ParamField>
+
+<ParamField body="metadata" type="string">
+  Additional data you want to store with the transaction.
+</ParamField>
+
+## Response
+
+<ResponseField name="status" type="boolean">
+  Request status - `true` or `false`.
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Description of the result.
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="Data Object">
+    <ResponseField name="data.id" type="string">
+      Unique transaction ID.
+    </ResponseField>
+    <ResponseField name="data.transaction_ref" type="string">
+      The transaction reference.
+    </ResponseField>
+    <ResponseField name="data.amount" type="string">
+      Transaction amount.
+    </ResponseField>
+    <ResponseField name="data.status" type="string">
+      Transaction status - `"PENDING"`.
+    </ResponseField>
+    <ResponseField name="data.access_code" type="string">
+      Access code for the transaction session.
+    </ResponseField>
+    <ResponseField name="data.checkout_url" type="string">
+      The URL to redirect the customer to.
+    </ResponseField>
+    <ResponseField name="data.created_datetime" type="string">
+      ISO 8601 timestamp of transaction creation.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X POST https://api.payvessel.com/pms/transactions/initialize/ \
+  -H "api-key: your_api_key" \
+  -H "api-secret: your_api_secret" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "amount": "500000",
+    "currency": "NGN",
+    "channels": ["BANK_TRANSFER", "CARD"],
+    "customer_name": "John Doe",
+    "customer_email": "customer@example.com",
+    "customer_phone_number": "+2348012345678",
+    "redirect_url": "https://yourapp.com/payment/callback",
+    "webhook_url": "https://yourapp.com/webhook"
+  }'
+```
+
+## Example Response
+
+```json
+{
+    "status": true,
+    "message": "Checkout transaction successfully initialized",
+    "data": {
+        "id": "21d0c799-fbb5-473e-856d-1b2f9ada9d8a",
+        "transaction_ref": "<string>",
+        "amount": "5000.00",
+        "status": "PENDING",
+        "access_code": "ABC-I77VVH-EROP40XN-TCGOTP-ABCD",
+        "checkout_url": "https://checkout.payvessel.com/ACS-I77VVH-EROP40XN-ABCD-XCN4",
+        "created_datetime": "2026-03-25T16:39:25.872400"
+    }
+}
+```

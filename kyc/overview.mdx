@@ -1,0 +1,33 @@
+---
+title: "KYC & Risk Overview"
+description: "How to combine identity verification and risk checks when onboarding merchants"
+---
+
+Use Payvessel’s KYC services to **verify who your customers are and how risky they are** before you let them transact.
+
+Typical onboarding flow:
+
+1. **Collect identity data** – name, date of birth, phone, email, and basic document details.
+2. **Verify identity numbers** – run BVN and/or NIN checks.
+3. **Confirm bank account** – verify bank account details before linking a payout account.
+4. **Check documents and face** – verify government IDs and compare live face to stored images.
+5. **Run liveness** – make sure a real person is present and not a spoof.
+6. **Score risk** – run blacklist, credit score, and loan‑feature queries.
+
+Use the pages below to design your KYC flow; then use the **KYC & Risk** section in the API reference for exact endpoints and payloads.
+
+<CardGroup cols={2}>
+  <Card title="BVN & NIN" icon="id-card" href="/kyc/merchant-bvn">
+    When to use bank vs national IDs
+  </Card>
+  <Card title="Documents" icon="file-lines" href="/kyc/merchant-documents">
+    Driver’s licence, voter’s card, passport
+  </Card>
+  <Card title="Face & Liveness" icon="face-smile" href="/kyc/merchant-face">
+    Prevent impersonation and spoofing
+  </Card>
+  <Card title="Bank account & Risk" icon="shield-check" href="/kyc/merchant-bank-account">
+    Verify payout accounts and run risk checks
+  </Card>
+</CardGroup>
+

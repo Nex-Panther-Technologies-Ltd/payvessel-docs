@@ -1,0 +1,35 @@
+
+
+**Send multiple payouts from your managed wallet in a single request.** Bulk transfers are perfect for payroll, vendor settlements, refunds, and other multi‑recipient disbursements.
+
+## How bulk transfers work
+
+1. **Prepare your batch**  
+   Build an array of transfer instructions (amount, destination account number, bank code, narration, unique reference for each row).
+
+2. **Validate accounts (optional, recommended)**  
+   Optionally run account‑number + bank‑code pairs through the **validate‑account** endpoint before including them in the batch.
+
+3. **Call the bulk transfer endpoint**  
+   Use the **Bulk Transfer** operation under **Transfers** to submit the entire batch in one API call from your business wallet.
+
+4. **Track batch result**  
+   The response returns:
+   - a `batch_reference`
+   - counts for `successful_count`, `failed_count`, and `total_count`
+   - the `total_amount` processed
+
+5. **Reconcile individual transfers**  
+   Use the **transfer‑status** and **wallet‑transactions** endpoints to drill into each transfer in the batch and reconcile them with your internal records.
+
+---
+
+## Best practices
+
+- **Batch sizing:** start with batches of 50–100 transfers per call to balance speed and observability.
+- **Idempotent references:** ensure each row in a batch has a unique reference so you can safely retry if there is a network error.
+- **Monitoring:** log and alert on high `failed_count` for a batch and surface reasons back to your operations dashboard.
+
+---
+
+For detailed request/response payloads and code examples, use the **Transfers** API reference for the bulk‑transfer and transfer‑status endpoints, plus the **Wallets** API for balance and transactions.

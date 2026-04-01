@@ -3,8 +3,6 @@ title: "Environments"
 description: "Understanding Payvessel's sandbox and production environments"
 ---
 
-# Environments
-
 **Safely develop and test your integration before going live with Payvessel's dedicated environments.**
 
 Payvessel provides separate environments to ensure you can build, test, and deploy your payment integration with confidence.
@@ -73,8 +71,8 @@ https://sandbox.payvessel.com
 Example sandbox request:
 ```bash
 curl https://sandbox.payvessel.com/api/v1/payments \
-  -H "api-key: PVKEY-3ZO1QOSQH83C5Q3PBCVUT1" \
-  -H "api-secret: Bearer PVSECRET-OZJD0SZ2F2WOTXAF" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET" \
   -H "Content-Type: application/json" \
   -d '{
     "amount": 1000,
@@ -118,7 +116,7 @@ Example production request:
 ```bash
 curl https://api.payvessel.com/api/v1/payments \
   -H "api-key: PVKEY-[your-production-key]" \
-  -H "api-secret: Bearer PVSECRET-[your-production-secret]" \
+  -H "api-secret: PVSECRET-[your-production-secret]" \
   -H "Content-Type: application/json" \
   -d '{
     "amount": 1000,

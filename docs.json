@@ -36,33 +36,41 @@
             "group": "API Basics",
             "pages": [
               "api-basics/authentication",
-              "api-basics/environments",
-              "api-basics/webhooks",
-              "api-basics/testing",
-              "api-basics/errors"
+              "api-basics/environments"
             ]
           },
           {
             "group": "Accept Payment",
             "pages": [
-              "accept-payment/one-time-payment",
-              "accept-payment/customer-reserved-account",
-              "accept-payment/invoice",
-              "accept-payment/refunds",
-              "accept-payment/settlement",
-              "accept-payment/payment-links"
+              "accept-payment/checkout",
+              "accept-payment/customer-reserved-account"
             ]
           },
           {
-            "group": "Send Money & Payouts",
+            "group": "Transfers",
             "pages": [
+              "transfer-payout/transfer-external-wallet",
               "transfer-payout/single-transfers",
               "transfer-payout/bulk-transfers"
             ]
           },
           {
+            "group": "Verify Identities",
+            "pages": [
+              "kyc/overview",
+              "kyc/merchant-bvn",
+              "kyc/merchant-nin",
+              "kyc/merchant-documents",
+              "kyc/merchant-face",
+              "kyc/merchant-bank-account",
+              "kyc/merchant-liveness",
+              "kyc/merchant-risk"
+            ]
+          },
+          {
             "group": "Wallets",
             "pages": [
+              "wallets/overview",
               "wallets/create-wallet",
               "wallets/wallet-balance",
               "wallets/get-wallets",
@@ -70,97 +78,84 @@
             ]
           },
           {
-            "group": "Verify Identities",
-            "pages": [
-              "verification-apis/verifying-your-customers",
-              "verification-apis/bvn-verification",
-              "verification-apis/nin-verification",
-              "verification-apis/liveness-detections",
-              "verification-apis/face-comparison",
-              "verification-apis/credit-score-service",
-              "verification-apis/blacklist-check",
-              "verification-apis/loan-features"
-            ]
-          },
-          {
-            "group": "Bill Payments",
-            "pages": [
-              "bill-payments/get-billers-information",
-              "bill-payments/get-biller-products",
-              "bill-payments/verify-customer",
-              "bill-payments/create-bill-payment",
-              "bill-payments/get-bill-payments-history",
-              "bill-payments/get-bill-payment-details",
-              "bill-payments/requery-payment"
-            ]
-          },
-          {
-            "group": "Cardholders",
-            "pages": [
-              "cardholders/enroll-cardholder",
-              "cardholders/get-cardholders",
-              "cardholders/get-cardholder-by-id"
-            ]
-          },
-          {
-            "group": "Card Issuance",
-            "pages": [
-              "card-issuance/create-card",
-              "card-issuance/get-all-cards",
-              "card-issuance/get-a-card",
-              "card-issuance/fund-card",
-              "card-issuance/withdraw-from-card",
-              "card-issuance/freeze-card",
-              "card-issuance/unfreeze-card",
-              "card-issuance/terminate-card"
-            ]
-          },
-          {
             "group": "Webhook",
             "pages": [
-              "webhook/overview",
-              "webhook/verifying-webhooks",
-              "webhook/supported-events"
+              "api-reference/webhook/overview",
+              "api-reference/webhook/verifying-webhooks"
             ]
           }
-          
         ]
       },
       {
         "tab": "API reference",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Getting Started",
             "pages": [
               "api-reference/introduction"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Transactions",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference/transactions/initialize-payment",
+              "api-reference/transactions/verify-payment",
+              "api-reference/transactions/list-transactions"
+            ]
+          },
+          {
+            "group": "Transfers",
+            "pages": [
+              "api-reference/transfers/initiate-transfer",
+              "api-reference/transfers/bulk-transfer",
+              "api-reference/transfers/transfer-status"
+            ]
+          },
+          {
+            "group": "KYC & Risk",
+            "pages": [
+              "api-reference/verification/merchant-bvn",
+              "api-reference/verification/merchant-nin",
+              "api-reference/verification/merchant-documents",
+              "api-reference/verification/merchant-face",
+              "api-reference/verification/merchant-bank-account",
+              "api-reference/verification/merchant-liveness",
+              "api-reference/verification/merchant-risk"
+            ]
+          },
+          {
+            "group": "Wallets",
+            "pages": [
+              "api-reference/wallets/create-wallet",
+              "api-reference/wallets/wallet-balance",
+              "api-reference/wallets/get-wallets",
+              "api-reference/wallets/wallet-statement"
+            ]
+          },
+          {
+            "group": "Virtual Accounts",
+            "pages": [
+              "api-reference/virtual-accounts/create-virtual-account",
+              "api-reference/virtual-accounts/get-virtual-account"
+            ]
+          },
+          {
+            "group": "Checkout",
+            "pages": [
+              "api-reference/checkout/initialize-transaction",
+              "api-reference/checkout/confirm-transaction"
+            ]
+          },
+          {
+            "group": "Webhook",
+            "pages": [
+              "api-reference/webhook/overview",
+              "api-reference/webhook/verifying-webhooks"
             ]
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Dashboard",
-          "href": "https://app.payvessel.com",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://blog.payvessel.com",
-          "icon": "newspaper"
-        }
-      ]
-    }
+    ]
   },
   "logo": {
     "light": "https://www.payvessel.com/payvessel-light-logo.png",
@@ -181,15 +176,15 @@
   },
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
   },
   "footer": {
     "socials": {

@@ -1,0 +1,80 @@
+---
+title: "Get Wallets"
+description: "List or retrieve managed wallets for your business"
+---
+
+
+**Retrieve all managed wallets** associated with your business. This is useful for monitoring balances across multiple wallets and reconciling transfers.
+
+## Endpoint
+
+<Badge variant="success">**GET**</Badge> `/pms/wallets`
+
+## Headers
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `api-key` | string | **Required** | Your API key |
+
+## Response
+
+<ResponseField name="status" type="string">
+  Request status - `"success"` or `"error"`.
+</ResponseField>
+
+<ResponseField name="data" type="array">
+  <Expandable title="Wallet Object">
+    <ResponseField name="id" type="string">
+      Unique wallet ID.
+    </ResponseField>
+    <ResponseField name="name" type="string">
+      Custom name or label for the wallet.
+    </ResponseField>
+    <ResponseField name="balance.available_balance" type="string">
+      Available balance.
+    </ResponseField>
+    <ResponseField name="balance.ledger_balance" type="string">
+      Ledger balance.
+    </ResponseField>
+    <ResponseField name="currency" type="string">
+      Wallet currency (e.g. `NGN`).
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X GET "https://api.payvessel.com/pms/wallets" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET"
+```
+
+## Example Response
+
+```json
+{
+  "status": "success",
+  "data": [
+    {
+      "id": "WLT_1",
+      "name": "Main Settlements",
+      "balance": {
+        "available_balance": "1000000.00",
+        "ledger_balance": "1000000.00"
+      },
+      "currency": "NGN"
+    },
+    {
+      "id": "WLT_2",
+      "name": "Refunds Wallet",
+      "balance": {
+        "available_balance": "50000.00",
+        "ledger_balance": "50000.00"
+      },
+      "currency": "NGN"
+    }
+  ]
+}
+```
+
