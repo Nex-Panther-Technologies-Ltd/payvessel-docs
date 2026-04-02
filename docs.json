@@ -55,16 +55,21 @@
             ]
           },
           {
-            "group": "Verify Identities",
+            "group": "Identity Verification",
             "pages": [
-              "kyc/overview",
-              "kyc/merchant-bvn",
-              "kyc/merchant-nin",
-              "kyc/merchant-documents",
-              "kyc/merchant-face",
-              "kyc/merchant-bank-account",
-              "kyc/merchant-liveness",
-              "kyc/merchant-risk"
+              "identity-verification/overview",
+              "identity-verification/basic-bvn-verification",
+              "identity-verification/enhanced-bvn-verification",
+              "identity-verification/basic-nin-verification",
+              "identity-verification/enhanced-nin-verification",
+              "identity-verification/drivers-license-verification",
+              "identity-verification/voters-card-verification",
+              "identity-verification/international-passport-verification",
+              "identity-verification/merchant-face",
+              "identity-verification/merchant-bank-account",
+              "identity-verification/blacklist-query",
+              "identity-verification/credit-score-query",
+              "identity-verification/loan-feature-query"
             ]
           },
           {
@@ -112,15 +117,20 @@
             ]
           },
           {
-            "group": "KYC & Risk",
+            "group": "Identity Verification",
             "pages": [
-              "api-reference/verification/merchant-bvn",
-              "api-reference/verification/merchant-nin",
-              "api-reference/verification/merchant-documents",
+              "api-reference/verification/basic-bvn-verification",
+              "api-reference/verification/enhanced-bvn-verification",
+              "api-reference/verification/basic-nin-verification",
+              "api-reference/verification/enhanced-nin-verification",
+              "api-reference/verification/drivers-license-verification",
+              "api-reference/verification/voters-card-verification",
+              "api-reference/verification/international-passport-verification",
               "api-reference/verification/merchant-face",
               "api-reference/verification/merchant-bank-account",
-              "api-reference/verification/merchant-liveness",
-              "api-reference/verification/merchant-risk"
+              "api-reference/verification/blacklist-query",
+              "api-reference/verification/credit-score-query",
+              "api-reference/verification/loan-feature-query"
             ]
           },
           {

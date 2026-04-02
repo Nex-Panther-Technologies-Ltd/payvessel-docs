@@ -127,6 +127,1611 @@
         }
       }
     },
+    "/api/v1/merchant/bvn/basic": {
+      "post": {
+        "summary": "Basic BVN Verification",
+        "description": "Verify a BVN against submitted identity details such as first name, middle name, last name, gender, date of birth, and phone number.",
+        "tags": [
+          "Identity Verification"
+        ],
+        "servers": [
+          {
+            "url": "https://api.payvessel.com/kyc"
+          },
+          {
+            "url": "https://sandbox.payvessel.com/kyc"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your PayVessel API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your PayVessel API secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BasicBvnVerificationRequest"
+              },
+              "examples": {
+                "default": {
+                  "summary": "Basic BVN verification request",
+                  "value": {
+                    "bvn": "22123456789",
+                    "first_name": "John",
+                    "middle_name": "Adebayo",
+                    "last_name": "Doe",
+                    "gender": "MALE",
+                    "birthday": "1992-08-14",
+                    "phone_number": "08012345678"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "BVN verification response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BasicBvnVerificationResponse"
+                },
+                "examples": {
+                  "successfulVerification": {
+                    "summary": "Successful basic BVN verification",
+                    "value": {
+                      "success": true,
+                      "message": "BVN verification completed successfully",
+                      "data": {
+                        "name_match_rlt": "MATCH",
+                        "names_match_percentage": "96",
+                        "birthday_match_rlt": "MATCH",
+                        "gender_match_rlt": "MATCH",
+                        "phone_number_match_rlt": "MATCH"
+                      },
+                      "charges": {
+                        "charged": false,
+                        "charged_amount": "0.00"
+                      }
+                    }
+                  },
+                  "bvnNotFound": {
+                    "summary": "BVN not found",
+                    "value": {
+                      "success": false,
+                      "message": "BVN not found",
+                      "data": null,
+                      "charges": {
+                        "charged": true,
+                        "charged_amount": "25.00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Verification could not be processed because the wallet balance is insufficient",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationPaymentErrorResponse"
+                },
+                "examples": {
+                  "insufficientBalance": {
+                    "summary": "Insufficient wallet balance",
+                    "value": {
+                      "success": false,
+                      "message": "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again.",
+                      "details": [
+                        "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/merchant/bvn/enhanced": {
+      "post": {
+        "summary": "Enhanced BVN Verification",
+        "description": "Verify a BVN and retrieve enriched identity information such as names, gender, birthday, photo, and phone numbers tied to the BVN.",
+        "tags": [
+          "Identity Verification"
+        ],
+        "servers": [
+          {
+            "url": "https://api.payvessel.com/kyc"
+          },
+          {
+            "url": "https://sandbox.payvessel.com/kyc"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your PayVessel API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your PayVessel API secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnhancedBvnVerificationRequest"
+              },
+              "examples": {
+                "default": {
+                  "summary": "Enhanced BVN verification request",
+                  "value": {
+                    "bvn": "22123456789"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Enhanced BVN verification response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnhancedBvnVerificationResponse"
+                },
+                "examples": {
+                  "successfulVerification": {
+                    "summary": "Successful enhanced BVN verification",
+                    "value": {
+                      "success": true,
+                      "message": "BVN verification completed successfully",
+                      "data": {
+                        "bvn": "22123456789",
+                        "first_name": "John",
+                        "middle_name": "Adebayo",
+                        "last_name": "Doe",
+                        "gender": "MALE",
+                        "name_on_card": "JOHN A DOE",
+                        "birthday": "1992-08-14",
+                        "photo": "/9j/4AAQSkZJRgABAQAAAQABAAD...",
+                        "phone_number": "08012345678",
+                        "phone_number_2": "08087654321"
+                      },
+                      "charges": {
+                        "charged": false,
+                        "charged_amount": "0.00"
+                      }
+                    }
+                  },
+                  "bvnNotFound": {
+                    "summary": "BVN not found",
+                    "value": {
+                      "success": false,
+                      "message": "BVN not found",
+                      "data": null,
+                      "charges": {
+                        "charged": true,
+                        "charged_amount": "25.00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Verification could not be processed because the wallet balance is insufficient",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationPaymentErrorResponse"
+                },
+                "examples": {
+                  "insufficientBalance": {
+                    "summary": "Insufficient wallet balance",
+                    "value": {
+                      "success": false,
+                      "message": "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again.",
+                      "details": [
+                        "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/merchant/nin/basic": {
+      "post": {
+        "summary": "Basic NIN Verification",
+        "description": "Verify a NIN against submitted identity details such as first name, middle name, last name, gender, date of birth, and phone number.",
+        "tags": [
+          "Identity Verification"
+        ],
+        "servers": [
+          {
+            "url": "https://api.payvessel.com/kyc"
+          },
+          {
+            "url": "https://sandbox.payvessel.com/kyc"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your PayVessel API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your PayVessel API secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BasicNinVerificationRequest"
+              },
+              "examples": {
+                "default": {
+                  "summary": "Basic NIN verification request",
+                  "value": {
+                    "nin": "12345678901",
+                    "first_name": "John",
+                    "last_name": "Doe",
+                    "middle_name": "Adebayo",
+                    "gender": "MALE",
+                    "birthday": "1992-08-14",
+                    "phone_number": "08012345678"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "NIN verification response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BasicNinVerificationResponse"
+                },
+                "examples": {
+                  "successfulVerification": {
+                    "summary": "Successful basic NIN verification",
+                    "value": {
+                      "success": true,
+                      "message": "NIN verification completed successfully",
+                      "data": {
+                        "name_match_rlt": "MATCH",
+                        "names_match_percentage": "96",
+                        "birthday_match_rlt": "MATCH",
+                        "gender_match_rlt": "MATCH",
+                        "phone_number_match_rlt": "MATCH"
+                      },
+                      "charges": {
+                        "charged": false,
+                        "charged_amount": "0.00"
+                      }
+                    }
+                  },
+                  "ninNotFound": {
+                    "summary": "NIN not found",
+                    "value": {
+                      "success": false,
+                      "message": "NIN not found",
+                      "data": null,
+                      "charges": {
+                        "charged": true,
+                        "charged_amount": "25.00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Verification could not be processed because the wallet balance is insufficient",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationPaymentErrorResponse"
+                },
+                "examples": {
+                  "insufficientBalance": {
+                    "summary": "Insufficient wallet balance",
+                    "value": {
+                      "success": false,
+                      "message": "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again.",
+                      "details": [
+                        "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/merchant/nin/enhanced": {
+      "post": {
+        "summary": "Enhanced NIN Verification",
+        "description": "Verify a NIN and retrieve enriched identity information such as names, gender, birth date, photo, and telephone number tied to the NIN.",
+        "tags": [
+          "Identity Verification"
+        ],
+        "servers": [
+          {
+            "url": "https://api.payvessel.com/kyc"
+          },
+          {
+            "url": "https://sandbox.payvessel.com/kyc"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your PayVessel API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your PayVessel API secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnhancedNinVerificationRequest"
+              },
+              "examples": {
+                "default": {
+                  "summary": "Enhanced NIN verification request",
+                  "value": {
+                    "nin": "12345678901"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Enhanced NIN verification response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnhancedNinVerificationResponse"
+                },
+                "examples": {
+                  "successfulVerification": {
+                    "summary": "Successful enhanced NIN verification",
+                    "value": {
+                      "success": true,
+                      "message": "NIN verification completed successfully",
+                      "data": {
+                        "nin": "12345678901",
+                        "first_name": "John",
+                        "middle_name": "Adebayo",
+                        "surname": "Doe",
+                        "gender": "MALE",
+                        "birth_date": "1992-08-14",
+                        "photo": "/9j/4AAQSkZJRgABAQAAAQABAAD...",
+                        "telephone_no": "08012345678",
+                        "error_message": ""
+                      },
+                      "charges": {
+                        "charged": false,
+                        "charged_amount": "0.00"
+                      }
+                    }
+                  },
+                  "ninNotFound": {
+                    "summary": "NIN not found",
+                    "value": {
+                      "success": false,
+                      "message": "NIN not found",
+                      "data": null,
+                      "charges": {
+                        "charged": true,
+                        "charged_amount": "25.00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Verification could not be processed because the wallet balance is insufficient",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationPaymentErrorResponse"
+                },
+                "examples": {
+                  "insufficientBalance": {
+                    "summary": "Insufficient wallet balance",
+                    "value": {
+                      "success": false,
+                      "message": "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again.",
+                      "details": [
+                        "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/merchant/documents/drivers-license": {
+      "post": {
+        "summary": "Verify Driver's License",
+        "description": "Verify a driver's license and retrieve the identity details attached to the license number.",
+        "tags": [
+          "Identity Verification"
+        ],
+        "servers": [
+          {
+            "url": "https://api.payvessel.com/kyc"
+          },
+          {
+            "url": "https://sandbox.payvessel.com/kyc"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your PayVessel API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your PayVessel API secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DriversLicenseVerificationRequest"
+              },
+              "examples": {
+                "default": {
+                  "summary": "Driver's license verification request",
+                  "value": {
+                    "license_number": "LAG-DL-4839201"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Driver's license verification response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DriversLicenseVerificationResponse"
+                },
+                "examples": {
+                  "successfulVerification": {
+                    "summary": "Successful driver's license verification",
+                    "value": {
+                      "success": true,
+                      "message": "Driver's license verification completed successfully",
+                      "data": {
+                        "first_name": "John",
+                        "middle_name": "Adebayo",
+                        "last_name": "Doe",
+                        "gender": "MALE",
+                        "birth_date": "1992-08-14",
+                        "photo": "/9j/4AAQSkZJRgABAQAAAQABAAD...",
+                        "license_number": "LAG-DL-4839201",
+                        "issue_date": "2021-06-01",
+                        "expiry_date": "2026-05-31"
+                      },
+                      "charges": {
+                        "charged": false,
+                        "charged_amount": "0.00"
+                      }
+                    }
+                  },
+                  "documentNotFound": {
+                    "summary": "Driver's license not found",
+                    "value": {
+                      "success": false,
+                      "message": "Driver's license not found",
+                      "data": null,
+                      "charges": {
+                        "charged": true,
+                        "charged_amount": "25.00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Verification could not be processed because the wallet balance is insufficient",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationPaymentErrorResponse"
+                },
+                "examples": {
+                  "insufficientBalance": {
+                    "summary": "Insufficient wallet balance",
+                    "value": {
+                      "success": false,
+                      "message": "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again.",
+                      "details": [
+                        "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/merchant/documents/voters-card": {
+      "post": {
+        "summary": "Verify Voter's Card",
+        "description": "Verify a voter's card and retrieve the identity details attached to the voter ID.",
+        "tags": [
+          "Identity Verification"
+        ],
+        "servers": [
+          {
+            "url": "https://api.payvessel.com/kyc"
+          },
+          {
+            "url": "https://sandbox.payvessel.com/kyc"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your PayVessel API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your PayVessel API secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VotersCardVerificationRequest"
+              },
+              "examples": {
+                "default": {
+                  "summary": "Voter's card verification request",
+                  "value": {
+                    "voters_id": "AKD12345678901"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Voter's card verification response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VotersCardVerificationResponse"
+                },
+                "examples": {
+                  "successfulVerification": {
+                    "summary": "Successful voter's card verification",
+                    "value": {
+                      "success": true,
+                      "message": "Voter's card verification completed successfully",
+                      "data": {
+                        "first_name": "John",
+                        "middle_name": "Adebayo",
+                        "last_name": "Doe",
+                        "gender": "MALE",
+                        "birth_date": "1992-08-14",
+                        "photo": "/9j/4AAQSkZJRgABAQAAAQABAAD...",
+                        "voters_id": "AKD12345678901",
+                        "polling_unit": "Ward 4 Unit 12",
+                        "state": "Lagos",
+                        "lga": "Ikeja"
+                      },
+                      "charges": {
+                        "charged": false,
+                        "charged_amount": "0.00"
+                      }
+                    }
+                  },
+                  "documentNotFound": {
+                    "summary": "Voter's card not found",
+                    "value": {
+                      "success": false,
+                      "message": "Voter's card not found",
+                      "data": null,
+                      "charges": {
+                        "charged": true,
+                        "charged_amount": "25.00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Verification could not be processed because the wallet balance is insufficient",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationPaymentErrorResponse"
+                },
+                "examples": {
+                  "insufficientBalance": {
+                    "summary": "Insufficient wallet balance",
+                    "value": {
+                      "success": false,
+                      "message": "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again.",
+                      "details": [
+                        "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/merchant/documents/international-passport": {
+      "post": {
+        "summary": "Verify International Passport",
+        "description": "Verify an international passport and retrieve the identity details attached to the passport number.",
+        "tags": [
+          "Identity Verification"
+        ],
+        "servers": [
+          {
+            "url": "https://api.payvessel.com/kyc"
+          },
+          {
+            "url": "https://sandbox.payvessel.com/kyc"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your PayVessel API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your PayVessel API secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InternationalPassportVerificationRequest"
+              },
+              "examples": {
+                "default": {
+                  "summary": "International passport verification request",
+                  "value": {
+                    "passport_number": "A12345678"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "International passport verification response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternationalPassportVerificationResponse"
+                },
+                "examples": {
+                  "successfulVerification": {
+                    "summary": "Successful international passport verification",
+                    "value": {
+                      "success": true,
+                      "message": "International passport verification completed successfully",
+                      "data": {
+                        "first_name": "John",
+                        "middle_name": "Adebayo",
+                        "last_name": "Doe",
+                        "gender": "MALE",
+                        "birth_date": "1992-08-14",
+                        "photo": "/9j/4AAQSkZJRgABAQAAAQABAAD...",
+                        "passport_number": "A12345678",
+                        "issue_date": "2021-03-10",
+                        "expiry_date": "2031-03-09",
+                        "nationality": "Nigerian"
+                      },
+                      "charges": {
+                        "charged": false,
+                        "charged_amount": "0.00"
+                      }
+                    }
+                  },
+                  "documentNotFound": {
+                    "summary": "International passport not found",
+                    "value": {
+                      "success": false,
+                      "message": "International passport not found",
+                      "data": null,
+                      "charges": {
+                        "charged": true,
+                        "charged_amount": "25.00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Verification could not be processed because the wallet balance is insufficient",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationPaymentErrorResponse"
+                },
+                "examples": {
+                  "insufficientBalance": {
+                    "summary": "Insufficient wallet balance",
+                    "value": {
+                      "success": false,
+                      "message": "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again.",
+                      "details": [
+                        "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/merchant/face/compare": {
+      "post": {
+        "summary": "Compare Faces",
+        "description": "Compare a source image against a target image and return a similarity score.",
+        "tags": [
+          "Identity Verification"
+        ],
+        "servers": [
+          {
+            "url": "https://api.payvessel.com/kyc"
+          },
+          {
+            "url": "https://sandbox.payvessel.com/kyc"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your PayVessel API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your PayVessel API secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FaceCompareRequest"
+              },
+              "examples": {
+                "default": {
+                  "summary": "Face comparison request",
+                  "value": {
+                    "source_image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD...",
+                    "target_image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Face comparison response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FaceCompareResponse"
+                },
+                "examples": {
+                  "successfulVerification": {
+                    "summary": "Successful face comparison",
+                    "value": {
+                      "success": true,
+                      "message": "Face comparison completed successfully",
+                      "data": {
+                        "similarity": "0.93"
+                      },
+                      "charges": {
+                        "charged": false,
+                        "charged_amount": "0.00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Verification could not be processed because the wallet balance is insufficient",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationPaymentErrorResponse"
+                },
+                "examples": {
+                  "insufficientBalance": {
+                    "summary": "Insufficient wallet balance",
+                    "value": {
+                      "success": false,
+                      "message": "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again.",
+                      "details": [
+                        "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/merchant/bank/verify-account": {
+      "post": {
+        "summary": "Verify Bank Account",
+        "description": "Verify a bank account against a BVN, bank code, and bank account number.",
+        "tags": [
+          "Identity Verification"
+        ],
+        "servers": [
+          {
+            "url": "https://api.payvessel.com/kyc"
+          },
+          {
+            "url": "https://sandbox.payvessel.com/kyc"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your PayVessel API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your PayVessel API secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BankAccountVerificationRequest"
+              },
+              "examples": {
+                "default": {
+                  "summary": "Bank account verification request",
+                  "value": {
+                    "bvn": "22123456789",
+                    "bank_code": "058",
+                    "bank_account": "0123456789"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Bank account verification response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BankAccountVerificationResponse"
+                },
+                "examples": {
+                  "successfulVerification": {
+                    "summary": "Successful bank account verification",
+                    "value": {
+                      "success": true,
+                      "message": "Bank account verification completed successfully",
+                      "data": {
+                        "verify_result": true,
+                        "bank_account_name": "JOHN ADEBAYO DOE",
+                        "name_match_percentage": 97
+                      },
+                      "charges": {
+                        "charged": false,
+                        "charged_amount": "0.00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Verification could not be processed because the wallet balance is insufficient",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationPaymentErrorResponse"
+                },
+                "examples": {
+                  "insufficientBalance": {
+                    "summary": "Insufficient wallet balance",
+                    "value": {
+                      "success": false,
+                      "message": "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again.",
+                      "details": [
+                        "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/merchant/risk/blacklist/query": {
+      "post": {
+        "summary": "Blacklist Query",
+        "description": "Query blacklist data using phone number, BVN, and NIN identifiers.",
+        "tags": [
+          "Risk"
+        ],
+        "servers": [
+          {
+            "url": "https://api.payvessel.com/kyc"
+          },
+          {
+            "url": "https://sandbox.payvessel.com/kyc"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your PayVessel API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your PayVessel API secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BlacklistQueryRequest"
+              },
+              "examples": {
+                "default": {
+                  "summary": "Blacklist query request",
+                  "value": {
+                    "phone_number": "08012345678",
+                    "bvn_no": "22123456789",
+                    "nin": "12345678901"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Blacklist query response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BlacklistQueryResponse"
+                },
+                "examples": {
+                  "successfulQuery": {
+                    "summary": "Successful blacklist query",
+                    "value": {
+                      "success": true,
+                      "message": "Blacklist query completed successfully",
+                      "data": {
+                        "result": "NO_HIT",
+                        "hit_time": 0,
+                        "request_id": "BLQ-20260402-0001"
+                      },
+                      "charges": {
+                        "charged": false,
+                        "charged_amount": "0.00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Query could not be processed because the wallet balance is insufficient",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationPaymentErrorResponse"
+                },
+                "examples": {
+                  "insufficientBalance": {
+                    "summary": "Insufficient wallet balance",
+                    "value": {
+                      "success": false,
+                      "message": "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again.",
+                      "details": [
+                        "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/merchant/risk/credit-score/query": {
+      "post": {
+        "summary": "Credit Score Query",
+        "description": "Query customer credit score information using mobile number, ID number, and optional extended info.",
+        "tags": [
+          "Risk"
+        ],
+        "servers": [
+          {
+            "url": "https://api.payvessel.com/kyc"
+          },
+          {
+            "url": "https://sandbox.payvessel.com/kyc"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your PayVessel API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your PayVessel API secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreditScoreQueryRequest"
+              },
+              "examples": {
+                "default": {
+                  "summary": "Credit score query request",
+                  "value": {
+                    "mobile_no": "08012345678",
+                    "id_number": "22123456789",
+                    "extend_info": {
+                      "channel": "web",
+                      "product": "consumer-loan"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Credit score query response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditScoreQueryResponse"
+                },
+                "examples": {
+                  "successfulQuery": {
+                    "summary": "Successful credit score query",
+                    "value": {
+                      "success": true,
+                      "message": "Credit score query completed successfully",
+                      "data": {
+                        "credit_score": "742",
+                        "version": "v1.0",
+                        "request_id": "CSQ-20260402-0001"
+                      },
+                      "charges": {
+                        "charged": false,
+                        "charged_amount": "0.00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Query could not be processed because the wallet balance is insufficient",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationPaymentErrorResponse"
+                },
+                "examples": {
+                  "insufficientBalance": {
+                    "summary": "Insufficient wallet balance",
+                    "value": {
+                      "success": false,
+                      "message": "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again.",
+                      "details": [
+                        "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/merchant/risk/loan-feature/query": {
+      "post": {
+        "summary": "Loan Feature Query",
+        "description": "Query loan-feature information using access type, value, authorization, type, and encryption settings.",
+        "tags": [
+          "Risk"
+        ],
+        "servers": [
+          {
+            "url": "https://api.payvessel.com/kyc"
+          },
+          {
+            "url": "https://sandbox.payvessel.com/kyc"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your PayVessel API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your PayVessel API secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoanFeatureQueryRequest"
+              },
+              "examples": {
+                "default": {
+                  "summary": "Loan feature query request",
+                  "value": {
+                    "access_type": "bvn",
+                    "value": "22123456789",
+                    "authorization": "Bearer demo-token",
+                    "type": 1,
+                    "encrypt": "0"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Loan feature query response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoanFeatureQueryResponse"
+                },
+                "examples": {
+                  "successfulQuery": {
+                    "summary": "Successful loan feature query",
+                    "value": {
+                      "success": true,
+                      "message": "Loan feature query completed successfully",
+                      "data": {},
+                      "charges": {
+                        "charged": false,
+                        "charged_amount": "0.00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Query could not be processed because the wallet balance is insufficient",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationPaymentErrorResponse"
+                },
+                "examples": {
+                  "insufficientBalance": {
+                    "summary": "Insufficient wallet balance",
+                    "value": {
+                      "success": false,
+                      "message": "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again.",
+                      "details": [
+                        "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/pms/api/external/request/customerReservedAccount/": {
       "post": {
         "summary": "Create Virtual Account",
@@ -1142,6 +2747,1163 @@
           }
         }
       },
+      "VerificationCharges": {
+        "type": "object",
+        "required": [
+          "charged",
+          "charged_amount"
+        ],
+        "properties": {
+          "charged": {
+            "type": "boolean",
+            "description": "Whether the verification request was billed"
+          },
+          "charged_amount": {
+            "type": "string",
+            "description": "Amount charged for the verification request",
+            "example": "0.00"
+          }
+        }
+      },
+      "BasicBvnVerificationRequest": {
+        "type": "object",
+        "required": [
+          "bvn",
+          "first_name",
+          "middle_name",
+          "last_name",
+          "gender",
+          "birthday",
+          "phone_number"
+        ],
+        "properties": {
+          "bvn": {
+            "type": "string",
+            "description": "Customer BVN",
+            "example": "22123456789"
+          },
+          "first_name": {
+            "type": "string",
+            "description": "Customer first name",
+            "example": "John"
+          },
+          "middle_name": {
+            "type": "string",
+            "description": "Customer middle name",
+            "example": "Adebayo"
+          },
+          "last_name": {
+            "type": "string",
+            "description": "Customer last name",
+            "example": "Doe"
+          },
+          "gender": {
+            "type": "string",
+            "description": "Customer gender",
+            "enum": [
+              "MALE",
+              "FEMALE"
+            ],
+            "example": "MALE"
+          },
+          "birthday": {
+            "type": "string",
+            "format": "date",
+            "description": "Customer date of birth",
+            "example": "1992-08-14"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "Customer phone number",
+            "example": "08012345678"
+          }
+        }
+      },
+      "BasicBvnVerificationData": {
+        "type": "object",
+        "required": [
+          "name_match_rlt",
+          "names_match_percentage",
+          "birthday_match_rlt",
+          "gender_match_rlt",
+          "phone_number_match_rlt"
+        ],
+        "properties": {
+          "name_match_rlt": {
+            "type": "string",
+            "description": "Result of the name match check",
+            "example": "MATCH"
+          },
+          "names_match_percentage": {
+            "type": "string",
+            "description": "Percentage score for matched names",
+            "example": "96"
+          },
+          "birthday_match_rlt": {
+            "type": "string",
+            "description": "Result of the birthday match check",
+            "example": "MATCH"
+          },
+          "gender_match_rlt": {
+            "type": "string",
+            "description": "Result of the gender match check",
+            "example": "MATCH"
+          },
+          "phone_number_match_rlt": {
+            "type": "string",
+            "description": "Result of the phone number match check",
+            "example": "MATCH"
+          }
+        }
+      },
+      "BasicNinVerificationRequest": {
+        "type": "object",
+        "required": [
+          "nin",
+          "first_name",
+          "last_name",
+          "middle_name",
+          "gender",
+          "birthday",
+          "phone_number"
+        ],
+        "properties": {
+          "nin": {
+            "type": "string",
+            "description": "Customer NIN",
+            "example": "12345678901"
+          },
+          "first_name": {
+            "type": "string",
+            "description": "Customer first name",
+            "example": "John"
+          },
+          "last_name": {
+            "type": "string",
+            "description": "Customer last name",
+            "example": "Doe"
+          },
+          "middle_name": {
+            "type": "string",
+            "description": "Customer middle name",
+            "example": "Adebayo"
+          },
+          "gender": {
+            "type": "string",
+            "description": "Customer gender",
+            "enum": [
+              "MALE",
+              "FEMALE"
+            ],
+            "example": "MALE"
+          },
+          "birthday": {
+            "type": "string",
+            "format": "date",
+            "description": "Customer date of birth",
+            "example": "1992-08-14"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "Customer phone number",
+            "example": "08012345678"
+          }
+        }
+      },
+      "BasicNinVerificationData": {
+        "type": "object",
+        "required": [
+          "name_match_rlt",
+          "names_match_percentage",
+          "birthday_match_rlt",
+          "gender_match_rlt",
+          "phone_number_match_rlt"
+        ],
+        "properties": {
+          "name_match_rlt": {
+            "type": "string",
+            "description": "Result of the name match check",
+            "example": "MATCH"
+          },
+          "names_match_percentage": {
+            "type": "string",
+            "description": "Percentage score for matched names",
+            "example": "96"
+          },
+          "birthday_match_rlt": {
+            "type": "string",
+            "description": "Result of the birthday match check",
+            "example": "MATCH"
+          },
+          "gender_match_rlt": {
+            "type": "string",
+            "description": "Result of the gender match check",
+            "example": "MATCH"
+          },
+          "phone_number_match_rlt": {
+            "type": "string",
+            "description": "Result of the phone number match check",
+            "example": "MATCH"
+          }
+        }
+      },
+      "BasicNinVerificationResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "message",
+          "data",
+          "charges"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether the request completed successfully",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message",
+            "example": "NIN verification completed successfully"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/BasicNinVerificationData"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "charges": {
+            "$ref": "#/components/schemas/VerificationCharges"
+          }
+        }
+      },
+      "BasicBvnVerificationResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "message",
+          "data",
+          "charges"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether the request completed successfully",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message",
+            "example": "BVN verification completed successfully"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/BasicBvnVerificationData"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "charges": {
+            "$ref": "#/components/schemas/VerificationCharges"
+          }
+        }
+      },
+      "VerificationPaymentErrorResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "message",
+          "details"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether the request completed successfully",
+            "example": false
+          },
+          "message": {
+            "type": "string",
+            "description": "Reason the request could not be processed",
+            "example": "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again."
+          },
+          "details": {
+            "type": "array",
+            "description": "Detailed error messages returned by the API",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "Your wallet balance is insufficient for this request. Required 25.00, available 0. Please fund your wallet and try again."
+            ]
+          }
+        }
+      },
+      "EnhancedBvnVerificationRequest": {
+        "type": "object",
+        "required": [
+          "bvn"
+        ],
+        "properties": {
+          "bvn": {
+            "type": "string",
+            "description": "Customer BVN",
+            "example": "22123456789"
+          }
+        }
+      },
+      "EnhancedBvnVerificationData": {
+        "type": "object",
+        "required": [
+          "bvn",
+          "first_name",
+          "middle_name",
+          "last_name",
+          "gender",
+          "name_on_card",
+          "birthday",
+          "photo",
+          "phone_number",
+          "phone_number_2"
+        ],
+        "properties": {
+          "bvn": {
+            "type": "string",
+            "description": "Verified BVN",
+            "example": "22123456789"
+          },
+          "first_name": {
+            "type": "string",
+            "description": "Customer first name",
+            "example": "John"
+          },
+          "middle_name": {
+            "type": "string",
+            "description": "Customer middle name",
+            "example": "Adebayo"
+          },
+          "last_name": {
+            "type": "string",
+            "description": "Customer last name",
+            "example": "Doe"
+          },
+          "gender": {
+            "type": "string",
+            "description": "Customer gender",
+            "example": "MALE"
+          },
+          "name_on_card": {
+            "type": "string",
+            "description": "Name shown on the customer's card record",
+            "example": "JOHN A DOE"
+          },
+          "birthday": {
+            "type": "string",
+            "description": "Customer date of birth",
+            "example": "1992-08-14"
+          },
+          "photo": {
+            "type": "string",
+            "description": "Customer photo returned by the provider",
+            "example": "/9j/4AAQSkZJRgABAQAAAQABAAD..."
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "Primary phone number linked to the BVN",
+            "example": "08012345678"
+          },
+          "phone_number_2": {
+            "type": "string",
+            "description": "Secondary phone number linked to the BVN",
+            "example": "08087654321"
+          }
+        }
+      },
+      "EnhancedNinVerificationRequest": {
+        "type": "object",
+        "required": [
+          "nin"
+        ],
+        "properties": {
+          "nin": {
+            "type": "string",
+            "description": "Customer NIN",
+            "example": "12345678901"
+          }
+        }
+      },
+      "EnhancedNinVerificationData": {
+        "type": "object",
+        "required": [
+          "nin",
+          "first_name",
+          "middle_name",
+          "surname",
+          "gender",
+          "birth_date",
+          "photo",
+          "telephone_no",
+          "error_message"
+        ],
+        "properties": {
+          "nin": {
+            "type": "string",
+            "description": "Verified NIN",
+            "example": "12345678901"
+          },
+          "first_name": {
+            "type": "string",
+            "description": "Customer first name",
+            "example": "John"
+          },
+          "middle_name": {
+            "type": "string",
+            "description": "Customer middle name",
+            "example": "Adebayo"
+          },
+          "surname": {
+            "type": "string",
+            "description": "Customer surname",
+            "example": "Doe"
+          },
+          "gender": {
+            "type": "string",
+            "description": "Customer gender",
+            "example": "MALE"
+          },
+          "birth_date": {
+            "type": "string",
+            "description": "Customer birth date",
+            "example": "1992-08-14"
+          },
+          "photo": {
+            "type": "string",
+            "description": "Customer photo returned by the provider",
+            "example": "/9j/4AAQSkZJRgABAQAAAQABAAD..."
+          },
+          "telephone_no": {
+            "type": "string",
+            "description": "Telephone number linked to the NIN",
+            "example": "08012345678"
+          },
+          "error_message": {
+            "type": "string",
+            "description": "Provider-level error message when applicable",
+            "example": ""
+          }
+        }
+      },
+      "EnhancedBvnVerificationResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "message",
+          "data",
+          "charges"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether the request completed successfully",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message",
+            "example": "BVN verification completed successfully"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EnhancedBvnVerificationData"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "charges": {
+            "$ref": "#/components/schemas/VerificationCharges"
+          }
+        }
+      },
+      "EnhancedNinVerificationResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "message",
+          "data",
+          "charges"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether the request completed successfully",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message",
+            "example": "NIN verification completed successfully"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EnhancedNinVerificationData"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "charges": {
+            "$ref": "#/components/schemas/VerificationCharges"
+          }
+        }
+      },
+      "DriversLicenseVerificationRequest": {
+        "type": "object",
+        "required": [
+          "license_number"
+        ],
+        "properties": {
+          "license_number": {
+            "type": "string",
+            "description": "Driver's license number",
+            "example": "LAG-DL-4839201"
+          }
+        }
+      },
+      "DriversLicenseVerificationData": {
+        "type": "object",
+        "required": [
+          "first_name",
+          "middle_name",
+          "last_name",
+          "gender",
+          "birth_date",
+          "photo",
+          "license_number",
+          "issue_date",
+          "expiry_date"
+        ],
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "example": "John"
+          },
+          "middle_name": {
+            "type": "string",
+            "example": "Adebayo"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "gender": {
+            "type": "string",
+            "example": "MALE"
+          },
+          "birth_date": {
+            "type": "string",
+            "example": "1992-08-14"
+          },
+          "photo": {
+            "type": "string",
+            "example": "/9j/4AAQSkZJRgABAQAAAQABAAD..."
+          },
+          "license_number": {
+            "type": "string",
+            "example": "LAG-DL-4839201"
+          },
+          "issue_date": {
+            "type": "string",
+            "example": "2021-06-01"
+          },
+          "expiry_date": {
+            "type": "string",
+            "example": "2026-05-31"
+          }
+        }
+      },
+      "DriversLicenseVerificationResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "message",
+          "data",
+          "charges"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Driver's license verification completed successfully"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DriversLicenseVerificationData"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "charges": {
+            "$ref": "#/components/schemas/VerificationCharges"
+          }
+        }
+      },
+      "VotersCardVerificationRequest": {
+        "type": "object",
+        "required": [
+          "voters_id"
+        ],
+        "properties": {
+          "voters_id": {
+            "type": "string",
+            "description": "Voter's identification number",
+            "example": "AKD12345678901"
+          }
+        }
+      },
+      "VotersCardVerificationData": {
+        "type": "object",
+        "required": [
+          "first_name",
+          "middle_name",
+          "last_name",
+          "gender",
+          "birth_date",
+          "photo",
+          "voters_id",
+          "polling_unit",
+          "state",
+          "lga"
+        ],
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "example": "John"
+          },
+          "middle_name": {
+            "type": "string",
+            "example": "Adebayo"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "gender": {
+            "type": "string",
+            "example": "MALE"
+          },
+          "birth_date": {
+            "type": "string",
+            "example": "1992-08-14"
+          },
+          "photo": {
+            "type": "string",
+            "example": "/9j/4AAQSkZJRgABAQAAAQABAAD..."
+          },
+          "voters_id": {
+            "type": "string",
+            "example": "AKD12345678901"
+          },
+          "polling_unit": {
+            "type": "string",
+            "example": "Ward 4 Unit 12"
+          },
+          "state": {
+            "type": "string",
+            "example": "Lagos"
+          },
+          "lga": {
+            "type": "string",
+            "example": "Ikeja"
+          }
+        }
+      },
+      "VotersCardVerificationResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "message",
+          "data",
+          "charges"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Voter's card verification completed successfully"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/VotersCardVerificationData"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "charges": {
+            "$ref": "#/components/schemas/VerificationCharges"
+          }
+        }
+      },
+      "InternationalPassportVerificationRequest": {
+        "type": "object",
+        "required": [
+          "passport_number"
+        ],
+        "properties": {
+          "passport_number": {
+            "type": "string",
+            "description": "International passport number",
+            "example": "A12345678"
+          }
+        }
+      },
+      "InternationalPassportVerificationData": {
+        "type": "object",
+        "required": [
+          "first_name",
+          "middle_name",
+          "last_name",
+          "gender",
+          "birth_date",
+          "photo",
+          "passport_number",
+          "issue_date",
+          "expiry_date",
+          "nationality"
+        ],
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "example": "John"
+          },
+          "middle_name": {
+            "type": "string",
+            "example": "Adebayo"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "gender": {
+            "type": "string",
+            "example": "MALE"
+          },
+          "birth_date": {
+            "type": "string",
+            "example": "1992-08-14"
+          },
+          "photo": {
+            "type": "string",
+            "example": "/9j/4AAQSkZJRgABAQAAAQABAAD..."
+          },
+          "passport_number": {
+            "type": "string",
+            "example": "A12345678"
+          },
+          "issue_date": {
+            "type": "string",
+            "example": "2021-03-10"
+          },
+          "expiry_date": {
+            "type": "string",
+            "example": "2031-03-09"
+          },
+          "nationality": {
+            "type": "string",
+            "example": "Nigerian"
+          }
+        }
+      },
+      "InternationalPassportVerificationResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "message",
+          "data",
+          "charges"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "International passport verification completed successfully"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/InternationalPassportVerificationData"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "charges": {
+            "$ref": "#/components/schemas/VerificationCharges"
+          }
+        }
+      },
+      "FaceCompareRequest": {
+        "type": "object",
+        "required": [
+          "source_image",
+          "target_image"
+        ],
+        "properties": {
+          "source_image": {
+            "type": "string",
+            "description": "Source face image as a URL or base64 string",
+            "example": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..."
+          },
+          "target_image": {
+            "type": "string",
+            "description": "Target face image as a URL or base64 string",
+            "example": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..."
+          }
+        }
+      },
+      "FaceCompareData": {
+        "type": "object",
+        "required": [
+          "similarity"
+        ],
+        "properties": {
+          "similarity": {
+            "type": "string",
+            "description": "Similarity score returned by the comparison engine",
+            "example": "0.93"
+          }
+        }
+      },
+      "FaceCompareResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "message",
+          "data",
+          "charges"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Face comparison completed successfully"
+          },
+          "data": {
+            "$ref": "#/components/schemas/FaceCompareData"
+          },
+          "charges": {
+            "$ref": "#/components/schemas/VerificationCharges"
+          }
+        }
+      },
+      "BankAccountVerificationRequest": {
+        "type": "object",
+        "required": [
+          "bvn",
+          "bank_code",
+          "bank_account"
+        ],
+        "properties": {
+          "bvn": {
+            "type": "string",
+            "description": "Customer BVN",
+            "example": "22123456789"
+          },
+          "bank_code": {
+            "type": "string",
+            "description": "Bank code",
+            "example": "058"
+          },
+          "bank_account": {
+            "type": "string",
+            "description": "Bank account number",
+            "example": "0123456789"
+          }
+        }
+      },
+      "BankAccountVerificationData": {
+        "type": "object",
+        "required": [
+          "verify_result",
+          "bank_account_name",
+          "name_match_percentage"
+        ],
+        "properties": {
+          "verify_result": {
+            "type": "boolean",
+            "description": "Whether the bank account verification succeeded",
+            "example": true
+          },
+          "bank_account_name": {
+            "type": "string",
+            "description": "Resolved bank account name",
+            "example": "JOHN ADEBAYO DOE"
+          },
+          "name_match_percentage": {
+            "type": "integer",
+            "description": "Percentage name match score",
+            "example": 97
+          }
+        }
+      },
+      "BankAccountVerificationResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "message",
+          "data",
+          "charges"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Bank account verification completed successfully"
+          },
+          "data": {
+            "$ref": "#/components/schemas/BankAccountVerificationData"
+          },
+          "charges": {
+            "$ref": "#/components/schemas/VerificationCharges"
+          }
+        }
+      },
+      "BlacklistQueryRequest": {
+        "type": "object",
+        "required": [
+          "phone_number",
+          "bvn_no",
+          "nin"
+        ],
+        "properties": {
+          "phone_number": {
+            "type": "string",
+            "description": "Customer phone number",
+            "example": "08012345678"
+          },
+          "bvn_no": {
+            "type": "string",
+            "description": "Customer BVN",
+            "example": "22123456789"
+          },
+          "nin": {
+            "type": "string",
+            "description": "Customer NIN",
+            "example": "12345678901"
+          }
+        }
+      },
+      "BlacklistQueryData": {
+        "type": "object",
+        "required": [
+          "result",
+          "hit_time",
+          "request_id"
+        ],
+        "properties": {
+          "result": {
+            "type": "string",
+            "example": "NO_HIT"
+          },
+          "hit_time": {
+            "type": "integer",
+            "example": 0
+          },
+          "request_id": {
+            "type": "string",
+            "example": "BLQ-20260402-0001"
+          }
+        }
+      },
+      "BlacklistQueryResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "message",
+          "data",
+          "charges"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Blacklist query completed successfully"
+          },
+          "data": {
+            "$ref": "#/components/schemas/BlacklistQueryData"
+          },
+          "charges": {
+            "$ref": "#/components/schemas/VerificationCharges"
+          }
+        }
+      },
+      "CreditScoreQueryRequest": {
+        "type": "object",
+        "required": [
+          "mobile_no",
+          "id_number",
+          "extend_info"
+        ],
+        "properties": {
+          "mobile_no": {
+            "type": "string",
+            "example": "08012345678"
+          },
+          "id_number": {
+            "type": "string",
+            "example": "22123456789"
+          },
+          "extend_info": {
+            "type": "object",
+            "additionalProperties": true,
+            "example": {
+              "channel": "web",
+              "product": "consumer-loan"
+            }
+          }
+        }
+      },
+      "CreditScoreQueryData": {
+        "type": "object",
+        "required": [
+          "credit_score",
+          "version",
+          "request_id"
+        ],
+        "properties": {
+          "credit_score": {
+            "type": "string",
+            "example": "742"
+          },
+          "version": {
+            "type": "string",
+            "example": "v1.0"
+          },
+          "request_id": {
+            "type": "string",
+            "example": "CSQ-20260402-0001"
+          }
+        }
+      },
+      "CreditScoreQueryResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "message",
+          "data",
+          "charges"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Credit score query completed successfully"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CreditScoreQueryData"
+          },
+          "charges": {
+            "$ref": "#/components/schemas/VerificationCharges"
+          }
+        }
+      },
+      "LoanFeatureQueryRequest": {
+        "type": "object",
+        "required": [
+          "access_type",
+          "value",
+          "authorization",
+          "type",
+          "encrypt"
+        ],
+        "properties": {
+          "access_type": {
+            "type": "string",
+            "example": "bvn"
+          },
+          "value": {
+            "type": "string",
+            "example": "22123456789"
+          },
+          "authorization": {
+            "type": "string",
+            "example": "Bearer demo-token"
+          },
+          "type": {
+            "type": "integer",
+            "example": 1
+          },
+          "encrypt": {
+            "type": "string",
+            "example": "0"
+          }
+        }
+      },
+      "LoanFeatureQueryResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "message",
+          "data",
+          "charges"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Loan feature query completed successfully"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": true,
+            "example": {}
+          },
+          "charges": {
+            "$ref": "#/components/schemas/VerificationCharges"
+          }
+        }
+      },
       "CreateVirtualAccountRequest": {
         "type": "object",
         "required": [
@@ -2124,8 +4886,14 @@
     },
     "securitySchemes": {
       "apiKeyAuth": {
-        "type": "http",
-        "scheme": "apiKey"
+        "type": "apiKey",
+        "in": "header",
+        "name": "api-key"
+      },
+      "apiSecretAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "api-secret"
       }
     }
   }

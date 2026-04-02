@@ -1,0 +1,47 @@
+---
+title: "Identity Verification Overview"
+description: "How to structure identity and risk checks across the PayVessel verification stack"
+---
+
+Use PayVessel Identity Verification to confirm who a customer is, validate linked financial details, and apply risk checks before you allow higher-trust actions.
+
+## Recommended Flow
+
+1. Start with a strong identity anchor such as **BVN** or **NIN**.
+2. Add **document verification** when you need richer profile evidence.
+3. Run **face comparison** when you need image-based matching.
+4. Confirm the customer’s **bank account** before payout or settlement flows.
+5. Use **risk queries** to screen for blacklist hits, assess credit posture, or retrieve loan-related signals.
+
+## Choose The Right Check
+
+<CardGroup cols={2}>
+  <Card title="Basic BVN Verification" icon="id-card" href="/identity-verification/basic-bvn-verification">
+    Compare a BVN against submitted identity fields and review match results.
+  </Card>
+  <Card title="Enhanced BVN Verification" icon="building-columns" href="/identity-verification/enhanced-bvn-verification">
+    Retrieve a fuller BVN profile for stronger onboarding and compliance checks.
+  </Card>
+  <Card title="Basic NIN Verification" icon="shield-check" href="/identity-verification/basic-nin-verification">
+    Check NIN data against customer-submitted profile details.
+  </Card>
+  <Card title="Enhanced NIN Verification" icon="address-card" href="/identity-verification/enhanced-nin-verification">
+    Retrieve richer NIN profile details when you need a deeper identity view.
+  </Card>
+  <Card title="Document Verification" icon="file-lines" href="/identity-verification/drivers-license-verification">
+    Verify driver's license, voter's card, and international passport records.
+  </Card>
+  <Card title="Face Comparison" icon="face-smile" href="/identity-verification/merchant-face">
+    Compare two face images and review the returned similarity score.
+  </Card>
+  <Card title="Bank Account Verification" icon="building-un" href="/identity-verification/merchant-bank-account">
+    Confirm a bank account against a BVN and returned account-name match score.
+  </Card>
+  <Card title="Risk Queries" icon="triangle-exclamation" href="/identity-verification/blacklist-query">
+    Screen blacklist status, credit score, and loan-related signals.
+  </Card>
+</CardGroup>
+
+<Note>
+Use the **API Reference** tab for exact headers, payloads, and live request examples. Use the pages in this section to decide **when** to call each endpoint and **how** to combine them.
+</Note>

@@ -1,0 +1,35 @@
+---
+title: "Compare Faces"
+description: "When to use face comparison and how to work with similarity scores"
+---
+
+Face comparison helps you determine whether two submitted images likely belong to the same person.
+
+## Best For
+
+- Identity confirmation after BVN, NIN, or document retrieval
+- Fraud reduction
+- Manual-review support
+
+## What You Submit
+
+You submit:
+
+- `source_image`
+- `target_image`
+
+These can represent a live selfie, stored customer image, or document-linked image depending on your flow.
+
+## What You Get Back
+
+The endpoint returns a `similarity` score.
+
+## How To Use It
+
+- Define an internal threshold for accept / review / reject
+- Use higher thresholds for higher-risk actions
+- Combine with liveness when you need stronger anti-spoof protection
+
+<Warning>
+Face similarity should support a broader identity decision, not replace core identity-number or document verification by itself.
+</Warning>

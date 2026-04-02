@@ -1,0 +1,45 @@
+---
+title: "Basic BVN Verification"
+description: "When to use basic BVN verification and how to interpret field-match results"
+---
+
+Basic BVN verification is best when you already collected customer profile data and want to check how closely it matches the BVN record.
+
+## Best For
+
+- Fast onboarding checks
+- Match-score driven workflows
+- Tiered KYC where you do not yet need full BVN profile details
+
+## What You Submit
+
+You provide the BVN together with identity fields such as first name, middle name, last name, gender, birthday, and phone number.
+
+## What You Get Back
+
+The response tells you how well the submitted profile matches the BVN record:
+
+- `name_match_rlt`
+- `names_match_percentage`
+- `birthday_match_rlt`
+- `gender_match_rlt`
+- `phone_number_match_rlt`
+
+## How To Use It
+
+Use this guide when you need a simple pass / review / fail decision:
+
+- Auto-approve when all core fields match
+- Route to manual review when the match percentage is borderline
+- Reject or request correction when the identity fields clearly differ
+
+## Typical Flow
+
+1. Collect BVN and customer profile details.
+2. Call Basic BVN Verification.
+3. Evaluate the match fields and score.
+4. Escalate to Enhanced BVN, document checks, or face comparison when needed.
+
+<Tip>
+If you need actual profile data from the BVN source instead of match results, use [Enhanced BVN Verification](/identity-verification/enhanced-bvn-verification).
+</Tip>

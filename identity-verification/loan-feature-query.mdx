@@ -1,0 +1,32 @@
+---
+title: "Loan Feature Query"
+description: "Use loan-feature queries when your workflow needs downstream loan-related signals"
+---
+
+Loan-feature queries are useful when your product needs loan-linked data or eligibility signals based on the submitted access context.
+
+## Best For
+
+- Loan onboarding
+- Offer personalization
+- Downstream lending or product-access logic
+
+## What You Submit
+
+You provide:
+
+- `access_type`
+- `value`
+- `authorization`
+- `type`
+- `encrypt`
+
+## What You Get Back
+
+The response returns a data object that you can interpret according to your product logic and the provider response you expect.
+
+## How To Use It
+
+- Call this after core identity verification is complete
+- Use the response to decide whether to show, hide, or tailor loan features
+- Log the request context so support and risk teams can audit decisions later
