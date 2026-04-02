@@ -5,15 +5,7 @@ description: 'Endpoint reference, request/response payloads, code samples, and p
 
 **Code samples, request/response payloads, and endpoint reference.** Use this tab for HTTP methods, headers, body schemas, and example code. For concepts, integration flows, and when-to-use guidance, see the **Guides** tab.
 
-<Note>
-**Documentation status:**
-<Accordion title="Send Money & Transfers">
-    Detailed endpoints for moving funds to recipients:
-    - [Create Recipient](/api-reference/transfers/create-recipient)
-    - [Initiate Transfer](/api-reference/transfers/initiate-transfer)
-  </Accordion>
-If a section is unclear or missing, [contact support](mailto:support@payvessel.com).
-</Note>
+
 
 PayVessel's REST API provides programmatic access to accept payments, send money, verify identities, manage wallets, and more. Our API is organized around REST principles with predictable resource-oriented URLs, accepts form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes and authentication.
 
@@ -68,10 +60,11 @@ Our API is organized into logical groups of functionality, matching the navigati
 
 <AccordionGroup>
   <Accordion title="💳 Transactions" icon="credit-card">
-    Initialize and verify payments, and retrieve transaction lists.
+    Initialize, confirm, and verify payments, and retrieve transaction lists.
     
     **Key Endpoints:**
     - `POST /transaction/initialize` - Initialize a payment
+    - `POST /transaction/confirm` - Confirm transaction
     - `GET /transaction/verify/{reference}` - Verify transaction status
     - `GET /transaction/list` - List transactions
   </Accordion>
@@ -101,14 +94,6 @@ Our API is organized into logical groups of functionality, matching the navigati
     - `GET /reserved-account/{account_number}` - Get account details
   </Accordion>
 
-  <Accordion title="🔗 Checkout" icon="cart-shopping">
-    PayVessel Hosted Checkout operations for verifying and confirming transactions.
-    
-    **Key Endpoints:**
-    - `POST /checkout/initialize` - Initialize hosted checkout
-    - `POST /checkout/confirm` - Confirm transaction
-  </Accordion>
-
 </AccordionGroup>
 
 ## Request & Response Format
@@ -127,15 +112,10 @@ All API responses follow a consistent structure:
 
 ```json
 {
-  "status": "success|error",
+  "status": true,false,
   "message": "Descriptive message",
   "data": {
     // Response data here
-  },
-  "meta": {
-    "total": 100,
-    "page": 1,
-    "per_page": 20
   }
 }
 ```

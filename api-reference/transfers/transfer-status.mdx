@@ -1,9 +1,30 @@
 ---
 title: "Transfer Status"
 description: "Check the status of a previously initiated transfer"
+openapi: "POST /pms/api/external/request/wallet/transfer-status/"
 ---
 
 Use this endpoint to **check the final status of a transfer** you created with either **Initiate Transfer** or **Bulk Transfer**.
+
+## Quick test (cURL)
+
+### Production
+```bash
+curl -X POST "https://api.payvessel.com/pms/api/external/request/wallet/transfer-status/" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_API_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"reference":"PAYOUT_2026_0001","session_id":"SESSION_123456789"}'
+```
+
+### Sandbox
+```bash
+curl -X POST "https://sandbox.payvessel.com/pms/api/external/request/wallet/transfer-status/" \
+  -H "api-key: YOUR_SANDBOX_API_KEY" \
+  -H "api-secret: YOUR_SANDBOX_API_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"reference":"PAYOUT_2026_0001","session_id":"SESSION_123456789"}'
+```
 
 ## Endpoint
 
@@ -11,18 +32,21 @@ Use this endpoint to **check the final status of a transfer** you created with e
 
 ## Headers
 
-| Name | Location | Type | Required | Description |
-|------|----------|------|----------|-------------|
-| `api-key` | header | string | Yes | Business API key |
-| `api-secret` | header | string | Yes | Business API secret |
-| `Content-Type` | header | string | Yes | Must be `application/json` |
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `api-key` | string | **Required** | Your API key |
+| `api-secret` | string | **Required** | Your API secret |
+| `Content-Type` | string | **Required** | Must be `application/json` |
 
-## Request body
+## Request Body
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `reference` | string | Yes | Transfer reference you passed when initiating the transfer |
-| `session_id` | string | Yes | Session ID returned in the initial transfer response |
+<ParamField body="reference" type="string" required>
+  Transfer reference you passed when initiating the transfer
+</ParamField>
+
+<ParamField body="session_id" type="string" required>
+  Session ID returned in the initial transfer response
+</ParamField>
 
 ### Example request
 

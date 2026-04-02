@@ -1,6 +1,7 @@
 ---
 title: "Create Wallet"
 description: "Create a digital wallet for customers to store funds and make transactions"
+openapi: "POST /wallets/create"
 ---
 
 Create a digital wallet for customers to securely store funds, make payments, and receive money. PayVessel wallets support multiple currencies and provide real-time balance tracking.
@@ -8,6 +9,26 @@ Create a digital wallet for customers to securely store funds, make payments, an
 <Note>
 Digital wallets enable you to build comprehensive fintech solutions with account-to-account transfers, bill payments, and merchant transactions.
 </Note>
+
+## Quick test (cURL)
+
+### Production
+```bash
+curl -X POST "https://api.payvessel.com/wallets/create" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: unique-key-123" \
+  -d '{"customer_id":"customer_123","currency":"NGN","wallet_type":"personal","label":"Main Account"}'
+```
+
+### Sandbox
+```bash
+curl -X POST "https://sandbox.payvessel.com/wallets/create" \
+  -H "api-key: YOUR_SANDBOX_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: unique-key-123" \
+  -d '{"customer_id":"customer_123","currency":"NGN","wallet_type":"personal","label":"Main Account"}'
+```
 
 ## Endpoint
 

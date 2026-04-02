@@ -17,7 +17,7 @@
 ## Request Body
 
 <ParamField body="amount" type="string" required>
-  Amount to charge in the smallest currency unit (e.g., `"10000"` for ₦100.00).
+  Amount to charge in naira (e.g., `"100"` for ₦100.00).
 </ParamField>
 
 <ParamField body="currency" type="string" default="NGN">
@@ -50,10 +50,6 @@
 
 <ParamField body="webhook_url" type="string">
   The URL to receive webhook notifications about the transaction.
-</ParamField>
-
-<ParamField body="metadata" type="string">
-  Additional data you want to store with the transaction.
 </ParamField>
 
 ## Response
@@ -100,9 +96,9 @@ curl -X POST https://api.payvessel.com/pms/transactions/initialize/ \
   -H "api-secret: your_api_secret" \
   -H "Content-Type: application/json" \
   -d '{
-    "amount": "500000",
+    "amount": "500",
     "currency": "NGN",
-    "channels": ["BANK_TRANSFER", "CARD"],
+    "channels": ["BANK_TRANSFER"],
     "customer_name": "John Doe",
     "customer_email": "customer@example.com",
     "customer_phone_number": "+2348012345678",
@@ -113,18 +109,49 @@ curl -X POST https://api.payvessel.com/pms/transactions/initialize/ \
 
 ## Example Response
 
-```json
+```json 200 Success
 {
-    "status": true,
-    "message": "Checkout transaction successfully initialized",
-    "data": {
-        "id": "21d0c799-fbb5-473e-856d-1b2f9ada9d8a",
-        "transaction_ref": "<string>",
-        "amount": "5000.00",
-        "status": "PENDING",
-        "access_code": "ABC-I77VVH-EROP40XN-TCGOTP-ABCD",
-        "checkout_url": "https://checkout.payvessel.com/ACS-I77VVH-EROP40XN-ABCD-XCN4",
-        "created_datetime": "2026-03-25T16:39:25.872400"
+  "status": true,
+  "message": "Checkout transaction successfully initialized",
+  "data": {
+    "id": "52b9bb2d-01d1-46ac-9800-14d34cb5f882",
+    "transaction_ref": "B0C866BD914C487895ACB8C45B939017",
+    "amount": "5000.00",
+    "status": "PENDING",
+    "access_code": "TEST-ACS-7AF7VH-2QIHE83N-TCTL28-BSDH",
+    "checkout_url": "https://checkout.payvessel.com/TEST-ACS-7AF7VH-2QIHE83N-TCTL28-BSDH",
+    "created_datetime": "2026-04-01T15:46:56.171229"
+  }
+}
+```
+
+```json 400 Bad Request
+{
+  "success": false,
+  "message": "amount must be at least 50",
+  "details": [
+    {
+      "code": "invalid",
+      "detail": "amount must be at least 50",
+      "attr": "amount"
+    },
+    {
+      "code": "required",
+      "detail": "This field is required.",
+      "attr": "channels"
+    },
+    {
+      "code": "blank",
+      "detail": "This field may not be blank.",
+      "attr": "customer_email"
     }
+  ]
+}
+```
+
+```json 401 Unauthorized
+{
+  "status": "error",
+  "message": "Unauthorized. Please check your API key"
 }
 ```
