@@ -1,7 +1,18 @@
 ---
 title: "List Transactions"
 description: "Retrieve a paginated list of transactions for your account"
+openapi: "GET /transactions"
 ---
+
+## Quick test (cURL)
+
+```bash
+curl -X GET "https://api.payvessel.com/transactions" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_API_SECRET" \
+  -H "Content-Type: application/json"
+```
+
 
 Retrieve a paginated list of all transactions for your account with optional filtering and sorting capabilities.
 

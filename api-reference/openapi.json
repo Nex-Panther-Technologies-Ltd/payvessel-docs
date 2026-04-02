@@ -1053,6 +1053,16 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/InitializeTransactionRequest"
+              },
+              "example": {
+                "amount": "5000.00",
+                "channels": ["BANK_TRANSFER"],
+                "currency": "NGN",
+                "customer_name": "John Doe",
+                "customer_email": "customer@example.com",
+                "customer_phone_number": "+2348012345678",
+                "redirect_url": "https://yourapp.com/payment/callback",
+                "webhook_url": "https://yourapp.com/webhook"
               }
             }
           }
@@ -1064,12 +1074,639 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/InitializeTransactionResponse"
+                },
+                "example": {
+                  "status": true,
+                  "message": "Checkout transaction successfully initialized",
+                  "data": {
+                    "id": "52b9bb2d-01d1-46ac-9800-14d34cb5f882",
+                    "transaction_ref": "B0C866BD914C487895ACB8C45B939017",
+                    "amount": "5000.00",
+                    "status": "PENDING",
+                    "access_code": "TEST-ACS-7AF7VH-2QIHE83N-TCTL28-BSDH",
+                    "checkout_url": "https://checkout.payvessel.com/TEST-ACS-7AF7VH-2QIHE83N-TCTL28-BSDH",
+                    "created_datetime": "2026-04-01T15:46:56.171229"
+                  }
                 }
               }
             }
           }
         },
         "tags": ["Checkout"]
+      }
+    },
+    "/transaction/verify/{reference}": {
+      "get": {
+        "summary": "Verify Payment",
+        "description": "Verify the status of a payment transaction by reference",
+        "parameters": [
+          {
+            "name": "reference",
+            "in": "path",
+            "description": "The unique transaction reference returned when the payment was initialized",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["application/json"]
+            },
+            "example": "application/json"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction verification successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyTransactionResponse"
+                },
+                "examples": {
+                  "success": {
+                    "summary": "Successful Payment",
+                    "value": {
+                      "status": "success",
+                      "message": "Transaction verification successful",
+                      "data": {
+                        "id": 123456789,
+                        "reference": "TXN_2024_001",
+                        "amount": 50000,
+                        "currency": "NGN",
+                        "status": "success",
+                        "gateway_response": "Successful",
+                        "paid_at": "2024-01-15T14:35:22Z",
+                        "created_at": "2024-01-15T14:30:00Z",
+                        "channel": "card",
+                        "fees": 750,
+                        "customer": {
+                          "id": 12345,
+                          "email": "customer@example.com",
+                          "first_name": "John",
+                          "last_name": "Doe",
+                          "phone": "+2348012345678"
+                        },
+                        "authorization": {
+                          "authorization_code": "AUTH_xyz789abc",
+                          "bin": "408408",
+                          "last4": "4081",
+                          "exp_month": "12",
+                          "exp_year": "2027",
+                          "channel": "card",
+                          "card_type": "visa",
+                          "bank": "TEST BANK",
+                          "country_code": "NG",
+                          "brand": "visa",
+                          "reusable": true
+                        },
+                        "metadata": {
+                          "custom_fields": [
+                            {
+                              "display_name": "Order ID",
+                              "variable_name": "order_id",
+                              "value": "ORD_001"
+                            }
+                          ]
+                        },
+                        "log": {
+                          "start_time": 1705329000,
+                          "time_spent": 322,
+                          "attempts": 1,
+                          "errors": 0,
+                          "success": true,
+                          "mobile": false,
+                          "input": [],
+                          "history": [
+                            {
+                              "type": "action",
+                              "message": "Attempted to pay with card",
+                              "time": 15
+                            },
+                            {
+                              "type": "success",
+                              "message": "Successfully paid with card",
+                              "time": 322
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "failed": {
+                    "summary": "Failed Payment",
+                    "value": {
+                      "status": "success",
+                      "message": "Transaction verification successful",
+                      "data": {
+                        "id": 123456790,
+                        "reference": "TXN_2024_002",
+                        "amount": 50000,
+                        "currency": "NGN",
+                        "status": "failed",
+                        "gateway_response": "Insufficient Funds",
+                        "paid_at": null,
+                        "created_at": "2024-01-15T15:00:00Z",
+                        "channel": "card",
+                        "fees": 0,
+                        "customer": {
+                          "id": 12346,
+                          "email": "customer2@example.com",
+                          "first_name": "Jane",
+                          "last_name": "Smith",
+                          "phone": "+2348012345679"
+                        },
+                        "authorization": null,
+                        "metadata": {},
+                        "log": {
+                          "start_time": 1705330800,
+                          "time_spent": 45,
+                          "attempts": 1,
+                          "errors": 1,
+                          "success": false,
+                          "mobile": false,
+                          "input": [],
+                          "history": [
+                            {
+                              "type": "action",
+                              "message": "Attempted to pay with card",
+                              "time": 10
+                            },
+                            {
+                              "type": "error",
+                              "message": "Payment failed: Insufficient Funds",
+                              "time": 45
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Transaction not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "status": "error",
+                  "message": "Transaction not found"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "status": "error",
+                  "message": "Unauthorized. Please check your API key"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Transactions"]
+      }
+    },
+    "/pms/api/external/request/wallet/transfer/": {
+      "post": {
+        "summary": "Initiate Transfer",
+        "description": "Send money from your managed wallet to a bank account",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["application/json"]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InitiateTransferRequest"
+              },
+              "example": {
+                "amount": "15000.00",
+                "account_number": "0123456789",
+                "bank_code": "999991",
+                "account_name": "John Doe",
+                "narration": "Vendor payout - March",
+                "reference": "PAYOUT_2026_0001",
+                "otp": "123456"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Transfer initiated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitiateTransferResponse"
+                },
+                "example": {
+                  "status": true,
+                  "message": "Transfer initiated successfully",
+                  "data": {
+                    "reference": "PAYOUT_2026_0001",
+                    "session_id": "SESSION_123456789",
+                    "amount": "15000.00",
+                    "status": "pending",
+                    "destination_account_number": "0123456789",
+                    "destination_bank_code": "999991",
+                    "destination_account_name": "John Doe"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Transfers"]
+      }
+    },
+    "/pms/api/external/request/wallet/bulk-transfer/": {
+      "post": {
+        "summary": "Bulk Transfer",
+        "description": "Initiate multiple wallet transfers in a single batch",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["application/json"]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkTransferRequest"
+              },
+              "example": {
+                "batch_reference": "PAYROLL_2026_03",
+                "transfers": [
+                  {
+                    "amount": "15000.00",
+                    "account_number": "0123456789",
+                    "bank_code": "999991",
+                    "account_name": "John Doe",
+                    "narration": "March salary",
+                    "reference": "PAYROLL_2026_03_EMP001"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Bulk transfer initiated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkTransferResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Transfers"]
+      }
+    },
+    "/pms/api/external/request/wallet/transfer-status/": {
+      "post": {
+        "summary": "Transfer Status",
+        "description": "Check the status of a previously initiated transfer",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["application/json"]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransferStatusRequest"
+              },
+              "example": {
+                "reference": "PAYOUT_2026_0001",
+                "session_id": "SESSION_123456789"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Transfer status retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransferStatusResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Transfers"]
+      }
+    },
+    "/wallets/create": {
+      "post": {
+        "summary": "Create Wallet",
+        "description": "Create a digital wallet for customers to store funds and make transactions",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["application/json"]
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "description": "Unique key to prevent duplicate wallet creation",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWalletRequest"
+              },
+              "example": {
+                "customer_id": "customer_123",
+                "currency": "NGN",
+                "wallet_type": "personal",
+                "label": "Main Account"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Wallet created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateWalletResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Wallets"]
+      }
+    },
+    "/pms/wallets": {
+      "get": {
+        "summary": "Get Wallets",
+        "description": "List or retrieve managed wallets for your business",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Wallets retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetWalletsResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Wallets"]
+      }
+    },
+    "/pms/wallets/{wallet_id}/balance": {
+      "get": {
+        "summary": "Wallet Balance",
+        "description": "Retrieve the current balance for a managed wallet",
+        "parameters": [
+          {
+            "name": "wallet_id",
+            "in": "path",
+            "description": "The unique identifier of the wallet",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Wallet balance retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WalletBalanceResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Wallets"]
+      }
+    },
+    "/pms/wallets/{wallet_id}/statement": {
+      "get": {
+        "summary": "Wallet Statement",
+        "description": "Get transaction history for a managed wallet",
+        "parameters": [
+          {
+            "name": "wallet_id",
+            "in": "path",
+            "description": "Unique ID of the wallet",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "description": "Start date in ISO 8601 format",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "End date in ISO 8601 format",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Wallet statement retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WalletStatementResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Wallets"]
       }
     }
   },
@@ -1780,20 +2417,20 @@
         "properties": {
           "amount": {
             "type": "string",
-            "description": "Transaction amount in kobo (for NGN) or minor currency units"
+            "description": "Transaction amount in naira (for NGN) or minor currency units"
           },
           "channels": {
             "type": "array",
             "items": {
               "type": "string",
-              "enum": ["BANK_TRANSFER", "CARD", "USSD"]
+              "enum": ["BANK_TRANSFER"]
             },
             "description": "Payment channels to enable for this transaction"
           },
           "currency": {
             "type": "string",
             "description": "Transaction currency code",
-            "enum": ["NGN"]
+            "enum": ["NGN", "USD"]
           },
           "metadata": {
             "type": "string",
@@ -1842,48 +2479,33 @@
           "data": {
             "type": "object",
             "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique transaction ID"
+              },
+              "transaction_ref": {
+                "type": "string",
+                "description": "Transaction reference"
+              },
               "amount": {
                 "type": "string",
                 "description": "Transaction amount"
               },
-              "channels": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                },
-                "description": "Enabled payment channels"
-              },
-              "currency": {
+              "status": {
                 "type": "string",
-                "description": "Transaction currency"
+                "description": "Transaction status"
               },
-              "metadata": {
+              "access_code": {
                 "type": "string",
-                "description": "Transaction metadata"
+                "description": "Access code for transaction session"
               },
-              "customer_name": {
+              "checkout_url": {
                 "type": "string",
-                "description": "Customer name"
+                "description": "URL to redirect customer for payment"
               },
-              "customer_email": {
+              "created_datetime": {
                 "type": "string",
-                "description": "Customer email"
-              },
-              "customer_phone_number": {
-                "type": "string",
-                "description": "Customer phone number"
-              },
-              "redirect_url": {
-                "type": "string",
-                "description": "Redirect URL"
-              },
-              "webhook_url": {
-                "type": "string",
-                "description": "Webhook URL"
-              },
-              "reference": {
-                "type": "string",
-                "description": "Transaction reference"
+                "description": "Transaction creation timestamp"
               }
             }
           }
@@ -2118,6 +2740,516 @@
             "type": "string",
             "format": "date-time",
             "description": "Last update timestamp"
+          }
+        }
+      },
+      "VerifyTransactionResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Request status indicator - 'success' or 'error'"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable message describing the result"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "description": "Internal transaction ID"
+              },
+              "reference": {
+                "type": "string",
+                "description": "Unique transaction reference"
+              },
+              "amount": {
+                "type": "integer",
+                "description": "Transaction amount in smallest currency unit"
+              },
+              "currency": {
+                "type": "string",
+                "description": "Transaction currency code"
+              },
+              "status": {
+                "type": "string",
+                "enum": ["success", "failed", "pending", "abandoned", "cancelled"],
+                "description": "Transaction status"
+              },
+              "gateway_response": {
+                "type": "string",
+                "description": "Response message from the payment gateway"
+              },
+              "paid_at": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true,
+                "description": "ISO 8601 timestamp when payment was completed (null if not paid)"
+              },
+              "created_at": {
+                "type": "string",
+                "format": "date-time",
+                "description": "ISO 8601 timestamp when transaction was created"
+              },
+              "channel": {
+                "type": "string",
+                "enum": ["card", "bank", "ussd", "qr", "mobile_money", "bank_transfer"],
+                "description": "Payment method used"
+              },
+              "fees": {
+                "type": "integer",
+                "description": "Transaction fees charged in smallest currency unit"
+              },
+              "customer": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "Customer ID in PayVessel system"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "Customer's email address"
+                  },
+                  "first_name": {
+                    "type": "string",
+                    "description": "Customer's first name"
+                  },
+                  "last_name": {
+                    "type": "string",
+                    "description": "Customer's last name"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "Customer's phone number"
+                  }
+                }
+              },
+              "authorization": {
+                "type": "object",
+                "nullable": true,
+                "properties": {
+                  "authorization_code": {
+                    "type": "string",
+                    "description": "Authorization code for future charges"
+                  },
+                  "bin": {
+                    "type": "string",
+                    "description": "First 6 digits of the card number"
+                  },
+                  "last4": {
+                    "type": "string",
+                    "description": "Last 4 digits of the card number"
+                  },
+                  "exp_month": {
+                    "type": "string",
+                    "description": "Card expiry month"
+                  },
+                  "exp_year": {
+                    "type": "string",
+                    "description": "Card expiry year"
+                  },
+                  "channel": {
+                    "type": "string",
+                    "description": "Authorization channel used"
+                  },
+                  "card_type": {
+                    "type": "string",
+                    "description": "Type of card - 'visa', 'mastercard', 'american express', etc."
+                  },
+                  "bank": {
+                    "type": "string",
+                    "description": "Issuing bank name"
+                  },
+                  "country_code": {
+                    "type": "string",
+                    "description": "Country code of the issuing bank"
+                  },
+                  "brand": {
+                    "type": "string",
+                    "description": "Card brand"
+                  },
+                  "reusable": {
+                    "type": "boolean",
+                    "description": "Whether the authorization can be reused for future payments"
+                  }
+                }
+              },
+              "metadata": {
+                "type": "object",
+                "description": "Custom metadata attached to the transaction"
+              },
+              "log": {
+                "type": "object",
+                "description": "Transaction processing log and history"
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Error status indicator",
+            "example": "error"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "Transaction not found"
+          }
+        }
+      },
+      "InitiateTransferRequest": {
+        "type": "object",
+        "required": ["amount", "account_number", "bank_code", "reference"],
+        "properties": {
+          "amount": {
+            "type": "string",
+            "description": "Amount to transfer in the smallest currency unit"
+          },
+          "account_number": {
+            "type": "string",
+            "description": "Destination bank account number"
+          },
+          "bank_code": {
+            "type": "string",
+            "description": "Destination bank code"
+          },
+          "account_name": {
+            "type": "string",
+            "description": "Optional account name for records"
+          },
+          "narration": {
+            "type": "string",
+            "description": "Description for beneficiary statement"
+          },
+          "reference": {
+            "type": "string",
+            "description": "Unique transfer reference"
+          },
+          "otp": {
+            "type": "string",
+            "description": "One-time password when required"
+          }
+        }
+      },
+      "InitiateTransferResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Request status"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "reference": {
+                "type": "string",
+                "description": "Transfer reference"
+              },
+              "session_id": {
+                "type": "string",
+                "description": "Session ID for status tracking"
+              },
+              "amount": {
+                "type": "string",
+                "description": "Transfer amount"
+              },
+              "status": {
+                "type": "string",
+                "description": "Transfer status"
+              },
+              "destination_account_number": {
+                "type": "string",
+                "description": "Destination account number"
+              },
+              "destination_bank_code": {
+                "type": "string",
+                "description": "Destination bank code"
+              },
+              "destination_account_name": {
+                "type": "string",
+                "description": "Destination account name"
+              }
+            }
+          }
+        }
+      },
+      "BulkTransferRequest": {
+        "type": "object",
+        "required": ["batch_reference", "transfers"],
+        "properties": {
+          "batch_reference": {
+            "type": "string",
+            "description": "Unique reference for the bulk batch"
+          },
+          "transfers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["amount", "account_number", "bank_code", "reference"],
+              "properties": {
+                "amount": {
+                  "type": "string",
+                  "description": "Amount for this transfer"
+                },
+                "account_number": {
+                  "type": "string",
+                  "description": "Destination account number"
+                },
+                "bank_code": {
+                  "type": "string",
+                  "description": "Destination bank code"
+                },
+                "account_name": {
+                  "type": "string",
+                  "description": "Optional account name"
+                },
+                "narration": {
+                  "type": "string",
+                  "description": "Transfer description"
+                },
+                "reference": {
+                  "type": "string",
+                  "description": "Unique reference for this transfer"
+                }
+              }
+            }
+          }
+        }
+      },
+      "BulkTransferResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Request status"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message"
+          },
+          "data": {
+            "type": "object",
+            "description": "Bulk transfer result data"
+          }
+        }
+      },
+      "TransferStatusRequest": {
+        "type": "object",
+        "required": ["reference", "session_id"],
+        "properties": {
+          "reference": {
+            "type": "string",
+            "description": "Transfer reference"
+          },
+          "session_id": {
+            "type": "string",
+            "description": "Session ID from initiation"
+          }
+        }
+      },
+      "TransferStatusResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Request status"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message"
+          },
+          "data": {
+            "type": "object",
+            "description": "Transfer status data"
+          }
+        }
+      },
+      "CreateWalletRequest": {
+        "type": "object",
+        "required": ["customer_id"],
+        "properties": {
+          "customer_id": {
+            "type": "string",
+            "description": "Unique identifier for the customer"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Primary currency for the wallet",
+            "default": "NGN",
+            "enum": ["NGN", "USD", "GBP", "EUR", "GHS", "KES", "ZAR"]
+          },
+          "wallet_type": {
+            "type": "string",
+            "description": "Type of wallet to create",
+            "default": "personal",
+            "enum": ["personal", "business", "savings", "current"]
+          },
+          "label": {
+            "type": "string",
+            "description": "Human-readable label for the wallet"
+          }
+        }
+      },
+      "CreateWalletResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Request status"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "wallet_id": {
+                "type": "string",
+                "description": "Unique wallet identifier"
+              },
+              "customer_id": {
+                "type": "string",
+                "description": "Customer identifier"
+              },
+              "currency": {
+                "type": "string",
+                "description": "Wallet currency"
+              },
+              "wallet_type": {
+                "type": "string",
+                "description": "Type of wallet created"
+              },
+              "label": {
+                "type": "string",
+                "description": "Wallet label"
+              },
+              "balance": {
+                "type": "string",
+                "description": "Initial balance"
+              },
+              "created_at": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Creation timestamp"
+              }
+            }
+          }
+        }
+      },
+      "GetWalletsResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Request status"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Unique wallet ID"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Custom name or label"
+                },
+                "balance": {
+                  "type": "object",
+                  "properties": {
+                    "available_balance": {
+                      "type": "string",
+                      "description": "Available balance"
+                    },
+                    "ledger_balance": {
+                      "type": "string",
+                      "description": "Ledger balance"
+                    }
+                  }
+                },
+                "currency": {
+                  "type": "string",
+                  "description": "Wallet currency"
+                }
+              }
+            }
+          }
+        }
+      },
+      "WalletBalanceResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Request status"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "wallet_id": {
+                "type": "string",
+                "description": "The unique ID of the wallet"
+              },
+              "balance": {
+                "type": "string",
+                "description": "The current balance in smallest currency unit"
+              },
+              "currency": {
+                "type": "string",
+                "description": "The currency of the wallet"
+              },
+              "available_balance": {
+                "type": "string",
+                "description": "Funds available for immediate transfer"
+              }
+            }
+          }
+        }
+      },
+      "WalletStatementResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Request status"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Transaction ID"
+                },
+                "amount": {
+                  "type": "string",
+                  "description": "Amount moved"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Transaction type"
+                }
+              }
+            }
           }
         }
       }
