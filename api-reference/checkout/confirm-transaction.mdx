@@ -7,21 +7,7 @@ openapi: "GET /pms/transactions/{reference}/confirm/"
 
 **Retrieve final transaction details and status** using the transaction reference. This is typically used after a customer is redirected back from the checkout page or when processing high-value transactions that require manual confirmation.
 
-## Quick test (cURL)
 
-### Production
-```bash
-curl -X GET "https://api.payvessel.com/pms/transactions/TRANSACTION_REFERENCE/confirm/" \
-  -H "api-key: PVKEY-N3K21QCOZGQBHIFRLVA89U88DMGQ2TZR" \
-  -H "api-secret: PVSECRET-FVMY9C35NH98T5J506NGI0M5ATM1GD9270YS1BEH4OVIJ4NTTIK3ON0HYWBZ0C8V"
-```
-
-### Sandbox
-```bash
-curl -X GET "https://sandbox.payvessel.com/pms/transactions/TRANSACTION_REFERENCE/confirm/" \
-  -H "api-key: PVTESTKEY-4JH1RM894THXK8EWV20V74Q17FJVFGAG" \
-  -H "api-secret: PVTESTSECRET-RSLFNA1Q09DBXEPJY66C5ELSQBGNGP4PBMKXDVXH08ZPI4K8OVZ9RLLIBO1OB100"
-```
 
 ## Endpoint
 

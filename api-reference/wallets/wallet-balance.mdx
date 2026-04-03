@@ -6,19 +6,6 @@ openapi: "GET /pms/wallets/{wallet_id}/balance"
 
 **Retrieve the current balance** for a managed wallet. Always verify the available balance before initiating transfers to avoid transaction failures.
 
-## Quick test (cURL)
-
-### Production
-```bash
-curl -X GET "https://api.payvessel.com/pms/wallets/wallet_123/balance" \
-  -H "api-key: YOUR_API_KEY"
-```
-
-### Sandbox
-```bash
-curl -X GET "https://sandbox.payvessel.com/pms/wallets/wallet_123/balance" \
-  -H "api-key: YOUR_SANDBOX_API_KEY"
-```
 
 ## Endpoint
 

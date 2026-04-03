@@ -1061,8 +1061,7 @@
                 "customer_name": "John Doe",
                 "customer_email": "customer@example.com",
                 "customer_phone_number": "+2348012345678",
-                "redirect_url": "https://yourapp.com/payment/callback",
-                "webhook_url": "https://yourapp.com/webhook"
+                "redirect_url": "https://yourapp.com/payment/callback"
               }
             }
           }
@@ -1301,6 +1300,131 @@
           }
         },
         "tags": ["Transactions"]
+      }
+    },
+    "/pms/api/external/request/wallet/banks/": {
+      "get": {
+        "summary": "Get Bank List",
+        "description": "Retrieve list of supported banks for fund transfers",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Business API Key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Business API Secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of supported banks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBankListResponse"
+                },
+                "example": {
+                  "status": true,
+                  "message": "Banks retrieved successfully",
+                  "data": [
+                    {
+                      "bank_code": "058",
+                      "bank_name": "Guaranty Trust Bank",
+                      "bank_short_name": "GTBank",
+                      "bank_logo_url": "https://assets.payvessel.com/banks/gtbank.png",
+                      "is_active": true
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Transfers"]
+      }
+    },
+    "/pms/api/external/request/wallet/validate-account/": {
+      "post": {
+        "summary": "Validate Account",
+        "description": "Resolve an account number to an account name before initiating transfer",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Business API Key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Business API Secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["application/json"]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateAccountRequest"
+              },
+              "example": {
+                "account_number": "4044823317",
+                "bank_code": "8980"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Account validated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateAccountResponse"
+                },
+                "example": {
+                  "status": true,
+                  "message": "Account resolved successfully",
+                  "data": {
+                    "account_name": "John Doe",
+                    "account_number": "4044823317",
+                    "bank_code": "8980",
+                    "bank_name": "PayVessel MFB"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Transfers"]
       }
     },
     "/pms/api/external/request/wallet/transfer/": {
@@ -2433,7 +2557,7 @@
             "enum": ["NGN", "USD"]
           },
           "metadata": {
-            "type": "string",
+            "type": "object",
             "description": "Additional information about the transaction"
           },
           "customer_name": {
@@ -2453,11 +2577,6 @@
             "type": "string",
             "format": "uri",
             "description": "URL to redirect customer after payment completion"
-          },
-          "webhook_url": {
-            "type": "string",
-            "format": "uri",
-            "description": "URL to receive payment notifications"
           },
           "reference": {
             "type": "string",
@@ -2659,10 +2778,6 @@
           "redirect_url": {
             "type": "string",
             "description": "Redirect URL"
-          },
-          "webhook_url": {
-            "type": "string",
-            "description": "Webhook URL"
           },
           "customer_name": {
             "type": "string",
@@ -2901,6 +3016,95 @@
             "type": "string",
             "description": "Error message",
             "example": "Transaction not found"
+          }
+        }
+      },
+      "GetBankListResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Request status indicator"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "bank_code": {
+                  "type": "string",
+                  "description": "Unique bank code used for transfers"
+                },
+                "bank_name": {
+                  "type": "string",
+                  "description": "Full bank name"
+                },
+                "bank_short_name": {
+                  "type": "string",
+                  "description": "Short bank display name"
+                },
+                "bank_logo_url": {
+                  "type": "string",
+                  "description": "URL to bank logo image"
+                },
+                "is_active": {
+                  "type": "boolean",
+                  "description": "Whether the bank is currently active for transfers"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ValidateAccountRequest": {
+        "type": "object",
+        "required": ["account_number", "bank_code"],
+        "properties": {
+          "account_number": {
+            "type": "string",
+            "description": "Bank account number to validate"
+          },
+          "bank_code": {
+            "type": "string",
+            "description": "Bank code for the destination bank"
+          }
+        }
+      },
+      "ValidateAccountResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Request status indicator"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "account_name": {
+                "type": "string",
+                "description": "Resolved account holder name"
+              },
+              "account_number": {
+                "type": "string",
+                "description": "Account number that was validated"
+              },
+              "bank_code": {
+                "type": "string",
+                "description": "Bank code used for validation"
+              },
+              "bank_name": {
+                "type": "string",
+                "description": "Resolved bank name"
+              }
+            }
           }
         }
       },

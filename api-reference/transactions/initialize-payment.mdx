@@ -10,25 +10,6 @@ Initialize a new payment transaction to collect money from customers via cards, 
 This endpoint creates a payment session and returns a checkout URL where customers can complete their payment securely.
 </Note>
 
-## Quick test (cURL)
-
-### Production
-```bash
-curl -X POST "https://api.payvessel.com/pms/transactions/initialize/" \
-  -H "api-key: PVKEY-N3K21QCOZGQBHIFRLVA89U88DMGQ2TZR" \
-  -H "api-secret: PVSECRET-FVMY9C35NH98T5J506NGI0M5ATM1GD9270YS1BEH4OVIJ4NTTIK3ON0HYWBZ0C8V" \
-  -H "Content-Type: application/json" \
-  -d '{"email":"test@example.com","amount":"50000","currency":"NGN","reference":"TXN_001","callback_url":"https://yourapp.com/callback"}'
-```
-
-### Sandbox
-```bash
-curl -X POST "https://sandbox.payvessel.com/pms/transactions/initialize/" \
-  -H "api-key: PVTESTKEY-4JH1RM894THXK8EWV20V74Q17FJVFGAG" \
-  -H "api-secret: PVTESTSECRET-RSLFNA1Q09DBXEPJY66C5ELSQBGNGP4PBMKXDVXH08ZPI4K8OVZ9RLLIBO1OB100" \
-  -H "Content-Type: application/json" \
-  -d '{"email":"test@example.com","amount":"50000","currency":"NGN","reference":"TXN_001","callback_url":"https://yourapp.com/callback"}'
-```
 
 
 <Note>
@@ -279,31 +260,6 @@ transaction = payvessel.Transaction.initialize(
 ```
 </CodeGroup>
 
-## Integration Flow
-
-<Steps>
-  <Step title="Initialize Transaction">
-    Make a POST request to `/transaction/initialize` with transaction details
-  </Step>
-  
-  <Step title="Redirect Customer">
-    Redirect your customer to the `authorization_url` from the response
-  </Step>
-  
-  <Step title="Customer Completes Payment">
-    Customer enters payment details and completes the transaction
-  </Step>
-  
-  <Step title="Handle Callback">
-    Customer is redirected to your `callback_url` with transaction status
-  </Step>
-  
-  <Step title="Verify Transaction">
-    Use the [Verify Transaction](/api-reference/transactions/verify-payment) endpoint to confirm payment status
-  </Step>
-</Steps>
-
-## Next Steps
 
 After initializing a payment:
 
