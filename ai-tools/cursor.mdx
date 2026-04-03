@@ -102,7 +102,7 @@ const apiConfig = {
   baseURL: 'https://api.example.com',
   timeout: 5000,
   headers: {
-    'Authorization': `Bearer ${process.env.API_TOKEN}`
+    'Authorization': `${process.env.API_TOKEN}`
   }
 };
 ```
@@ -114,19 +114,19 @@ Example of a code group:
 <CodeGroup>
 ```javascript Node.js
 const response = await fetch('/api/endpoint', {
-  headers: { Authorization: `Bearer ${apiKey}` }
+  headers: { Authorization: `${apiKey}` }
 });
 ```
 
 ```python Python
 import requests
 response = requests.get('/api/endpoint', 
-  headers={'Authorization': f'Bearer {api_key}'})
+  headers={'Authorization': f'{api_key}'})
 ```
 
 ```curl cURL
 curl -X GET '/api/endpoint' \
-  -H 'Authorization: Bearer YOUR_API_KEY'
+  -H 'Authorization: YOUR_API_KEY'
 ```
 </CodeGroup>
 
@@ -266,7 +266,7 @@ Maximum number of results to return. Range: 1-100.
 </ParamField>
 
 <ParamField header="Authorization" type="string" required>
-Bearer token for API authentication. Format: `Bearer YOUR_API_KEY`
+Token for API authentication. Format: `YOUR_API_KEY`
 </ParamField>
 
 #### Response fields

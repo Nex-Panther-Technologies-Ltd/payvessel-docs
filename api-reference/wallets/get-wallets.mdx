@@ -1,10 +1,24 @@
 ---
 title: "Get Wallets"
 description: "List or retrieve managed wallets for your business"
+openapi: "GET /pms/wallets"
 ---
 
-
 **Retrieve all managed wallets** associated with your business. This is useful for monitoring balances across multiple wallets and reconciling transfers.
+
+## Quick test (cURL)
+
+### Production
+```bash
+curl -X GET "https://api.payvessel.com/pms/wallets" \
+  -H "api-key: YOUR_API_KEY"
+```
+
+### Sandbox
+```bash
+curl -X GET "https://sandbox.payvessel.com/pms/wallets" \
+  -H "api-key: YOUR_SANDBOX_API_KEY"
+```
 
 ## Endpoint
 
