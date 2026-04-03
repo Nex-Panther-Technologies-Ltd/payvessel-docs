@@ -1,0 +1,28 @@
+---
+title: "Verify Payment"
+description: "Confirm the status of a payment before fulfilling an order"
+---
+
+Always verify a payment server-side before delivering goods or services. Never rely solely on a redirect callback.
+
+## How it works
+
+1. **Collect the transaction reference** from the redirect URL or your database.
+2. **Call the verify endpoint** with the reference.
+3. **Check the `status` field** — only fulfil the order when `status` is `success`.
+
+## Status values
+
+| Status | Meaning |
+|--------|---------|
+| `success` | Payment confirmed — safe to fulfil |
+| `pending` | Not yet confirmed — wait or retry |
+| `failed` | Payment failed — notify the customer |
+
+<Warning>
+Verify using your `api-key` and `api-secret` from your server. Never trust client-side confirmation alone.
+</Warning>
+
+<Card title="API Reference" icon="code" href="/api-reference/transactions/verify-payment">
+  Full request/response details
+</Card>

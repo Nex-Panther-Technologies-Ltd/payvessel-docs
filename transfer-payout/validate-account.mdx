@@ -1,0 +1,20 @@
+---
+title: "Validate Account"
+description: "Resolve a bank account number to a name before sending money"
+---
+
+Confirm an account number belongs to the expected person before initiating a transfer. This prevents misdirected payments.
+
+## How it works
+
+1. **Send** the `account_number` and `bank_code` in the request body.
+2. **Receive** the resolved `account_name`, `account_number`, `bank_code`, and `bank_name`.
+3. **Show the account name** to your user for confirmation before proceeding with the transfer.
+
+<Warning>
+Always validate the account before calling Initiate Transfer. Transfers are irreversible once completed.
+</Warning>
+
+<Card title="API Reference" icon="code" href="/api-reference/transfers/validate-account">
+  Full request/response details
+</Card>

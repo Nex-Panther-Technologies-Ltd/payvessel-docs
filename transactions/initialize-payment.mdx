@@ -1,0 +1,32 @@
+---
+title: "Initialize Payment"
+description: "Start a payment session and get a checkout URL for your customer"
+---
+
+Initialize a transaction to generate a secure checkout URL where your customer completes payment.
+
+## How it works
+
+1. **Send a request** with the customer's email, amount, currency, and payment channel.
+2. **Receive a `checkout_url`** and `access_code` in the response.
+3. **Redirect the customer** to the checkout URL to complete payment.
+4. **Verify the payment** after the customer returns using the transaction reference.
+
+## Key fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `customer_email` | Yes | Customer's email address |
+| `amount` | Yes | Amount in naira (e.g. `"5000"` for ₦5,000) |
+| `channels` | Yes | `["BANK_TRANSFER"]` |
+| `currency` | No | Defaults to `NGN` |
+| `redirect_url` | No | Where to send the customer after payment |
+| `metadata` | No | Custom object to attach to the transaction |
+
+<Note>
+Always verify the payment on your server after the customer returns. Never fulfil an order based on the redirect alone.
+</Note>
+
+<Card title="API Reference" icon="code" href="/api-reference/transactions/initialize-payment">
+  Full request/response details
+</Card>
