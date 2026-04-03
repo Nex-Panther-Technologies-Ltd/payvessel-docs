@@ -1,6 +1,7 @@
 ---
 title: "Initiate Transfer"
 description: "Send money from your managed wallet to a bank account"
+openapi: "POST /pms/api/external/request/wallet/transfer/"
 ---
 
 Use this endpoint to **initiate a single payout from your business wallet to a beneficiary’s bank account**. The transfer debits your wallet and credits the destination account.
@@ -9,29 +10,69 @@ Use this endpoint to **initiate a single payout from your business wallet to a b
 **Transfers are irreversible once completed.** Always validate account details and confirm available balance before initiating a transfer.
 </Warning>
 
+## Quick test (cURL)
+
+### Production
+```bash
+curl -X POST "https://api.payvessel.com/pms/api/external/request/wallet/transfer/" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_API_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"amount":"15000.00","account_number":"0123456789","bank_code":"999991","account_name":"John Doe","narration":"Vendor payout - March","reference":"PAYOUT_2026_0001","otp":"123456"}'
+```
+
+### Sandbox
+```bash
+curl -X POST "https://sandbox.payvessel.com/pms/api/external/request/wallet/transfer/" \
+  -H "api-key: YOUR_SANDBOX_API_KEY" \
+  -H "api-secret: YOUR_SANDBOX_API_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"amount":"15000.00","account_number":"0123456789","bank_code":"999991","account_name":"John Doe","narration":"Vendor payout - March","reference":"PAYOUT_2026_0001","otp":"123456"}'
+```
+
 ## Endpoint
 
 <Badge variant="success">**POST**</Badge> `/pms/api/external/request/wallet/transfer/`
 
 ## Headers
 
-| Name | Location | Type | Required | Description |
-|------|----------|------|----------|-------------|
-| `api-key` | header | string | Yes | Business API key |
-| `api-secret` | header | string | Yes | Business API secret |
-| `Content-Type` | header | string | Yes | Must be `application/json` |
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `api-key` | string | **Required** | Your API key |
+| `api-secret` | string | **Required** | Your API secret |
+| `Content-Type` | string | **Required** | Must be `application/json` |
 
-## Request body
+## Request Body
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `amount` | string | Yes | Amount to transfer (e.g. `"15000.00"`) |
-| `account_number` | string | Yes | Destination bank account number |
-| `bank_code` | string | Yes | Destination bank code |
-| `account_name` | string | No | Optional account name for your own records |
-| `narration` | string | No | Description that may appear on the beneficiary’s statement |
-| `reference` | string | Yes | Unique transfer reference for idempotency and reconciliation |
-| `otp` | string | Sometimes | One‑time password when required by your security settings |
+<ParamField body="amount" type="string" required>
+  Amount to transfer in the smallest currency unit (e.g. `"15000.00"` for ₦15,000.00)
+</ParamField>
+
+<ParamField body="account_number" type="string" required>
+  Destination bank account number
+</ParamField>
+
+<ParamField body="bank_code" type="string" required>
+  Destination bank code (see bank list endpoint for available codes)
+</ParamField>
+
+<ParamField body="account_name" type="string">
+  Optional account name for your own records
+</ParamField>
+
+<ParamField body="narration" type="string">
+  Description that may appear on the beneficiary's statement
+</ParamField>
+
+<ParamField body="reference" type="string" required>
+  Unique transfer reference for idempotency and reconciliation
+  
+  <Warning>Must be unique across all your transfers</Warning>
+</ParamField>
+
+<ParamField body="otp" type="string">
+  One-time password when required by your security settings
+</ParamField>
 
 ### Example request
 

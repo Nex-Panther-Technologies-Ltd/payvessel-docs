@@ -105,15 +105,16 @@
             "pages": [
               "api-reference/transactions/initialize-payment",
               "api-reference/transactions/verify-payment",
-              "api-reference/transactions/list-transactions"
-            ]
-          },
-          {
-            "group": "Transfers",
-            "pages": [
               "api-reference/transfers/initiate-transfer",
               "api-reference/transfers/bulk-transfer",
               "api-reference/transfers/transfer-status"
+            ]
+          },
+          {
+            "group": "Virtual Accounts",
+            "pages": [
+              "api-reference/virtual-accounts/create-virtual-account",
+              "api-reference/virtual-accounts/get-virtual-account"
             ]
           },
           {
@@ -140,20 +141,6 @@
               "api-reference/wallets/wallet-balance",
               "api-reference/wallets/get-wallets",
               "api-reference/wallets/wallet-statement"
-            ]
-          },
-          {
-            "group": "Virtual Accounts",
-            "pages": [
-              "api-reference/virtual-accounts/create-virtual-account",
-              "api-reference/virtual-accounts/get-virtual-account"
-            ]
-          },
-          {
-            "group": "Checkout",
-            "pages": [
-              "api-reference/checkout/initialize-transaction",
-              "api-reference/checkout/confirm-transaction"
             ]
           },
           {

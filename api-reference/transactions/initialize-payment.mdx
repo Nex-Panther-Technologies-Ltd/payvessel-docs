@@ -1,12 +1,38 @@
 ---
 title: "Initialize Payment"
 description: "Initialize a new payment transaction to collect money from customers"
+openapi: "POST /pms/transactions/initialize/"
 ---
 
 Initialize a new payment transaction to collect money from customers via cards, bank transfers, or mobile wallets.
 
 <Note>
 This endpoint creates a payment session and returns a checkout URL where customers can complete their payment securely.
+</Note>
+
+## Quick test (cURL)
+
+### Production
+```bash
+curl -X POST "https://api.payvessel.com/pms/transactions/initialize/" \
+  -H "api-key: PVKEY-N3K21QCOZGQBHIFRLVA89U88DMGQ2TZR" \
+  -H "api-secret: PVSECRET-FVMY9C35NH98T5J506NGI0M5ATM1GD9270YS1BEH4OVIJ4NTTIK3ON0HYWBZ0C8V" \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com","amount":"50000","currency":"NGN","reference":"TXN_001","callback_url":"https://yourapp.com/callback"}'
+```
+
+### Sandbox
+```bash
+curl -X POST "https://sandbox.payvessel.com/pms/transactions/initialize/" \
+  -H "api-key: PVTESTKEY-4JH1RM894THXK8EWV20V74Q17FJVFGAG" \
+  -H "api-secret: PVTESTSECRET-RSLFNA1Q09DBXEPJY66C5ELSQBGNGP4PBMKXDVXH08ZPI4K8OVZ9RLLIBO1OB100" \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com","amount":"50000","currency":"NGN","reference":"TXN_001","callback_url":"https://yourapp.com/callback"}'
+```
+
+
+<Note>
+This is the primary canonical initialization endpoint for both the transaction and checkout flows. It maps to `POST /pms/transactions/initialize/`, and `api-reference/checkout/initialize-transaction` is an equivalent alias.
 </Note>
 
 ## Endpoint
@@ -20,7 +46,6 @@ This endpoint creates a payment session and returns a checkout URL where custome
 | `api-key` | string | **Required** | Your API key |
 | `api-secret` | string | **Required** | Your API secret |
 | `Content-Type` | string | **Required** | Must be `application/json` |
-| `Idempotency-Key` | string | Optional | Unique key to prevent duplicate transactions |
 
 ## Request Body
 
@@ -29,15 +54,15 @@ This endpoint creates a payment session and returns a checkout URL where custome
 </ParamField>
 
 <ParamField body="amount" type="string" required>
-  Transaction amount in kobo (NGN) or the smallest currency unit
+  Transaction amount in naira (NGN) or the smallest currency unit
   
-  <Note>For ₦500.00, send `"50000"` (500 × 100 kobo)</Note>
+  <Note>For ₦500.00, send `"500"` (500 naira)</Note>
 </ParamField>
 
 <ParamField body="currency" type="string" default="NGN">
   Three-letter ISO currency code
   
-  **Supported currencies:** `NGN`, `USD`, `GBP`, `EUR`, `GHS`, `KES`, `ZAR`
+  **Supported currencies:** `NGN`, `USD`
 </ParamField>
 
 <ParamField body="reference" type="string">
@@ -50,28 +75,10 @@ This endpoint creates a payment session and returns a checkout URL where custome
   URL to redirect customers after payment completion
 </ParamField>
 
-<ParamField body="metadata" type="object">
-  Additional information about the transaction in key-value pairs
-  
-  ```json
-  {
-    "custom_fields": [
-      {
-        "display_name": "Cart ID",
-        "variable_name": "cart_id", 
-        "value": "8393"
-      }
-    ],
-    "customer_id": "12345",
-    "order_id": "ORD-2024-001"
-  }
-  ```
-</ParamField>
-
 <ParamField body="channels" type="array">
   Payment methods to allow for this transaction
   
-  **Available channels:** `card`, `bank`, `ussd`, `qr`, `mobile_money`, `bank_transfer`
+  **Available channels:** `BANK_TRANSFER`
   
   <Note>If not specified, all available channels will be enabled</Note>
 </ParamField>
@@ -110,16 +117,11 @@ curl -X POST https://sandbox.payvessel.com/pms/transactions/initialize/ \
     "customer_email": "test@example.com",
     "customer_name": "Test Customer",
     "customer_phone_number": "08012345678",
-    "amount": "5000",
+    "amount": "50",
     "currency": "NGN",
     "channels": [
-        "CARD",
         "BANK_TRANSFER"
-    ],
-    "metadata": {
-        "source": "payvessel_test_platform",
-        "platform": "web"
-    }
+    ]
 }'
 ```
 
@@ -128,24 +130,15 @@ const payvessel = require('payvessel')(process.env.PAYVESSEL_SECRET_KEY);
 
 const transaction = await payvessel.transaction.initialize({
   email: 'customer@example.com',
-  amount: '50000',
+  amount: '50',
   currency: 'NGN',
   reference: 'TXN_2024_001',
   callback_url: 'https://yourapp.com/payment/callback',
-  channels: ['card', 'bank', 'ussd'],
+  channels: ['BANK_TRANSFER'],
   customer: {
     first_name: 'John',
     last_name: 'Doe',
     phone: '+2348012345678'
-  },
-  metadata: {
-    custom_fields: [
-      {
-        display_name: 'Order ID',
-        variable_name: 'order_id',
-        value: 'ORD_001'
-      }
-    ]
   }
 });
 ```
@@ -156,24 +149,15 @@ $payvessel = new \Payvessel\Payvessel(getenv('PAYVESSEL_SECRET_KEY'));
 
 $transaction = $payvessel->transaction->initialize([
   'email' => 'customer@example.com',
-  'amount' => '50000',
+  'amount' => '50',
   'currency' => 'NGN',
   'reference' => 'TXN_2024_001',
   'callback_url' => 'https://yourapp.com/payment/callback',
-  'channels' => ['card', 'bank', 'ussd'],
+  'channels' => ['BANK_TRANSFER'],
   'customer' => [
     'first_name' => 'John',
     'last_name' => 'Doe',
     'phone' => '+2348012345678'
-  ],
-  'metadata' => [
-    'custom_fields' => [
-      [
-        'display_name' => 'Order ID',
-        'variable_name' => 'order_id',
-        'value' => 'ORD_001'
-      ]
-    ]
   ]
 ]);
 ?>
@@ -186,24 +170,15 @@ payvessel.api_key = os.environ['PAYVESSEL_SECRET_KEY']
 
 transaction = payvessel.Transaction.initialize(
     email='customer@example.com',
-    amount='50000',
+    amount='50',
     currency='NGN',
     reference='TXN_2024_001',
     callback_url='https://yourapp.com/payment/callback',
-    channels=['card', 'bank', 'ussd'],
+    channels=['BANK_TRANSFER'],
     customer={
         'first_name': 'John',
         'last_name': 'Doe',
         'phone': '+2348012345678'
-    },
-    metadata={
-        'custom_fields': [
-            {
-                'display_name': 'Order ID',
-                'variable_name': 'order_id',
-                'value': 'ORD_001'
-            }
-        ]
     }
 )
 ```
@@ -261,25 +236,38 @@ transaction = payvessel.Transaction.initialize(
   "status": true,
   "message": "Checkout transaction successfully initialized",
   "data": {
-    "id": "21d0c799-fbb5-473e-856d-1b2f9ada9d8a",
-    "transaction_ref": "AEEB469A686141D28C0D361E9FE0250F",
+    "id": "52b9bb2d-01d1-46ac-9800-14d34cb5f882",
+    "transaction_ref": "B0C866BD914C487895ACB8C45B939017",
     "amount": "5000.00",
     "status": "PENDING",
-    "access_code": "ACS-I77VVH-EROP40XN-TCGOTP-XCN4",
-    "checkout_url": "https://checkout.payvessel.com/ACS-I77VVH-EROP40XN-TCGOTP-XCN4",
-    "created_datetime": "2026-03-25T16:39:25.872400"
+    "access_code": "TEST-ACS-7AF7VH-2QIHE83N-TCTL28-BSDH",
+    "checkout_url": "https://checkout.payvessel.com/TEST-ACS-7AF7VH-2QIHE83N-TCTL28-BSDH",
+    "created_datetime": "2026-04-01T15:46:56.171229"
   }
 }
 ```
 
 ```json 400 Bad Request
 {
-  "status": "error",
-  "message": "Validation failed",
-  "errors": {
-    "email": ["The email field is required"],
-    "amount": ["The amount must be a positive number"]
-  }
+  "success": false,
+  "message": "amount must be at least 50",
+  "details": [
+    {
+      "code": "invalid",
+      "detail": "amount must be at least 50",
+      "attr": "amount"
+    },
+    {
+      "code": "required",
+      "detail": "This field is required.",
+      "attr": "channels"
+    },
+    {
+      "code": "blank",
+      "detail": "This field may not be blank.",
+      "attr": "customer_email"
+    }
+  ]
 }
 ```
 
@@ -325,12 +313,6 @@ After initializing a payment:
   </Card>
   <Card title="Handle Webhooks" icon="webhook" href="/api-basics/webhooks">
     Receive real-time payment notifications
-  </Card>
-  <Card title="Process Refunds" icon="rotate-left" href="/api-reference/transactions/create-refund">
-    Handle refund requests when needed
-  </Card>
-  <Card title="View Transactions" icon="list" href="/api-reference/transactions/list-transactions">
-    Retrieve transaction history
   </Card>
 </CardGroup>
 

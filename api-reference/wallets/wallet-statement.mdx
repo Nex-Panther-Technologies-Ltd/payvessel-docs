@@ -1,11 +1,24 @@
 ---
 title: "Wallet Statement"
 description: "Get transaction history for a managed wallet"
+openapi: "GET /pms/wallets/{wallet_id}/statement"
 ---
 
-
-
 Generate a **transaction history** for a specific wallet over a given period.
+
+## Quick test (cURL)
+
+### Production
+```bash
+curl -X GET "https://api.payvessel.com/pms/wallets/wallet_123/statement?from=2024-01-01&to=2024-01-31" \
+  -H "api-key: YOUR_API_KEY"
+```
+
+### Sandbox
+```bash
+curl -X GET "https://sandbox.payvessel.com/pms/wallets/wallet_123/statement?from=2024-01-01&to=2024-01-31" \
+  -H "api-key: YOUR_SANDBOX_API_KEY"
+```
 
 ## Endpoint
 
