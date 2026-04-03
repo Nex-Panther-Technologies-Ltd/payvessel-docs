@@ -10,25 +10,6 @@ Use this endpoint to **initiate a single payout from your business wallet to a b
 **Transfers are irreversible once completed.** Always validate account details and confirm available balance before initiating a transfer.
 </Warning>
 
-## Quick test (cURL)
-
-### Production
-```bash
-curl -X POST "https://api.payvessel.com/pms/api/external/request/wallet/transfer/" \
-  -H "api-key: YOUR_API_KEY" \
-  -H "api-secret: YOUR_API_SECRET" \
-  -H "Content-Type: application/json" \
-  -d '{"amount":"15000.00","account_number":"0123456789","bank_code":"999991","account_name":"John Doe","narration":"Vendor payout - March","reference":"PAYOUT_2026_0001","otp":"123456"}'
-```
-
-### Sandbox
-```bash
-curl -X POST "https://sandbox.payvessel.com/pms/api/external/request/wallet/transfer/" \
-  -H "api-key: YOUR_SANDBOX_API_KEY" \
-  -H "api-secret: YOUR_SANDBOX_API_SECRET" \
-  -H "Content-Type: application/json" \
-  -d '{"amount":"15000.00","account_number":"0123456789","bank_code":"999991","account_name":"John Doe","narration":"Vendor payout - March","reference":"PAYOUT_2026_0001","otp":"123456"}'
-```
 
 ## Endpoint
 

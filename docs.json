@@ -7,7 +7,7 @@
     "light": "#ff8533",
     "dark": "#cc5500"
   },
-  "favicon": "https://www.payvessel.com/favicon.ico",
+  "favicon": "/logo/light.svg",
   "navigation": {
     "tabs": [
       {
@@ -49,9 +49,18 @@
           {
             "group": "Transfers",
             "pages": [
-              "transfer-payout/transfer-external-wallet",
+              "transfer-payout/get-bank-list",
+              "transfer-payout/validate-account",
               "transfer-payout/single-transfers",
               "transfer-payout/bulk-transfers"
+            ]
+          },
+          {
+            "group": "Wallets",
+            "pages": [
+              "wallets/overview",
+              "wallets/wallet-balance",
+              "wallets/get-wallets"
             ]
           },
           {
@@ -65,16 +74,6 @@
               "kyc/merchant-bank-account",
               "kyc/merchant-liveness",
               "kyc/merchant-risk"
-            ]
-          },
-          {
-            "group": "Wallets",
-            "pages": [
-              "wallets/overview",
-              "wallets/create-wallet",
-              "wallets/wallet-balance",
-              "wallets/get-wallets",
-              "wallets/wallet-statement"
             ]
           },
           {
@@ -99,10 +98,7 @@
             "group": "Transactions",
             "pages": [
               "api-reference/transactions/initialize-payment",
-              "api-reference/transactions/verify-payment",
-              "api-reference/transfers/initiate-transfer",
-              "api-reference/transfers/bulk-transfer",
-              "api-reference/transfers/transfer-status"
+              "api-reference/transactions/verify-payment"
             ]
           },
           {
@@ -110,6 +106,22 @@
             "pages": [
               "api-reference/virtual-accounts/create-virtual-account",
               "api-reference/virtual-accounts/get-virtual-account"
+            ]
+          },
+          {
+            "group": "Transfer",
+            "pages": [
+              "api-reference/transfers/get-bank-list",
+              "api-reference/transfers/validate-account",
+              "api-reference/transfers/initiate-transfer",
+              "api-reference/transfers/bulk-transfer"
+            ]
+          },
+          {
+            "group": "Wallets",
+            "pages": [
+              "api-reference/wallets/wallet-balance",
+              "api-reference/wallets/get-wallets"
             ]
           },
           {
@@ -122,15 +134,6 @@
               "api-reference/verification/merchant-bank-account",
               "api-reference/verification/merchant-liveness",
               "api-reference/verification/merchant-risk"
-            ]
-          },
-          {
-            "group": "Wallets",
-            "pages": [
-              "api-reference/wallets/create-wallet",
-              "api-reference/wallets/wallet-balance",
-              "api-reference/wallets/get-wallets",
-              "api-reference/wallets/wallet-statement"
             ]
           },
           {

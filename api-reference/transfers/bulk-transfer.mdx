@@ -10,16 +10,6 @@ Use this endpoint to **send multiple payouts from your business wallet in one re
 Bulk transfers are powerful: always validate input (bank codes, account numbers, amounts) before sending a batch, and use unique references for each row.
 </Warning>
 
-## Quick test (cURL)
-
-### Production
-```bash
-curl -X POST "https://api.payvessel.com/pms/api/external/request/wallet/bulk-transfer/" \
-  -H "api-key: YOUR_API_KEY" \
-  -H "api-secret: YOUR_API_SECRET" \
-  -H "Content-Type: application/json" \
-  -d '{"batch_reference":"PAYROLL_2026_03","transfers":[{"amount":"15000.00","account_number":"0123456789","bank_code":"999991","account_name":"John Doe","narration":"Salary March","reference":"PAYROLL_001"}]}'
-```
 
 ### Sandbox
 ```bash

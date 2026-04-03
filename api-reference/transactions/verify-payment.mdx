@@ -4,16 +4,6 @@ description: "Verify the status of a payment transaction by reference"
 openapi: "GET /transaction/verify/{reference}"
 ---
 
-## Quick test (cURL)
-
-```bash
-curl -X GET "https://api.payvessel.com/transaction/verify/TXN_2024_001" \
-  -H "api-key: YOUR_API_KEY" \
-  -H "api-secret: YOUR_API_SECRET" \
-  -H "Content-Type: application/json"
-```
-
-
 Verify the status and details of a payment transaction using its unique reference. Call this endpoint after payment completion to confirm the transaction status.
 
 <Warning>
