@@ -1,35 +1,64 @@
 ---
 title: "Get Wallets"
 description: "List or retrieve managed wallets for your business"
-openapi: "GET /pms/wallets"
+openapi: "GET /pms/api/external/request/wallet/get-or-create/"
 ---
 
-**Retrieve all managed wallets** associated with your business. This is useful for monitoring balances across multiple wallets and reconciling transfers.
+**Get an existing wallet or create one automatically** for the authenticated business. No request body is required.
 
 
 ## Endpoint
 
-<Badge variant="success">**GET**</Badge> `/pms/wallets`
+<Badge variant="success">**GET**</Badge> `/pms/api/external/request/wallet/get-or-create/`
 
 ## Headers
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `api-key` | string | **Required** | Your API key |
+| `api-secret` | string | **Required** | Your API secret |
 
 ## Response
 
-<ResponseField name="status" type="string">
-  Request status - `"success"` or `"error"`.
+<ResponseField name="status" type="boolean">
+  Request status.
 </ResponseField>
 
-<ResponseField name="data" type="array">
+<ResponseField name="message" type="string">
+  Description of the result.
+</ResponseField>
+
+<ResponseField name="data" type="object">
   <Expandable title="Wallet Object">
     <ResponseField name="id" type="string">
       Unique wallet ID.
     </ResponseField>
-    <ResponseField name="name" type="string">
-      Custom name or label for the wallet.
+    <ResponseField name="business_id" type="string">
+      Business identifier.
+    </ResponseField>
+    <ResponseField name="wallet_name" type="string">
+      Wallet name.
+    </ResponseField>
+    <ResponseField name="account_number" type="string">
+      Wallet account number.
+    </ResponseField>
+    <ResponseField name="account_name" type="string">
+      Wallet account name.
+    </ResponseField>
+    <ResponseField name="bank_name" type="string">
+      Settlement bank name.
+    </ResponseField>
+    <ResponseField name="bank_code" type="string">
+      Settlement bank code.
+    </ResponseField>
+    <ResponseField name="currency" type="string">
+      Wallet currency.
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      Wallet status.
+    </ResponseField>
+    <ResponseField name="created_datetime" type="string">
+      Wallet creation timestamp.
     </ResponseField>
     <ResponseField name="balance.available_balance" type="string">
       Available balance.
@@ -37,16 +66,13 @@ openapi: "GET /pms/wallets"
     <ResponseField name="balance.ledger_balance" type="string">
       Ledger balance.
     </ResponseField>
-    <ResponseField name="currency" type="string">
-      Wallet currency (e.g. `NGN`).
-    </ResponseField>
   </Expandable>
 </ResponseField>
 
 ## Example Request
 
 ```bash
-curl -X GET "https://api.payvessel.com/pms/wallets" \
+curl -X GET "https://api.payvessel.com/pms/api/external/request/wallet/get-or-create/" \
   -H "api-key: YOUR_API_KEY" \
   -H "api-secret: YOUR_SECRET"
 ```
@@ -55,27 +81,24 @@ curl -X GET "https://api.payvessel.com/pms/wallets" \
 
 ```json
 {
-  "status": "success",
-  "data": [
-    {
-      "id": "WLT_1",
-      "name": "Main Settlements",
-      "balance": {
-        "available_balance": "1000000.00",
-        "ledger_balance": "1000000.00"
-      },
-      "currency": "NGN"
-    },
-    {
-      "id": "WLT_2",
-      "name": "Refunds Wallet",
-      "balance": {
-        "available_balance": "50000.00",
-        "ledger_balance": "50000.00"
-      },
-      "currency": "NGN"
+  "status": true,
+  "message": "string",
+  "data": {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "business_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "wallet_name": "string",
+    "account_number": "string",
+    "account_name": "string",
+    "bank_name": "string",
+    "bank_code": "string",
+    "currency": "string",
+    "status": "string",
+    "created_datetime": "2026-05-07T12:06:43.830Z",
+    "balance": {
+      "available_balance": "806856696425.66",
+      "ledger_balance": ""
     }
-  ]
+  }
 }
 ```
 

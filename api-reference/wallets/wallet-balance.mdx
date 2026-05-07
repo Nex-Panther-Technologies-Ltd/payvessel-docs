@@ -1,7 +1,7 @@
 ---
 title: "Wallet Balance"
 description: "Retrieve the current balance for a managed wallet"
-openapi: "GET /pms/wallets/{wallet_id}/balance"
+openapi: "GET /pms/api/external/request/wallet/balance/"
 ---
 
 **Retrieve the current balance** for a managed wallet. Always verify the available balance before initiating transfers to avoid transaction failures.
@@ -9,19 +9,14 @@ openapi: "GET /pms/wallets/{wallet_id}/balance"
 
 ## Endpoint
 
-<Badge variant="success">**GET**</Badge> `/pms/wallets/{wallet_id}/balance`
-
-## Path Parameters
-
-<ParamField path="wallet_id" type="string" required>
-  The unique identifier of the wallet.
-</ParamField>
+<Badge variant="success">**GET**</Badge> `/pms/api/external/request/wallet/balance/`
 
 ## Headers
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `api-key` | string | **Required** | Your API key |
+| `api-secret` | string | **Required** | Your API secret |
 
 ## Response
 
@@ -35,17 +30,14 @@ openapi: "GET /pms/wallets/{wallet_id}/balance"
 
 <ResponseField name="data" type="object">
   <Expandable title="Data Object">
-    <ResponseField name="data.wallet_id" type="string">
-      The unique ID of the wallet.
-    </ResponseField>
-    <ResponseField name="data.balance" type="string">
-      The current balance in smallest currency unit (e.g., kobo for NGN).
-    </ResponseField>
-    <ResponseField name="data.currency" type="string">
-      The currency of the wallet (e.g., `NGN`, `USD`).
-    </ResponseField>
     <ResponseField name="data.available_balance" type="string">
       Funds available for immediate transfer.
+    </ResponseField>
+    <ResponseField name="data.ledger_balance" type="string">
+      Book balance including pending debits/credits.
+    </ResponseField>
+    <ResponseField name="data.currency" type="string">
+      The wallet currency (e.g., `NGN`).
     </ResponseField>
   </Expandable>
 </ResponseField>
@@ -53,7 +45,7 @@ openapi: "GET /pms/wallets/{wallet_id}/balance"
 ## Example Request
 
 ```bash
-curl -X GET https://api.payvessel.com/pms/wallets/WLT_123456/balance \
+curl -X GET https://api.payvessel.com/pms/api/external/request/wallet/balance/ \
   -H "api-key: YOUR_API_KEY" \
   -H "api-secret: YOUR_SECRET"
 ```
@@ -62,12 +54,11 @@ curl -X GET https://api.payvessel.com/pms/wallets/WLT_123456/balance \
 
 ```json
 {
-  "status": "success",
-  "message": "Balance retrieved",
+  "status": true,
+  "message": "string",
   "data": {
-    "wallet_id": "WLT_123456",
-    "balance": "500000",
-    "available_balance": "495000",
+    "available_balance": "1.78",
+    "ledger_balance": "-9390113420548.59",
     "currency": "NGN"
   }
 }
