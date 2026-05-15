@@ -20,7 +20,24 @@ Create a reserved virtual bank account (STATIC or DYNAMIC). Headers: `api-key`, 
 }
 ```
 
+
+
 **Example request body (DYNAMIC):**
+
+You can specify either Rubies MFB or 9Payment Service Bank for the dynamic account:
+
+```json
+{
+  "email": "customer@example.com",
+  "name": "JANE DOE",
+  "phoneNumber": "08012345678",
+  "bankcode": ["090175"],
+  "account_type": "DYNAMIC",
+  "businessid": "061C074E2F91F944B93993B4"
+}
+```
+
+or
 
 ```json
 {
@@ -33,31 +50,41 @@ Create a reserved virtual bank account (STATIC or DYNAMIC). Headers: `api-key`, 
 }
 ```
 
-**Example response (201):**
+**Example response for Rubies MFB (DYNAMIC):**
 
 ```json
 {
   "status": true,
   "service": "CREATE_VIRTUAL_ACCOUNT",
   "business": "061C074E2F91F944B93993B4",
-  "banks": [
-    {
-      "bankName": "9Payment Service Bank",
-      "accountNumber": "5030200545",
-      "accountName": "Payvessel-Merchant",
-      "account_type": "STATIC",
-      "expire_date": "2024-01-04T11:29:32.6522498+01:00",
-      "trackingReference": "40HTTGT96CDF360C3DRVGV3J"
-    },
-    {
-      "bankName": "PalmPay",
-      "accountNumber": "6030200545",
-      "accountName": "Payvessel-Merchant",
-      "account_type": "STATIC",
-      "expire_date": "2024-01-04T11:29:32.6522498+01:00",
-      "trackingReference": "50HTTGT96CDF360C3DRVGV3J"
-    }
-  ]
+  "banks": {
+    "bankCode": "090175",
+    "bankName": "Rubies MFB",
+    "accountNumber": "8880314352",
+    "accountName": "Demo User",
+    "account_type": "DYNAMIC",
+    "expire_date": "2026-05-15T11:49:36.117753+01:00",
+    "trackingReference": "XOINFKVRO90311273BD8DZZ8"
+  }
+}
+```
+
+**Example response for 9Payment Service Bank (DYNAMIC):**
+
+```json
+{
+  "status": true,
+  "service": "CREATE_VIRTUAL_ACCOUNT",
+  "business": "061C074E2F91F944B93993B4",
+  "banks": {
+    "bankCode": "120001",
+    "bankName": "9Payment Service Bank",
+    "accountNumber": "5030200545",
+    "accountName": "Demo User",
+    "account_type": "DYNAMIC",
+    "expire_date": "2026-05-15T11:49:36.117753+01:00",
+    "trackingReference": "YOINFKVRO90311273BD8DZZ9"
+  }
 }
 ```
 
