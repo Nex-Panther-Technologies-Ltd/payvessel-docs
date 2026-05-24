@@ -90,7 +90,7 @@ The PayVessel API requires **full Nigerian KYC on every create request**.
     PayVessel holds and syncs the spendable `balance` on the card object after fund, withdraw, and card activity. Do not assume your local ledger matches the API balance without calling **Get card**.
   </Accordion>
   <Accordion title="Card spend">
-    Merchant charges (AUTHORIZATION, SETTLEMENT, etc.) reduce **card balance only**. They do not debit your business wallet. Query **transactions** for spend history.
+    Merchant charges (AUTHORIZATION, SETTLEMENT, etc.) reduce **card balance**. PayVessel will charge applicable fees to your business USD wallet.
   </Accordion>
 </AccordionGroup>
 
