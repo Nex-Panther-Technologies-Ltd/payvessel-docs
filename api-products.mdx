@@ -1,0 +1,135 @@
+---
+title: "PayVessel API Products"
+description: "Explore PayVessel APIs for USD virtual cards, Nigerian virtual accounts, BVN and NIN verification, credit score checks, payments, transfers, and wallets."
+keywords:
+  [
+    "PayVessel API",
+    "virtual card API",
+    "USD virtual card API",
+    "virtual account API",
+    "BVN verification API",
+    "NIN verification API",
+    "credit score API",
+    "identity verification API Nigeria",
+    "fintech API Nigeria",
+  ]
+---
+
+PayVessel provides REST APIs for payments, banking, identity, and card issuing in Nigeria. Use this page to find the right product API for your integration.
+
+## Virtual card API
+
+Issue **USD virtual Visa and Mastercard** cards for your customers. Fund cards from your business wallet, manage freeze and terminate lifecycle, and receive webhooks for spend and funding events.
+
+<CardGroup cols={2}>
+  <Card title="Virtual card API guide" icon="credit-card" href="/virtual-cards/overview">
+    Getting started, limits, and security
+  </Card>
+  <Card title="Create a card" icon="plus" href="/api-reference/virtual-cards/create-customer-card">
+    API reference with request samples
+  </Card>
+  <Card title="Fund a card" icon="wallet" href="/api-reference/virtual-cards/fund-card">
+    Load USD from your business wallet
+  </Card>
+  <Card title="Card webhooks" icon="webhook" href="/virtual-cards/webhooks">
+  </Card>
+</CardGroup>
+
+## Virtual account API
+
+Create **STATIC** or **DYNAMIC** Nigerian virtual bank accounts so customers can pay you by bank transfer. Reserve accounts per customer and reconcile incoming credits with webhooks.
+
+<CardGroup cols={2}>
+  <Card title="Create virtual account" icon="building-columns" href="/virtual-accounts/create-virtual-account">
+    Guide: STATIC vs DYNAMIC accounts
+  </Card>
+  <Card title="Virtual account API" icon="code" href="/api-reference/virtual-accounts/create-virtual-account">
+    API reference
+  </Card>
+  <Card title="Get virtual account" icon="magnifying-glass" href="/api-reference/virtual-accounts/get-virtual-account">
+    Retrieve account details by ID
+  </Card>
+  <Card title="Reserved accounts guide" icon="book-open" href="/accept-payment/customer-reserved-account">
+    Checkout and collection flows
+  </Card>
+</CardGroup>
+
+## BVN verification API
+
+Verify **Bank Verification Number (BVN)** details against customer-submitted identity data. Choose basic field-match verification or enhanced profile retrieval for deeper KYC.
+
+<CardGroup cols={2}>
+  <Card title="Basic BVN verification" icon="id-card" href="/identity-verification/basic-bvn-verification">
+    Match scores and onboarding checks
+  </Card>
+  <Card title="Enhanced BVN verification" icon="id-card" href="/identity-verification/enhanced-bvn-verification">
+    Full BVN profile fields
+  </Card>
+  <Card title="BVN API (basic)" icon="code" href="/api-reference/verification/basic-bvn-verification">
+    API reference
+  </Card>
+  <Card title="BVN API (enhanced)" icon="code" href="/api-reference/verification/enhanced-bvn-verification">
+    API reference
+  </Card>
+</CardGroup>
+
+## NIN verification API
+
+Verify **National Identification Number (NIN)** records for Nigerian customers. Use basic verification for match results or enhanced verification when you need richer identity attributes.
+
+<CardGroup cols={2}>
+  <Card title="Basic NIN verification" icon="fingerprint" href="/identity-verification/basic-nin-verification">
+    Field-match workflows
+  </Card>
+  <Card title="Enhanced NIN verification" icon="fingerprint" href="/identity-verification/enhanced-nin-verification">
+    Extended NIN profile data
+  </Card>
+  <Card title="NIN API (basic)" icon="code" href="/api-reference/verification/basic-nin-verification">
+    API reference
+  </Card>
+  <Card title="NIN API (enhanced)" icon="code" href="/api-reference/verification/enhanced-nin-verification">
+    API reference
+  </Card>
+</CardGroup>
+
+## Credit score API and risk checks
+
+Run **credit score queries**, blacklist screening, and loan-feature lookups to support underwriting, limits, and compliance decisions.
+
+<CardGroup cols={2}>
+  <Card title="Credit score API" icon="chart-line" href="/identity-verification/credit-score-query">
+    Score-based risk signals
+  </Card>
+  <Card title="Credit score API reference" icon="code" href="/api-reference/verification/credit-score-query">
+    Request and response schemas
+  </Card>
+  <Card title="Blacklist query" icon="ban" href="/identity-verification/blacklist-query">
+    Screen customers against deny lists
+  </Card>
+  <Card title="Identity verification overview" icon="shield-check" href="/identity-verification/overview">
+    Full verification stack
+  </Card>
+</CardGroup>
+
+## Payments, transfers, and wallets
+
+<CardGroup cols={2}>
+  <Card title="Accept payments" icon="credit-card" href="/accept-payment/checkout">
+    Checkout and card payments
+  </Card>
+  <Card title="Bank transfers" icon="paper-plane" href="/transfer-payout/single-transfers">
+    Payouts and disbursements
+  </Card>
+  <Card title="Wallets" icon="wallet" href="/wallets/overview">
+    Managed balances
+  </Card>
+  <Card title="API reference" icon="book" href="/api-reference/introduction">
+    All endpoints
+  </Card>
+</CardGroup>
+
+## Get started
+
+1. Create a PayVessel business account and obtain **API key** and **secret** from the [Dashboard](https://app.payvessel.com).
+2. Read [Authentication](/api-basics/authentication) and [Environments](/api-basics/environments) (production and sandbox).
+3. Follow the [Quickstart](/quickstart) or jump to the product guide above.

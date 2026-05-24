@@ -2,6 +2,22 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "PayVessel",
+  "description": "PayVessel API documentation for virtual card API, virtual account API, BVN and NIN verification API, credit score API, payments, transfers, and wallets in Nigeria.",
+  "seo": {
+    "indexing": "navigable",
+    "metatags": {
+      "og:site_name": "PayVessel API Documentation",
+      "og:locale": "en_NG",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@payvessel",
+      "robots": "index, follow",
+      "googlebot": "index, follow",
+      "keywords": "PayVessel API, virtual card API, virtual account API, BVN verification API, NIN verification API, credit score API, identity verification API Nigeria, fintech API Nigeria, USD virtual card, Nigerian virtual account"
+    }
+  },
+  "search": {
+    "prompt": "Search virtual card API, BVN, NIN, credit score..."
+  },
   "colors": {
     "primary": "#ff6b00",
     "light": "#ff8533",
@@ -22,6 +38,7 @@
             "group": "Getting started",
             "pages": [
               "index",
+              "api-products",
               "quickstart",
               "support"
             ]
