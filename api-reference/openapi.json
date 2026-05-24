@@ -7992,7 +7992,7 @@
           },
           "kind": {
             "type": "string",
-            "description": "customer for external API cards"
+            "description": "customer card"
           },
           "customer_id": {
             "type": "string",
