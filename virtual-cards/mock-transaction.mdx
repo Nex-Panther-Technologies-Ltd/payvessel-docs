@@ -3,7 +3,7 @@ title: "Simulate Card Transaction"
 description: "Sandbox-only test spend and credits on virtual cards"
 ---
 
-Use this endpoint to **test card spend and transaction history** without real merchant charges. It calls the issuer’s sandbox mock API; PayVessel ingests the result via webhook and updates balance from the issuer.
+Use this endpoint to **test card spend and transaction history** without real merchant charges. PayVessel records the simulation via webhook and updates the card balance.
 
 <Warning>
 **Sandbox only.** Not exposed in production. Your integration should only call this when using sandbox API keys and `https://sandbox.payvessel.com`.
@@ -13,7 +13,7 @@ Use this endpoint to **test card spend and transaction history** without real me
 
 1. **Create and activate** a card ([Create a Card](/virtual-cards/create-customer-card), then poll [Get a Card](/virtual-cards/get-card) until `ACTIVE`).
 2. **POST a simulation** with `amount` and `type` (`DEBIT` or `CREDIT`).
-3. **Issuer fires a webhook** — PayVessel records the transaction and refreshes card balance.
+3. **PayVessel processes the event** — the transaction is recorded and the card balance is refreshed.
 4. **Verify** with [Get Card Transactions](/virtual-cards/list-transactions).
 
 ## Request fields
@@ -31,7 +31,7 @@ Use this endpoint to **test card spend and transaction history** without real me
 
 ## Limitations
 
-- Card must be **ACTIVE** and fully linked to the issuer (not pending activation)
+- Card must be **ACTIVE** (not pending activation)
 - Balance shown in the response may change again after the webhook syncs
 - Production requests return a validation error
 

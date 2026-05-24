@@ -4327,7 +4327,7 @@
     "/pms/api/external/request/virtual-cards/{card_id}/fund/": {
       "post": {
         "summary": "Fund a Card",
-        "description": "Debit business USD wallet and credit card balance at issuer.",
+        "description": "Debit business USD wallet and credit the card balance.",
         "parameters": [
           {
             "name": "api-key",
@@ -4589,7 +4589,7 @@
     "/pms/api/external/request/virtual-cards/{card_id}/freeze/": {
       "post": {
         "summary": "Freeze a Card",
-        "description": "Block card spending at issuer.",
+        "description": "Block card spending.",
         "parameters": [
           {
             "name": "api-key",

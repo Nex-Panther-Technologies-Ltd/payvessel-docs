@@ -8,7 +8,7 @@ Fetch the current state of a single virtual card — status, balance, customer l
 ## How it works
 
 1. **Provide the PayVessel `card_id`** returned from create (or list).
-2. **Receive the card object** — PayVessel syncs status and balance from the issuer when needed.
+2. **Receive the card object** — PayVessel syncs status and balance when needed.
 3. **Poll after create** until `status` is `ACTIVE` — then `card_number`, `cvv`, and `expiry` are included in the response.
 
 ## Response fields (ACTIVE / FROZEN)

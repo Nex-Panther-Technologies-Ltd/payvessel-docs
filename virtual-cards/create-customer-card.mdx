@@ -3,7 +3,7 @@ title: "Create a Card"
 description: "Create a USD virtual card for a customer (asynchronous)"
 ---
 
-This resource allows you to create a card for a customer. PayVessel debits your business USD wallet, completes customer KYC with the card issuer, and returns a card you can fund and manage through the API.
+This resource allows you to create a card for a customer. PayVessel debits your business USD wallet, completes customer KYC, and returns a card you can fund and manage through the API.
 
 This operation is **asynchronous**, meaning we notify you via a **webhook event** on the final status (for example when the card becomes `ACTIVE`). You can also poll [Get a Card](/virtual-cards/get-card) until `card_number` is available.
 
