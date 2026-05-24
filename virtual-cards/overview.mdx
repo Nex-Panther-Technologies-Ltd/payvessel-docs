@@ -67,28 +67,6 @@ Example: `POST https://api.payvessel.com/pms/api/external/request/virtual-cards/
 
 ***
 
-## Integration flow
-
-```mermaid
-sequenceDiagram
-    participant App as Your backend
-    participant PV as PayVessel PMS
-    participant Issuer as Card issuer
-
-    App->>PV: POST /virtual-cards/ (KYC + prefund)
-    PV->>PV: Debit business USD wallet
-    PV->>Issuer: Create card
-    PV-->>App: 201 PENDING + card id
-    loop Until ACTIVE
-        App->>PV: GET /virtual-cards/{id}/
-        PV->>Issuer: Sync status
-        PV-->>App: ACTIVE + masked_pan
-    end
-    App->>PV: POST /virtual-cards/{id}/fund/
-    Note over App,PV: Customer spends at merchants (issuer webhooks)
-    App->>PV: GET /virtual-cards/{id}/transactions/
-```
-
 <Steps>
   <Step title="Quote creation cost">
     Use [Card Fee Quote](/virtual-cards/fee-quote) to show issuance and funding charges before debiting the wallet.
