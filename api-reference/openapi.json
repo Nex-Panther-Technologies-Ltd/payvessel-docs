@@ -4892,7 +4892,7 @@
     "/pms/api/external/request/virtual-cards/{card_id}/mock-transaction/": {
       "post": {
         "summary": "Simulate Card Transaction",
-        "description": "Sandbox only. Triggers a simulated card spend (DEBIT) or credit (CREDIT) at the issuer. Transaction history and balance update when the issuer webhook is processed. Not available in production.",
+        "description": "Sandbox only. Triggers a simulated card spend (DEBIT) or credit (CREDIT). Transaction history and balance update when PayVessel processes the event. Not available in production.",
         "parameters": [
           {
             "name": "api-key",
