@@ -1,0 +1,142 @@
+---
+title: "Webhooks"
+description: "Virtual card webhook events, payloads, and transaction types"
+---
+
+PayVessel sends webhooks when virtual cards are created, used at merchants, funded, withdrawn, or terminated. Configure your webhook URL in the PayVessel Dashboard and verify every payload before updating balances or order status in your system.
+
+See [Verifying Webhooks](/api-reference/webhook/verifying-webhooks) for signature checks, trusted IPs, and idempotent handling.
+
+***
+
+## Lifecycle events
+
+Use the `event` field to route each notification to the correct handler.
+
+### Card transaction (`issuing.transaction`)
+
+Sent when spend, funding, withdrawal, declines, reversals, refunds, or other card activity occurs. PayVessel records the transaction and refreshes the card balance.
+
+```json
+{
+  "event": "issuing.transaction",
+  "card_id": "7b231d95-9006-4e53-a08c-dbe3b4d3ab4d",
+  "reference": "dd7412f3-aa14-4a77-94b5-a26f3cfb-56c",
+  "amount": 80,
+  "currency": "USD",
+  "mode": "DEBIT",
+  "status": "SUCCESS",
+  "type": "AUTHORIZATION",
+  "description": "Approved or completed successfully",
+  "fee": 0,
+  "settled": false,
+  "merchant": {
+    "city": "Lagos",
+    "country": "NG",
+    "name": "DLO*GOOGLE TikTok Liv"
+  },
+  "created_at": "2023-12-11T21:22:32.312347102Z",
+  "updated_at": "2023-12-11T21:22:32.312350944Z"
+}
+```
+
+### Successful card creation (`issuing.created.successful`)
+
+Sent when card provisioning completes. The card moves to `ACTIVE` (or the status in the payload). Match your internal record using `reference` from the create response.
+
+```json
+{
+  "event": "issuing.created.successful",
+  "reference": "your-create-reference",
+  "card": {
+    "id": "fe796aef-5dca-47d5-a542-16d403b464d1",
+    "name": "JOHN DOE",
+    "masked_pan": "536898******1914",
+    "type": "VIRTUAL",
+    "issuer": "VISA",
+    "currency": "USD",
+    "status": "ACTIVE",
+    "balance": 0,
+    "auto_approve": true
+  }
+}
+```
+
+### Failed card creation (`issuing.created.failed`)
+
+Sent when card provisioning fails. Update the card status to `FAILED` and notify your customer or ops team.
+
+```json
+{
+  "event": "issuing.created.failed",
+  "reference": "your-create-reference"
+}
+```
+
+### Card terminated (`issuing.terminated`)
+
+Sent when a card is closed. Remaining balance may be returned to your business USD wallet (fees may apply). The card status becomes `TERMINATED`.
+
+```json
+{
+  "event": "issuing.terminated",
+  "card_id": "700865ae-af75-4b6b-b09d-1ecb16753dee",
+  "amount": 120,
+  "reason": "Insufficient Funds",
+  "reference": "61a85f53-6e67-434d-9b6d-fa1d4c7c2f68"
+}
+```
+
+### Card charge (`issuing.charge`)
+
+Alternate notification for card-related charges (for example platform or subscription fees). Processed the same way as `issuing.transaction`.
+
+```json
+{
+  "event": "issuing.charge",
+  "card_id": "32244f-3ac0-431d-9fb0-43f72505",
+  "amount": 30,
+  "transaction_date": "2024-12-17T09:26:42.243416144Z"
+}
+```
+
+<Note>
+Match cards using `reference` from create (lifecycle events) or `card_id` in the payload (transaction and termination events). Store PayVessel `card_id` from the API for your own lookups.
+</Note>
+
+***
+
+## Transaction types
+
+The `type` field on `issuing.transaction` (and related events) describes what happened:
+
+| Type | Description |
+| --- | --- |
+| `AUTHORIZATION` | Card was successfully used at a merchant (authorization hold). |
+| `SETTLEMENT` | Authorization was settled at the merchant. |
+| `FUNDING` | Card was funded (for example via [Fund a Card](/virtual-cards/fund-card) or create-time prefund). |
+| `WITHDRAWAL` | Funds were withdrawn from the card to your business wallet. |
+| `TERMINATION` | Card was terminated; may accompany balance settlement. |
+| `DECLINE` | Merchant charge was declined (for example insufficient balance). |
+| `REVERSAL` | Merchant reversed a charge shortly after authorization. |
+| `REFUND` | Refund processed when a reversal did not complete as expected. |
+| `CROSS-BORDER` | Cross-border use — merchant outside the US or authorization currency not USD. |
+
+### Mode
+
+`mode` is either **`CREDIT`** (money in) or **`DEBIT`** (money out).
+
+***
+
+## What to do on each event
+
+| Event | Suggested action |
+| --- | --- |
+| `issuing.created.successful` | Mark card active; show masked PAN; poll [Get a Card](/virtual-cards/get-card) if you need full credentials. |
+| `issuing.created.failed` | Mark card `FAILED`; surface error to customer or retry create. |
+| `issuing.transaction` / `issuing.charge` | Append to transaction history; refresh balance via [Get a Card](/virtual-cards/get-card) or [Get Card Transactions](/virtual-cards/list-transactions). |
+| `issuing.terminated` | Mark card `TERMINATED`; expect wallet credit for remaining balance where applicable. |
+
+<Card title="List transactions" icon="list" href="/virtual-cards/list-transactions">
+  Query normalized transaction history from the API
+</Card>

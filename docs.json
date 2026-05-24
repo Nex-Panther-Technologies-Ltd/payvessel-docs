@@ -79,6 +79,7 @@
             "group": "Issuing",
             "pages": [
               "virtual-cards/overview",
+              "virtual-cards/webhooks",
               "virtual-cards/create-customer-card",
               "virtual-cards/get-card",
               "virtual-cards/list-cards",
