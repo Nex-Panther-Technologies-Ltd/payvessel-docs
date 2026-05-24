@@ -1,9 +1,9 @@
 ---
 title: "Getting Started"
-description: "Issue USD virtual cards for your customers via the PayVessel external API"
+description: "Issue USD virtual cards for your customers via the PayVessel API"
 ---
 
-PayVessel **USD virtual cards** let your customers pay online at international merchants. You integrate through the **external API** using your business **API key** and **secret**; PayVessel handles issuer enrollment, card lifecycle, and wallet debits for funding.
+PayVessel **USD virtual cards** let your customers pay online at international merchants. You integrate through the **PayVessel API** using your business **API key** and **secret**; PayVessel handles issuer enrollment, card lifecycle, and wallet debits for funding.
 
 <Frame>
   <img
@@ -46,12 +46,12 @@ All virtual card endpoints live under:
 Example: `POST https://api.payvessel.com/pms/api/external/request/virtual-cards/`
 
 <Note>
-Authentication matches other PayVessel external APIs. See [Authentication](/api-basics/authentication) for `api-key` and `api-secret` headers.
+Authentication matches other PayVessel APIs. See [Authentication](/api-basics/authentication) for `api-key` and `api-secret` headers.
 </Note>
 
 ***
 
-## What you can do (external API)
+## What you can do
 
 | Capability | Description |
 |------------|-------------|
@@ -66,7 +66,7 @@ Authentication matches other PayVessel external APIs. See [Authentication](/api-
 | **Fee quotes** | Calculate charges before create, fund, or withdraw |
 
 <Warning>
-**Customer cards only.** Business (merchant) cards are created from the PayVessel merchant dashboard, not the external API.
+**Customer cards only.** Business (merchant) cards are created from the PayVessel merchant dashboard, not the API.
 </Warning>
 
 ***
@@ -113,9 +113,9 @@ sequenceDiagram
 
 ***
 
-## Customer KYC (external API)
+## Customer KYC
 
-The external API requires **full Nigerian KYC on every create request**. `customer_id` is not accepted — existing customers are matched by **email**.
+The PayVessel API requires **full Nigerian KYC on every create request**. `customer_id` is not accepted — existing customers are matched by **email**.
 
 | Field | Required | Notes |
 |-------|----------|-------|
@@ -178,7 +178,7 @@ Funding fee tiers:
 | `401` | Missing or invalid `api-key` / `api-secret` |
 | `400` | Validation (KYC, minimum amounts, insufficient wallet balance) |
 | `404` | Unknown `card_id` for your business |
-| `429` | External API rate limit |
+| `429` | API rate limit |
 
 Responses use `{ "status": true|false, "message": "...", "data": ... }`. Validation errors may include a `errors` object.
 
@@ -197,7 +197,7 @@ Responses use `{ "status": true|false, "message": "...", "data": ... }`. Validat
     Store PayVessel `card_id` and transaction `id` for support — issuer references are not exposed in API responses.
   </Card>
   <Card title="Server-side only" icon="server">
-    Never call the external API from mobile or browser; keep secrets on your backend.
+    Never call the PayVessel API from mobile or browser; keep secrets on your backend.
   </Card>
 </CardGroup>
 

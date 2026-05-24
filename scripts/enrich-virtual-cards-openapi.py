@@ -148,7 +148,7 @@ def main() -> None:
         "properties": {
             "id": {"type": "string", "format": "uuid", "description": "PayVessel card ID"},
             "business_id": {"type": "string", "format": "uuid", "description": "Owning business"},
-            "kind": {"type": "string", "description": "customer for external API cards"},
+            "kind": {"type": "string", "description": "customer card"},
             "customer_id": {"type": "string", "format": "uuid", "description": "Linked customer ID"},
             "customer_name": {"type": "string", "description": "Customer display name"},
             "card_name": {"type": "string", "description": "Name on card"},
