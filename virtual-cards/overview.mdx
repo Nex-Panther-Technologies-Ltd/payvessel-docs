@@ -67,26 +67,6 @@ Example: `POST https://api.payvessel.com/pms/api/external/request/virtual-cards/
 
 ***
 
-<Steps>
-  <Step title="Quote creation cost">
-    Use [Card Fee Quote](/virtual-cards/fee-quote) to show issuance and funding charges before debiting the wallet.
-  </Step>
-  <Step title="Create the card">
-    Call [Create a Card](/virtual-cards/create-customer-card) with customer KYC. Optionally include `prefund_amount` (minimum **$3 USD** when provided).
-  </Step>
-  <Step title="Wait for activation">
-    New cards return `status: PENDING`. Poll [Get a Card](/virtual-cards/get-card) until `ACTIVE` and `card_number` is present (usually seconds; allow up to a few minutes).
-  </Step>
-  <Step title="Fund or let customer spend">
-    Use [Fund a Card](/virtual-cards/fund-card) for top-ups. Card spends are handled by the issuer; use [Get Card Transactions](/virtual-cards/list-transactions) for history.
-  </Step>
-  <Step title="Withdraw or terminate">
-    Use [Withdraw from a Card](/virtual-cards/withdraw-card) to return USD to your wallet, or [Terminate Card](/virtual-cards/terminate-card) to close the card.
-  </Step>
-</Steps>
-
-***
-
 ## Customer KYC
 
 The PayVessel API requires **full Nigerian KYC on every create request**. `customer_id` is not accepted — existing customers are matched by **email**.
