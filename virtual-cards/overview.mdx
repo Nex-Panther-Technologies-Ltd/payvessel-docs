@@ -151,18 +151,6 @@ Responses use `{ "status": true|false, "message": "...", "data": ... }`. Validat
   <Card title="Never log sensitive data" icon="ban">
     Do not write PAN, CVV, or expiry to application logs, crash reports, analytics, webhooks you forward, or support tickets. Redact these fields in any debug output.
   </Card>
-  <Card title="List vs get" icon="list">
-    [List cards](/virtual-cards/list-cards) returns `masked_pan` only. Full credentials are returned only from **Get card** for a single `card_id` when the card is `ACTIVE` or `FROZEN`.
-  </Card>
-  <Card title="Control access" icon="lock">
-    Gate any endpoint or UI that displays card credentials behind your own authentication and authorization. Only the entitled customer or admin role should trigger a credential fetch.
-  </Card>
-  <Card title="Encrypt in transit" icon="globe">
-    Use TLS for every call to PayVessel and for any response that carries card data to your frontend. Do not send credentials over email, SMS, or chat.
-  </Card>
-  <Card title="Webhook hygiene" icon="webhook">
-    Card webhooks do not include full PAN/CVV. If you relay events to third parties, strip sensitive fields and verify webhook signatures before processing.
-  </Card>
 </CardGroup>
 
 ***
