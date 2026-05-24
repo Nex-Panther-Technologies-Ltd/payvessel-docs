@@ -19,7 +19,7 @@ PayVessel issues virtual **Mastercard** and **Visa** cards in **USD** that work 
 
 ## Where can cards be used?
 
-PayVessel virtual **USD** cards are accepted at merchant sites that accept USD cards — commonly US merchants such as Meta (Facebook), PayPal, Google, Snap Inc., Canva, and many more.
+PayVessel virtual **USD** cards are accepted at merchant sites that accept USD cards: commonly US merchants such as Meta (Facebook), PayPal, Google, Snap Inc., Canva, and many more.
 
 Some merchants may decline the card. Restrictions are identified by **MCC** (Merchant Category Code). The following MCCs are **not supported**:
 
@@ -67,23 +67,6 @@ If you encounter acceptance issues, contact [support@payvessel.com](mailto:suppo
     Calculate fees before create or fund
   </Card>
 </CardGroup>
-
-***
-
-## Base URL
-
-All virtual card endpoints live under:
-
-```
-/pms/api/external/request/virtual-cards/
-```
-
-| Environment | Base URL |
-|-------------|----------|
-| Production | `https://api.payvessel.com` |
-| Sandbox | `https://sandbox.payvessel.com` |
-
-Example: `POST https://api.payvessel.com/pms/api/external/request/virtual-cards/`
 
 ***
 
@@ -179,7 +162,7 @@ Responses use `{ "status": true|false, "message": "...", "data": ... }`. Validat
     Never persist `card_number`, `cvv`, or `expiry` in your database, cache, session storage, or mobile secure storage. Store only the PayVessel `card_id` and non-sensitive metadata (status, `masked_pan` from list).
   </Card>
   <Card title="Fetch when needed" icon="rotate">
-    When your customer must view or use the card, call [Get a Card](/virtual-cards/get-card) from your **backend** at that moment. Return credentials to your client over HTTPS only for the active session — do not keep them after the user leaves the screen.
+    When your customer must view or use the card, call [Get a Card](/virtual-cards/get-card) from your **backend** at that moment. Return credentials to your client over HTTPS only for the active session: do not keep them after the user leaves the screen.
   </Card>
   <Card title="Server-side only" icon="server">
     Never call the PayVessel API from a mobile app or browser with `api-key` / `api-secret`. All create, fund, and credential retrieval flows must run on your server.

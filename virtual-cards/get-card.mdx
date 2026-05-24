@@ -3,13 +3,13 @@ title: "Get a Card"
 description: "Retrieve one issued virtual card by ID"
 ---
 
-Fetch the current state of a single virtual card — status, balance, customer linkage, and **full card credentials** when the card is ready.
+Fetch the current state of a single virtual card: status, balance, customer linkage, and **full card credentials** when the card is ready.
 
 ## How it works
 
 1. **Provide the PayVessel `card_id`** returned from create (or list).
-2. **Receive the card object** — PayVessel syncs status and balance when needed.
-3. **Poll after create** until `status` is `ACTIVE` — then `card_number`, `cvv`, and `expiry` are included in the response.
+2. **Receive the card object**: PayVessel syncs status and balance when needed.
+3. **Poll after create** until `status` is `ACTIVE`: then `card_number`, `cvv`, and `expiry` are included in the response.
 
 ## Response fields (ACTIVE / FROZEN)
 
@@ -19,7 +19,7 @@ Fetch the current state of a single virtual card — status, balance, customer l
 | `cvv` | Card verification value |
 | `expiry` | Expiration (`MM/YY`) |
 
-While `status` is `PENDING`, card credentials are omitted — poll until `ACTIVE`.
+While `status` is `PENDING`, card credentials are omitted: poll until `ACTIVE`.
 
 ## Sample response (ACTIVE)
 

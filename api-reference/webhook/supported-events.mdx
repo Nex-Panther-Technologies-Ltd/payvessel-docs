@@ -63,5 +63,5 @@ Always verify the signature and implement idempotency before acting on an event.
 - Log the `event`, `transaction.reference`, and timestamp for auditing.
 - Queue long-running operations to avoid response timeouts.
 - Provide manual replay tooling so operations teams can reprocess specific events.
-- Monitor for event bursts—throttle downstream systems as needed.
+- Monitor for event bursts, throttle downstream systems as needed.
 

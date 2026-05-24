@@ -1,6 +1,6 @@
 ---
 title: "Card Payment Overview"
-description: "Accept card payments with 3DS, OTP, and PIN support — production-ready integration guide"
+description: "Accept card payments with 3DS, OTP, and PIN support: production-ready integration guide"
 ---
 
 **Accept debit and credit card payments** through Payvessel's card payment APIs. Card flows support 3D Secure (3DS), OTP, and PIN authentication depending on the issuer.
@@ -38,7 +38,7 @@ Every request must include:
 | Header | Required | Description |
 |--------|----------|-------------|
 | `api-key` | Yes | Your Payvessel **public** API key (safe for frontend) |
-| `api-secret` | Yes (for charge/validate) | `YOUR_SECRET_KEY` — **never** expose in client-side code |
+| `api-secret` | Yes (for charge/validate) | `YOUR_SECRET_KEY`: **never** expose in client-side code |
 | `Content-Type` | Yes | `application/json` |
 
 <Warning>
@@ -58,7 +58,7 @@ Below is **production-style** code with comments for a minimal backend charge + 
 
 ```javascript
 // =============================================================================
-// CARD PAYMENT — BACKEND (Node.js). Never expose API secret to the client.
+// CARD PAYMENT: BACKEND (Node.js). Never expose API secret to the client.
 // =============================================================================
 
 const PAYVESSEL_BASE = process.env.PAYVESSEL_BASE_URL || 'https://api.payvessel.com';
@@ -72,7 +72,7 @@ const headers = {
 };
 
 /**
- * Step 1 — Charge the card with encrypted payload from your frontend.
+ * Step 1: Charge the card with encrypted payload from your frontend.
  * Frontend must encrypt card using the public key from GET /pms/checkout/card-payment/public-key/
  */
 async function chargeCard(encryptedCardData, encryptionKey, reference) {
@@ -94,7 +94,7 @@ async function chargeCard(encryptedCardData, encryptionKey, reference) {
 }
 
 /**
- * Step 2 — If the issuer requires OTP, call this after the customer submits OTP.
+ * Step 2: If the issuer requires OTP, call this after the customer submits OTP.
  */
 async function validateOtp(transactionRef, otp) {
   const res = await fetch(`${PAYVESSEL_BASE}/pms/checkout/card-payment/validate-otp/`, {
@@ -111,7 +111,7 @@ async function validateOtp(transactionRef, otp) {
 }
 
 /**
- * Step 3 — If the issuer requires PIN, call this with the card PIN.
+ * Step 3: If the issuer requires PIN, call this with the card PIN.
  */
 async function validatePin(transactionRef, pin) {
   const res = await fetch(`${PAYVESSEL_BASE}/pms/checkout/card-payment/validate-pin/`, {
@@ -128,7 +128,7 @@ async function validatePin(transactionRef, pin) {
 }
 
 /**
- * Step 4 — Confirm final status (poll or call after redirect/callback).
+ * Step 4: Confirm final status (poll or call after redirect/callback).
  */
 async function confirmPaymentStatus(transactionRef) {
   const res = await fetch(

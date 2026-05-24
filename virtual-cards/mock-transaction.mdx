@@ -13,7 +13,7 @@ Use this endpoint to **test card spend and transaction history** without real me
 
 1. **Create and activate** a card ([Create a Card](/virtual-cards/create-customer-card), then poll [Get a Card](/virtual-cards/get-card) until `ACTIVE`).
 2. **POST a simulation** with `amount` and `type` (`DEBIT` or `CREDIT`).
-3. **PayVessel processes the event** — the transaction is recorded and the card balance is refreshed.
+3. **PayVessel processes the event**: the transaction is recorded and the card balance is refreshed.
 4. **Verify** with [Get Card Transactions](/virtual-cards/list-transactions).
 
 ## Request fields
@@ -35,6 +35,6 @@ Use this endpoint to **test card spend and transaction history** without real me
 - Balance shown in the response may change again after the webhook syncs
 - Production requests return a validation error
 
-<Card title="API Reference — Try it" icon="play" href="/api-reference/virtual-cards/mock-transaction">
+<Card title="API Reference: Try it" icon="play" href="/api-reference/virtual-cards/mock-transaction">
   Run this endpoint in the browser (sandbox)
 </Card>
