@@ -1,0 +1,22 @@
+---
+title: "Fund a Card"
+description: "Load USD from your business wallet onto a virtual card"
+---
+
+Move USD from your PayVessel **business USD wallet** onto a customer’s virtual card. Funding fees apply; the issuer holds the spendable balance.
+
+## How it works
+
+1. **Confirm wallet balance** can cover amount + funding fee ([Card Fee Quote](/virtual-cards/fee-quote)).
+2. **POST the fund amount** with the target `card_id`.
+3. **Card balance updates** at the issuer; use [Get a Card](/virtual-cards/get-card) to read the synced balance.
+
+## When to use
+
+- Top up a card after the initial prefund
+- Replenish spend limits for recurring customers
+- Move float from your business wallet to card programs
+
+<Card title="API Reference" icon="code" href="/api-reference/virtual-cards/fund-card">
+  Full request/response details and Try it
+</Card>

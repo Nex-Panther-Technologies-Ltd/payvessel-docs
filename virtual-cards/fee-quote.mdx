@@ -1,0 +1,33 @@
+---
+title: "Card Fee Quote"
+description: "Calculate fees before create, fund, or withdraw"
+---
+
+Calculate a single fee amount for a given operation (`issuance`, `funding`, `withdrawal`, etc.) before debiting your wallet.
+
+## How it works
+
+1. **Choose `fee_type`** for the operation you are about to perform.
+2. **Include `amount_usd`** when required (e.g. `funding`, `cross_border`).
+3. **Receive the quoted fee** to show your user or validate wallet balance.
+
+## Fee types
+
+| `fee_type`      | `amount_usd` required |
+|-----------------|------------------------|
+| `issuance`      | No                     |
+| `funding`       | Yes                    |
+| `withdrawal`    | No                     |
+| `spend`         | No                     |
+| `maintenance`   | No                     |
+| `cross_border`  | Yes                    |
+
+## When to use
+
+- Show total cost before [Create a Card](/virtual-cards/create-customer-card)
+- Confirm funding fee before [Fund a Card](/virtual-cards/fund-card)
+- Preview withdrawal charges
+
+<Card title="API Reference" icon="code" href="/api-reference/virtual-cards/fee-quote">
+  Full request/response details and Try it
+</Card>

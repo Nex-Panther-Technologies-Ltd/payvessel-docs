@@ -1,0 +1,21 @@
+---
+title: "Unfreeze a Card"
+description: "Restore spend on a frozen card"
+---
+
+Restore spending on a **FROZEN** card so the customer can authorize merchants again.
+
+## How it works
+
+1. **Call unfreeze** with the `card_id`.
+2. **Issuer restores spend** — status returns to `ACTIVE` when successful.
+
+## When to use
+
+- Customer confirms card is safe to use again
+- End of a temporary compliance hold
+- After resolving a false-positive fraud alert
+
+<Card title="API Reference" icon="code" href="/api-reference/virtual-cards/unfreeze-card">
+  Full request/response details and Try it
+</Card>

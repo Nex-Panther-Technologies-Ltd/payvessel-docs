@@ -1,0 +1,90 @@
+---
+title: "Get all Cards"
+description: "List customer virtual cards for your business"
+---
+
+List every **customer** and **business** virtual card issued under your business. Filter by lifecycle status when you only need active or pending cards.
+
+<Note>
+List responses include `masked_pan` only. For full `card_number` and `cvv`, call [Get a Card](/virtual-cards/get-card) on a single `card_id`.
+</Note>
+
+## How it works
+
+1. **Call the list endpoint** with your API credentials (no body).
+2. **Optionally filter** with `status` (`PENDING`, `ACTIVE`, `FROZEN`, `TERMINATED`, `FAILED`).
+3. **Receive an array** of card objects with `id`, `kind`, `status`, `masked_pan`, and `balance`.
+
+## When to use
+
+- Populate a cards dashboard for your merchants
+- Find a `card_id` before fund, withdraw, or freeze
+- Reconcile how many cards are active vs terminated
+
+## Sample response
+
+```json
+{
+  "status": true,
+  "message": "Virtual cards retrieved successfully",
+  "data": [
+    {
+      "id": "7f219a25-d968-4894-9a8b-ba83fa0bf6ec",
+      "business_id": "8f926b04-e63a-4449-b346-ea922b69e20e",
+      "kind": "customer",
+      "customer_id": "5e6bda15-1090-4cfe-bc1d-861990947bbc",
+      "customer_name": "MUSA GANIYU",
+      "business_name": null,
+      "card_name": "Ganiyu Musa",
+      "masked_pan": "557350******7848",
+      "status": "ACTIVE",
+      "currency": "USD",
+      "brand": "MASTERCARD",
+      "balance": "3.00",
+      "expiry": "08/31",
+      "created_datetime": "2026-05-24T00:38:02.543669",
+      "updated_datetime": "2026-05-24T03:20:19.331923"
+    },
+    {
+      "id": "a0e7ed8b-bbb7-48d2-81e1-d76d98965006",
+      "business_id": "8f926b04-e63a-4449-b346-ea922b69e20e",
+      "kind": "customer",
+      "customer_id": "5e6bda15-1090-4cfe-bc1d-861990947bbc",
+      "customer_name": "MUSA GANIYU",
+      "business_name": null,
+      "card_name": "Ganiyu Musa",
+      "masked_pan": "227449******4392",
+      "status": "TERMINATED",
+      "currency": "USD",
+      "brand": "VISA",
+      "balance": "0.00",
+      "expiry": "08/31",
+      "created_datetime": "2026-05-22T21:35:08.115964",
+      "updated_datetime": "2026-05-22T21:35:50.942942"
+    },
+    {
+      "id": "aae598cc-99d9-4730-80f5-4044d49bba75",
+      "business_id": "8f926b04-e63a-4449-b346-ea922b69e20e",
+      "kind": "business",
+      "customer_id": null,
+      "customer_name": null,
+      "business_name": "Nex Panther Technologies",
+      "card_name": "MARKETING CARD",
+      "masked_pan": "222980******7461",
+      "status": "TERMINATED",
+      "currency": "USD",
+      "brand": "MASTERCARD",
+      "balance": "0.00",
+      "expiry": "08/31",
+      "created_datetime": "2026-05-22T20:29:31.615688",
+      "updated_datetime": "2026-05-24T02:05:56.229932"
+    }
+  ]
+}
+```
+
+The live response may include more cards in `data`; each object uses the same shape.
+
+<Card title="API Reference" icon="code" href="/api-reference/virtual-cards/list-cards">
+  Full request/response details and Try it
+</Card>

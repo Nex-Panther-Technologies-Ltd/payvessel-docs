@@ -7,7 +7,12 @@
     "light": "#ff8533",
     "dark": "#cc5500"
   },
-  "favicon": "/logo/light.svg",
+  "favicon": "/favicon.png",
+  "api": {
+    "playground": {
+      "display": "interactive"
+    }
+  },
   "navigation": {
     "tabs": [
       {
@@ -64,6 +69,30 @@
             ]
           },
           {
+            "group": "Virtual Accounts",
+            "pages": [
+              "virtual-accounts/create-virtual-account",
+              "virtual-accounts/get-virtual-account"
+            ]
+          },
+          {
+            "group": "Issuing",
+            "pages": [
+              "virtual-cards/overview",
+              "virtual-cards/create-customer-card",
+              "virtual-cards/get-card",
+              "virtual-cards/list-cards",
+              "virtual-cards/fund-card",
+              "virtual-cards/withdraw-card",
+              "virtual-cards/list-transactions",
+              "virtual-cards/mock-transaction",
+              "virtual-cards/freeze-card",
+              "virtual-cards/unfreeze-card",
+              "virtual-cards/terminate-card",
+              "virtual-cards/fee-quote"
+            ]
+          },
+          {
             "group": "Identity Verification",
             "pages": [
               "identity-verification/overview",
@@ -111,6 +140,22 @@
             "pages": [
               "api-reference/virtual-accounts/create-virtual-account",
               "api-reference/virtual-accounts/get-virtual-account"
+            ]
+          },
+          {
+            "group": "Issuing",
+            "pages": [
+              "api-reference/virtual-cards/create-customer-card",
+              "api-reference/virtual-cards/list-cards",
+              "api-reference/virtual-cards/get-card",
+              "api-reference/virtual-cards/fund-card",
+              "api-reference/virtual-cards/withdraw-card",
+              "api-reference/virtual-cards/list-transactions",
+              "api-reference/virtual-cards/mock-transaction",
+              "api-reference/virtual-cards/freeze-card",
+              "api-reference/virtual-cards/unfreeze-card",
+              "api-reference/virtual-cards/terminate-card",
+              "api-reference/virtual-cards/fee-quote"
             ]
           },
           {

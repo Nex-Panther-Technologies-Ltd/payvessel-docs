@@ -1,0 +1,22 @@
+---
+title: "Get Card Transactions"
+description: "Transaction history for a virtual card"
+---
+
+View spend, funding, withdrawal, and fee activity for a single card. History is recorded from issuer webhooks and API operations.
+
+## How it works
+
+1. **Provide the `card_id`** for the card you want history for.
+2. **Optionally set `size`** (default 50, maximum 100).
+3. **Receive transactions** with amount, entry (debit/credit), status, merchant, and timestamps.
+
+## When to use
+
+- Show card activity in your customer portal
+- Reconcile spends against issuer statements
+- Support disputes using the transaction `id` (same value as `ref_id`)
+
+<Card title="API Reference" icon="code" href="/api-reference/virtual-cards/list-transactions">
+  Full request/response details and Try it
+</Card>

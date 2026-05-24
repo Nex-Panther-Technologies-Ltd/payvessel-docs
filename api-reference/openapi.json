@@ -142,41 +142,6 @@
             "url": "https://sandbox.payvessel.com/kyc"
           }
         ],
-        "parameters": [
-          {
-            "name": "api-key",
-            "in": "header",
-            "description": "Your PayVessel API key",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
-          },
-          {
-            "name": "api-secret",
-            "in": "header",
-            "description": "Your PayVessel API secret",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "description": "Request content type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "application/json"
-              ]
-            },
-            "example": "application/json"
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -266,7 +231,40 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ]
       }
     },
     "/api/v1/merchant/bvn/enhanced": {
@@ -282,41 +280,6 @@
           },
           {
             "url": "https://sandbox.payvessel.com/kyc"
-          }
-        ],
-        "parameters": [
-          {
-            "name": "api-key",
-            "in": "header",
-            "description": "Your PayVessel API key",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
-          },
-          {
-            "name": "api-secret",
-            "in": "header",
-            "description": "Your PayVessel API secret",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "description": "Request content type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "application/json"
-              ]
-            },
-            "example": "application/json"
           }
         ],
         "requestBody": {
@@ -407,7 +370,40 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ]
       }
     },
     "/api/v1/merchant/nin/basic": {
@@ -423,41 +419,6 @@
           },
           {
             "url": "https://sandbox.payvessel.com/kyc"
-          }
-        ],
-        "parameters": [
-          {
-            "name": "api-key",
-            "in": "header",
-            "description": "Your PayVessel API key",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
-          },
-          {
-            "name": "api-secret",
-            "in": "header",
-            "description": "Your PayVessel API secret",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "description": "Request content type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "application/json"
-              ]
-            },
-            "example": "application/json"
           }
         ],
         "requestBody": {
@@ -549,7 +510,40 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ]
       }
     },
     "/api/v1/merchant/nin/enhanced": {
@@ -565,41 +559,6 @@
           },
           {
             "url": "https://sandbox.payvessel.com/kyc"
-          }
-        ],
-        "parameters": [
-          {
-            "name": "api-key",
-            "in": "header",
-            "description": "Your PayVessel API key",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
-          },
-          {
-            "name": "api-secret",
-            "in": "header",
-            "description": "Your PayVessel API secret",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "description": "Request content type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "application/json"
-              ]
-            },
-            "example": "application/json"
           }
         ],
         "requestBody": {
@@ -689,7 +648,40 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ]
       }
     },
     "/api/v1/merchant/documents/drivers-license": {
@@ -705,41 +697,6 @@
           },
           {
             "url": "https://sandbox.payvessel.com/kyc"
-          }
-        ],
-        "parameters": [
-          {
-            "name": "api-key",
-            "in": "header",
-            "description": "Your PayVessel API key",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
-          },
-          {
-            "name": "api-secret",
-            "in": "header",
-            "description": "Your PayVessel API secret",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "description": "Request content type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "application/json"
-              ]
-            },
-            "example": "application/json"
           }
         ],
         "requestBody": {
@@ -829,7 +786,40 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ]
       }
     },
     "/api/v1/merchant/documents/voters-card": {
@@ -845,41 +835,6 @@
           },
           {
             "url": "https://sandbox.payvessel.com/kyc"
-          }
-        ],
-        "parameters": [
-          {
-            "name": "api-key",
-            "in": "header",
-            "description": "Your PayVessel API key",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
-          },
-          {
-            "name": "api-secret",
-            "in": "header",
-            "description": "Your PayVessel API secret",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "description": "Request content type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "application/json"
-              ]
-            },
-            "example": "application/json"
           }
         ],
         "requestBody": {
@@ -970,7 +925,40 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ]
       }
     },
     "/api/v1/merchant/documents/international-passport": {
@@ -986,41 +974,6 @@
           },
           {
             "url": "https://sandbox.payvessel.com/kyc"
-          }
-        ],
-        "parameters": [
-          {
-            "name": "api-key",
-            "in": "header",
-            "description": "Your PayVessel API key",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
-          },
-          {
-            "name": "api-secret",
-            "in": "header",
-            "description": "Your PayVessel API secret",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "description": "Request content type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "application/json"
-              ]
-            },
-            "example": "application/json"
           }
         ],
         "requestBody": {
@@ -1111,7 +1064,40 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ]
       }
     },
     "/api/v1/merchant/face/compare": {
@@ -1127,41 +1113,6 @@
           },
           {
             "url": "https://sandbox.payvessel.com/kyc"
-          }
-        ],
-        "parameters": [
-          {
-            "name": "api-key",
-            "in": "header",
-            "description": "Your PayVessel API key",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
-          },
-          {
-            "name": "api-secret",
-            "in": "header",
-            "description": "Your PayVessel API secret",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "description": "Request content type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "application/json"
-              ]
-            },
-            "example": "application/json"
           }
         ],
         "requestBody": {
@@ -1232,7 +1183,40 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ]
       }
     },
     "/api/v1/merchant/bank/verify-account": {
@@ -1248,41 +1232,6 @@
           },
           {
             "url": "https://sandbox.payvessel.com/kyc"
-          }
-        ],
-        "parameters": [
-          {
-            "name": "api-key",
-            "in": "header",
-            "description": "Your PayVessel API key",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
-          },
-          {
-            "name": "api-secret",
-            "in": "header",
-            "description": "Your PayVessel API secret",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "description": "Request content type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "application/json"
-              ]
-            },
-            "example": "application/json"
           }
         ],
         "requestBody": {
@@ -1356,7 +1305,40 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ]
       }
     },
     "/api/v1/merchant/risk/blacklist/query": {
@@ -1372,41 +1354,6 @@
           },
           {
             "url": "https://sandbox.payvessel.com/kyc"
-          }
-        ],
-        "parameters": [
-          {
-            "name": "api-key",
-            "in": "header",
-            "description": "Your PayVessel API key",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
-          },
-          {
-            "name": "api-secret",
-            "in": "header",
-            "description": "Your PayVessel API secret",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "description": "Request content type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "application/json"
-              ]
-            },
-            "example": "application/json"
           }
         ],
         "requestBody": {
@@ -1480,7 +1427,40 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ]
       }
     },
     "/api/v1/merchant/risk/credit-score/query": {
@@ -1496,41 +1476,6 @@
           },
           {
             "url": "https://sandbox.payvessel.com/kyc"
-          }
-        ],
-        "parameters": [
-          {
-            "name": "api-key",
-            "in": "header",
-            "description": "Your PayVessel API key",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
-          },
-          {
-            "name": "api-secret",
-            "in": "header",
-            "description": "Your PayVessel API secret",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "description": "Request content type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "application/json"
-              ]
-            },
-            "example": "application/json"
           }
         ],
         "requestBody": {
@@ -1607,7 +1552,40 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ]
       }
     },
     "/api/v1/merchant/risk/loan-feature/query": {
@@ -1623,41 +1601,6 @@
           },
           {
             "url": "https://sandbox.payvessel.com/kyc"
-          }
-        ],
-        "parameters": [
-          {
-            "name": "api-key",
-            "in": "header",
-            "description": "Your PayVessel API key",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVKEY-9A1BC2D3EF4G5H6J7K8L"
-          },
-          {
-            "name": "api-secret",
-            "in": "header",
-            "description": "Your PayVessel API secret",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVSECRET-8Z7Y6X5W4V3U2T1S0R9Q"
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "description": "Request content type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "application/json"
-              ]
-            },
-            "example": "application/json"
           }
         ],
         "requestBody": {
@@ -1729,13 +1672,7 @@
               }
             }
           }
-        }
-      }
-    },
-    "/pms/api/external/request/customerReservedAccount/": {
-      "post": {
-        "summary": "Create Virtual Account",
-        "description": "Create a reserved virtual bank account for a customer. Each reserved account is unique per customer, supports static and dynamic modes, and triggers notifications when funded. Use static accounts for recurring funding and dynamic accounts for one-time payments.",
+        },
         "parameters": [
           {
             "name": "api-key",
@@ -1753,8 +1690,7 @@
             "required": true,
             "schema": {
               "type": "string"
-            },
-            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+            }
           },
           {
             "name": "Content-Type",
@@ -1763,11 +1699,19 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["application/json"]
+              "enum": [
+                "application/json"
+              ]
             },
             "example": "application/json"
           }
-        ],
+        ]
+      }
+    },
+    "/pms/api/external/request/customerReservedAccount/": {
+      "post": {
+        "summary": "Create Virtual Account",
+        "description": "Create a reserved virtual bank account for a customer. Each reserved account is unique per customer, supports static and dynamic modes, and triggers notifications when funded. Use static accounts for recurring funding and dynamic accounts for one-time payments.",
         "requestBody": {
           "required": true,
           "content": {
@@ -1782,7 +1726,10 @@
                     "email": "johndoe@gmail.com",
                     "name": "JOHN DOE",
                     "phoneNumber": "09012345672",
-                    "bankcode": ["999991", "120001"],
+                    "bankcode": [
+                      "999991",
+                      "120001"
+                    ],
                     "account_type": "STATIC",
                     "businessid": "061C074E2F91F944B93993B4",
                     "bvn": "22345678901",
@@ -1860,7 +1807,9 @@
                         "bankcode": [
                           "At least one partner bank code is required"
                         ],
-                        "bvn": ["BVN is mandatory for STATIC accounts"]
+                        "bvn": [
+                          "BVN is mandatory for STATIC accounts"
+                        ]
                       }
                     }
                   }
@@ -1918,7 +1867,42 @@
             }
           }
         },
-        "tags": ["Virtual Accounts"]
+        "tags": [
+          "Virtual Accounts"
+        ],
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ]
       }
     },
     "/pms/api/external/request/virtual-account/{businessid}/{account}/": {
@@ -1926,6 +1910,24 @@
         "summary": "Get Single Virtual Account",
         "description": "Fetch details of a specific virtual account using its business ID and account number.",
         "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "businessid",
             "in": "path",
@@ -1943,36 +1945,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "api-key",
-            "in": "header",
-            "description": "Your Payvessel public API key",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "api-secret",
-            "in": "header",
-            "description": "Your Payvessel secret",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "description": "Request content type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": ["application/json"]
-            },
-            "example": "application/json"
           }
         ],
         "responses": {
@@ -2041,45 +2013,15 @@
             }
           }
         },
-        "tags": ["Virtual Accounts"]
+        "tags": [
+          "Virtual Accounts"
+        ]
       }
     },
     "/pms/checkout/card-payment/charge/": {
       "post": {
         "summary": "Card Payment Charge",
         "description": "Process a card payment by charging the customer's card. This endpoint initiates the payment flow and may require additional authentication steps like OTP or PIN validation.",
-        "parameters": [
-          {
-            "name": "api-key",
-            "in": "header",
-            "description": "Your Payvessel public API key",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "api-secret",
-            "in": "header",
-            "description": "Your Payvessel secret",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "description": "Request content type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": ["application/json"]
-            },
-            "example": "application/json"
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -2122,13 +2064,9 @@
             }
           }
         },
-        "tags": ["Card"]
-      }
-    },
-    "/pms/checkout/card-payment/confirm-status/": {
-      "get": {
-        "summary": "Confirm Payment Status",
-        "description": "Check the final status of a card payment transaction. Use this to confirm whether a payment was successful after authentication steps.",
+        "tags": [
+          "Card"
+        ],
         "parameters": [
           {
             "name": "api-key",
@@ -2146,8 +2084,7 @@
             "required": true,
             "schema": {
               "type": "string"
-            },
-            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+            }
           },
           {
             "name": "Content-Type",
@@ -2156,11 +2093,19 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["application/json"]
+              "enum": [
+                "application/json"
+              ]
             },
             "example": "application/json"
           }
-        ],
+        ]
+      }
+    },
+    "/pms/checkout/card-payment/confirm-status/": {
+      "get": {
+        "summary": "Confirm Payment Status",
+        "description": "Check the final status of a card payment transaction. Use this to confirm whether a payment was successful after authentication steps.",
         "responses": {
           "200": {
             "description": "Payment status retrieved successfully",
@@ -2173,13 +2118,9 @@
             }
           }
         },
-        "tags": ["Card"]
-      }
-    },
-    "/pms/checkout/card-payment/public-key/": {
-      "get": {
-        "summary": "Get Public Key",
-        "description": "Retrieve the public encryption key for securing sensitive card data during transmission.",
+        "tags": [
+          "Card"
+        ],
         "parameters": [
           {
             "name": "api-key",
@@ -2189,8 +2130,23 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
-        ],
+        ]
+      }
+    },
+    "/pms/checkout/card-payment/public-key/": {
+      "get": {
+        "summary": "Get Public Key",
+        "description": "Retrieve the public encryption key for securing sensitive card data during transmission.",
         "requestBody": {
           "required": false,
           "content": {
@@ -2223,13 +2179,9 @@
             }
           }
         },
-        "tags": ["Card"]
-      }
-    },
-    "/pms/checkout/card-payment/resend-otp/": {
-      "post": {
-        "summary": "Resend OTP",
-        "description": "Resend the one-time password (OTP) for card payment authentication when the initial OTP was not received or expired.",
+        "tags": [
+          "Card"
+        ],
         "parameters": [
           {
             "name": "api-key",
@@ -2247,8 +2199,7 @@
             "required": true,
             "schema": {
               "type": "string"
-            },
-            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+            }
           },
           {
             "name": "Content-Type",
@@ -2257,11 +2208,19 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["application/json"]
+              "enum": [
+                "application/json"
+              ]
             },
             "example": "application/json"
           }
-        ],
+        ]
+      }
+    },
+    "/pms/checkout/card-payment/resend-otp/": {
+      "post": {
+        "summary": "Resend OTP",
+        "description": "Resend the one-time password (OTP) for card payment authentication when the initial OTP was not received or expired.",
         "requestBody": {
           "required": true,
           "content": {
@@ -2293,7 +2252,42 @@
             }
           }
         },
-        "tags": ["Card"]
+        "tags": [
+          "Card"
+        ],
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ]
       }
     },
     "/pms/checkout/card-payment/resolve-bin/{bin}/": {
@@ -2302,18 +2296,27 @@
         "description": "Resolve card Bank Identification Number (BIN) to get card type, bank information, and other card metadata.",
         "parameters": [
           {
-            "name": "bin",
-            "in": "path",
-            "description": "First 6-8 digits of the card number (Bank Identification Number)",
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
             "required": true,
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "api-key",
+            "name": "api-secret",
             "in": "header",
-            "description": "Your Payvessel public API key",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "bin",
+            "in": "path",
+            "description": "First 6-8 digits of the card number (Bank Identification Number)",
             "required": true,
             "schema": {
               "type": "string"
@@ -2332,7 +2335,9 @@
             }
           }
         },
-        "tags": ["Card"]
+        "tags": [
+          "Card"
+        ]
       }
     },
     "/pms/checkout/card-payment/simulate-3ds-callback/": {
@@ -2341,28 +2346,40 @@
         "description": "Simulate a 3D Secure authentication callback for testing purposes in the sandbox environment.",
         "parameters": [
           {
-            "name": "status",
-            "in": "query",
-            "description": "3DS authentication status (success/failed)",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": ["success", "failed"]
-            }
-          },
-          {
-            "name": "transactionId",
-            "in": "query",
-            "description": "Transaction ID for 3DS authentication",
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
             "required": true,
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "api-key",
+            "name": "api-secret",
             "in": "header",
-            "description": "Your Payvessel public API key",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "3DS authentication status (success/failed)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "failed"
+              ]
+            }
+          },
+          {
+            "name": "transactionId",
+            "in": "query",
+            "description": "Transaction ID for 3DS authentication",
             "required": true,
             "schema": {
               "type": "string"
@@ -2381,45 +2398,15 @@
             }
           }
         },
-        "tags": ["Card"]
+        "tags": [
+          "Card"
+        ]
       }
     },
     "/pms/checkout/card-payment/validate-otp/": {
       "post": {
         "summary": "Validate OTP",
         "description": "Validate the one-time password (OTP) provided by the customer for card payment authentication.",
-        "parameters": [
-          {
-            "name": "api-key",
-            "in": "header",
-            "description": "Your Payvessel public API key",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "api-secret",
-            "in": "header",
-            "description": "Your Payvessel secret",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "description": "Request content type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": ["application/json"]
-            },
-            "example": "application/json"
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -2442,13 +2429,9 @@
             }
           }
         },
-        "tags": ["Card"]
-      }
-    },
-    "/pms/checkout/card-payment/validate-phone/": {
-      "post": {
-        "summary": "Validate Phone",
-        "description": "Validate the customer's phone number for card payment authentication and OTP delivery.",
+        "tags": [
+          "Card"
+        ],
         "parameters": [
           {
             "name": "api-key",
@@ -2466,8 +2449,7 @@
             "required": true,
             "schema": {
               "type": "string"
-            },
-            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+            }
           },
           {
             "name": "Content-Type",
@@ -2476,11 +2458,19 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["application/json"]
+              "enum": [
+                "application/json"
+              ]
             },
             "example": "application/json"
           }
-        ],
+        ]
+      }
+    },
+    "/pms/checkout/card-payment/validate-phone/": {
+      "post": {
+        "summary": "Validate Phone",
+        "description": "Validate the customer's phone number for card payment authentication and OTP delivery.",
         "requestBody": {
           "required": true,
           "content": {
@@ -2503,13 +2493,9 @@
             }
           }
         },
-        "tags": ["Card"]
-      }
-    },
-    "/pms/checkout/card-payment/validate-pin/": {
-      "post": {
-        "summary": "Validate PIN",
-        "description": "Validate the customer's card PIN for payment authentication when required by the card issuer.",
+        "tags": [
+          "Card"
+        ],
         "parameters": [
           {
             "name": "api-key",
@@ -2527,8 +2513,7 @@
             "required": true,
             "schema": {
               "type": "string"
-            },
-            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+            }
           },
           {
             "name": "Content-Type",
@@ -2537,11 +2522,19 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["application/json"]
+              "enum": [
+                "application/json"
+              ]
             },
             "example": "application/json"
           }
-        ],
+        ]
+      }
+    },
+    "/pms/checkout/card-payment/validate-pin/": {
+      "post": {
+        "summary": "Validate PIN",
+        "description": "Validate the customer's card PIN for payment authentication when required by the card issuer.",
         "requestBody": {
           "required": true,
           "content": {
@@ -2564,23 +2557,10 @@
             }
           }
         },
-        "tags": ["Card"]
-      }
-    },
-    "/pms/transactions/{reference}/confirm/": {
-      "get": {
-        "summary": "Confirm Transaction",
-        "description": "Retrieve detailed information about a specific transaction using its reference. This endpoint provides comprehensive transaction data including status, amounts, fees, and associated entities.",
+        "tags": [
+          "Card"
+        ],
         "parameters": [
-          {
-            "name": "reference",
-            "in": "path",
-            "description": "Transaction reference to confirm",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "api-key",
             "in": "header",
@@ -2597,8 +2577,55 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
             },
-            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+            "example": "application/json"
+          }
+        ]
+      }
+    },
+    "/pms/transactions/{reference}/confirm/": {
+      "get": {
+        "summary": "Confirm Transaction",
+        "description": "Retrieve detailed information about a specific transaction using its reference. This endpoint provides comprehensive transaction data including status, amounts, fees, and associated entities.",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "reference",
+            "in": "path",
+            "description": "Transaction reference to confirm",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2613,45 +2640,15 @@
             }
           }
         },
-        "tags": ["Checkout"]
+        "tags": [
+          "Checkout"
+        ]
       }
     },
     "/pms/transactions/initialize/": {
       "post": {
         "summary": "Initialize Transaction",
         "description": "Initialize a new payment transaction with customer details, amount, and payment channels. This creates a transaction session that can be used for payment processing.",
-        "parameters": [
-          {
-            "name": "api-key",
-            "in": "header",
-            "description": "Your Payvessel public API key",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "api-secret",
-            "in": "header",
-            "description": "Your Payvessel secret",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "description": "Request content type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": ["application/json"]
-            },
-            "example": "application/json"
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -2661,7 +2658,9 @@
               },
               "example": {
                 "amount": "5000.00",
-                "channels": ["BANK_TRANSFER"],
+                "channels": [
+                  "BANK_TRANSFER"
+                ],
                 "currency": "NGN",
                 "customer_name": "John Doe",
                 "customer_email": "customer@example.com",
@@ -2696,23 +2695,10 @@
             }
           }
         },
-        "tags": ["Checkout"]
-      }
-    },
-    "/transaction/verify/{reference}": {
-      "get": {
-        "summary": "Verify Payment",
-        "description": "Verify the status of a payment transaction by reference",
+        "tags": [
+          "Checkout"
+        ],
         "parameters": [
-          {
-            "name": "reference",
-            "in": "path",
-            "description": "The unique transaction reference returned when the payment was initialized",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "api-key",
             "in": "header",
@@ -2729,8 +2715,7 @@
             "required": true,
             "schema": {
               "type": "string"
-            },
-            "example": "PVSECRET-5LZNFFNT8N9NF6SXUZPWEYQ0Q2Y"
+            }
           },
           {
             "name": "Content-Type",
@@ -2739,9 +2724,46 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["application/json"]
+              "enum": [
+                "application/json"
+              ]
             },
             "example": "application/json"
+          }
+        ]
+      }
+    },
+    "/transaction/verify/{reference}": {
+      "get": {
+        "summary": "Verify Payment",
+        "description": "Verify the status of a payment transaction by reference",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "reference",
+            "in": "path",
+            "description": "The unique transaction reference returned when the payment was initialized",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2904,33 +2926,15 @@
             }
           }
         },
-        "tags": ["Transactions"]
+        "tags": [
+          "Transactions"
+        ]
       }
     },
     "/pms/api/external/request/wallet/banks/": {
       "get": {
         "summary": "Get Bank List",
         "description": "Retrieve list of supported banks for fund transfers",
-        "parameters": [
-          {
-            "name": "api-key",
-            "in": "header",
-            "description": "Business API Key",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "api-secret",
-            "in": "header",
-            "description": "Business API Secret",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "List of supported banks",
@@ -2956,18 +2960,14 @@
             }
           }
         },
-        "tags": ["Transfers"]
-      }
-    },
-    "/pms/api/external/request/wallet/validate-account/": {
-      "post": {
-        "summary": "Validate Account",
-        "description": "Resolve an account number to an account name before initiating transfer",
+        "tags": [
+          "Transfers"
+        ],
         "parameters": [
           {
             "name": "api-key",
             "in": "header",
-            "description": "Business API Key",
+            "description": "Your Payvessel public API key",
             "required": true,
             "schema": {
               "type": "string"
@@ -2976,23 +2976,19 @@
           {
             "name": "api-secret",
             "in": "header",
-            "description": "Business API Secret",
+            "description": "Your Payvessel secret",
             "required": true,
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "description": "Request content type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": ["application/json"]
-            }
           }
-        ],
+        ]
+      }
+    },
+    "/pms/api/external/request/wallet/validate-account/": {
+      "post": {
+        "summary": "Validate Account",
+        "description": "Resolve an account number to an account name before initiating transfer",
         "requestBody": {
           "required": true,
           "content": {
@@ -3029,13 +3025,9 @@
             }
           }
         },
-        "tags": ["Transfers"]
-      }
-    },
-    "/pms/api/external/request/wallet/transfer/": {
-      "post": {
-        "summary": "Initiate Transfer",
-        "description": "Send money from your managed wallet to a bank account",
+        "tags": [
+          "Transfers"
+        ],
         "parameters": [
           {
             "name": "api-key",
@@ -3062,10 +3054,19 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["application/json"]
-            }
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
           }
-        ],
+        ]
+      }
+    },
+    "/pms/api/external/request/wallet/transfer/": {
+      "post": {
+        "summary": "Initiate Transfer",
+        "description": "Send money from your managed wallet to a bank account",
         "requestBody": {
           "required": true,
           "content": {
@@ -3110,13 +3111,9 @@
             }
           }
         },
-        "tags": ["Transfers"]
-      }
-    },
-    "/pms/api/external/request/wallet/bulk-transfer/": {
-      "post": {
-        "summary": "Bulk Transfer",
-        "description": "Initiate multiple wallet transfers in a single batch",
+        "tags": [
+          "Transfers"
+        ],
         "parameters": [
           {
             "name": "api-key",
@@ -3143,10 +3140,19 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["application/json"]
-            }
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
           }
-        ],
+        ]
+      }
+    },
+    "/pms/api/external/request/wallet/bulk-transfer/": {
+      "post": {
+        "summary": "Bulk Transfer",
+        "description": "Initiate multiple wallet transfers in a single batch",
         "requestBody": {
           "required": true,
           "content": {
@@ -3182,13 +3188,9 @@
             }
           }
         },
-        "tags": ["Transfers"]
-      }
-    },
-    "/pms/api/external/request/wallet/transfer-status/": {
-      "post": {
-        "summary": "Transfer Status",
-        "description": "Check the status of a previously initiated transfer",
+        "tags": [
+          "Transfers"
+        ],
         "parameters": [
           {
             "name": "api-key",
@@ -3215,10 +3217,19 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["application/json"]
-            }
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
           }
-        ],
+        ]
+      }
+    },
+    "/pms/api/external/request/wallet/transfer-status/": {
+      "post": {
+        "summary": "Transfer Status",
+        "description": "Check the status of a previously initiated transfer",
         "requestBody": {
           "required": true,
           "content": {
@@ -3245,7 +3256,42 @@
             }
           }
         },
-        "tags": ["Transfers"]
+        "tags": [
+          "Transfers"
+        ],
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ]
       }
     },
     "/wallets/create": {
@@ -3263,14 +3309,26 @@
             }
           },
           {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "Content-Type",
             "in": "header",
             "description": "Request content type",
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["application/json"]
-            }
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
           },
           {
             "name": "Idempotency-Key",
@@ -3309,33 +3367,15 @@
             }
           }
         },
-        "tags": ["Wallets"]
+        "tags": [
+          "Wallets"
+        ]
       }
     },
     "/pms/api/external/request/wallet/get-or-create/": {
       "get": {
         "summary": "Get Wallets",
         "description": "Get existing wallet or create a new one for the authenticated business",
-        "parameters": [
-          {
-            "name": "api-key",
-            "in": "header",
-            "description": "Your Payvessel public API key",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "api-secret",
-            "in": "header",
-            "description": "Your Payvessel secret",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Wallets retrieved successfully",
@@ -3348,13 +3388,9 @@
             }
           }
         },
-        "tags": ["Wallets"]
-      }
-    },
-    "/pms/api/external/request/wallet/balance/": {
-      "get": {
-        "summary": "Wallet Balance",
-        "description": "Retrieve the current balance for a managed wallet",
+        "tags": [
+          "Wallets"
+        ],
         "parameters": [
           {
             "name": "api-key",
@@ -3374,7 +3410,13 @@
               "type": "string"
             }
           }
-        ],
+        ]
+      }
+    },
+    "/pms/api/external/request/wallet/balance/": {
+      "get": {
+        "summary": "Wallet Balance",
+        "description": "Retrieve the current balance for a managed wallet",
         "responses": {
           "200": {
             "description": "Wallet balance retrieved successfully",
@@ -3387,7 +3429,29 @@
             }
           }
         },
-        "tags": ["Wallets"]
+        "tags": [
+          "Wallets"
+        ],
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
       }
     },
     "/pms/wallets/{wallet_id}/statement": {
@@ -3395,6 +3459,24 @@
         "summary": "Wallet Statement",
         "description": "Get transaction history for a managed wallet",
         "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "wallet_id",
             "in": "path",
@@ -3421,15 +3503,6 @@
               "type": "string",
               "format": "date"
             }
-          },
-          {
-            "name": "api-key",
-            "in": "header",
-            "description": "Your Payvessel public API key",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -3444,7 +3517,1536 @@
             }
           }
         },
-        "tags": ["Wallets"]
+        "tags": [
+          "Wallets"
+        ]
+      }
+    },
+    "/pms/api/external/request/virtual-cards/": {
+      "get": {
+        "summary": "Get all Cards",
+        "description": "List issued virtual cards for the authenticated business (customer and business cards). Returns masked_pan only \u2014 use Get a Card for full card_number and cvv on a single card.",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "description": "Filter: PENDING, ACTIVE, FROZEN, TERMINATED, FAILED",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PENDING",
+                "ACTIVE",
+                "FROZEN",
+                "TERMINATED",
+                "FAILED"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Virtual cards retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardListResponse"
+                },
+                "examples": {
+                  "success": {
+                    "summary": "Issued cards (customer and business)",
+                    "value": {
+                      "status": true,
+                      "message": "Virtual cards retrieved successfully",
+                      "data": [
+                        {
+                          "id": "7f219a25-d968-4894-9a8b-ba83fa0bf6ec",
+                          "business_id": "8f926b04-e63a-4449-b346-ea922b69e20e",
+                          "kind": "customer",
+                          "customer_id": "5e6bda15-1090-4cfe-bc1d-861990947bbc",
+                          "customer_name": "MUSA GANIYU",
+                          "business_name": null,
+                          "card_name": "Ganiyu Musa",
+                          "masked_pan": "557350******7848",
+                          "status": "ACTIVE",
+                          "currency": "USD",
+                          "brand": "MASTERCARD",
+                          "balance": "3.00",
+                          "expiry": "08/31",
+                          "created_datetime": "2026-05-24T00:38:02.543669",
+                          "updated_datetime": "2026-05-24T03:20:19.331923"
+                        },
+                        {
+                          "id": "a0e7ed8b-bbb7-48d2-81e1-d76d98965006",
+                          "business_id": "8f926b04-e63a-4449-b346-ea922b69e20e",
+                          "kind": "customer",
+                          "customer_id": "5e6bda15-1090-4cfe-bc1d-861990947bbc",
+                          "customer_name": "MUSA GANIYU",
+                          "business_name": null,
+                          "card_name": "Ganiyu Musa",
+                          "masked_pan": "227449******4392",
+                          "status": "TERMINATED",
+                          "currency": "USD",
+                          "brand": "VISA",
+                          "balance": "0.00",
+                          "expiry": "08/31",
+                          "created_datetime": "2026-05-22T21:35:08.115964",
+                          "updated_datetime": "2026-05-22T21:35:50.942942"
+                        },
+                        {
+                          "id": "aae598cc-99d9-4730-80f5-4044d49bba75",
+                          "business_id": "8f926b04-e63a-4449-b346-ea922b69e20e",
+                          "kind": "business",
+                          "customer_id": null,
+                          "customer_name": null,
+                          "business_name": "Nex Panther Technologies",
+                          "card_name": "MARKETING CARD",
+                          "masked_pan": "222980******7461",
+                          "status": "TERMINATED",
+                          "currency": "USD",
+                          "brand": "MASTERCARD",
+                          "balance": "0.00",
+                          "expiry": "08/31",
+                          "created_datetime": "2026-05-22T20:29:31.615688",
+                          "updated_datetime": "2026-05-24T02:05:56.229932"
+                        },
+                        {
+                          "id": "94659981-fcdd-46fc-baf6-ed2defe11497",
+                          "business_id": "8f926b04-e63a-4449-b346-ea922b69e20e",
+                          "kind": "business",
+                          "customer_id": null,
+                          "customer_name": null,
+                          "business_name": "Nex Panther Technologies",
+                          "card_name": "NEX PANTHER TECHNOLOGIES",
+                          "masked_pan": "556239******1702",
+                          "status": "TERMINATED",
+                          "currency": "USD",
+                          "brand": "MASTERCARD",
+                          "balance": "0.00",
+                          "expiry": "08/31",
+                          "created_datetime": "2026-05-22T20:16:55.532341",
+                          "updated_datetime": "2026-05-24T02:09:20.005748"
+                        },
+                        {
+                          "id": "e52c1e97-4266-4673-ba17-2f5c581a471a",
+                          "business_id": "8f926b04-e63a-4449-b346-ea922b69e20e",
+                          "kind": "customer",
+                          "customer_id": "5e6bda15-1090-4cfe-bc1d-861990947bbc",
+                          "customer_name": "MUSA GANIYU",
+                          "business_name": null,
+                          "card_name": "Ganiyu Musa",
+                          "masked_pan": "271479******0667",
+                          "status": "TERMINATED",
+                          "currency": "USD",
+                          "brand": "VISA",
+                          "balance": "0.00",
+                          "expiry": "08/31",
+                          "created_datetime": "2026-05-22T20:05:58.926686",
+                          "updated_datetime": "2026-05-22T20:11:53.886907"
+                        },
+                        {
+                          "id": "ef8bfabb-a362-42e2-b881-4264466d1092",
+                          "business_id": "8f926b04-e63a-4449-b346-ea922b69e20e",
+                          "kind": "customer",
+                          "customer_id": "5e6bda15-1090-4cfe-bc1d-861990947bbc",
+                          "customer_name": "MUSA GANIYU",
+                          "business_name": null,
+                          "card_name": "Ganiyu Musa",
+                          "masked_pan": "222216******9786",
+                          "status": "TERMINATED",
+                          "currency": "USD",
+                          "brand": "MASTERCARD",
+                          "balance": "0.00",
+                          "expiry": "08/31",
+                          "created_datetime": "2026-05-22T20:04:53.885611",
+                          "updated_datetime": "2026-05-22T20:05:30.183982"
+                        },
+                        {
+                          "id": "8d56aa56-0539-4a12-bd07-186754a5c30d",
+                          "business_id": "8f926b04-e63a-4449-b346-ea922b69e20e",
+                          "kind": "customer",
+                          "customer_id": "5e6bda15-1090-4cfe-bc1d-861990947bbc",
+                          "customer_name": "MUSA GANIYU",
+                          "business_name": null,
+                          "card_name": "Ganiyu Musa",
+                          "masked_pan": "222631******9071",
+                          "status": "TERMINATED",
+                          "currency": "USD",
+                          "brand": "MASTERCARD",
+                          "balance": "0.00",
+                          "expiry": "08/31",
+                          "created_datetime": "2026-05-22T20:02:12.217529",
+                          "updated_datetime": "2026-05-22T20:03:54.927384"
+                        },
+                        {
+                          "id": "1e68abb2-ffea-4325-b8cf-ee47ef1181a7",
+                          "business_id": "8f926b04-e63a-4449-b346-ea922b69e20e",
+                          "kind": "customer",
+                          "customer_id": "5e6bda15-1090-4cfe-bc1d-861990947bbc",
+                          "customer_name": "MUSA GANIYU",
+                          "business_name": null,
+                          "card_name": "Ganiyu Musa",
+                          "masked_pan": "559823******2749",
+                          "status": "TERMINATED",
+                          "currency": "USD",
+                          "brand": "VISA",
+                          "balance": "0.00",
+                          "expiry": "08/31",
+                          "created_datetime": "2026-05-22T19:59:03.393789",
+                          "updated_datetime": "2026-05-22T19:59:55.652210"
+                        },
+                        {
+                          "id": "821e3321-818d-44aa-8816-b8078d83651c",
+                          "business_id": "8f926b04-e63a-4449-b346-ea922b69e20e",
+                          "kind": "customer",
+                          "customer_id": "5e6bda15-1090-4cfe-bc1d-861990947bbc",
+                          "customer_name": "MUSA GANIYU",
+                          "business_name": null,
+                          "card_name": "Ganiyu Musa",
+                          "masked_pan": "257392******6469",
+                          "status": "TERMINATED",
+                          "currency": "USD",
+                          "brand": "MASTERCARD",
+                          "balance": "0.00",
+                          "expiry": "08/31",
+                          "created_datetime": "2026-05-22T19:36:16.031791",
+                          "updated_datetime": "2026-05-22T19:55:15.561682"
+                        },
+                        {
+                          "id": "8b248314-1303-4cfe-abf5-db9353da4cc7",
+                          "business_id": "8f926b04-e63a-4449-b346-ea922b69e20e",
+                          "kind": "customer",
+                          "customer_id": "5e6bda15-1090-4cfe-bc1d-861990947bbc",
+                          "customer_name": "MUSA GANIYU",
+                          "business_name": null,
+                          "card_name": "Ganiyu Musa",
+                          "masked_pan": "229160******5625",
+                          "status": "TERMINATED",
+                          "currency": "USD",
+                          "brand": "MASTERCARD",
+                          "balance": "0.00",
+                          "expiry": "08/31",
+                          "created_datetime": "2026-05-22T19:10:25.288651",
+                          "updated_datetime": "2026-05-22T19:35:48.059145"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "unauthorized": {
+                    "summary": "Invalid credentials",
+                    "value": {
+                      "error": 401,
+                      "message": "Unauthorized. Please check your API key."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Issuing"
+        ],
+        "operationId": "externalVirtualCardsList"
+      },
+      "post": {
+        "summary": "Create a Card",
+        "description": "Create a USD virtual card for a customer with full KYC and initial prefund. This operation is asynchronous: the response returns a card in PENDING status, and PayVessel notifies you via a webhook when the card reaches its final status (for example ACTIVE). You may also poll Get a Card until activation completes.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCustomerVirtualCardRequest"
+              },
+              "examples": {
+                "fullKyc": {
+                  "summary": "Full customer KYC",
+                  "value": {
+                    "first_name": "Jane",
+                    "last_name": "Doe",
+                    "email": "jane.doe@example.com",
+                    "phone": "08031234567",
+                    "bvn": "22345678901",
+                    "nin": "12345678901",
+                    "dob": "1990-05-15",
+                    "image": "data:image/jpeg;base64,YOUR_BASE64_IDENTITY_IMAGE",
+                    "state": "Lagos",
+                    "lga": "Ikeja",
+                    "street": "12 Admiralty Way, Lekki Phase 1",
+                    "postal_code": "101233",
+                    "brand": "VISA",
+                    "currency": "USD",
+                    "prefund_amount": "10.00",
+                    "card_name": "Jane Doe"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Virtual card creation started",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardResponse"
+                },
+                "examples": {
+                  "pending": {
+                    "summary": "Card creation started",
+                    "value": {
+                      "status": true,
+                      "message": "Virtual card creation started",
+                      "data": {
+                        "id": "7f219a25-d968-4894-9a8b-ba83fa0bf6ec",
+                        "status": "PENDING",
+                        "masked_pan": "",
+                        "balance": "10.00",
+                        "currency": "USD",
+                        "brand": "VISA"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "unauthorized": {
+                    "summary": "Invalid credentials",
+                    "value": {
+                      "error": 401,
+                      "message": "Unauthorized. Please check your API key."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Issuing"
+        ],
+        "operationId": "externalVirtualCardsCreate",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ]
+      }
+    },
+    "/pms/api/external/request/virtual-cards/fees/quote/": {
+      "post": {
+        "summary": "Card Fee Quote",
+        "description": "Calculate a single fee (funding, withdrawal, issuance, etc.).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VirtualCardFeeQuoteRequest"
+              },
+              "examples": {
+                "funding": {
+                  "value": {
+                    "fee_type": "funding",
+                    "amount_usd": "50.00"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Quote calculated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardFeeQuoteResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "unauthorized": {
+                    "summary": "Invalid credentials",
+                    "value": {
+                      "error": 401,
+                      "message": "Unauthorized. Please check your API key."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Issuing"
+        ],
+        "operationId": "externalVirtualCardsFeeQuote",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ]
+      }
+    },
+    "/pms/api/external/request/virtual-cards/{card_id}/": {
+      "get": {
+        "summary": "Get a Card",
+        "description": "Retrieve one card by PayVessel card ID. When status is ACTIVE or FROZEN, returns full card credentials (card_number, cvv, expiry). Poll after create until ACTIVE.",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "card_id",
+            "in": "path",
+            "description": "PayVessel card ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Card retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardResponse"
+                },
+                "examples": {
+                  "active": {
+                    "summary": "Active card with full credentials",
+                    "value": {
+                      "status": true,
+                      "message": "Virtual card retrieved successfully",
+                      "data": {
+                        "id": "7f219a25-d968-4894-9a8b-ba83fa0bf6ec",
+                        "business_id": "8f926b04-e63a-4449-b346-ea922b69e20e",
+                        "kind": "customer",
+                        "customer_id": "5e6bda15-1090-4cfe-bc1d-861990947bbc",
+                        "customer_name": "MUSA GANIYU",
+                        "business_name": null,
+                        "card_name": "Ganiyu Musa",
+                        "status": "ACTIVE",
+                        "currency": "USD",
+                        "brand": "MASTERCARD",
+                        "balance": "3.00",
+                        "expiry": "08/31",
+                        "card_number": "5573 5078 9962 7848",
+                        "cvv": "123",
+                        "created_datetime": "2026-05-24T00:38:02.543669",
+                        "updated_datetime": "2026-05-24T03:20:19.331923"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "unauthorized": {
+                    "summary": "Invalid credentials",
+                    "value": {
+                      "error": 401,
+                      "message": "Unauthorized. Please check your API key."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Issuing"
+        ],
+        "operationId": "externalVirtualCardsGet"
+      }
+    },
+    "/pms/api/external/request/virtual-cards/{card_id}/transactions/": {
+      "get": {
+        "summary": "Get Card Transactions",
+        "description": "Transaction history for a card (spend, funding, withdrawal).",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "card_id",
+            "in": "path",
+            "description": "PayVessel card ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "description": "Max rows (default 50, max 100)",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transactions retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardTransactionListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "unauthorized": {
+                    "summary": "Invalid credentials",
+                    "value": {
+                      "error": 401,
+                      "message": "Unauthorized. Please check your API key."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Issuing"
+        ],
+        "operationId": "externalVirtualCardsTransactions"
+      }
+    },
+    "/pms/api/external/request/virtual-cards/{card_id}/fund/": {
+      "post": {
+        "summary": "Fund a Card",
+        "description": "Debit business USD wallet and credit card balance at issuer.",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "card_id",
+            "in": "path",
+            "description": "PayVessel card ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VirtualCardAmountRequest"
+              },
+              "examples": {
+                "default": {
+                  "value": {
+                    "amount": "25.00"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Card funded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "unauthorized": {
+                    "summary": "Invalid credentials",
+                    "value": {
+                      "error": 401,
+                      "message": "Unauthorized. Please check your API key."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Issuing"
+        ],
+        "operationId": "externalVirtualCardsFund"
+      }
+    },
+    "/pms/api/external/request/virtual-cards/{card_id}/withdraw/": {
+      "post": {
+        "summary": "Withdraw from a Card",
+        "description": "Move USD from card to business wallet (min $3).",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "card_id",
+            "in": "path",
+            "description": "PayVessel card ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VirtualCardAmountRequest"
+              },
+              "examples": {
+                "default": {
+                  "value": {
+                    "amount": "5.00"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Withdrawal successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "unauthorized": {
+                    "summary": "Invalid credentials",
+                    "value": {
+                      "error": 401,
+                      "message": "Unauthorized. Please check your API key."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Issuing"
+        ],
+        "operationId": "externalVirtualCardsWithdraw"
+      }
+    },
+    "/pms/api/external/request/virtual-cards/{card_id}/freeze/": {
+      "post": {
+        "summary": "Freeze a Card",
+        "description": "Block card spending at issuer.",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "card_id",
+            "in": "path",
+            "description": "PayVessel card ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Card frozen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "unauthorized": {
+                    "summary": "Invalid credentials",
+                    "value": {
+                      "error": 401,
+                      "message": "Unauthorized. Please check your API key."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Issuing"
+        ],
+        "operationId": "externalVirtualCardsFreeze"
+      }
+    },
+    "/pms/api/external/request/virtual-cards/{card_id}/unfreeze/": {
+      "post": {
+        "summary": "Unfreeze a Card",
+        "description": "Restore spending on a frozen card.",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "card_id",
+            "in": "path",
+            "description": "PayVessel card ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Card unfrozen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "unauthorized": {
+                    "summary": "Invalid credentials",
+                    "value": {
+                      "error": 401,
+                      "message": "Unauthorized. Please check your API key."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Issuing"
+        ],
+        "operationId": "externalVirtualCardsUnfreeze"
+      }
+    },
+    "/pms/api/external/request/virtual-cards/{card_id}/terminate/": {
+      "post": {
+        "summary": "Terminate Card",
+        "description": "Permanently close card; remaining balance returns to business wallet.",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "card_id",
+            "in": "path",
+            "description": "PayVessel card ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Card terminated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "unauthorized": {
+                    "summary": "Invalid credentials",
+                    "value": {
+                      "error": 401,
+                      "message": "Unauthorized. Please check your API key."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Issuing"
+        ],
+        "operationId": "externalVirtualCardsTerminate"
+      }
+    },
+    "/pms/api/external/request/virtual-cards/{card_id}/mock-transaction/": {
+      "post": {
+        "summary": "Simulate Card Transaction",
+        "description": "Sandbox only. Triggers a simulated card spend (DEBIT) or credit (CREDIT) at the issuer. Transaction history and balance update when the issuer webhook is processed. Not available in production.",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          },
+          {
+            "name": "card_id",
+            "in": "path",
+            "description": "PayVessel card ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MockCardTransactionRequest"
+              },
+              "examples": {
+                "debit": {
+                  "summary": "Simulate spend",
+                  "value": {
+                    "amount": "1.50",
+                    "type": "DEBIT"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Simulation accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MockCardTransactionResponse"
+                },
+                "examples": {
+                  "success": {
+                    "summary": "Simulation sent",
+                    "value": {
+                      "status": true,
+                      "message": "Simulated transaction sent.",
+                      "data": {
+                        "card_id": "7f219a25-d968-4894-9a8b-ba83fa0bf6ec",
+                        "amount": "1.50",
+                        "currency": "USD",
+                        "type": "DEBIT",
+                        "card_balance": "8.50",
+                        "message": "Simulated transaction sent."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "unauthorized": {
+                    "summary": "Invalid credentials",
+                    "value": {
+                      "error": 401,
+                      "message": "Unauthorized. Please check your API key."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error (e.g. not sandbox, card not active)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Issuing"
+        ],
+        "operationId": "externalVirtualCardsMockTransaction"
       }
     }
   },
@@ -3473,7 +5075,9 @@
   "components": {
     "schemas": {
       "Plant": {
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "type": "object",
         "properties": {
           "name": {
@@ -3492,7 +5096,9 @@
             "$ref": "#/components/schemas/Plant"
           },
           {
-            "required": ["id"],
+            "required": [
+              "id"
+            ],
             "type": "object",
             "properties": {
               "id": {
@@ -3505,7 +5111,10 @@
         ]
       },
       "Error": {
-        "required": ["error", "message"],
+        "required": [
+          "error",
+          "message"
+        ],
         "type": "object",
         "properties": {
           "error": {
@@ -4703,14 +6312,23 @@
             "description": "List of partner bank codes to provision the virtual account with",
             "items": {
               "type": "string",
-              "enum": ["999991", "120001"]
+              "enum": [
+                "999991",
+                "120001"
+              ]
             },
-            "example": ["999991", "120001"]
+            "example": [
+              "999991",
+              "120001"
+            ]
           },
           "account_type": {
             "type": "string",
             "description": "Type of virtual account to create",
-            "enum": ["STATIC", "DYNAMIC"]
+            "enum": [
+              "STATIC",
+              "DYNAMIC"
+            ]
           },
           "businessid": {
             "type": "string",
@@ -4728,7 +6346,12 @@
       },
       "CreateVirtualAccountResponse": {
         "type": "object",
-        "required": ["status", "service", "business", "banks"],
+        "required": [
+          "status",
+          "service",
+          "business",
+          "banks"
+        ],
         "properties": {
           "status": {
             "type": "boolean",
@@ -4777,7 +6400,10 @@
           "account_type": {
             "type": "string",
             "description": "Virtual account type",
-            "enum": ["STATIC", "DYNAMIC"]
+            "enum": [
+              "STATIC",
+              "DYNAMIC"
+            ]
           },
           "expire_date": {
             "type": "string",
@@ -4792,7 +6418,12 @@
       },
       "CreateVirtualAccountError": {
         "type": "object",
-        "required": ["status", "service", "message", "errors"],
+        "required": [
+          "status",
+          "service",
+          "message",
+          "errors"
+        ],
         "properties": {
           "status": {
             "type": "boolean",
@@ -4850,10 +6481,16 @@
           "account_type": {
             "type": "string",
             "description": "Virtual account type",
-            "enum": ["STATIC", "DYNAMIC"]
+            "enum": [
+              "STATIC",
+              "DYNAMIC"
+            ]
           },
           "expire_date": {
-            "type": ["string", "null"],
+            "type": [
+              "string",
+              "null"
+            ],
             "format": "date-time",
             "description": "Expiration date for dynamic accounts; null for static accounts"
           },
@@ -4865,7 +6502,11 @@
       },
       "CardChargeRequest": {
         "type": "object",
-        "required": ["cardData", "key", "reference"],
+        "required": [
+          "cardData",
+          "key",
+          "reference"
+        ],
         "properties": {
           "cardData": {
             "type": "string",
@@ -4883,7 +6524,12 @@
       },
       "CardDetails": {
         "type": "object",
-        "required": ["number", "cvv", "expiry_month", "expiry_year"],
+        "required": [
+          "number",
+          "cvv",
+          "expiry_month",
+          "expiry_year"
+        ],
         "properties": {
           "number": {
             "type": "string",
@@ -4954,7 +6600,9 @@
       },
       "ConfirmStatusRequest": {
         "type": "object",
-        "required": ["transactionRef"],
+        "required": [
+          "transactionRef"
+        ],
         "properties": {
           "transactionRef": {
             "type": "string",
@@ -5019,7 +6667,10 @@
       },
       "ResendOtpRequest": {
         "type": "object",
-        "required": ["transactionRef", "amount"],
+        "required": [
+          "transactionRef",
+          "amount"
+        ],
         "properties": {
           "transactionRef": {
             "type": "string",
@@ -5166,7 +6817,10 @@
       },
       "ValidateOtpRequest": {
         "type": "object",
-        "required": ["reference", "otp"],
+        "required": [
+          "reference",
+          "otp"
+        ],
         "properties": {
           "reference": {
             "type": "string",
@@ -5213,7 +6867,10 @@
       },
       "ValidatePhoneRequest": {
         "type": "object",
-        "required": ["reference", "phone"],
+        "required": [
+          "reference",
+          "phone"
+        ],
         "properties": {
           "reference": {
             "type": "string",
@@ -5257,7 +6914,10 @@
       },
       "ValidatePinRequest": {
         "type": "object",
-        "required": ["reference", "pin"],
+        "required": [
+          "reference",
+          "pin"
+        ],
         "properties": {
           "reference": {
             "type": "string",
@@ -5318,14 +6978,19 @@
             "type": "array",
             "items": {
               "type": "string",
-              "enum": ["BANK_TRANSFER"]
+              "enum": [
+                "BANK_TRANSFER"
+              ]
             },
             "description": "Payment channels to enable for this transaction"
           },
           "currency": {
             "type": "string",
             "description": "Transaction currency code",
-            "enum": ["NGN", "USD"]
+            "enum": [
+              "NGN",
+              "USD"
+            ]
           },
           "metadata": {
             "type": "object",
@@ -5439,12 +7104,20 @@
               },
               "status": {
                 "type": "string",
-                "enum": ["PENDING", "SUCCESS", "FAILED", "CANCELLED"],
+                "enum": [
+                  "PENDING",
+                  "SUCCESS",
+                  "FAILED",
+                  "CANCELLED"
+                ],
                 "description": "Transaction status"
               },
               "transaction_type": {
                 "type": "string",
-                "enum": ["CREDIT", "DEBIT"],
+                "enum": [
+                  "CREDIT",
+                  "DEBIT"
+                ],
                 "description": "Type of transaction"
               },
               "channel": {
@@ -5605,7 +7278,10 @@
           },
           "account_type": {
             "type": "string",
-            "enum": ["STATIC", "DYNAMIC"],
+            "enum": [
+              "STATIC",
+              "DYNAMIC"
+            ],
             "description": "Account type"
           },
           "expire_datetime": {
@@ -5661,7 +7337,13 @@
               },
               "status": {
                 "type": "string",
-                "enum": ["success", "failed", "pending", "abandoned", "cancelled"],
+                "enum": [
+                  "success",
+                  "failed",
+                  "pending",
+                  "abandoned",
+                  "cancelled"
+                ],
                 "description": "Transaction status"
               },
               "gateway_response": {
@@ -5681,7 +7363,14 @@
               },
               "channel": {
                 "type": "string",
-                "enum": ["card", "bank", "ussd", "qr", "mobile_money", "bank_transfer"],
+                "enum": [
+                  "card",
+                  "bank",
+                  "ussd",
+                  "qr",
+                  "mobile_money",
+                  "bank_transfer"
+                ],
                 "description": "Payment method used"
               },
               "fees": {
@@ -5833,7 +7522,10 @@
       },
       "ValidateAccountRequest": {
         "type": "object",
-        "required": ["account_number", "bank_code"],
+        "required": [
+          "account_number",
+          "bank_code"
+        ],
         "properties": {
           "account_number": {
             "type": "string",
@@ -5881,7 +7573,12 @@
       },
       "InitiateTransferRequest": {
         "type": "object",
-        "required": ["amount", "account_number", "bank_code", "reference"],
+        "required": [
+          "amount",
+          "account_number",
+          "bank_code",
+          "reference"
+        ],
         "properties": {
           "amount": {
             "type": "string",
@@ -5961,7 +7658,10 @@
       },
       "BulkTransferRequest": {
         "type": "object",
-        "required": ["batch_reference", "transfers"],
+        "required": [
+          "batch_reference",
+          "transfers"
+        ],
         "properties": {
           "batch_reference": {
             "type": "string",
@@ -5971,7 +7671,12 @@
             "type": "array",
             "items": {
               "type": "object",
-              "required": ["amount", "account_number", "bank_code", "reference"],
+              "required": [
+                "amount",
+                "account_number",
+                "bank_code",
+                "reference"
+              ],
               "properties": {
                 "amount": {
                   "type": "string",
@@ -6021,7 +7726,10 @@
       },
       "TransferStatusRequest": {
         "type": "object",
-        "required": ["reference", "session_id"],
+        "required": [
+          "reference",
+          "session_id"
+        ],
         "properties": {
           "reference": {
             "type": "string",
@@ -6052,7 +7760,9 @@
       },
       "CreateWalletRequest": {
         "type": "object",
-        "required": ["customer_id"],
+        "required": [
+          "customer_id"
+        ],
         "properties": {
           "customer_id": {
             "type": "string",
@@ -6062,13 +7772,26 @@
             "type": "string",
             "description": "Primary currency for the wallet",
             "default": "NGN",
-            "enum": ["NGN", "USD", "GBP", "EUR", "GHS", "KES", "ZAR"]
+            "enum": [
+              "NGN",
+              "USD",
+              "GBP",
+              "EUR",
+              "GHS",
+              "KES",
+              "ZAR"
+            ]
           },
           "wallet_type": {
             "type": "string",
             "description": "Type of wallet to create",
             "default": "personal",
-            "enum": ["personal", "business", "savings", "current"]
+            "enum": [
+              "personal",
+              "business",
+              "savings",
+              "current"
+            ]
           },
           "label": {
             "type": "string",
@@ -6253,18 +7976,439 @@
             }
           }
         }
-      }
-    },
-    "securitySchemes": {
-      "apiKeyAuth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "api-key"
       },
-      "apiSecretAuth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "api-secret"
+      "IssuedCard": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "PayVessel card ID"
+          },
+          "business_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Owning business"
+          },
+          "kind": {
+            "type": "string",
+            "description": "customer for external API cards"
+          },
+          "customer_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Linked customer ID"
+          },
+          "customer_name": {
+            "type": "string",
+            "description": "Customer display name"
+          },
+          "card_name": {
+            "type": "string",
+            "description": "Name on card"
+          },
+          "masked_pan": {
+            "type": "string",
+            "description": "Masked PAN (empty while PENDING)"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "ACTIVE",
+              "FROZEN",
+              "TERMINATED",
+              "FAILED"
+            ],
+            "description": "Card lifecycle status"
+          },
+          "currency": {
+            "type": "string",
+            "description": "USD"
+          },
+          "brand": {
+            "type": "string",
+            "description": "VISA or MASTERCARD"
+          },
+          "balance": {
+            "type": "string",
+            "description": "Issuer-synced balance in USD"
+          },
+          "expiry": {
+            "type": "string",
+            "description": "Card expiry (MM/YY)"
+          },
+          "card_number": {
+            "type": "string",
+            "description": "Full PAN (GET card only, when ACTIVE/FROZEN)"
+          },
+          "cvv": {
+            "type": "string",
+            "description": "CVV (GET card only, when ACTIVE/FROZEN)"
+          },
+          "created_datetime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_datetime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "IssuedCardTransaction": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "card_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ref_id": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "merchant": {
+            "type": "string"
+          },
+          "entry": {
+            "type": "string",
+            "enum": [
+              "DEBIT",
+              "CREDIT"
+            ]
+          },
+          "status": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "fee": {
+            "type": "string"
+          },
+          "settled": {
+            "type": "boolean"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "created_datetime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "VirtualCardResponse": {
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Indicates whether the request succeeded"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable result message",
+            "example": "Virtual card creation started"
+          },
+          "data": {
+            "$ref": "#/components/schemas/IssuedCard",
+            "description": "Issued card details"
+          }
+        }
+      },
+      "VirtualCardListResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Indicates whether the request succeeded"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable result message"
+          },
+          "data": {
+            "type": "array",
+            "description": "List of issued cards",
+            "items": {
+              "$ref": "#/components/schemas/IssuedCard"
+            }
+          }
+        }
+      },
+      "VirtualCardTransactionListResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IssuedCardTransaction"
+            }
+          }
+        }
+      },
+      "CreateCustomerVirtualCardRequest": {
+        "type": "object",
+        "required": [
+          "brand",
+          "currency"
+        ],
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "description": "Customer first name"
+          },
+          "last_name": {
+            "type": "string",
+            "description": "Customer last name"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email address"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Nigerian phone number"
+          },
+          "bvn": {
+            "type": "string",
+            "description": "11-digit Bank Verification Number"
+          },
+          "nin": {
+            "type": "string",
+            "description": "11-digit National Identification Number"
+          },
+          "dob": {
+            "type": "string",
+            "format": "date",
+            "description": "Date of birth (YYYY-MM-DD)"
+          },
+          "image": {
+            "type": "string",
+            "description": "Base64-encoded identity document image"
+          },
+          "state": {
+            "type": "string",
+            "description": "State of residence"
+          },
+          "lga": {
+            "type": "string",
+            "description": "Local government area"
+          },
+          "street": {
+            "type": "string",
+            "description": "Street address"
+          },
+          "postal_code": {
+            "type": "string",
+            "description": "Postal code"
+          },
+          "brand": {
+            "type": "string",
+            "enum": [
+              "VISA",
+              "MASTERCARD"
+            ],
+            "description": "Card network"
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "USD"
+            ],
+            "description": "Must be USD for customer cards"
+          },
+          "prefund_amount": {
+            "type": "string",
+            "description": "Optional initial card balance in USD (minimum 3.00 when provided)",
+            "example": "10.00"
+          },
+          "card_name": {
+            "type": "string",
+            "description": "Optional label on card (max 255 characters)"
+          }
+        }
+      },
+      "VirtualCardAmountRequest": {
+        "type": "object",
+        "required": [
+          "amount"
+        ],
+        "properties": {
+          "amount": {
+            "type": "string",
+            "description": "USD amount (e.g. 25.00). Withdraw minimum 3.00",
+            "example": "25.00"
+          }
+        }
+      },
+      "VirtualCardFeeQuoteRequest": {
+        "type": "object",
+        "required": [
+          "fee_type"
+        ],
+        "properties": {
+          "fee_type": {
+            "type": "string",
+            "enum": [
+              "issuance",
+              "funding",
+              "withdrawal",
+              "spend",
+              "maintenance",
+              "cross_border",
+              "chargeback",
+              "decline"
+            ],
+            "description": "Fee type to calculate"
+          },
+          "amount_usd": {
+            "type": "string",
+            "description": "Principal USD amount (required for funding, cross_border)"
+          }
+        }
+      },
+      "VirtualCardCreateQuoteRequest": {
+        "type": "object",
+        "properties": {
+          "prefund_amount_usd": {
+            "type": "string",
+            "example": "10.00"
+          }
+        }
+      },
+      "VirtualCardFeesResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        }
+      },
+      "VirtualCardFeeQuoteResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        }
+      },
+      "VirtualCardCreateQuoteResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        }
+      },
+      "MockCardTransactionRequest": {
+        "type": "object",
+        "required": [
+          "amount"
+        ],
+        "properties": {
+          "amount": {
+            "type": "string",
+            "description": "Transaction amount in USD (e.g. 1.50)",
+            "example": "1.50"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "DEBIT",
+              "CREDIT"
+            ],
+            "default": "DEBIT",
+            "description": "DEBIT simulates a card spend; CREDIT simulates a refund or credit"
+          }
+        }
+      },
+      "MockCardTransactionResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Indicates whether the request succeeded"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable result message"
+          },
+          "data": {
+            "type": "object",
+            "description": "Simulation result",
+            "properties": {
+              "card_id": {
+                "type": "string",
+                "format": "uuid",
+                "description": "PayVessel card ID"
+              },
+              "amount": {
+                "type": "string",
+                "description": "Amount sent to the simulator"
+              },
+              "currency": {
+                "type": "string",
+                "description": "USD"
+              },
+              "type": {
+                "type": "string",
+                "description": "DEBIT or CREDIT"
+              },
+              "card_balance": {
+                "type": "string",
+                "description": "Card balance after simulation (may update again via webhook)"
+              },
+              "message": {
+                "type": "string",
+                "description": "Simulation result message"
+              }
+            }
+          }
+        }
       }
     }
   }

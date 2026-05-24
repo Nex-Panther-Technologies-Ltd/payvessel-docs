@@ -1,0 +1,22 @@
+---
+title: "Freeze a Card"
+description: "Temporarily block card spend"
+---
+
+Temporarily block new authorizations on an **ACTIVE** card. Funding and other operations may still be restricted while frozen.
+
+## How it works
+
+1. **Call freeze** with the target `card_id`.
+2. **Issuer blocks spend** — new merchant charges are declined.
+3. **Unfreeze** when the customer should spend again.
+
+## When to use
+
+- Suspected fraud or lost device
+- Customer-requested pause
+- Compliance hold before investigation
+
+<Card title="API Reference" icon="code" href="/api-reference/virtual-cards/freeze-card">
+  Full request/response details and Try it
+</Card>

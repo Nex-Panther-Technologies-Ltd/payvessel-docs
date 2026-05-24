@@ -1,0 +1,797 @@
+{
+  "paths": {
+    "/pms/api/external/request/virtual-cards/": {
+      "get": {
+        "summary": "List Virtual Cards",
+        "description": "List issued customer virtual cards for the authenticated business.",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PENDING",
+                "ACTIVE",
+                "FROZEN",
+                "TERMINATED",
+                "FAILED"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cards retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardListResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Virtual Cards"
+        ]
+      },
+      "post": {
+        "summary": "Create Customer Virtual Card",
+        "description": "Issue a USD virtual card with customer KYC and initial prefund from the business USD wallet.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCustomerVirtualCardRequest"
+              },
+              "examples": {
+                "full_kyc": {
+                  "summary": "Create card with full KYC",
+                  "value": {
+                    "first_name": "Jane",
+                    "last_name": "Doe",
+                    "email": "jane.doe@example.com",
+                    "phone": "08031234567",
+                    "bvn": "22345678901",
+                    "nin": "12345678901",
+                    "dob": "1990-05-15",
+                    "image": "data:image/jpeg;base64,YOUR_BASE64_IDENTITY_IMAGE",
+                    "state": "Lagos",
+                    "lga": "Ikeja",
+                    "street": "12 Admiralty Way",
+                    "postal_code": "101233",
+                    "brand": "VISA",
+                    "currency": "USD",
+                    "prefund_amount": "10.00",
+                    "card_name": "Jane Doe"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Card creation started",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Virtual Cards"
+        ]
+      }
+    },
+    "/pms/api/external/request/virtual-cards/fees/": {
+      "get": {
+        "summary": "Get Virtual Card Fees",
+        "description": "Merchant fee schedule for virtual cards.",
+        "responses": {
+          "200": {
+            "description": "Fee schedule",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardFeesResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Virtual Cards"
+        ]
+      }
+    },
+    "/pms/api/external/request/virtual-cards/fees/quote/": {
+      "post": {
+        "summary": "Virtual Card Fee Quote",
+        "description": "Calculate a single fee (funding, withdrawal, issuance, etc.).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VirtualCardFeeQuoteRequest"
+              },
+              "examples": {
+                "funding": {
+                  "value": {
+                    "fee_type": "funding",
+                    "amount_usd": "50.00"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Quote calculated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardFeeQuoteResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Virtual Cards"
+        ]
+      }
+    },
+    "/pms/api/external/request/virtual-cards/fees/create-quote/": {
+      "post": {
+        "summary": "Create Card Quote",
+        "description": "Total USD charge before issuing a card (issuance + caution + prefund + prefund fee).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VirtualCardCreateQuoteRequest"
+              },
+              "examples": {
+                "default": {
+                  "value": {
+                    "prefund_amount_usd": "10.00"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Quote calculated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardCreateQuoteResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Virtual Cards"
+        ]
+      }
+    },
+    "/pms/api/external/request/virtual-cards/{card_id}/": {
+      "get": {
+        "summary": "Get Virtual Card",
+        "description": "Retrieve one card by PayVessel card ID. Poll after create until status is ACTIVE.",
+        "parameters": [
+          {
+            "name": "card_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Card retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Virtual Cards"
+        ]
+      }
+    },
+    "/pms/api/external/request/virtual-cards/{card_id}/transactions/": {
+      "get": {
+        "summary": "List Card Transactions",
+        "description": "Transaction history for a card (spend, funding, withdrawal).",
+        "parameters": [
+          {
+            "name": "card_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transactions retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardTransactionListResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Virtual Cards"
+        ]
+      }
+    },
+    "/pms/api/external/request/virtual-cards/{card_id}/fund/": {
+      "post": {
+        "summary": "Fund Virtual Card",
+        "description": "Debit business USD wallet and credit card balance at issuer.",
+        "parameters": [
+          {
+            "name": "card_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VirtualCardAmountRequest"
+              },
+              "examples": {
+                "default": {
+                  "value": {
+                    "amount": "25.00"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Card funded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Virtual Cards"
+        ]
+      }
+    },
+    "/pms/api/external/request/virtual-cards/{card_id}/withdraw/": {
+      "post": {
+        "summary": "Withdraw from Virtual Card",
+        "description": "Move USD from card to business wallet (min $3).",
+        "parameters": [
+          {
+            "name": "card_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VirtualCardAmountRequest"
+              },
+              "examples": {
+                "default": {
+                  "value": {
+                    "amount": "5.00"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Withdrawal successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Virtual Cards"
+        ]
+      }
+    },
+    "/pms/api/external/request/virtual-cards/{card_id}/freeze/": {
+      "post": {
+        "summary": "Freeze Virtual Card",
+        "description": "Block card spending at issuer.",
+        "parameters": [
+          {
+            "name": "card_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Card frozen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Virtual Cards"
+        ]
+      }
+    },
+    "/pms/api/external/request/virtual-cards/{card_id}/unfreeze/": {
+      "post": {
+        "summary": "Unfreeze Virtual Card",
+        "description": "Restore spending on a frozen card.",
+        "parameters": [
+          {
+            "name": "card_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Card unfrozen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Virtual Cards"
+        ]
+      }
+    },
+    "/pms/api/external/request/virtual-cards/{card_id}/terminate/": {
+      "post": {
+        "summary": "Terminate Virtual Card",
+        "description": "Permanently close card; remaining balance returns to business wallet.",
+        "parameters": [
+          {
+            "name": "card_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Card terminated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirtualCardResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Virtual Cards"
+        ]
+      }
+    }
+  },
+  "schemas": {
+    "IssuedCard": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "business_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "kind": {
+          "type": "string",
+          "example": "customer"
+        },
+        "customer_id": {
+          "type": "string",
+          "format": "uuid",
+          "nullable": true
+        },
+        "customer_name": {
+          "type": "string",
+          "nullable": true
+        },
+        "card_name": {
+          "type": "string"
+        },
+        "masked_pan": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "PENDING",
+            "ACTIVE",
+            "FROZEN",
+            "TERMINATED",
+            "FAILED"
+          ]
+        },
+        "currency": {
+          "type": "string",
+          "example": "USD"
+        },
+        "brand": {
+          "type": "string",
+          "enum": [
+            "VISA",
+            "MASTERCARD"
+          ]
+        },
+        "balance": {
+          "type": "string"
+        },
+        "expiry": {
+          "type": "string",
+          "nullable": true
+        },
+        "card_number": {
+          "type": "string",
+          "description": "Full PAN (GET card only, when ACTIVE/FROZEN)"
+        },
+        "cvv": {
+          "type": "string",
+          "description": "CVV (GET card only, when ACTIVE/FROZEN)"
+        },
+        "created_datetime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_datetime": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "IssuedCardTransaction": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "card_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "ref_id": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "merchant": {
+          "type": "string"
+        },
+        "entry": {
+          "type": "string",
+          "enum": [
+            "DEBIT",
+            "CREDIT"
+          ]
+        },
+        "status": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "fee": {
+          "type": "string"
+        },
+        "settled": {
+          "type": "boolean"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "created_datetime": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "VirtualCardResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/IssuedCard"
+        }
+      }
+    },
+    "VirtualCardListResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/IssuedCard"
+          }
+        }
+      }
+    },
+    "VirtualCardTransactionListResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/IssuedCardTransaction"
+          }
+        }
+      }
+    },
+    "CreateCustomerVirtualCardRequest": {
+      "type": "object",
+      "required": [
+        "brand",
+        "currency"
+      ],
+      "properties": {
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "bvn": {
+          "type": "string"
+        },
+        "nin": {
+          "type": "string"
+        },
+        "dob": {
+          "type": "string",
+          "format": "date"
+        },
+        "image": {
+          "type": "string",
+          "description": "Base64 identity image"
+        },
+        "state": {
+          "type": "string"
+        },
+        "lga": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "postal_code": {
+          "type": "string"
+        },
+        "brand": {
+          "type": "string",
+          "enum": [
+            "VISA",
+            "MASTERCARD"
+          ]
+        },
+        "currency": {
+          "type": "string",
+          "enum": [
+            "USD"
+          ]
+        },
+        "prefund_amount": {
+          "type": "string",
+          "description": "Optional initial card balance in USD (minimum 3.00 when provided)",
+          "example": "10.00"
+        },
+        "card_name": {
+          "type": "string"
+        }
+      }
+    },
+    "VirtualCardAmountRequest": {
+      "type": "object",
+      "required": [
+        "amount"
+      ],
+      "properties": {
+        "amount": {
+          "type": "string",
+          "example": "25.00"
+        }
+      }
+    },
+    "VirtualCardFeeQuoteRequest": {
+      "type": "object",
+      "required": [
+        "fee_type"
+      ],
+      "properties": {
+        "fee_type": {
+          "type": "string",
+          "enum": [
+            "issuance",
+            "funding",
+            "withdrawal",
+            "spend",
+            "maintenance",
+            "cross_border",
+            "chargeback",
+            "decline"
+          ]
+        },
+        "amount_usd": {
+          "type": "string"
+        }
+      }
+    },
+    "VirtualCardCreateQuoteRequest": {
+      "type": "object",
+      "properties": {
+        "prefund_amount_usd": {
+          "type": "string",
+          "example": "10.00"
+        }
+      }
+    },
+    "VirtualCardFeesResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object"
+        }
+      }
+    },
+    "VirtualCardFeeQuoteResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object"
+        }
+      }
+    },
+    "VirtualCardCreateQuoteResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

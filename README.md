@@ -14,19 +14,21 @@ Click the green **Use this template** button at the top of this repo to copy the
 
 ## Development
 
-Install the [Mintlify CLI](https://www.npmjs.com/package/mint) to preview your documentation changes locally. To install, use the following command:
+**Prefer `npm run dev`** — it runs **`npx mint@latest dev`** under **Homebrew Node 22** when installed (`brew install node@22`), so a system-wide **Node 25+** does not break the Mint preview (see [mintlify/starter#116](https://github.com/mintlify/starter/issues/116)).
 
-```
-npm i -g mint
-```
-
-Run the following command at the root of your documentation, where your `docs.json` is located:
-
-```
-mint dev
+```bash
+npm run dev
 ```
 
-View your local preview at `http://localhost:3000`.
+The Mint CLI may still print `localStorage` / `Invalid URL` lines in the terminal; if the preview URL opens in the browser, you can ignore that until Mint fixes it.
+
+**Docker (no local Node version juggling):**
+
+```bash
+npm run dev:docker
+```
+
+Optional global CLI: `npm i -g mint`. View the preview at **http://localhost:3000** (or the port printed in the terminal).
 
 ## Publishing changes
 

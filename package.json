@@ -4,6 +4,8 @@
   "description": "Use the starter kit to get your docs deployed and ready to customize.",
   "main": "index.js",
   "scripts": {
+    "dev": "node scripts/run-mint-dev.cjs",
+    "dev:docker": "docker run --rm -it -p 3000:3000 -v \"$(pwd):/project\" -w /project node:22-bookworm npx --yes mint@latest dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

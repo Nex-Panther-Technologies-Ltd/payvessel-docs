@@ -7,7 +7,7 @@ description: 'Endpoint reference, request/response payloads, code samples, and p
 
 
 
-PayVessel's REST API provides programmatic access to accept payments, send money, verify identities, manage wallets, and more. Our API is organized around REST principles with predictable resource-oriented URLs, accepts form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes and authentication.
+PayVessel's REST API provides programmatic access to accept payments, send money, verify identities, manage wallets, issue **USD virtual cards**, and more. Our API is organized around REST principles with predictable resource-oriented URLs, accepts form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes and authentication.
 
 <CardGroup cols={2}>
   <Card title="🚀 Getting Started" icon="rocket">
@@ -98,14 +98,8 @@ Our API is organized into logical groups of functionality, matching the navigati
 
 ## Request & Response Format
 
-### Request Headers
-All requests should include these headers:
-
-```http
-api-key: YOUR_API_KEY
-api-secret: YOUR_SECRET_KEY
-Content-Type: application/json
-```
+### Authentication
+All API requests require `api-key`, `api-secret`, and `Content-Type: application/json`. See [Authentication](/api-basics/authentication) for details.
 
 ### Response Structure
 All API responses follow a consistent structure:

@@ -1,0 +1,63 @@
+---
+title: "Get a Card"
+description: "Retrieve one issued virtual card by ID"
+---
+
+Fetch the current state of a single virtual card — status, balance, customer linkage, and **full card credentials** when the card is ready.
+
+## How it works
+
+1. **Provide the PayVessel `card_id`** returned from create (or list).
+2. **Receive the card object** — PayVessel syncs status and balance from the issuer when needed.
+3. **Poll after create** until `status` is `ACTIVE` — then `card_number`, `cvv`, and `expiry` are included in the response.
+
+## Response fields (ACTIVE / FROZEN)
+
+| Field | Description |
+| --- | --- |
+| `card_number` | Full PAN (spaces every 4 digits) |
+| `cvv` | Card verification value |
+| `expiry` | Expiration (`MM/YY`) |
+
+While `status` is `PENDING`, card credentials are omitted — poll until `ACTIVE`.
+
+## Sample response (ACTIVE)
+
+```json
+{
+  "status": true,
+  "message": "Virtual card retrieved successfully",
+  "data": {
+    "id": "7f219a25-d968-4894-9a8b-ba83fa0bf6ec",
+    "business_id": "8f926b04-e63a-4449-b346-ea922b69e20e",
+    "kind": "customer",
+    "customer_id": "5e6bda15-1090-4cfe-bc1d-861990947bbc",
+    "customer_name": "MUSA GANIYU",
+    "business_name": null,
+    "card_name": "Ganiyu Musa",
+    "status": "ACTIVE",
+    "currency": "USD",
+    "brand": "MASTERCARD",
+    "balance": "3.00",
+    "expiry": "08/31",
+    "card_number": "5573 5078 9962 7848",
+    "cvv": "123",
+    "created_datetime": "2026-05-24T00:38:02.543669",
+    "updated_datetime": "2026-05-24T03:20:19.331923"
+  }
+}
+```
+
+<Warning>
+Treat `card_number` and `cvv` as highly sensitive. Do not log them or store them in plaintext.
+</Warning>
+
+## When to use
+
+- Poll activation after [Create a Card](/virtual-cards/create-customer-card)
+- Show the virtual card to your end user in your app
+- Confirm freeze/terminate status before the next action
+
+<Card title="API Reference" icon="code" href="/api-reference/virtual-cards/get-card">
+  Full request/response details and Try it
+</Card>

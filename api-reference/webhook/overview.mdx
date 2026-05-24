@@ -40,13 +40,6 @@ Configure webhook endpoints in the Payvessel Dashboard and verify each notificat
   </Card>
 </CardGroup>
 
-## Headers You Will Receive
-
-| Header | Description |
-|--------|-------------|
-| `HTTP_PAYVESSEL_HTTP_SIGNATURE` | HMAC SHA-512 hash of the payload generated with your Payvessel secret |
-| `Content-Type` | Always `application/json` |
-| `X-Forwarded-For` | Present when your infrastructure sits behind a proxy—use it to determine the originating IP |
 
 ## Webhook Payload Anatomy
 

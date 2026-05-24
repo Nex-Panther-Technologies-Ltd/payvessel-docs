@@ -1,0 +1,73 @@
+---
+title: "Create a Card"
+description: "Create a USD virtual card for a customer (asynchronous)"
+---
+
+This resource allows you to create a card for a customer. PayVessel debits your business USD wallet, completes customer KYC with the card issuer, and returns a card you can fund and manage through the API.
+
+This operation is **asynchronous**, meaning we notify you via a **webhook event** on the final status (for example when the card becomes `ACTIVE`). You can also poll [Get a Card](/virtual-cards/get-card) until `card_number` is available.
+
+**Supported card networks:**
+
+| Network     | `brand` value   |
+|-------------|-----------------|
+| Visa        | `VISA`          |
+| Mastercard  | `MASTERCARD`    |
+
+Currency must be `USD`. Minimum prefund is **$3.00**.
+
+## How it works
+
+1. **Send a request** with full customer KYC and card details (`brand`, `currency`). Optionally include `prefund_amount` to fund the card on creation.
+2. **PayVessel debits** your business USD wallet (issuance + prefund fees apply).
+3. **Receive a card** in `PENDING` status with a PayVessel `card_id`.
+4. **Wait for the final status** via your webhook handler, or poll [Get a Card](/virtual-cards/get-card) until `status` is `ACTIVE`.
+
+## Required request fields
+
+| Field | Required | Notes |
+|-------|----------|-------------|
+| `first_name`, `last_name` | Yes | Customer legal name |
+| `email`, `phone` | Yes | Nigerian phone format |
+| `bvn`, `nin` | Yes | 11 digits each |
+| `dob` | Yes | `YYYY-MM-DD` |
+| `image` | Yes | Base64 identity document (JPEG or PNG) |
+| `state`, `lga`, `street`, `postal_code` | Yes | Nigerian address |
+| `brand`, `currency` | Yes | USD only |
+| `prefund_amount` | No | Optional; minimum **$3 USD** when provided |
+| `card_name` | Optional | Label on card (max 255 characters) |
+
+Existing customers are matched automatically by **email** — do not send `customer_id`.
+
+## Use cases
+
+- Issue virtual cards for marketplace sellers or wallet users
+- Prefund cards for subscription or travel spend
+- Onboard customers with full KYC in one API call
+
+## Example request
+
+```json
+{
+  "first_name": "Jane",
+  "last_name": "Doe",
+  "email": "jane.doe@example.com",
+  "phone": "08031234567",
+  "bvn": "22345678901",
+  "nin": "12345678901",
+  "dob": "1990-05-15",
+  "image": "data:image/jpeg;base64,YOUR_BASE64_IDENTITY_IMAGE",
+  "state": "Lagos",
+  "lga": "Ikeja",
+  "street": "12 Admiralty Way, Lekki Phase 1",
+  "postal_code": "101233",
+  "brand": "VISA",
+  "currency": "USD",
+  "prefund_amount": "10.00",
+  "card_name": "Jane Doe"
+}
+```
+
+<Card title="API Reference — Try it" icon="play" href="/api-reference/virtual-cards/create-customer-card">
+  Run this endpoint in the browser (interactive playground)
+</Card>
