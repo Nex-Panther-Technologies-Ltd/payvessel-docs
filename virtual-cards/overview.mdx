@@ -24,6 +24,29 @@ Use the **API reference** pages for each endpoint — they include a **Try it** 
 
 ***
 
+## Merchant dashboard card details
+
+Issue cards from **Card issuing** in the merchant dashboard (**Create business card** or **Create customer card**, when enabled for your business). After a card is created, open it from the cards list to view **Card details**:
+
+![PayVessel merchant dashboard card details — balance, fund and withdraw, virtual card preview, transactions](/images/virtual-cards/card-details-dashboard.png)
+
+| Area | What you can do |
+|------|-----------------|
+| **Balance** | View the card’s spendable USD balance synced from the issuer |
+| **Fund card / Withdraw** | Move USD between your business USD wallet and the card ([Fund](/virtual-cards/fund-card) / [Withdraw](/virtual-cards/withdraw-card) via API) |
+| **Card preview** | Masked PAN, card name, and network (Visa or Mastercard) |
+| **Show details** | Reveal full card number, CVV, and expiry when the card is `ACTIVE` |
+| **Freeze card** | Temporarily block spend ([Freeze](/virtual-cards/freeze-card) / [Unfreeze](/virtual-cards/unfreeze-card) via API) |
+| **Terminate card** | Close the card and return remaining balance to your wallet ([Terminate](/virtual-cards/terminate-card)) |
+| **Transactions** | Prefund, spend, withdrawal, and fee entries (e.g. **Card prefund** credits on creation) |
+| **Generate card statement** | Export activity for reconciliation |
+
+<Note>
+**Customer card access** must be enabled by PayVessel for your business before **Create customer card** appears in the dashboard. Business cards can always be issued from the dashboard. Use the [external API](/virtual-cards/create-customer-card) for programmatic customer card issuance.
+</Note>
+
+***
+
 ## Base URL
 
 All virtual card endpoints live under:
@@ -62,35 +85,6 @@ Authentication matches other PayVessel external APIs. See [Authentication](/api-
 <Warning>
 **Customer cards only.** Business (merchant) cards are created from the PayVessel merchant dashboard, not the external API.
 </Warning>
-
-***
-
-## Merchant dashboard card details
-
-Issue cards from **Card issuing** in the merchant dashboard (**Create business card** or **Create customer card**, when enabled for your business). After a card is created, open it from the cards list to view **Card details**:
-
-<Frame caption="Card details — balance, funding, lifecycle controls, and transaction history">
-  <img
-    src="/images/virtual-cards/card-details-dashboard.jpg"
-    alt="PayVessel merchant dashboard card details page with balance, fund and withdraw actions, virtual card preview, freeze toggle, and transactions table"
-    style={{ borderRadius: "0.5rem" }}
-  />
-</Frame>
-
-| Area | What you can do |
-|------|-----------------|
-| **Balance** | View the card’s spendable USD balance synced from the issuer |
-| **Fund card / Withdraw** | Move USD between your business USD wallet and the card ([Fund](/virtual-cards/fund-card) / [Withdraw](/virtual-cards/withdraw-card) via API) |
-| **Card preview** | Masked PAN, card name, and network (Visa or Mastercard) |
-| **Show details** | Reveal full card number, CVV, and expiry when the card is `ACTIVE` |
-| **Freeze card** | Temporarily block spend ([Freeze](/virtual-cards/freeze-card) / [Unfreeze](/virtual-cards/unfreeze-card) via API) |
-| **Terminate card** | Close the card and return remaining balance to your wallet ([Terminate](/virtual-cards/terminate-card)) |
-| **Transactions** | Prefund, spend, withdrawal, and fee entries (e.g. **Card prefund** credits on creation) |
-| **Generate card statement** | Export activity for reconciliation |
-
-<Note>
-**Customer card access** must be enabled by PayVessel for your business before **Create customer card** appears in the dashboard. Business cards can always be issued from the dashboard. Use the [external API](/virtual-cards/create-customer-card) for programmatic customer card issuance.
-</Note>
 
 ***
 
