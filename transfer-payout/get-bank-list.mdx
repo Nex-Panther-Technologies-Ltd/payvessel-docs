@@ -1,0 +1,20 @@
+---
+title: "Get Bank List"
+description: "Fetch all supported banks and their codes before initiating a transfer"
+---
+
+Retrieve the full list of supported banks. Use this to populate a bank picker in your UI and get the correct `bank_code` for transfers and account validation.
+
+## How it works
+
+1. **Call the endpoint** with your `api-key` and `api-secret` — no request body needed.
+2. **Display the list** to your user for bank selection.
+3. **Use the `bank_code`** when calling Validate Account or Initiate Transfer.
+
+<Note>
+Only show banks where `is_active` is `true` in your UI.
+</Note>
+
+<Card title="API Reference" icon="code" href="/api-reference/transfers/get-bank-list">
+  Full request/response details
+</Card>

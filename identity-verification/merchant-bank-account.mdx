@@ -1,0 +1,34 @@
+---
+title: "Verify Bank Account"
+description: "Use bank account verification before linking a customer bank account to payouts or settlements"
+---
+
+Bank account verification confirms whether a bank account aligns with the submitted BVN and returns the resolved account-name details.
+
+## Best For
+
+- Linking payout accounts
+- Reducing transfer failures
+- Detecting name mismatches before funds movement
+
+## What You Submit
+
+You provide:
+
+- BVN
+- Bank code
+- Bank account number
+
+## What You Get Back
+
+The response includes:
+
+- `verify_result`
+- `bank_account_name`
+- `name_match_percentage`
+
+## How To Use It
+
+- Auto-approve strong account-name matches
+- Pause for review when the match percentage is low
+- Use this before enabling withdrawals, settlements, or recipient creation

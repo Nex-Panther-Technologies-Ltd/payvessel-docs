@@ -7,7 +7,7 @@
     "light": "#ff8533",
     "dark": "#cc5500"
   },
-  "favicon": "https://www.payvessel.com/favicon.ico",
+  "favicon": "/logo/light.svg",
   "navigation": {
     "tabs": [
       {
@@ -49,32 +49,36 @@
           {
             "group": "Transfers",
             "pages": [
-              "transfer-payout/transfer-external-wallet",
+              "transfer-payout/get-bank-list",
+              "transfer-payout/validate-account",
               "transfer-payout/single-transfers",
               "transfer-payout/bulk-transfers"
-            ]
-          },
-          {
-            "group": "Verify Identities",
-            "pages": [
-              "kyc/overview",
-              "kyc/merchant-bvn",
-              "kyc/merchant-nin",
-              "kyc/merchant-documents",
-              "kyc/merchant-face",
-              "kyc/merchant-bank-account",
-              "kyc/merchant-liveness",
-              "kyc/merchant-risk"
             ]
           },
           {
             "group": "Wallets",
             "pages": [
               "wallets/overview",
-              "wallets/create-wallet",
               "wallets/wallet-balance",
-              "wallets/get-wallets",
-              "wallets/wallet-statement"
+              "wallets/get-wallets"
+            ]
+          },
+          {
+            "group": "Identity Verification",
+            "pages": [
+              "identity-verification/overview",
+              "identity-verification/basic-bvn-verification",
+              "identity-verification/enhanced-bvn-verification",
+              "identity-verification/basic-nin-verification",
+              "identity-verification/enhanced-nin-verification",
+              "identity-verification/drivers-license-verification",
+              "identity-verification/voters-card-verification",
+              "identity-verification/international-passport-verification",
+              "identity-verification/merchant-face",
+              "identity-verification/merchant-bank-account",
+              "identity-verification/blacklist-query",
+              "identity-verification/credit-score-query",
+              "identity-verification/loan-feature-query"
             ]
           },
           {
@@ -99,37 +103,7 @@
             "group": "Transactions",
             "pages": [
               "api-reference/transactions/initialize-payment",
-              "api-reference/transactions/verify-payment",
-              "api-reference/transactions/list-transactions"
-            ]
-          },
-          {
-            "group": "Transfers",
-            "pages": [
-              "api-reference/transfers/initiate-transfer",
-              "api-reference/transfers/bulk-transfer",
-              "api-reference/transfers/transfer-status"
-            ]
-          },
-          {
-            "group": "KYC & Risk",
-            "pages": [
-              "api-reference/verification/merchant-bvn",
-              "api-reference/verification/merchant-nin",
-              "api-reference/verification/merchant-documents",
-              "api-reference/verification/merchant-face",
-              "api-reference/verification/merchant-bank-account",
-              "api-reference/verification/merchant-liveness",
-              "api-reference/verification/merchant-risk"
-            ]
-          },
-          {
-            "group": "Wallets",
-            "pages": [
-              "api-reference/wallets/create-wallet",
-              "api-reference/wallets/wallet-balance",
-              "api-reference/wallets/get-wallets",
-              "api-reference/wallets/wallet-statement"
+              "api-reference/transactions/verify-payment"
             ]
           },
           {
@@ -140,10 +114,36 @@
             ]
           },
           {
-            "group": "Checkout",
+            "group": "Transfer",
             "pages": [
-              "api-reference/checkout/initialize-transaction",
-              "api-reference/checkout/confirm-transaction"
+              "api-reference/transfers/get-bank-list",
+              "api-reference/transfers/validate-account",
+              "api-reference/transfers/initiate-transfer",
+              "api-reference/transfers/bulk-transfer"
+            ]
+          },
+          {
+            "group": "Wallets",
+            "pages": [
+              "api-reference/wallets/wallet-balance",
+              "api-reference/wallets/get-wallets"
+            ]
+          },
+          {
+            "group": "Identity Verification",
+            "pages": [
+              "api-reference/verification/basic-bvn-verification",
+              "api-reference/verification/enhanced-bvn-verification",
+              "api-reference/verification/basic-nin-verification",
+              "api-reference/verification/enhanced-nin-verification",
+              "api-reference/verification/drivers-license-verification",
+              "api-reference/verification/voters-card-verification",
+              "api-reference/verification/international-passport-verification",
+              "api-reference/verification/merchant-face",
+              "api-reference/verification/merchant-bank-account",
+              "api-reference/verification/blacklist-query",
+              "api-reference/verification/credit-score-query",
+              "api-reference/verification/loan-feature-query"
             ]
           },
           {

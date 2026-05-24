@@ -1,0 +1,87 @@
+---
+title: "Validate Account"
+description: "Resolve an account number to an account name before initiating transfer"
+openapi: "POST /pms/api/external/request/wallet/validate-account/"
+---
+
+Resolve an account number to an account name before initiating transfer.
+
+## Endpoint
+
+<Badge variant="success">**POST**</Badge> `/pms/api/external/request/wallet/validate-account/`
+
+## Headers
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `api-key` | string | **Required** | Business API Key |
+| `api-secret` | string | **Required** | Business API Secret |
+| `Content-Type` | string | **Required** | Must be `application/json` |
+
+## Request Body
+
+**Media type:** `application/json`
+
+```json
+{
+  "account_number": "4044823317",
+  "bank_code": "8980"
+}
+```
+
+<ParamField body="account_number" type="string" required>
+  Bank account number to validate
+</ParamField>
+
+<ParamField body="bank_code" type="string" required>
+  Bank code for the destination bank
+</ParamField>
+
+## Response
+
+### 200
+
+**Media type:** `application/json`
+
+```json
+{
+  "status": true,
+  "message": "string",
+  "data": {
+    "account_name": "string",
+    "account_number": "string",
+    "bank_code": "string",
+    "bank_name": "string"
+  }
+}
+```
+
+## Response Fields
+
+<ResponseField name="status" type="boolean">
+  Request status indicator
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Response message
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Validated account details
+</ResponseField>
+
+<ResponseField name="data.account_name" type="string">
+  Resolved account holder name
+</ResponseField>
+
+<ResponseField name="data.account_number" type="string">
+  Account number that was validated
+</ResponseField>
+
+<ResponseField name="data.bank_code" type="string">
+  Bank code used for validation
+</ResponseField>
+
+<ResponseField name="data.bank_name" type="string">
+  Resolved bank name
+</ResponseField>

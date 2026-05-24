@@ -1,0 +1,74 @@
+---
+title: "Get Bank List"
+description: "Retrieve list of supported banks for fund transfers"
+openapi: "GET /pms/api/external/request/wallet/banks/"
+---
+
+Retrieve list of supported banks for fund transfers.
+
+## Endpoint
+
+<Badge>GET</Badge> `/pms/api/external/request/wallet/banks/`
+
+## Headers
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `api-key` | string | **Required** | Business API Key |
+| `api-secret` | string | **Required** | Business API Secret |
+
+## Response
+
+### 200
+
+**Media type:** `application/json`
+
+```json
+{
+  "status": true,
+  "message": "string",
+  "data": [
+    {
+      "bank_code": "string",
+      "bank_name": "string",
+      "bank_short_name": "string",
+      "bank_logo_url": "string",
+      "is_active": true
+    }
+  ]
+}
+```
+
+## Response Fields
+
+<ResponseField name="status" type="boolean">
+  Request status indicator
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Response message
+</ResponseField>
+
+<ResponseField name="data" type="array">
+  List of supported banks
+</ResponseField>
+
+<ResponseField name="data[].bank_code" type="string">
+  Unique bank code used for transfers
+</ResponseField>
+
+<ResponseField name="data[].bank_name" type="string">
+  Full bank name
+</ResponseField>
+
+<ResponseField name="data[].bank_short_name" type="string">
+  Short bank display name
+</ResponseField>
+
+<ResponseField name="data[].bank_logo_url" type="string">
+  URL to bank logo image
+</ResponseField>
+
+<ResponseField name="data[].is_active" type="boolean">
+  Whether the bank is currently active for transfers
+</ResponseField>

@@ -1,0 +1,48 @@
+---
+title: "Enhanced BVN Verification"
+description: "When to use enhanced BVN verification to retrieve richer identity details"
+---
+
+Enhanced BVN verification is the stronger BVN workflow when you need a richer profile tied to the customer’s BVN.
+
+## Best For
+
+- Full onboarding checks
+- Compliance-heavy account creation
+- Internal identity enrichment before approval or limit upgrades
+
+## What You Submit
+
+You only submit the BVN.
+
+## What You Get Back
+
+The response can include identity attributes such as:
+
+- Names
+- Gender
+- Birthday
+- Photo
+- Linked phone numbers
+- Name on card
+
+## How To Use It
+
+Use enhanced BVN when the outcome depends on profile retrieval, not just field matching. A common pattern is:
+
+1. Run Enhanced BVN Verification.
+2. Compare the returned profile to your customer-submitted data.
+3. Add document or face checks for higher-risk users.
+4. Store only the fields you actually need for audit and decisioning.
+
+## When To Prefer This Over Basic BVN
+
+Choose Enhanced BVN when:
+
+- You need profile values back
+- You want a stored photo or secondary phone number
+- You are building a stronger first-time identity check
+
+<Tip>
+For lightweight match validation against fields the customer already entered, [Basic BVN Verification](/identity-verification/basic-bvn-verification) is usually enough.
+</Tip>
