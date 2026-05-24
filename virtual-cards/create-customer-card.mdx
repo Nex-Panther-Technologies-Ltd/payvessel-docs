@@ -22,6 +22,15 @@ Currency must be `USD`. Minimum prefund is **$3.00**.
 2. **PayVessel debits** your business USD wallet (issuance + prefund fees apply).
 3. **Receive a card** in `PENDING` status with a PayVessel `card_id`.
 4. **Wait for the final status** via your webhook handler, or poll [Get a Card](/virtual-cards/get-card) until `status` is `ACTIVE`.
+5. **Manage the card** in the [merchant dashboard](/virtual-cards/overview#merchant-dashboard-card-details) (fund, withdraw, freeze, transactions) or through the API endpoints below.
+
+<Frame caption="Card details after issuance — merchant dashboard">
+  <img
+    src="/images/virtual-cards/card-details-dashboard.jpg"
+    alt="PayVessel card details page showing $10 balance, fund and withdraw buttons, and Card prefund transaction rows"
+    style={{ borderRadius: "0.5rem" }}
+  />
+</Frame>
 
 ## Required request fields
 
