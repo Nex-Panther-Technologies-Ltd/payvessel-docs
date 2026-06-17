@@ -20,7 +20,7 @@
     }
   ],
   "paths": {
-    "/api/v1/biller-reseller/billers": {
+    "/vaas/api/v1/biller-reseller/billers": {
       "get": {
         "tags": [
           "Biller Reseller",
@@ -63,7 +63,7 @@
         }
       }
     },
-    "/api/v1/biller-reseller/billers/{biller_id}/items": {
+    "/vaas/api/v1/biller-reseller/billers/{biller_id}/items": {
       "get": {
         "tags": [
           "Biller Reseller",
@@ -115,7 +115,7 @@
         }
       }
     },
-    "/api/v1/biller-reseller/orders": {
+    "/vaas/api/v1/biller-reseller/orders": {
       "post": {
         "tags": [
           "Biller Reseller",
@@ -158,7 +158,7 @@
         }
       }
     },
-    "/api/v1/biller-reseller/orders/{order_id}": {
+    "/vaas/api/v1/biller-reseller/orders/{order_id}": {
       "get": {
         "tags": [
           "Biller Reseller",
@@ -202,7 +202,7 @@
         }
       }
     },
-    "/api/v1/biller-reseller/validate-account": {
+    "/vaas/api/v1/biller-reseller/validate-account": {
       "post": {
         "tags": [
           "Biller Reseller",
@@ -245,7 +245,7 @@
         }
       }
     },
-    "/api/v1/esim/orders": {
+    "/vaas/api/v1/esim/orders": {
       "post": {
         "tags": [
           "eSIM",
@@ -288,7 +288,7 @@
         }
       }
     },
-    "/api/v1/esim/orders/{order_id}": {
+    "/vaas/api/v1/esim/orders/{order_id}": {
       "get": {
         "tags": [
           "eSIM",
@@ -333,7 +333,7 @@
         }
       }
     },
-    "/api/v1/esim/packages": {
+    "/vaas/api/v1/esim/packages": {
       "get": {
         "tags": [
           "eSIM",
@@ -442,7 +442,7 @@
         }
       }
     },
-    "/api/v1/esim/regions": {
+    "/vaas/api/v1/esim/regions": {
       "get": {
         "tags": [
           "eSIM",
@@ -475,7 +475,7 @@
         }
       }
     },
-    "/api/v1/gift-cards/countries": {
+    "/vaas/api/v1/gift-cards/countries": {
       "get": {
         "tags": [
           "Gift Cards",
@@ -508,7 +508,7 @@
         }
       }
     },
-    "/api/v1/gift-cards/countries/{country_id}": {
+    "/vaas/api/v1/gift-cards/countries/{country_id}": {
       "get": {
         "tags": [
           "Gift Cards",
@@ -552,7 +552,7 @@
         }
       }
     },
-    "/api/v1/gift-cards/orders": {
+    "/vaas/api/v1/gift-cards/orders": {
       "post": {
         "tags": [
           "Gift Cards",
@@ -595,7 +595,7 @@
         }
       }
     },
-    "/api/v1/gift-cards/orders/{order_id}": {
+    "/vaas/api/v1/gift-cards/orders/{order_id}": {
       "get": {
         "tags": [
           "Gift Cards",
@@ -639,7 +639,7 @@
         }
       }
     },
-    "/api/v1/gift-cards/products/{operator_id}/denominations": {
+    "/vaas/api/v1/gift-cards/products/{operator_id}/denominations": {
       "get": {
         "tags": [
           "Gift Cards",
@@ -683,7 +683,7 @@
         }
       }
     },
-    "/api/v1/gift-cards/{country_code}/products": {
+    "/vaas/api/v1/gift-cards/{country_code}/products": {
       "get": {
         "tags": [
           "Gift Cards",
