@@ -1,0 +1,32 @@
+---
+title: "List Regions"
+description: "List all supported eSIM regions and countries"
+sidebarTitle: "List Regions"
+---
+
+Retrieve all supported regions from the eSIM provider. Regions can be countries or broader areas (e.g. "Europe", "Asia") and may contain nested sub-locations.
+
+## Usage
+
+```bash
+curl https://api.payvessel.com/api/v1/esim/regions \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY"
+```
+
+## Response fields
+
+Each region includes:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `code` | string | Region/country code (e.g. `US`, `EU`) |
+| `name` | string | Display name (e.g. "United States", "Europe") |
+| `region_type` | integer or null | Type identifier for the region |
+| `sub_locations` | array | Nested sub-regions (same structure, recursive) |
+
+Use the `code` value as the `location_code` filter when [listing packages](/esim/list-packages).
+
+<Card title="API Reference" icon="code" href="/api-reference/esim/list-regions">
+  Full request/response details and Try it
+</Card>

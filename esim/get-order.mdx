@@ -1,0 +1,78 @@
+---
+title: "Get eSIM Order"
+description: "Retrieve an eSIM order by ID, including profile and activation details"
+sidebarTitle: "Get Order"
+---
+
+Retrieve an eSIM order by its PayVessel order ID. When the order is `completed`, the response includes full eSIM profile details your user needs to activate their data plan.
+
+## Usage
+
+```bash
+curl https://api.payvessel.com/api/v1/esim/orders/{order_id} \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY"
+```
+
+## Response fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | string (uuid) | PayVessel order ID |
+| `reference` | string | Your merchant reference |
+| `provider_order_no` | string or null | Provider's order number |
+| `provider_transaction_id` | string or null | Provider's transaction ID |
+| `package_code` | string | The package purchased |
+| `package_slug` | string or null | Package slug |
+| `package_name` | string | Human-readable package name |
+| `location` | string | Target region |
+| `currency_code` | string | Price currency |
+| `quantity` | integer | Number of eSIMs |
+| `amount_usd` | number | Amount in USD |
+| `amount_naira` | number | Amount in NGN |
+| `status` | string | `pending`, `processing`, `completed`, or `failed` |
+| `error_message` | string or null | Error details if the order failed |
+| `profiles` | array | eSIM profiles (see below) |
+| `created_datetime` | datetime | When the order was created |
+| `updated_datetime` | datetime | Last status update |
+| `completed_datetime` | datetime or null | When provisioning completed |
+
+### Profile object
+
+Each profile in the `profiles` array contains the eSIM activation details:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `iccid` | string or null | SIM card identifier |
+| `qr_code_url` | string or null | QR code image URL for eSIM installation |
+| `short_url` | string or null | Short activation URL |
+| `ac` | string or null | Activation code (SM-DP+ address) |
+| `msisdn` | string or null | Assigned phone number (if applicable) |
+| `imsi` | string or null | International mobile subscriber identity |
+| `esim_status` | string or null | Current eSIM status |
+| `activate_time` | string or null | When the eSIM was activated |
+| `expired_time` | string or null | When the eSIM expires |
+| `total_volume` | integer or null | Total data allowance (bytes) |
+| `total_duration` | integer or null | Total validity period |
+| `duration_unit` | string or null | Unit for duration |
+| `order_usage` | integer or null | Data used so far (bytes) |
+| `pin` | string or null | SIM PIN |
+| `puk` | string or null | SIM PUK |
+| `apn` | string or null | APN setting |
+| `packages` | array | Allocated packages on this profile |
+
+### Allocated package object
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `package_code` | string | Package identifier |
+| `package_name` | string or null | Package name |
+| `slug` | string or null | Package slug |
+| `duration` | integer or null | Validity period |
+| `volume` | integer or null | Data allowance (bytes) |
+| `location_code` | string or null | Target location |
+| `create_time` | string or null | When the package was allocated |
+
+<Card title="API Reference" icon="code" href="/api-reference/esim/get-order">
+  Full request/response details and Try it
+</Card>

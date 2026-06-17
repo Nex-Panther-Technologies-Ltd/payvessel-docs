@@ -1,0 +1,49 @@
+---
+title: "Get Biller Items"
+description: "Retrieve available items and packages for a specific biller"
+sidebarTitle: "Get Biller Items"
+---
+
+Fetch the available items (packages or denominations) for a specific biller. These are the purchasable options your users can select from.
+
+## Usage
+
+Pass the `biller_id` as a path parameter and the `category` as a query parameter.
+
+```bash
+curl https://api.payvessel.com/api/v1/biller-reseller/billers/{biller_id}/items?category=betting \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY"
+```
+
+## Response fields
+
+Each item includes:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `biller_id` | string | The parent biller's ID |
+| `item_id` | string | Unique item identifier (used when creating an order) |
+| `item_name` | string | Display name of the item |
+| `amount` | integer or null | Fixed price (null if variable) |
+| `min_amount` | integer or null | Minimum amount for variable-price items |
+| `max_amount` | integer or null | Maximum amount for variable-price items |
+| `is_fix_amount` | integer or null | `1` if the item has a fixed price |
+| `status` | integer or null | Item availability status |
+| `ext_info` | object or null | Extra details (validity period, data size, description) |
+
+### ext_info object
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `validity_date` | integer or null | Validity in days |
+| `item_size` | string or null | Data size (e.g. "1GB", "5GB") |
+| `item_description` | object or null | Additional description from the provider |
+
+## Next step
+
+Use the `item_id` when [creating an order](/biller-reseller/create-order).
+
+<Card title="API Reference" icon="code" href="/api-reference/biller-reseller/get-biller-items">
+  Full request/response details and Try it
+</Card>

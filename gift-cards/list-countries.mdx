@@ -1,0 +1,36 @@
+---
+title: "List Countries"
+description: "List all countries that have gift card products available"
+sidebarTitle: "List Countries"
+---
+
+Retrieve all countries that have gift card products available. Use this as the first step to let your users browse gift cards by region.
+
+## Usage
+
+```bash
+curl https://api.payvessel.com/api/v1/gift-cards/countries \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY"
+```
+
+## Response fields
+
+Each country includes:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | integer | Numeric country ID |
+| `name` | string | Country name (e.g. "United States") |
+| `code` | string | ISO 3166-1 alpha-2 code (e.g. `US`) |
+| `currency_code` | string | Local currency code |
+| `fee` | integer or null | Processing fee (if applicable) |
+| `image` | string or null | Country flag/image URL |
+
+## Next step
+
+Use the `code` value to [list products](/gift-cards/list-products) available in that country.
+
+<Card title="API Reference" icon="code" href="/api-reference/gift-cards/list-countries">
+  Full request/response details and Try it
+</Card>

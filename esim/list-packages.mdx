@@ -1,0 +1,68 @@
+---
+title: "List Packages"
+description: "Browse available eSIM data packages with optional filters"
+sidebarTitle: "List Packages"
+---
+
+List available eSIM data packages. Use query filters to narrow results by location, package type, or specific codes.
+
+## Usage
+
+```bash
+curl "https://api.payvessel.com/api/v1/esim/packages?location_code=US&package_type=BASE" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY"
+```
+
+## Query parameters
+
+| Parameter | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `location_code` | string | No | | Filter by region/country code (e.g. `US`, `GB`) |
+| `package_type` | string | No | `BASE` | Package type filter |
+| `package_code` | string | No | | Filter by exact package code |
+| `slug` | string | No | | Filter by package slug |
+| `iccid` | string | No | | Filter by ICCID (for top-up packages on existing eSIMs) |
+
+## Response fields
+
+Each package includes:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `package_code` | string | Unique package identifier (used when creating an order) |
+| `slug` | string or null | URL-friendly package identifier |
+| `name` | string | Display name |
+| `currency_code` | string | Price currency |
+| `price_usd` | number | Wholesale price in USD |
+| `retail_price_usd` | number or null | Suggested retail price in USD |
+| `volume_bytes` | integer | Data allowance in bytes |
+| `duration` | integer | Validity period |
+| `duration_unit` | string | Unit for duration (e.g. "DAY") |
+| `location` | string | Target location/region |
+| `description` | string or null | Package description |
+| `speed` | string or null | Network speed (e.g. "4G/LTE") |
+| `location_networks` | array | Supported networks per location |
+
+### location_networks object
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `location_name` | string | Country or area name |
+| `location_logo` | string or null | Logo URL |
+| `operators` | array | Network operators available |
+
+Each operator has:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `operator_name` | string | Carrier name |
+| `network_type` | string or null | Network type (e.g. "4G") |
+
+## Next step
+
+Use the `package_code` when [creating an order](/esim/create-order).
+
+<Card title="API Reference" icon="code" href="/api-reference/esim/list-packages">
+  Full request/response details and Try it
+</Card>

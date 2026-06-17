@@ -1,0 +1,42 @@
+---
+title: "List Products"
+description: "Fetch all gift card products available in a specific country"
+sidebarTitle: "List Products"
+---
+
+Fetch all gift card products (brands) available in a specific country. Use the ISO 3166-1 alpha-2 country code from [List Countries](/gift-cards/list-countries).
+
+## Usage
+
+```bash
+curl https://api.payvessel.com/api/v1/gift-cards/US/products \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY"
+```
+
+## Path parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `country_code` | string | Yes | ISO 3166-1 alpha-2 code (e.g. `US`, `GB`, `NG`) |
+
+## Response fields
+
+Each product includes:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | string | Product/operator ID (used to fetch denominations and create orders) |
+| `name` | string | Brand name (e.g. "Amazon", "iTunes", "Steam") |
+| `brandId` | string or null | Brand identifier |
+| `productType` | object or null | Product type with `id` and `name` fields |
+| `currency` | string or null | Product currency |
+| `image` | string or null | Brand logo URL |
+
+## Next step
+
+Use the product `id` as the `operator_id` to [get denominations](/gift-cards/get-denominations).
+
+<Card title="API Reference" icon="code" href="/api-reference/gift-cards/list-products">
+  Full request/response details and Try it
+</Card>

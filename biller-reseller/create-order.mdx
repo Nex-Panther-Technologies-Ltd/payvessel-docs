@@ -1,0 +1,60 @@
+---
+title: "Create Order"
+description: "Create a biller reseller order to purchase airtime, data, or betting top-ups"
+sidebarTitle: "Create Order"
+---
+
+Create a biller reseller order. PayVessel debits your business wallet and submits the request to the provider for fulfillment.
+
+## Usage
+
+```bash
+curl -X POST https://api.payvessel.com/api/v1/biller-reseller/orders \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "reference": "bet-order-001",
+    "category": "betting",
+    "biller_id": "BET9JA_BILLER_ID",
+    "item_id": "BET9JA_ITEM_ID",
+    "recharge_account": "12345678",
+    "amount": 1000
+  }'
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `reference` | string | Yes | Your unique merchant order reference (max 64 characters) |
+| `category` | string | Yes | One of: `airtime`, `data`, `betting` |
+| `biller_id` | string | Yes | The biller to purchase from |
+| `item_id` | string | Yes | The specific item/package to purchase |
+| `recharge_account` | string | Yes | Customer's phone number or account ID (max 15 characters) |
+| `amount` | number | Yes | Amount to charge in naira |
+
+<Warning>
+  The order amount is debited from your business wallet immediately. Make sure you have sufficient balance before creating an order.
+</Warning>
+
+## Response
+
+The response returns an order object. Key fields:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | string (uuid) | PayVessel order ID |
+| `reference` | string | Your merchant reference |
+| `status` | string | Order status: `pending`, `processing`, `success`, `failed`, or `cancelled` |
+| `amount` | number | Amount charged in naira |
+| `error_message` | string or null | Error details if the order failed |
+| `created_datetime` | datetime | When the order was created |
+
+## Next step
+
+Poll [Get Order](/biller-reseller/get-order) to check whether the order has been fulfilled.
+
+<Card title="API Reference" icon="code" href="/api-reference/biller-reseller/create-order">
+  Full request/response details and Try it
+</Card>

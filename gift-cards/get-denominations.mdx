@@ -1,0 +1,44 @@
+---
+title: "Get Denominations"
+description: "Fetch available denominations and pricing for a gift card product"
+sidebarTitle: "Get Denominations"
+---
+
+Fetch all available denominations (values) for a gift card product. This returns the specific card values your users can purchase, along with USD and NGN pricing.
+
+## Usage
+
+```bash
+curl https://api.payvessel.com/api/v1/gift-cards/products/{operator_id}/denominations \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY"
+```
+
+## Path parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `operator_id` | string | Yes | The product/operator ID from [List Products](/gift-cards/list-products) |
+
+## Response fields
+
+The `data` object is a map of denomination IDs to denomination objects:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | string | Denomination ID (used as `product_id` when creating an order) |
+| `name` | string | Display name (e.g. "$25 Amazon Gift Card") |
+| `priceType` | string or null | Pricing type (e.g. "FIXED", "RANGE") |
+| `usd` | number or null | Price in USD |
+| `ngn` | number or null | Price in NGN |
+| `operatorId` | string or null | Parent operator ID |
+| `country` | string or null | Country code |
+| `image` | string or null | Card image URL |
+
+## Next step
+
+Use the denomination `id` as the `product_id` when [purchasing a gift card](/gift-cards/purchase).
+
+<Card title="API Reference" icon="code" href="/api-reference/gift-cards/get-denominations">
+  Full request/response details and Try it
+</Card>

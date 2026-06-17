@@ -1,0 +1,58 @@
+---
+title: "Create eSIM Order"
+description: "Purchase an eSIM data package and provision a profile"
+sidebarTitle: "Create Order"
+---
+
+Create an eSIM order. PayVessel debits your business wallet, provisions the eSIM with the selected package, and returns the order details.
+
+## Usage
+
+```bash
+curl -X POST https://api.payvessel.com/api/v1/esim/orders \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "reference": "esim-order-001",
+    "package_code": "US_5GB_30D",
+    "quantity": 1
+  }'
+```
+
+## Request body
+
+| Field | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `reference` | string | Yes | | Your unique merchant order reference (max 64 characters) |
+| `package_code` | string | Yes | | The package to purchase (from [List Packages](/esim/list-packages)) |
+| `quantity` | integer | No | `1` | Number of eSIMs to provision (must be greater than 0) |
+
+<Warning>
+  The order amount is debited from your business wallet immediately. Make sure you have sufficient balance before creating an order.
+</Warning>
+
+## Response
+
+The response returns an order object. Key fields:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | string (uuid) | PayVessel order ID |
+| `reference` | string | Your merchant reference |
+| `package_code` | string | The package purchased |
+| `package_name` | string | Human-readable package name |
+| `location` | string | Target region |
+| `quantity` | integer | Number of eSIMs |
+| `amount_usd` | number | Amount in USD |
+| `amount_naira` | number | Amount in NGN |
+| `status` | string | `pending`, `processing`, `completed`, or `failed` |
+| `profiles` | array | eSIM profile details (populated when `completed`) |
+
+## Next step
+
+Poll [Get Order](/esim/get-order) until the status is `completed` to retrieve the eSIM profile with QR code and activation details.
+
+<Card title="API Reference" icon="code" href="/api-reference/esim/create-order">
+  Full request/response details and Try it
+</Card>

@@ -1,0 +1,62 @@
+---
+title: "Gift Card API"
+description: "Purchase and deliver digital gift cards from global brands through the PayVessel gift card API."
+keywords:
+  [
+    "gift card API",
+    "gift card API Nigeria",
+    "digital gift card API",
+    "buy gift cards API",
+    "PayVessel gift cards",
+  ]
+sidebarTitle: "Overview"
+---
+
+The PayVessel **gift card API** lets you sell **digital gift cards** from global brands to your users. Browse available products by country, check denominations and pricing, and purchase cards instantly.
+
+## Integration flow
+
+1. **List countries** to discover which countries have gift card products.
+2. **List products** for a country to show available gift card brands.
+3. **Get denominations** for a product to see available values and pricing.
+4. **Purchase a gift card** by creating an order; PayVessel debits your wallet and returns the redemption code.
+5. **Get order** to retrieve the gift card details (redeem code, serial number).
+
+```mermaid
+sequenceDiagram
+    participant You
+    participant PayVessel
+    participant Provider
+
+    You->>PayVessel: GET /countries
+    PayVessel-->>You: Available countries
+    You->>PayVessel: GET /{country_code}/products
+    PayVessel-->>You: Gift card products
+    You->>PayVessel: GET /products/{operator_id}/denominations
+    PayVessel-->>You: Denominations and pricing
+    You->>PayVessel: POST /orders
+    PayVessel->>Provider: Purchase gift card
+    Provider-->>PayVessel: Redeem code
+    PayVessel-->>You: Order with redeem code
+```
+
+## Order statuses
+
+| Status | Description |
+| --- | --- |
+| `pending` | Order received, not yet submitted to provider |
+| `processing` | Submitted to provider, awaiting fulfillment |
+| `completed` | Gift card purchased; redeem code available |
+| `cancelled` | Order was cancelled |
+
+## Base path
+
+All gift card endpoints are under:
+
+```
+/api/v1/gift-cards
+```
+
+## Authentication
+
+All requests require `api-key` and `api-secret` headers. See [Authentication](/api-basics/authentication) for details.

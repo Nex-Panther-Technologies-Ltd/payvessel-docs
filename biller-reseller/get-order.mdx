@@ -1,0 +1,39 @@
+---
+title: "Get Order"
+description: "Retrieve a biller reseller order by ID to check its status"
+sidebarTitle: "Get Order"
+---
+
+Retrieve a biller reseller order by its PayVessel order ID. Use this to poll for the final order status after creation.
+
+## Usage
+
+```bash
+curl https://api.payvessel.com/api/v1/biller-reseller/orders/{order_id} \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY"
+```
+
+## Response fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | string (uuid) | PayVessel order ID |
+| `business_id` | string | Your business ID |
+| `reference` | string | Your merchant reference |
+| `provider_reference` | string or null | Reference from the upstream provider |
+| `category` | string | `airtime`, `data`, or `betting` |
+| `biller_id` | string | The biller used |
+| `item_id` | string | The item purchased |
+| `recharge_account` | string | The customer's account |
+| `amount` | number | Amount charged in naira |
+| `status` | string | `pending`, `processing`, `success`, `failed`, or `cancelled` |
+| `error_message` | string or null | Error details if the order failed |
+| `wallet_transaction_id` | string or null | Associated wallet transaction |
+| `created_datetime` | datetime | When the order was created |
+| `updated_datetime` | datetime | Last status update |
+| `completed_datetime` | datetime or null | When the order reached a terminal state |
+
+<Card title="API Reference" icon="code" href="/api-reference/biller-reseller/get-order">
+  Full request/response details and Try it
+</Card>

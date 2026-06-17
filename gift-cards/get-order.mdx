@@ -1,0 +1,42 @@
+---
+title: "Get Order"
+description: "Retrieve a gift card order by ID to check status and get the redemption code"
+sidebarTitle: "Get Order"
+---
+
+Retrieve a gift card order by its PayVessel order ID. Use this to poll for the final status and retrieve the redemption code.
+
+## Usage
+
+```bash
+curl https://api.payvessel.com/api/v1/gift-cards/orders/{order_id} \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY"
+```
+
+## Response fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | string (uuid) | PayVessel order ID |
+| `business_id` | string | Your business ID |
+| `reference` | string | Your merchant reference |
+| `billpoint_transaction_id` | integer or null | Provider transaction ID |
+| `operator_id` | string | Product/operator ID |
+| `product_id` | string | Denomination ID |
+| `product_name` | string | Gift card name |
+| `country` | string | Country |
+| `amount_naira` | number | Amount in NGN |
+| `amount_usd` | number | Amount in USD |
+| `redeem_code` | string or null | Gift card redemption code |
+| `serial_number` | string or null | Gift card serial number |
+| `status` | string | `pending`, `processing`, `completed`, or `cancelled` |
+| `error_message` | string or null | Error details if the order failed |
+| `wallet_transaction_id` | string or null | Associated wallet transaction |
+| `created_datetime` | datetime | When the order was created |
+| `updated_datetime` | datetime | Last status update |
+| `completed_datetime` | datetime or null | When the order was fulfilled |
+
+<Card title="API Reference" icon="code" href="/api-reference/gift-cards/get-order">
+  Full request/response details and Try it
+</Card>

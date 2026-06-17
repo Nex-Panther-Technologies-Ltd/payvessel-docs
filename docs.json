@@ -129,6 +129,44 @@
             ]
           },
           {
+            "group": "Value Added Services",
+            "pages": [
+              {
+                "group": "Biller Reseller",
+                "pages": [
+                  "biller-reseller/overview",
+                  "biller-reseller/get-billers",
+                  "biller-reseller/get-biller-items",
+                  "biller-reseller/validate-account",
+                  "biller-reseller/create-order",
+                  "biller-reseller/get-order"
+                ]
+              },
+              {
+                "group": "eSIM",
+                "pages": [
+                  "esim/overview",
+                  "esim/list-regions",
+                  "esim/list-packages",
+                  "esim/create-order",
+                  "esim/get-order"
+                ]
+              },
+              {
+                "group": "Gift Cards",
+                "pages": [
+                  "gift-cards/overview",
+                  "gift-cards/list-countries",
+                  "gift-cards/get-country",
+                  "gift-cards/list-products",
+                  "gift-cards/get-denominations",
+                  "gift-cards/purchase",
+                  "gift-cards/get-order"
+                ]
+              }
+            ]
+          },
+          {
             "group": "Webhook",
             "pages": [
               "api-reference/webhook/overview",
@@ -207,6 +245,41 @@
               "api-reference/verification/blacklist-query",
               "api-reference/verification/credit-score-query",
               "api-reference/verification/loan-feature-query"
+            ]
+          },
+          {
+            "group": "Value Added Services",
+            "pages": [
+              {
+                "group": "Biller Reseller",
+                "pages": [
+                  "api-reference/biller-reseller/get-billers",
+                  "api-reference/biller-reseller/get-biller-items",
+                  "api-reference/biller-reseller/validate-account",
+                  "api-reference/biller-reseller/create-order",
+                  "api-reference/biller-reseller/get-order"
+                ]
+              },
+              {
+                "group": "eSIM",
+                "pages": [
+                  "api-reference/esim/list-regions",
+                  "api-reference/esim/list-packages",
+                  "api-reference/esim/create-order",
+                  "api-reference/esim/get-order"
+                ]
+              },
+              {
+                "group": "Gift Cards",
+                "pages": [
+                  "api-reference/gift-cards/list-countries",
+                  "api-reference/gift-cards/get-country",
+                  "api-reference/gift-cards/list-products",
+                  "api-reference/gift-cards/get-denominations",
+                  "api-reference/gift-cards/purchase",
+                  "api-reference/gift-cards/get-order"
+                ]
+              }
             ]
           },
           {

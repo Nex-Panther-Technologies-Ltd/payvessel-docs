@@ -1,0 +1,58 @@
+---
+title: "Purchase Gift Card"
+description: "Purchase a gift card and receive a redemption code"
+sidebarTitle: "Purchase"
+---
+
+Purchase a gift card. PayVessel debits your business wallet and returns the gift card redemption details.
+
+## Usage
+
+```bash
+curl -X POST https://api.payvessel.com/api/v1/gift-cards/orders \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "reference": "gift-order-001",
+    "operator_id": "AMAZON_US",
+    "product_id": "AMAZON_25_USD"
+  }'
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `reference` | string | Yes | Your unique merchant order reference (max 64 characters) |
+| `operator_id` | string | Yes | The product/operator ID from [List Products](/gift-cards/list-products) |
+| `product_id` | string | Yes | The denomination ID from [Get Denominations](/gift-cards/get-denominations) |
+
+<Warning>
+  The order amount is debited from your business wallet immediately. Make sure you have sufficient balance before creating an order.
+</Warning>
+
+## Response
+
+The response returns an order object. Key fields:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | string (uuid) | PayVessel order ID |
+| `reference` | string | Your merchant reference |
+| `product_name` | string | Gift card name |
+| `country` | string | Country |
+| `amount_usd` | number | Amount in USD |
+| `amount_naira` | number | Amount in NGN |
+| `redeem_code` | string or null | Gift card redemption code (available when `completed`) |
+| `serial_number` | string or null | Gift card serial number |
+| `status` | string | `pending`, `processing`, `completed`, or `cancelled` |
+| `error_message` | string or null | Error details if the order failed |
+
+## Next step
+
+If the status is not yet `completed`, poll [Get Order](/gift-cards/get-order) to retrieve the redemption code.
+
+<Card title="API Reference" icon="code" href="/api-reference/gift-cards/purchase">
+  Full request/response details and Try it
+</Card>

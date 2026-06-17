@@ -1,0 +1,73 @@
+---
+title: "Biller Reseller API"
+description: "Resell airtime, data bundles, and betting top-ups through a single integration with the PayVessel biller reseller API."
+keywords:
+  [
+    "biller reseller API",
+    "airtime API Nigeria",
+    "data bundle API",
+    "betting top-up API",
+    "PayVessel biller reseller",
+  ]
+sidebarTitle: "Overview"
+---
+
+The PayVessel **biller reseller API** lets you resell **airtime**, **data bundles**, and **betting top-ups** to your end users. Orders are charged against your business wallet, and fulfillment is handled by PayVessel.
+
+## Supported categories
+
+| Category | Description |
+| --- | --- |
+| `airtime` | Prepaid mobile airtime credit |
+| `data` | Mobile data bundles |
+| `betting` | Betting account funding (e.g. Bet9ja, SportyBet) |
+
+## Integration flow
+
+1. **List billers** for a category to show available providers (e.g. Bet9ja, SportyBet).
+2. **List biller items** to get the specific packages or denominations for that biller.
+3. **Validate the recharge account** to confirm the customer's account exists before placing an order.
+4. **Create an order** to purchase the item; PayVessel debits your wallet and fulfils the request.
+5. **Get order** to check the status or poll for completion.
+
+```mermaid
+sequenceDiagram
+    participant You
+    participant PayVessel
+    participant Biller
+
+    You->>PayVessel: GET /billers?category=betting
+    PayVessel-->>You: List of billers
+    You->>PayVessel: GET /billers/{biller_id}/items?category=betting
+    PayVessel-->>You: Available items/packages
+    You->>PayVessel: POST /validate-account
+    PayVessel-->>You: Account validated
+    You->>PayVessel: POST /orders
+    PayVessel->>Biller: Fulfil order
+    Biller-->>PayVessel: Confirmation
+    PayVessel-->>You: Order created (status: processing)
+    You->>PayVessel: GET /orders/{order_id}
+    PayVessel-->>You: Order status (success/failed)
+```
+
+## Order statuses
+
+| Status | Description |
+| --- | --- |
+| `pending` | Order received, not yet submitted to provider |
+| `processing` | Submitted to provider, awaiting confirmation |
+| `success` | Fulfilled successfully |
+| `failed` | Provider rejected or could not fulfil the order |
+| `cancelled` | Order was cancelled |
+
+## Base path
+
+All biller reseller endpoints are under:
+
+```
+/api/v1/biller-reseller
+```
+
+## Authentication
+
+All requests require `api-key` and `api-secret` headers. See [Authentication](/api-basics/authentication) for details.

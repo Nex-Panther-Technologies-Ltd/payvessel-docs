@@ -1,0 +1,38 @@
+---
+title: "Get Billers"
+description: "Retrieve available billers for a given category (airtime, data, or betting)"
+sidebarTitle: "Get Billers"
+---
+
+Fetch the list of available billers (providers) for a specific category. Use this to display provider options to your users before they select a package.
+
+## Usage
+
+Pass a `category` query parameter to filter billers by type.
+
+```bash
+curl https://api.payvessel.com/api/v1/biller-reseller/billers?category=betting \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY"
+```
+
+## Response fields
+
+Each biller in the response includes:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `biller_id` | string | Unique identifier for the biller |
+| `biller_name` | string | Display name (e.g. "Bet9ja", "SportyBet") |
+| `biller_icon` | string | URL to the biller's logo |
+| `min_amount` | integer or null | Minimum order amount (if applicable) |
+| `max_amount` | integer or null | Maximum order amount (if applicable) |
+| `status` | integer or null | Biller availability status |
+
+## Next step
+
+After selecting a biller, call [Get Biller Items](/biller-reseller/get-biller-items) to retrieve the available packages.
+
+<Card title="API Reference" icon="code" href="/api-reference/biller-reseller/get-billers">
+  Full request/response details and Try it
+</Card>

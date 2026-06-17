@@ -1,0 +1,2812 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "PayVessel Value-Added Services API",
+    "description": "API reference for PayVessel biller reseller, eSIM, and gift card services.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.payvessel.com"
+    },
+    {
+      "url": "https://sandbox.payvessel.com"
+    }
+  ],
+  "security": [
+    {
+      "apiKey": [],
+      "apiSecret": []
+    }
+  ],
+  "paths": {
+    "/api/v1/biller-reseller/billers": {
+      "get": {
+        "tags": [
+          "Biller Reseller",
+          "Biller Reseller"
+        ],
+        "summary": "Get Billers",
+        "description": "Get available billers for a given category",
+        "operationId": "get_billers_api_v1_biller_reseller_billers_get",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/BillerResellerCategory"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBillersResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/biller-reseller/billers/{biller_id}/items": {
+      "get": {
+        "tags": [
+          "Biller Reseller",
+          "Biller Reseller"
+        ],
+        "summary": "Get Biller Items",
+        "description": "Get available items/packages for a specific biller and category",
+        "operationId": "get_biller_items_api_v1_biller_reseller_billers__biller_id__items_get",
+        "parameters": [
+          {
+            "name": "biller_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Biller Id"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/BillerResellerCategory"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetItemsResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/biller-reseller/orders": {
+      "post": {
+        "tags": [
+          "Biller Reseller",
+          "Biller Reseller"
+        ],
+        "summary": "Create Biller Reseller Order",
+        "description": "Create a biller reseller order and charge the merchant wallet",
+        "operationId": "create_order_api_v1_biller_reseller_orders_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/api__biller_reseller__schema__order__CreateOrderRequestSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api__biller_reseller__schema__order__CreateOrderResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/biller-reseller/orders/{order_id}": {
+      "get": {
+        "tags": [
+          "Biller Reseller",
+          "Biller Reseller"
+        ],
+        "summary": "Get Order",
+        "description": "Get a biller reseller order by ID",
+        "operationId": "get_order_api_v1_biller_reseller_orders__order_id__get",
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Order Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api__biller_reseller__schema__order__GetOrderResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/biller-reseller/validate-account": {
+      "post": {
+        "tags": [
+          "Biller Reseller",
+          "Biller Reseller"
+        ],
+        "summary": "Validate Recharge Account",
+        "description": "Validate a customer recharge account (e.g. betting account ID) before placing an order",
+        "operationId": "validate_account_api_v1_biller_reseller_validate_account_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateAccountRequestSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateAccountResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/esim/orders": {
+      "post": {
+        "tags": [
+          "eSIM",
+          "eSIM"
+        ],
+        "summary": "Create eSIM Order",
+        "description": "Create an eSIM order and charge the merchant wallet",
+        "operationId": "create_order_api_v1_esim_orders_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/api__esim__schema__CreateOrderRequestSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api__esim__schema__CreateOrderResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/esim/orders/{order_id}": {
+      "get": {
+        "tags": [
+          "eSIM",
+          "eSIM"
+        ],
+        "summary": "Get eSIM Order",
+        "description": "Get an eSIM order by ID and refresh provider status when needed",
+        "operationId": "get_order_api_v1_esim_orders__order_id__get",
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Order Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api__esim__schema__GetOrderResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/esim/packages": {
+      "get": {
+        "tags": [
+          "eSIM",
+          "eSIM"
+        ],
+        "summary": "List eSIM Packages",
+        "description": "List available eSIM packages with optional provider-compatible filters",
+        "operationId": "list_packages_api_v1_esim_packages_get",
+        "parameters": [
+          {
+            "name": "location_code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Location Code"
+            }
+          },
+          {
+            "name": "package_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "BASE",
+              "title": "Package Type"
+            }
+          },
+          {
+            "name": "package_code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Package Code"
+            }
+          },
+          {
+            "name": "slug",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Slug"
+            }
+          },
+          {
+            "name": "iccid",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Iccid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListPackagesResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/esim/regions": {
+      "get": {
+        "tags": [
+          "eSIM",
+          "eSIM"
+        ],
+        "summary": "List eSIM Regions",
+        "description": "List all supported eSIM regions from the configured provider",
+        "operationId": "list_regions_api_v1_esim_regions_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListRegionsResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/gift-cards/countries": {
+      "get": {
+        "tags": [
+          "Gift Cards",
+          "Gift Cards"
+        ],
+        "summary": "List Countries",
+        "description": "List all countries that have gift card products available",
+        "operationId": "list_countries_api_v1_gift_cards_countries_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListCountriesResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/gift-cards/countries/{country_id}": {
+      "get": {
+        "tags": [
+          "Gift Cards",
+          "Gift Cards"
+        ],
+        "summary": "Get Country",
+        "description": "Retrieve a single country by its numeric ID",
+        "operationId": "get_country_api_v1_gift_cards_countries__country_id__get",
+        "parameters": [
+          {
+            "name": "country_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Country Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCountryResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/gift-cards/orders": {
+      "post": {
+        "tags": [
+          "Gift Cards",
+          "Gift Cards"
+        ],
+        "summary": "Purchase Gift Card",
+        "description": "Purchase a gift card and charge the business managed wallet",
+        "operationId": "create_order_api_v1_gift_cards_orders_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/api__gift_cards__schema__order__CreateOrderRequestSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api__gift_cards__schema__order__CreateOrderResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/gift-cards/orders/{order_id}": {
+      "get": {
+        "tags": [
+          "Gift Cards",
+          "Gift Cards"
+        ],
+        "summary": "Get Order",
+        "description": "Retrieve a gift card order by ID",
+        "operationId": "get_order_api_v1_gift_cards_orders__order_id__get",
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Order Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api__gift_cards__schema__order__GetOrderResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/gift-cards/products/{operator_id}/denominations": {
+      "get": {
+        "tags": [
+          "Gift Cards",
+          "Gift Cards"
+        ],
+        "summary": "Get Product Denominations",
+        "description": "Fetch all available denominations for a given gift card operator ID",
+        "operationId": "get_denominations_api_v1_gift_cards_products__operator_id__denominations_get",
+        "parameters": [
+          {
+            "name": "operator_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Operator Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDenominationsResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/gift-cards/{country_code}/products": {
+      "get": {
+        "tags": [
+          "Gift Cards",
+          "Gift Cards"
+        ],
+        "summary": "List Gift Cards by Country",
+        "description": "Fetch all gift card products available in a specific country using its ISO 3166-1 alpha-2 code",
+        "operationId": "list_products_api_v1_gift_cards__country_code__products_get",
+        "parameters": [
+          {
+            "name": "country_code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Country Code"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListProductsResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "api-key"
+      },
+      "apiSecret": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "api-secret"
+      }
+    },
+    "schemas": {
+      "AllocatedEsimProfileSchema": {
+        "properties": {
+          "esim_tran_no": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Esim Tran No"
+          },
+          "order_no": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Order No"
+          },
+          "transaction_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Transaction Id"
+          },
+          "imsi": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Imsi"
+          },
+          "iccid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Iccid"
+          },
+          "sms_status": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sms Status"
+          },
+          "msisdn": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Msisdn"
+          },
+          "ac": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ac"
+          },
+          "qr_code_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Qr Code Url"
+          },
+          "short_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Short Url"
+          },
+          "smdp_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Smdp Status"
+          },
+          "eid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Eid"
+          },
+          "active_type": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active Type"
+          },
+          "data_type": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data Type"
+          },
+          "activate_time": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Activate Time"
+          },
+          "installation_time": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Installation Time"
+          },
+          "expired_time": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expired Time"
+          },
+          "total_volume": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Volume"
+          },
+          "total_duration": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Duration"
+          },
+          "duration_unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Unit"
+          },
+          "order_usage": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Order Usage"
+          },
+          "esim_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Esim Status"
+          },
+          "pin": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pin"
+          },
+          "puk": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Puk"
+          },
+          "apn": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Apn"
+          },
+          "ip_export": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ip Export"
+          },
+          "support_top_up_type": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Support Top Up Type"
+          },
+          "fup_policy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fup Policy"
+          },
+          "packages": {
+            "items": {
+              "$ref": "#/components/schemas/AllocatedPackageSchema"
+            },
+            "type": "array",
+            "title": "Packages"
+          }
+        },
+        "type": "object",
+        "title": "AllocatedEsimProfileSchema"
+      },
+      "AllocatedPackageSchema": {
+        "properties": {
+          "package_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Package Name"
+          },
+          "package_code": {
+            "type": "string",
+            "title": "Package Code"
+          },
+          "slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slug"
+          },
+          "duration": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration"
+          },
+          "volume": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Volume"
+          },
+          "location_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location Code"
+          },
+          "create_time": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Create Time"
+          }
+        },
+        "type": "object",
+        "required": [
+          "package_code"
+        ],
+        "title": "AllocatedPackageSchema"
+      },
+      "BillerResellerCategory": {
+        "type": "string",
+        "enum": [
+          "betting",
+          "airtime",
+          "data"
+        ],
+        "title": "BillerResellerCategory"
+      },
+      "BillerResellerStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "processing",
+          "success",
+          "failed",
+          "cancelled"
+        ],
+        "title": "BillerResellerStatus"
+      },
+      "BillerSchema": {
+        "properties": {
+          "biller_id": {
+            "type": "string",
+            "title": "Biller Id"
+          },
+          "biller_name": {
+            "type": "string",
+            "title": "Biller Name"
+          },
+          "biller_icon": {
+            "type": "string",
+            "title": "Biller Icon"
+          },
+          "min_amount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Amount"
+          },
+          "max_amount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Amount"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "biller_id",
+          "biller_name",
+          "biller_icon"
+        ],
+        "title": "BillerSchema"
+      },
+      "CountrySchema": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "currency_code": {
+            "type": "string",
+            "title": "Currency Code"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "fee": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fee"
+          },
+          "image": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "currency_code",
+          "name",
+          "code"
+        ],
+        "title": "CountrySchema"
+      },
+      "DenominationSchema": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "priceType": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pricetype"
+          },
+          "usd": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Usd"
+          },
+          "ngn": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ngn"
+          },
+          "operatorId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Operatorid"
+          },
+          "country": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
+          },
+          "image": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "DenominationSchema"
+      },
+      "EsimOrderStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "processing",
+          "completed",
+          "failed"
+        ],
+        "title": "EsimOrderStatus"
+      },
+      "GetBillersResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/BillerSchema"
+            },
+            "type": "array",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "GetBillersResponseSchema"
+      },
+      "GetCountryResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CountrySchema"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "GetCountryResponseSchema"
+      },
+      "GetDenominationsResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/DenominationSchema"
+            },
+            "type": "object",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "GetDenominationsResponseSchema"
+      },
+      "GetItemsResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/ItemSchema"
+            },
+            "type": "array",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "GetItemsResponseSchema"
+      },
+      "GiftCardOrderStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "processing",
+          "completed",
+          "cancelled"
+        ],
+        "title": "GiftCardOrderStatus"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ItemExtInfoSchema": {
+        "properties": {
+          "validity_date": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Validity Date"
+          },
+          "item_size": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Item Size"
+          },
+          "item_description": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Item Description"
+          }
+        },
+        "type": "object",
+        "title": "ItemExtInfoSchema"
+      },
+      "ItemSchema": {
+        "properties": {
+          "biller_id": {
+            "type": "string",
+            "title": "Biller Id"
+          },
+          "item_id": {
+            "type": "string",
+            "title": "Item Id"
+          },
+          "item_name": {
+            "type": "string",
+            "title": "Item Name"
+          },
+          "amount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amount"
+          },
+          "min_amount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Amount"
+          },
+          "max_amount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Amount"
+          },
+          "is_fix_amount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Fix Amount"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "ext_info": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ItemExtInfoSchema"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "biller_id",
+          "item_id",
+          "item_name"
+        ],
+        "title": "ItemSchema"
+      },
+      "ListCountriesResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/CountrySchema"
+            },
+            "type": "array",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "ListCountriesResponseSchema"
+      },
+      "ListPackagesResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/PackageSchema"
+            },
+            "type": "array",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "ListPackagesResponseSchema"
+      },
+      "ListProductsResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/ProductSchema"
+            },
+            "type": "array",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "ListProductsResponseSchema"
+      },
+      "ListRegionsResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/RegionSchema"
+            },
+            "type": "array",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "ListRegionsResponseSchema"
+      },
+      "PackageLocationNetworkSchema": {
+        "properties": {
+          "location_name": {
+            "type": "string",
+            "title": "Location Name"
+          },
+          "location_logo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location Logo"
+          },
+          "operators": {
+            "items": {
+              "$ref": "#/components/schemas/PackageNetworkOperatorSchema"
+            },
+            "type": "array",
+            "title": "Operators"
+          }
+        },
+        "type": "object",
+        "required": [
+          "location_name"
+        ],
+        "title": "PackageLocationNetworkSchema"
+      },
+      "PackageNetworkOperatorSchema": {
+        "properties": {
+          "operator_name": {
+            "type": "string",
+            "title": "Operator Name"
+          },
+          "network_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Network Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "operator_name"
+        ],
+        "title": "PackageNetworkOperatorSchema"
+      },
+      "PackageSchema": {
+        "properties": {
+          "package_code": {
+            "type": "string",
+            "title": "Package Code"
+          },
+          "slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slug"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "currency_code": {
+            "type": "string",
+            "title": "Currency Code"
+          },
+          "price_units": {
+            "type": "integer",
+            "title": "Price Units"
+          },
+          "price_usd": {
+            "type": "number",
+            "title": "Price Usd"
+          },
+          "retail_price_units": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retail Price Units"
+          },
+          "retail_price_usd": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retail Price Usd"
+          },
+          "volume_bytes": {
+            "type": "integer",
+            "title": "Volume Bytes"
+          },
+          "duration": {
+            "type": "integer",
+            "title": "Duration"
+          },
+          "duration_unit": {
+            "type": "string",
+            "title": "Duration Unit"
+          },
+          "location": {
+            "type": "string",
+            "title": "Location"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "active_type": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active Type"
+          },
+          "favorite": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Favorite"
+          },
+          "speed": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Speed"
+          },
+          "sms_status": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sms Status"
+          },
+          "data_type": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data Type"
+          },
+          "unused_valid_time": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unused Valid Time"
+          },
+          "location_networks": {
+            "items": {
+              "$ref": "#/components/schemas/PackageLocationNetworkSchema"
+            },
+            "type": "array",
+            "title": "Location Networks"
+          }
+        },
+        "type": "object",
+        "required": [
+          "package_code",
+          "name",
+          "currency_code",
+          "price_units",
+          "price_usd",
+          "volume_bytes",
+          "duration",
+          "duration_unit",
+          "location"
+        ],
+        "title": "PackageSchema"
+      },
+      "ProductSchema": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "brandId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Brandid"
+          },
+          "productType": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProductTypeSchema"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "currency": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Currency"
+          },
+          "image": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "ProductSchema"
+      },
+      "ProductTypeSchema": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "ProductTypeSchema"
+      },
+      "RegionSchema": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "region_type": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Type"
+          },
+          "sub_locations": {
+            "items": {
+              "$ref": "#/components/schemas/RegionSchema"
+            },
+            "type": "array",
+            "title": "Sub Locations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "name"
+        ],
+        "title": "RegionSchema"
+      },
+      "ValidateAccountDataSchema": {
+        "properties": {
+          "biller": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Biller"
+          }
+        },
+        "type": "object",
+        "title": "ValidateAccountDataSchema"
+      },
+      "ValidateAccountRequestSchema": {
+        "properties": {
+          "category": {
+            "$ref": "#/components/schemas/BillerResellerCategory"
+          },
+          "recharge_account": {
+            "type": "string",
+            "maxLength": 15,
+            "title": "Recharge Account"
+          },
+          "biller_id": {
+            "type": "string",
+            "title": "Biller Id"
+          },
+          "item_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Item Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "category",
+          "recharge_account",
+          "biller_id"
+        ],
+        "title": "ValidateAccountRequestSchema"
+      },
+      "ValidateAccountResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ValidateAccountDataSchema"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "ValidateAccountResponseSchema"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "api__biller_reseller__schema__order__CreateOrderRequestSchema": {
+        "properties": {
+          "category": {
+            "$ref": "#/components/schemas/BillerResellerCategory"
+          },
+          "biller_id": {
+            "type": "string",
+            "title": "Biller Id"
+          },
+          "item_id": {
+            "type": "string",
+            "title": "Item Id"
+          },
+          "recharge_account": {
+            "type": "string",
+            "maxLength": 15,
+            "title": "Recharge Account"
+          },
+          "amount": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "Amount",
+            "description": "Amount in naira"
+          },
+          "reference": {
+            "type": "string",
+            "maxLength": 32,
+            "title": "Reference",
+            "description": "Unique merchant order reference"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 50
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          }
+        },
+        "type": "object",
+        "required": [
+          "category",
+          "biller_id",
+          "item_id",
+          "recharge_account",
+          "amount",
+          "reference"
+        ],
+        "title": "CreateOrderRequestSchema"
+      },
+      "api__biller_reseller__schema__order__CreateOrderResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "$ref": "#/components/schemas/api__biller_reseller__schema__order__OrderSchema"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "CreateOrderResponseSchema"
+      },
+      "api__biller_reseller__schema__order__GetOrderResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "$ref": "#/components/schemas/api__biller_reseller__schema__order__OrderSchema"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "GetOrderResponseSchema"
+      },
+      "api__biller_reseller__schema__order__OrderSchema": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "business_id": {
+            "type": "string",
+            "title": "Business Id"
+          },
+          "reference": {
+            "type": "string",
+            "title": "Reference"
+          },
+          "provider_reference": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider Reference"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "biller_id": {
+            "type": "string",
+            "title": "Biller Id"
+          },
+          "item_id": {
+            "type": "string",
+            "title": "Item Id"
+          },
+          "recharge_account": {
+            "type": "string",
+            "title": "Recharge Account"
+          },
+          "amount": {
+            "type": "number",
+            "title": "Amount"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BillerResellerStatus"
+          },
+          "error_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Message"
+          },
+          "wallet_transaction_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Wallet Transaction Id"
+          },
+          "created_datetime": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created Datetime"
+          },
+          "updated_datetime": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated Datetime"
+          },
+          "completed_datetime": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed Datetime"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "business_id",
+          "reference",
+          "provider_reference",
+          "category",
+          "biller_id",
+          "item_id",
+          "recharge_account",
+          "amount",
+          "status",
+          "error_message",
+          "wallet_transaction_id",
+          "created_datetime",
+          "updated_datetime",
+          "completed_datetime"
+        ],
+        "title": "OrderSchema"
+      },
+      "api__esim__schema__CreateOrderRequestSchema": {
+        "properties": {
+          "reference": {
+            "type": "string",
+            "maxLength": 64,
+            "title": "Reference",
+            "description": "Unique merchant order reference"
+          },
+          "package_code": {
+            "type": "string",
+            "maxLength": 64,
+            "title": "Package Code"
+          },
+          "quantity": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "Quantity",
+            "default": 1
+          }
+        },
+        "type": "object",
+        "required": [
+          "reference",
+          "package_code"
+        ],
+        "title": "CreateOrderRequestSchema"
+      },
+      "api__esim__schema__CreateOrderResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "$ref": "#/components/schemas/api__esim__schema__OrderSchema"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "CreateOrderResponseSchema"
+      },
+      "api__esim__schema__GetOrderResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "$ref": "#/components/schemas/api__esim__schema__OrderSchema"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "GetOrderResponseSchema"
+      },
+      "api__esim__schema__OrderSchema": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "reference": {
+            "type": "string",
+            "title": "Reference"
+          },
+          "provider_order_no": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider Order No"
+          },
+          "provider_transaction_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider Transaction Id"
+          },
+          "package_code": {
+            "type": "string",
+            "title": "Package Code"
+          },
+          "package_slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Package Slug"
+          },
+          "package_name": {
+            "type": "string",
+            "title": "Package Name"
+          },
+          "location": {
+            "type": "string",
+            "title": "Location"
+          },
+          "currency_code": {
+            "type": "string",
+            "title": "Currency Code"
+          },
+          "quantity": {
+            "type": "integer",
+            "title": "Quantity"
+          },
+          "amount_usd": {
+            "type": "number",
+            "title": "Amount Usd"
+          },
+          "amount_naira": {
+            "type": "number",
+            "title": "Amount Naira"
+          },
+          "status": {
+            "$ref": "#/components/schemas/EsimOrderStatus"
+          },
+          "error_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Message"
+          },
+          "profiles": {
+            "items": {
+              "$ref": "#/components/schemas/AllocatedEsimProfileSchema"
+            },
+            "type": "array",
+            "title": "Profiles"
+          },
+          "created_datetime": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created Datetime"
+          },
+          "updated_datetime": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated Datetime"
+          },
+          "completed_datetime": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed Datetime"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "reference",
+          "provider_order_no",
+          "provider_transaction_id",
+          "package_code",
+          "package_slug",
+          "package_name",
+          "location",
+          "currency_code",
+          "quantity",
+          "amount_usd",
+          "amount_naira",
+          "status",
+          "error_message",
+          "created_datetime",
+          "updated_datetime",
+          "completed_datetime"
+        ],
+        "title": "OrderSchema"
+      },
+      "api__gift_cards__schema__order__CreateOrderRequestSchema": {
+        "properties": {
+          "reference": {
+            "type": "string",
+            "maxLength": 64,
+            "title": "Reference",
+            "description": "Unique merchant order reference"
+          },
+          "operator_id": {
+            "type": "string",
+            "title": "Operator Id"
+          },
+          "product_id": {
+            "type": "string",
+            "title": "Product Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "reference",
+          "operator_id",
+          "product_id"
+        ],
+        "title": "CreateOrderRequestSchema"
+      },
+      "api__gift_cards__schema__order__CreateOrderResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "$ref": "#/components/schemas/api__gift_cards__schema__order__OrderSchema"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "CreateOrderResponseSchema"
+      },
+      "api__gift_cards__schema__order__GetOrderResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "$ref": "#/components/schemas/api__gift_cards__schema__order__OrderSchema"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "GetOrderResponseSchema"
+      },
+      "api__gift_cards__schema__order__OrderSchema": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "business_id": {
+            "type": "string",
+            "title": "Business Id"
+          },
+          "reference": {
+            "type": "string",
+            "title": "Reference"
+          },
+          "billpoint_transaction_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Billpoint Transaction Id"
+          },
+          "operator_id": {
+            "type": "string",
+            "title": "Operator Id"
+          },
+          "product_id": {
+            "type": "string",
+            "title": "Product Id"
+          },
+          "product_name": {
+            "type": "string",
+            "title": "Product Name"
+          },
+          "country": {
+            "type": "string",
+            "title": "Country"
+          },
+          "amount_naira": {
+            "type": "number",
+            "title": "Amount Naira"
+          },
+          "amount_usd": {
+            "type": "number",
+            "title": "Amount Usd"
+          },
+          "redeem_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Redeem Code"
+          },
+          "serial_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Serial Number"
+          },
+          "status": {
+            "$ref": "#/components/schemas/GiftCardOrderStatus"
+          },
+          "error_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Message"
+          },
+          "wallet_transaction_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Wallet Transaction Id"
+          },
+          "created_datetime": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created Datetime"
+          },
+          "updated_datetime": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated Datetime"
+          },
+          "completed_datetime": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed Datetime"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "business_id",
+          "reference",
+          "billpoint_transaction_id",
+          "operator_id",
+          "product_id",
+          "product_name",
+          "country",
+          "amount_naira",
+          "amount_usd",
+          "redeem_code",
+          "serial_number",
+          "status",
+          "error_message",
+          "wallet_transaction_id",
+          "created_datetime",
+          "updated_datetime",
+          "completed_datetime"
+        ],
+        "title": "OrderSchema"
+      }
+    }
+  }
+}

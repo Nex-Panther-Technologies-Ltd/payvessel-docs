@@ -1,0 +1,36 @@
+---
+title: "Get Country"
+description: "Retrieve a single gift card country by its numeric ID"
+sidebarTitle: "Get Country"
+---
+
+Retrieve details for a single country by its numeric ID.
+
+## Usage
+
+```bash
+curl https://api.payvessel.com/api/v1/gift-cards/countries/{country_id} \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY"
+```
+
+## Path parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `country_id` | integer | Yes | The numeric country ID (from [List Countries](/gift-cards/list-countries)) |
+
+## Response fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | integer | Numeric country ID |
+| `name` | string | Country name |
+| `code` | string | ISO 3166-1 alpha-2 code |
+| `currency_code` | string | Local currency code |
+| `fee` | integer or null | Processing fee |
+| `image` | string or null | Country flag/image URL |
+
+<Card title="API Reference" icon="code" href="/api-reference/gift-cards/get-country">
+  Full request/response details and Try it
+</Card>

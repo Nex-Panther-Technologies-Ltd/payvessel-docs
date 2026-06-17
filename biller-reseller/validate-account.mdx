@@ -1,0 +1,42 @@
+---
+title: "Validate Recharge Account"
+description: "Validate a customer's recharge account before placing a biller reseller order"
+sidebarTitle: "Validate Account"
+---
+
+Validate a customer's recharge account before placing an order. This confirms that the account exists with the provider and prevents failed orders.
+
+## Usage
+
+```bash
+curl -X POST https://api.payvessel.com/api/v1/biller-reseller/validate-account \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "category": "betting",
+    "recharge_account": "12345678",
+    "biller_id": "BET9JA_BILLER_ID"
+  }'
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `category` | string | Yes | One of: `airtime`, `data`, `betting` |
+| `recharge_account` | string | Yes | The customer's account (phone number or betting ID). Max 15 characters. |
+| `biller_id` | string | Yes | The biller to validate against |
+| `item_id` | string | No | Optional item ID for context |
+
+## Response
+
+The response `data` object contains:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `biller` | string or null | The resolved biller/account name from the provider |
+
+<Card title="API Reference" icon="code" href="/api-reference/biller-reseller/validate-account">
+  Full request/response details and Try it
+</Card>
