@@ -1278,7 +1278,7 @@
             "type": "string",
             "title": "Name"
           },
-          "priceType": {
+          "price_type": {
             "anyOf": [
               {
                 "type": "string"
@@ -1287,7 +1287,7 @@
                 "type": "null"
               }
             ],
-            "title": "Pricetype"
+            "title": "Price Type"
           },
           "usd": {
             "anyOf": [
@@ -1311,7 +1311,7 @@
             ],
             "title": "Ngn"
           },
-          "operatorId": {
+          "operator_id": {
             "anyOf": [
               {
                 "type": "string"
@@ -1320,7 +1320,7 @@
                 "type": "null"
               }
             ],
-            "title": "Operatorid"
+            "title": "Operator Id"
           },
           "country": {
             "anyOf": [
@@ -1951,7 +1951,7 @@
             "type": "string",
             "title": "Name"
           },
-          "brandId": {
+          "brand_id": {
             "anyOf": [
               {
                 "type": "string"
@@ -1960,9 +1960,9 @@
                 "type": "null"
               }
             ],
-            "title": "Brandid"
+            "title": "Brand Id"
           },
-          "productType": {
+          "product_type": {
             "anyOf": [
               {
                 "$ref": "#/components/schemas/ProductTypeSchema"
