@@ -1,0 +1,45 @@
+---
+title: "Verify Order"
+description: "Verify the status of a biller reseller order by its merchant reference"
+sidebarTitle: "Verify Order"
+---
+
+Verify the status of a biller reseller order using your merchant reference. If the order is not yet final, PayVessel checks for the latest status before responding.
+
+## Usage
+
+```bash
+curl https://api.payvessel.com/vaas/api/v1/biller-reseller/orders/verify/{reference} \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY"
+```
+
+## Path parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `reference` | string | Yes | Your unique merchant order reference |
+
+## Response fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | string (uuid) | PayVessel order ID |
+| `business_id` | string | Your business ID |
+| `reference` | string | Your merchant reference |
+| `provider_reference` | string or null | Reference from the upstream provider |
+| `category` | string | `airtime`, `data`, or `betting` |
+| `biller_id` | string | The biller used |
+| `item_id` | string | The item purchased |
+| `recharge_account` | string | The customer's account |
+| `amount` | number | Amount charged in naira |
+| `status` | string | `pending`, `processing`, `success`, `failed`, or `cancelled` |
+| `error_message` | string or null | Error details if the order failed |
+| `wallet_transaction_id` | string or null | Associated wallet transaction |
+| `created_datetime` | datetime | When the order was created |
+| `updated_datetime` | datetime | Last status update |
+| `completed_datetime` | datetime or null | When the order reached a terminal state |
+
+<Card title="API Reference" icon="code" href="/api-reference/biller-reseller/verify-order">
+  Full request/response details and Try it
+</Card>

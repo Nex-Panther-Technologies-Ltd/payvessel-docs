@@ -20,231 +20,6 @@
     }
   ],
   "paths": {
-    "/vaas/api/v1/biller-reseller/billers": {
-      "get": {
-        "tags": [
-          "Biller Reseller",
-          "Biller Reseller"
-        ],
-        "summary": "Get Billers",
-        "description": "Get available billers for a given category",
-        "operationId": "get_billers_api_v1_biller_reseller_billers_get",
-        "parameters": [
-          {
-            "name": "category",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/BillerResellerCategory"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetBillersResponseSchema"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/vaas/api/v1/biller-reseller/billers/{biller_id}/items": {
-      "get": {
-        "tags": [
-          "Biller Reseller",
-          "Biller Reseller"
-        ],
-        "summary": "Get Biller Items",
-        "description": "Get available items/packages for a specific biller and category",
-        "operationId": "get_biller_items_api_v1_biller_reseller_billers__biller_id__items_get",
-        "parameters": [
-          {
-            "name": "biller_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Biller Id"
-            }
-          },
-          {
-            "name": "category",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/BillerResellerCategory"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetItemsResponseSchema"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/vaas/api/v1/biller-reseller/orders": {
-      "post": {
-        "tags": [
-          "Biller Reseller",
-          "Biller Reseller"
-        ],
-        "summary": "Create Biller Reseller Order",
-        "description": "Create a biller reseller order and charge the merchant wallet",
-        "operationId": "create_order_api_v1_biller_reseller_orders_post",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/api__biller_reseller__schema__order__CreateOrderRequestSchema"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/api__biller_reseller__schema__order__CreateOrderResponseSchema"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/vaas/api/v1/biller-reseller/orders/{order_id}": {
-      "get": {
-        "tags": [
-          "Biller Reseller",
-          "Biller Reseller"
-        ],
-        "summary": "Get Order",
-        "description": "Get a biller reseller order by ID",
-        "operationId": "get_order_api_v1_biller_reseller_orders__order_id__get",
-        "parameters": [
-          {
-            "name": "order_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Order Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/api__biller_reseller__schema__order__GetOrderResponseSchema"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/vaas/api/v1/biller-reseller/validate-account": {
-      "post": {
-        "tags": [
-          "Biller Reseller",
-          "Biller Reseller"
-        ],
-        "summary": "Validate Recharge Account",
-        "description": "Validate a customer recharge account (e.g. betting account ID) before placing an order",
-        "operationId": "validate_account_api_v1_biller_reseller_validate_account_post",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ValidateAccountRequestSchema"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ValidateAccountResponseSchema"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/vaas/api/v1/esim/orders": {
       "post": {
         "tags": [
@@ -1462,6 +1237,767 @@
           }
         }
       }
+    },
+    "/vaas/api/v1/biller-reseller/billers": {
+      "get": {
+        "tags": [
+          "Biller Reseller",
+          "Biller Reseller"
+        ],
+        "summary": "Get Billers",
+        "description": "Get available billers",
+        "operationId": "get_billers_api_v1_biller_reseller_billers_get",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Key"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Secret"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBillersResponseSchema"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "null"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vaas/api/v1/biller-reseller/billers/{biller_id}/items": {
+      "get": {
+        "tags": [
+          "Biller Reseller",
+          "Biller Reseller"
+        ],
+        "summary": "Get Biller Items",
+        "description": "Get available items/packages for a specific biller",
+        "operationId": "get_biller_items_api_v1_biller_reseller_billers__biller_id__items_get",
+        "parameters": [
+          {
+            "name": "biller_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Biller Id"
+            }
+          },
+          {
+            "name": "api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Key"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Secret"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetItemsResponseSchema"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "null"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vaas/api/v1/biller-reseller/validate-account": {
+      "post": {
+        "tags": [
+          "Biller Reseller",
+          "Biller Reseller"
+        ],
+        "summary": "Validate Recharge Account",
+        "description": "Validate a customer recharge account (e.g. betting account ID) before placing an order",
+        "operationId": "validate_account_api_v1_biller_reseller_validate_account_post",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Key"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Secret"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateAccountRequestSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateAccountResponseSchema"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "Unable to reach upstream service",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "null"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "null"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vaas/api/v1/biller-reseller/orders": {
+      "post": {
+        "tags": [
+          "Biller Reseller",
+          "Biller Reseller"
+        ],
+        "summary": "Create Biller Reseller Order",
+        "description": "Create a biller reseller order and charge the merchant wallet",
+        "operationId": "create_order_api_v1_biller_reseller_orders_post",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Key"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Secret"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/api__biller_reseller__schema__order__CreateOrderRequestSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api__biller_reseller__schema__order__CreateOrderResponseSchema"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request \u2014 duplicate reference, invalid biller/item, invalid amount, insufficient balance, or wallet charge failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "null"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "Unable to reach upstream service or purchase failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "null"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "null"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vaas/api/v1/biller-reseller/orders/verify/{reference}": {
+      "get": {
+        "tags": [
+          "Biller Reseller",
+          "Biller Reseller"
+        ],
+        "summary": "Verify Order",
+        "description": "Verify the status of an order by its reference. Checks the provider for the latest status if the order is not yet final.",
+        "operationId": "verify_order_api_v1_biller_reseller_orders_verify__reference__get",
+        "parameters": [
+          {
+            "name": "reference",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Reference"
+            }
+          },
+          {
+            "name": "api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Key"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Secret"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api__biller_reseller__schema__order__GetOrderResponseSchema"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Order not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "null"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "Unable to reach upstream service",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "null"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "null"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vaas/api/v1/biller-reseller/orders/{order_id}": {
+      "get": {
+        "tags": [
+          "Biller Reseller",
+          "Biller Reseller"
+        ],
+        "summary": "Get Order",
+        "description": "Get a biller reseller order by ID",
+        "operationId": "get_order_api_v1_biller_reseller_orders__order_id__get",
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Order Id"
+            }
+          },
+          {
+            "name": "api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Key"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Secret"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api__biller_reseller__schema__order__GetOrderResponseSchema"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Order not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "null"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "null"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1877,108 +2413,6 @@
           "package_code"
         ],
         "title": "AllocatedPackageSchema"
-      },
-      "BillerResellerCategory": {
-        "type": "string",
-        "enum": [
-          "betting",
-          "airtime",
-          "data"
-        ],
-        "title": "BillerResellerCategory"
-      },
-      "BillerResellerStatus": {
-        "type": "string",
-        "enum": [
-          "pending",
-          "processing",
-          "success",
-          "failed",
-          "cancelled"
-        ],
-        "title": "BillerResellerStatus"
-      },
-      "BillerSchema": {
-        "properties": {
-          "biller_id": {
-            "type": "string",
-            "title": "Biller Id"
-          },
-          "biller_name": {
-            "type": "string",
-            "title": "Biller Name"
-          },
-          "biller_icon": {
-            "type": "string",
-            "title": "Biller Icon"
-          },
-          "min_amount": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Min Amount"
-          },
-          "max_amount": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Max Amount"
-          },
-          "status": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Status"
-          }
-        },
-        "type": "object",
-        "required": [
-          "biller_id",
-          "biller_name",
-          "biller_icon"
-        ],
-        "title": "BillerSchema"
-      },
-      "GetBillersResponseSchema": {
-        "properties": {
-          "status": {
-            "type": "boolean",
-            "title": "Status"
-          },
-          "message": {
-            "type": "string",
-            "title": "Message"
-          },
-          "data": {
-            "items": {
-              "$ref": "#/components/schemas/BillerSchema"
-            },
-            "type": "array",
-            "title": "Data"
-          }
-        },
-        "type": "object",
-        "required": [
-          "status",
-          "message",
-          "data"
-        ],
-        "title": "GetBillersResponseSchema"
       },
       "GetItemsResponseSchema": {
         "properties": {
@@ -3063,6 +3497,341 @@
           "cancelled"
         ],
         "title": "GiftCardOrderStatus"
+      },
+      "BillerResellerCategory": {
+        "type": "string",
+        "enum": [
+          "betting",
+          "airtime",
+          "data"
+        ],
+        "title": "BillerResellerCategory"
+      },
+      "BillerResellerStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "processing",
+          "success",
+          "failed",
+          "cancelled"
+        ],
+        "title": "BillerResellerStatus"
+      },
+      "BillerSchema": {
+        "properties": {
+          "biller_id": {
+            "type": "string",
+            "title": "Biller Id"
+          },
+          "biller_name": {
+            "type": "string",
+            "title": "Biller Name"
+          },
+          "biller_icon": {
+            "type": "string",
+            "title": "Biller Icon"
+          },
+          "min_amount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Amount"
+          },
+          "max_amount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Amount"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "biller_id",
+          "biller_name",
+          "biller_icon"
+        ],
+        "title": "BillerSchema"
+      },
+      "GetBillersResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/BillerSchema"
+            },
+            "type": "array",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "GetBillersResponseSchema"
+      },
+      "api__biller_reseller__schema__order__CreateOrderRequestSchema": {
+        "properties": {
+          "biller_id": {
+            "type": "string",
+            "title": "Biller Id"
+          },
+          "item_id": {
+            "type": "string",
+            "title": "Item Id"
+          },
+          "recharge_account": {
+            "type": "string",
+            "maxLength": 15,
+            "title": "Recharge Account"
+          },
+          "amount": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "Amount",
+            "description": "Amount in naira"
+          },
+          "reference": {
+            "type": "string",
+            "maxLength": 32,
+            "title": "Reference",
+            "description": "Unique merchant order reference"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 50
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "webhook_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Webhook Url",
+            "description": "Webhook URL for order status notifications"
+          }
+        },
+        "type": "object",
+        "required": [
+          "biller_id",
+          "item_id",
+          "recharge_account",
+          "amount",
+          "reference"
+        ],
+        "title": "CreateOrderRequestSchema"
+      },
+      "api__biller_reseller__schema__order__CreateOrderResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "$ref": "#/components/schemas/api__biller_reseller__schema__order__OrderSchema"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "CreateOrderResponseSchema"
+      },
+      "api__biller_reseller__schema__order__GetOrderResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "$ref": "#/components/schemas/api__biller_reseller__schema__order__OrderSchema"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "GetOrderResponseSchema"
+      },
+      "api__biller_reseller__schema__order__OrderSchema": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "business_id": {
+            "type": "string",
+            "title": "Business Id"
+          },
+          "reference": {
+            "type": "string",
+            "title": "Reference"
+          },
+          "provider_reference": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider Reference"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "biller_id": {
+            "type": "string",
+            "title": "Biller Id"
+          },
+          "item_id": {
+            "type": "string",
+            "title": "Item Id"
+          },
+          "recharge_account": {
+            "type": "string",
+            "title": "Recharge Account"
+          },
+          "amount": {
+            "type": "number",
+            "title": "Amount"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BillerResellerStatus"
+          },
+          "error_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Message"
+          },
+          "wallet_transaction_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Wallet Transaction Id"
+          },
+          "created_datetime": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created Datetime"
+          },
+          "updated_datetime": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated Datetime"
+          },
+          "completed_datetime": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed Datetime"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "business_id",
+          "reference",
+          "provider_reference",
+          "category",
+          "biller_id",
+          "item_id",
+          "recharge_account",
+          "amount",
+          "status",
+          "error_message",
+          "wallet_transaction_id",
+          "created_datetime",
+          "updated_datetime",
+          "completed_datetime"
+        ],
+        "title": "OrderSchema"
       }
     }
   }

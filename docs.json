@@ -140,7 +140,8 @@
                   "biller-reseller/get-biller-items",
                   "biller-reseller/validate-account",
                   "biller-reseller/create-order",
-                  "biller-reseller/get-order"
+                  "biller-reseller/get-order",
+                  "biller-reseller/verify-order"
                 ]
               },
               {
@@ -260,7 +261,8 @@
                   "api-reference/biller-reseller/get-biller-items",
                   "api-reference/biller-reseller/validate-account",
                   "api-reference/biller-reseller/create-order",
-                  "api-reference/biller-reseller/get-order"
+                  "api-reference/biller-reseller/get-order",
+                  "api-reference/biller-reseller/verify-order"
                 ]
               },
               {

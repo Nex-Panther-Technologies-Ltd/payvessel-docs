@@ -4,7 +4,7 @@ description: "Create a biller reseller order to purchase airtime, data, or betti
 sidebarTitle: "Create Order"
 ---
 
-Create a biller reseller order. PayVessel debits your business wallet and submits the request to the provider for fulfillment.
+Create a biller reseller order. PayVessel debits your business wallet and submits the request for fulfillment.
 
 ## Usage
 
@@ -15,7 +15,6 @@ curl -X POST https://api.payvessel.com/vaas/api/v1/biller-reseller/orders \
   -H "Content-Type: application/json" \
   -d '{
     "reference": "bet-order-001",
-    "category": "betting",
     "biller_id": "BET9JA_BILLER_ID",
     "item_id": "BET9JA_ITEM_ID",
     "recharge_account": "12345678",
@@ -27,12 +26,14 @@ curl -X POST https://api.payvessel.com/vaas/api/v1/biller-reseller/orders \
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `reference` | string | Yes | Your unique merchant order reference (max 64 characters) |
-| `category` | string | Yes | One of: `airtime`, `data`, `betting` |
 | `biller_id` | string | Yes | The biller to purchase from |
 | `item_id` | string | Yes | The specific item/package to purchase |
 | `recharge_account` | string | Yes | Customer's phone number or account ID (max 15 characters) |
-| `amount` | number | Yes | Amount to charge in naira |
+| `amount` | integer | Yes | Amount to charge in naira |
+| `reference` | string | Yes | Your unique merchant order reference (max 32 characters) |
+| `title` | string | No | Order title (max 50 characters) |
+| `description` | string | No | Order description (max 200 characters) |
+| `webhook_url` | string | No | Webhook URL for order status notifications (max 512 characters) |
 
 <Warning>
   The order amount is debited from your business wallet immediately. Make sure you have sufficient balance before creating an order.
@@ -53,7 +54,7 @@ The response returns an order object. Key fields:
 
 ## Next step
 
-Poll [Get Order](/biller-reseller/get-order) to check whether the order has been fulfilled.
+Use [Verify Order](/biller-reseller/verify-order) or [Get Order](/biller-reseller/get-order) to check whether the order has been fulfilled.
 
 <Card title="API Reference" icon="code" href="/api-reference/biller-reseller/create-order">
   Full request/response details and Try it

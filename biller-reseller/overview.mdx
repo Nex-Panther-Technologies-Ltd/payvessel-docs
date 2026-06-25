@@ -28,13 +28,13 @@ The PayVessel **biller reseller API** lets you resell **airtime**, **data bundle
 2. **List biller items** to get the specific packages or denominations for that biller.
 3. **Validate the recharge account** to confirm the customer's account exists before placing an order.
 4. **Create an order** to purchase the item; PayVessel debits your wallet and fulfils the request.
-5. **Get order** to check the status or poll for completion.
+5. **Receive a webhook** when the order status changes (e.g. success, failed).
+6. **Verify order** or **get order** to check the status or retrieve order details.
 
 ```mermaid
 sequenceDiagram
     participant You
     participant PayVessel
-    participant Biller
 
     You->>PayVessel: GET /billers?category=betting
     PayVessel-->>You: List of billers
@@ -43,21 +43,18 @@ sequenceDiagram
     You->>PayVessel: POST /validate-account
     PayVessel-->>You: Account validated
     You->>PayVessel: POST /orders
-    PayVessel->>Biller: Fulfil order
-    Biller-->>PayVessel: Confirmation
     PayVessel-->>You: Order created (status: processing)
-    You->>PayVessel: GET /orders/{order_id}
-    PayVessel-->>You: Order status (success/failed)
+    PayVessel--)You: Webhook (order status update)
 ```
 
 ## Order statuses
 
 | Status | Description |
 | --- | --- |
-| `pending` | Order received, not yet submitted to provider |
-| `processing` | Submitted to provider, awaiting confirmation |
+| `pending` | Order received, not yet being processed |
+| `processing` | Order is being fulfilled |
 | `success` | Fulfilled successfully |
-| `failed` | Provider rejected or could not fulfil the order |
+| `failed` | Order could not be fulfilled |
 | `cancelled` | Order was cancelled |
 
 ## Base path
