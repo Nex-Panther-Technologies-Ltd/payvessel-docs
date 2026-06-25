@@ -19,14 +19,14 @@ The PayVessel **gift card API** lets you sell **digital gift cards** from global
 1. **List countries** to discover which countries have gift card products.
 2. **List operators** for a country to see available gift card brands.
 3. **List products** for an operator to see available values and pricing.
-4. **Purchase a gift card** by creating an order; PayVessel debits your wallet and returns the redemption code.
-5. **Verify order** or **get order** to retrieve the gift card details (redeem code, serial number).
+4. **Purchase a gift card** by creating an order; PayVessel debits your wallet.
+5. **Receive a webhook** when the order status changes (e.g. completed, cancelled).
+6. **Verify order** or **get order** to retrieve the gift card details (redeem code, serial number).
 
 ```mermaid
 sequenceDiagram
     participant You
     participant PayVessel
-    participant Provider
 
     You->>PayVessel: GET /countries
     PayVessel-->>You: Available countries
@@ -35,17 +35,16 @@ sequenceDiagram
     You->>PayVessel: GET /operators/{operator_id}/products
     PayVessel-->>You: Products and pricing
     You->>PayVessel: POST /orders
-    PayVessel->>Provider: Purchase gift card
-    Provider-->>PayVessel: Redeem code
-    PayVessel-->>You: Order with redeem code
+    PayVessel-->>You: Order created
+    PayVessel--)You: Webhook (order status update)
 ```
 
 ## Order statuses
 
 | Status | Description |
 | --- | --- |
-| `pending` | Order received, not yet submitted to provider |
-| `processing` | Submitted to provider, awaiting fulfillment |
+| `pending` | Order received, not yet being processed |
+| `processing` | Order is being fulfilled |
 | `completed` | Gift card purchased; redeem code available |
 | `cancelled` | Order was cancelled |
 
