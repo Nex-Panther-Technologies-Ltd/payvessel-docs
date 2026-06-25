@@ -1,15 +1,15 @@
 ---
 title: "List Products"
-description: "Fetch all gift card products available in a specific country"
+description: "Fetch all available products for a gift card operator"
 sidebarTitle: "List Products"
 ---
 
-Fetch all gift card products (brands) available in a specific country. Use the ISO 3166-1 alpha-2 country code from [List Countries](/gift-cards/list-countries).
+Fetch all available products (denominations/values) for a given gift card operator. This returns the specific card values your users can purchase, along with USD and NGN pricing.
 
 ## Usage
 
 ```bash
-curl https://api.payvessel.com/vaas/api/v1/gift-cards/US/products \
+curl https://api.payvessel.com/vaas/api/v1/gift-cards/operators/{operator_id}/products \
   -H "api-key: YOUR_API_KEY" \
   -H "api-secret: YOUR_SECRET_KEY"
 ```
@@ -18,24 +18,26 @@ curl https://api.payvessel.com/vaas/api/v1/gift-cards/US/products \
 
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
-| `country_code` | string | Yes | ISO 3166-1 alpha-2 code (e.g. `US`, `GB`, `NG`) |
+| `operator_id` | string | Yes | The operator ID from [List Operators](/gift-cards/list-operators) |
 
 ## Response fields
 
-Each product includes:
+The `data` object is a map of product IDs to product objects:
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `id` | string | Product/operator ID (used to fetch denominations and create orders) |
-| `name` | string | Brand name (e.g. "Amazon", "iTunes", "Steam") |
-| `brand_id` | string or null | Brand identifier |
-| `product_type` | object or null | Product type with `id` and `name` fields |
-| `currency` | string or null | Product currency |
-| `image` | string or null | Brand logo URL |
+| `id` | string | Product ID (used as `product_id` when creating an order) |
+| `name` | string | Display name (e.g. "$25 Amazon Gift Card") |
+| `price_type` | string or null | Pricing type (e.g. "FIXED", "RANGE") |
+| `usd` | number or null | Price in USD |
+| `ngn` | number or null | Price in NGN |
+| `operator_id` | string or null | Parent operator ID |
+| `country` | string or null | Country code |
+| `image` | string or null | Card image URL |
 
 ## Next step
 
-Use the product `id` as the `operator_id` to [get denominations](/gift-cards/get-denominations).
+Use the product `id` as the `product_id` when [purchasing a gift card](/gift-cards/purchase).
 
 <Card title="API Reference" icon="code" href="/api-reference/gift-cards/list-products">
   Full request/response details and Try it

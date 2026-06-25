@@ -484,6 +484,40 @@
         "summary": "List Countries",
         "description": "List all countries that have gift card products available",
         "operationId": "list_countries_api_v1_gift_cards_countries_get",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Key"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Secret"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -491,6 +525,64 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ListCountriesResponseSchema"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "Unable to reach upstream service",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-06-25T12:00:00+00:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-06-25T12:00:00+00:00"
+                    }
+                  }
                 }
               }
             }
@@ -526,6 +618,38 @@
               "type": "integer",
               "title": "Country Id"
             }
+          },
+          {
+            "name": "api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Key"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Secret"
+            }
           }
         ],
         "responses": {
@@ -535,6 +659,332 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GetCountryResponseSchema"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "Unable to reach upstream service",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-06-25T12:00:00+00:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-06-25T12:00:00+00:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vaas/api/v1/gift-cards/countries/{country_code}/operators": {
+      "get": {
+        "tags": [
+          "Gift Cards",
+          "Gift Cards"
+        ],
+        "summary": "List Gift Card Operators by Country",
+        "description": "Fetch all gift card operators available in a specific country using its ISO 3166-1 alpha-2 code",
+        "operationId": "list_operators_api_v1_gift_cards_countries__country_code__operators_get",
+        "parameters": [
+          {
+            "name": "country_code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Country Code"
+            }
+          },
+          {
+            "name": "api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Key"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Secret"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListOperatorsResponseSchema"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "Unable to reach upstream service",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-06-25T12:00:00+00:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-06-25T12:00:00+00:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vaas/api/v1/gift-cards/operators/{operator_id}/products": {
+      "get": {
+        "tags": [
+          "Gift Cards",
+          "Gift Cards"
+        ],
+        "summary": "List Products by Operator",
+        "description": "Fetch all available products for a given gift card operator ID",
+        "operationId": "list_products_api_v1_gift_cards_operators__operator_id__products_get",
+        "parameters": [
+          {
+            "name": "operator_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Operator Id"
+            }
+          },
+          {
+            "name": "api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Key"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Secret"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListProductsResponseSchema"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "Unable to reach upstream service",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-06-25T12:00:00+00:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-06-25T12:00:00+00:00"
+                    }
+                  }
                 }
               }
             }
@@ -561,6 +1011,40 @@
         "summary": "Purchase Gift Card",
         "description": "Purchase a gift card and charge the business managed wallet",
         "operationId": "create_order_api_v1_gift_cards_orders_post",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Key"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Secret"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -578,6 +1062,93 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/api__gift_cards__schema__order__CreateOrderResponseSchema"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request \u2014 duplicate reference, product not found, insufficient balance, or wallet charge failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-06-25T12:00:00+00:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "Unable to reach upstream service or purchase failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-06-25T12:00:00+00:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-06-25T12:00:00+00:00"
+                    }
+                  }
                 }
               }
             }
@@ -613,6 +1184,38 @@
               "type": "string",
               "title": "Order Id"
             }
+          },
+          {
+            "name": "api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Key"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Secret"
+            }
           }
         ],
         "responses": {
@@ -626,46 +1229,60 @@
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
+          "404": {
+            "description": "Order not found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-06-25T12:00:00+00:00"
+                    }
+                  }
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/vaas/api/v1/gift-cards/products/{operator_id}/denominations": {
-      "get": {
-        "tags": [
-          "Gift Cards",
-          "Gift Cards"
-        ],
-        "summary": "Get Product Denominations",
-        "description": "Fetch all available denominations for a given gift card operator ID",
-        "operationId": "get_denominations_api_v1_gift_cards_products__operator_id__denominations_get",
-        "parameters": [
-          {
-            "name": "operator_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Operator Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
+          },
+          "500": {
+            "description": "Internal server error",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetDenominationsResponseSchema"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-06-25T12:00:00+00:00"
+                    }
+                  }
                 }
               }
             }
@@ -683,23 +1300,55 @@
         }
       }
     },
-    "/vaas/api/v1/gift-cards/{country_code}/products": {
+    "/vaas/api/v1/gift-cards/orders/verify/{reference}": {
       "get": {
         "tags": [
           "Gift Cards",
           "Gift Cards"
         ],
-        "summary": "List Gift Cards by Country",
-        "description": "Fetch all gift card products available in a specific country using its ISO 3166-1 alpha-2 code",
-        "operationId": "list_products_api_v1_gift_cards__country_code__products_get",
+        "summary": "Verify Order",
+        "description": "Verify the status of a gift card order by its reference. Checks the provider for the latest status if the order is not yet final.",
+        "operationId": "verify_order_api_v1_gift_cards_orders_verify__reference__get",
         "parameters": [
           {
-            "name": "country_code",
+            "name": "reference",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string",
-              "title": "Country Code"
+              "title": "Reference"
+            }
+          },
+          {
+            "name": "api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Key"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Secret"
             }
           }
         ],
@@ -709,7 +1358,94 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ListProductsResponseSchema"
+                  "$ref": "#/components/schemas/api__gift_cards__schema__order__GetOrderResponseSchema"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Order not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-06-25T12:00:00+00:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "Unable to reach upstream service",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-06-25T12:00:00+00:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-06-25T12:00:00+00:00"
+                    }
+                  }
                 }
               }
             }
@@ -1218,150 +1954,6 @@
         ],
         "title": "BillerSchema"
       },
-      "CountrySchema": {
-        "properties": {
-          "id": {
-            "type": "integer",
-            "title": "Id"
-          },
-          "currency_code": {
-            "type": "string",
-            "title": "Currency Code"
-          },
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "code": {
-            "type": "string",
-            "title": "Code"
-          },
-          "fee": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Fee"
-          },
-          "image": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Image"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "currency_code",
-          "name",
-          "code"
-        ],
-        "title": "CountrySchema"
-      },
-      "DenominationSchema": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "title": "Id"
-          },
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "price_type": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Price Type"
-          },
-          "usd": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Usd"
-          },
-          "ngn": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Ngn"
-          },
-          "operator_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Operator Id"
-          },
-          "country": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Country"
-          },
-          "image": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Image"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "name"
-        ],
-        "title": "DenominationSchema"
-      },
-      "EsimOrderStatus": {
-        "type": "string",
-        "enum": [
-          "pending",
-          "processing",
-          "completed",
-          "failed"
-        ],
-        "title": "EsimOrderStatus"
-      },
       "GetBillersResponseSchema": {
         "properties": {
           "status": {
@@ -1388,54 +1980,6 @@
         ],
         "title": "GetBillersResponseSchema"
       },
-      "GetCountryResponseSchema": {
-        "properties": {
-          "status": {
-            "type": "boolean",
-            "title": "Status"
-          },
-          "message": {
-            "type": "string",
-            "title": "Message"
-          },
-          "data": {
-            "$ref": "#/components/schemas/CountrySchema"
-          }
-        },
-        "type": "object",
-        "required": [
-          "status",
-          "message",
-          "data"
-        ],
-        "title": "GetCountryResponseSchema"
-      },
-      "GetDenominationsResponseSchema": {
-        "properties": {
-          "status": {
-            "type": "boolean",
-            "title": "Status"
-          },
-          "message": {
-            "type": "string",
-            "title": "Message"
-          },
-          "data": {
-            "additionalProperties": {
-              "$ref": "#/components/schemas/DenominationSchema"
-            },
-            "type": "object",
-            "title": "Data"
-          }
-        },
-        "type": "object",
-        "required": [
-          "status",
-          "message",
-          "data"
-        ],
-        "title": "GetDenominationsResponseSchema"
-      },
       "GetItemsResponseSchema": {
         "properties": {
           "status": {
@@ -1461,16 +2005,6 @@
           "data"
         ],
         "title": "GetItemsResponseSchema"
-      },
-      "GiftCardOrderStatus": {
-        "type": "string",
-        "enum": [
-          "pending",
-          "processing",
-          "completed",
-          "cancelled"
-        ],
-        "title": "GiftCardOrderStatus"
       },
       "HTTPValidationError": {
         "properties": {
@@ -1664,32 +2198,6 @@
         ],
         "title": "ListPackagesResponseSchema"
       },
-      "ListProductsResponseSchema": {
-        "properties": {
-          "status": {
-            "type": "boolean",
-            "title": "Status"
-          },
-          "message": {
-            "type": "string",
-            "title": "Message"
-          },
-          "data": {
-            "items": {
-              "$ref": "#/components/schemas/ProductSchema"
-            },
-            "type": "array",
-            "title": "Data"
-          }
-        },
-        "type": "object",
-        "required": [
-          "status",
-          "message",
-          "data"
-        ],
-        "title": "ListProductsResponseSchema"
-      },
       "ListRegionsResponseSchema": {
         "properties": {
           "status": {
@@ -1746,30 +2254,6 @@
           "location_name"
         ],
         "title": "PackageLocationNetworkSchema"
-      },
-      "PackageNetworkOperatorSchema": {
-        "properties": {
-          "operator_name": {
-            "type": "string",
-            "title": "Operator Name"
-          },
-          "network_type": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Network Type"
-          }
-        },
-        "type": "object",
-        "required": [
-          "operator_name"
-        ],
-        "title": "PackageNetworkOperatorSchema"
       },
       "PackageSchema": {
         "properties": {
@@ -1941,85 +2425,6 @@
         ],
         "title": "PackageSchema"
       },
-      "ProductSchema": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "title": "Id"
-          },
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "brand_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Brand Id"
-          },
-          "product_type": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/ProductTypeSchema"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "currency": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Currency"
-          },
-          "image": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Image"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "name"
-        ],
-        "title": "ProductSchema"
-      },
-      "ProductTypeSchema": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "title": "Id"
-          },
-          "name": {
-            "type": "string",
-            "title": "Name"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "name"
-        ],
-        "title": "ProductTypeSchema"
-      },
       "RegionSchema": {
         "properties": {
           "code": {
@@ -2162,377 +2567,36 @@
         ],
         "title": "ValidationError"
       },
-      "api__biller_reseller__schema__order__CreateOrderRequestSchema": {
-        "properties": {
-          "category": {
-            "$ref": "#/components/schemas/BillerResellerCategory"
-          },
-          "biller_id": {
-            "type": "string",
-            "title": "Biller Id"
-          },
-          "item_id": {
-            "type": "string",
-            "title": "Item Id"
-          },
-          "recharge_account": {
-            "type": "string",
-            "maxLength": 15,
-            "title": "Recharge Account"
-          },
-          "amount": {
-            "type": "integer",
-            "exclusiveMinimum": 0.0,
-            "title": "Amount",
-            "description": "Amount in naira"
-          },
-          "reference": {
-            "type": "string",
-            "maxLength": 32,
-            "title": "Reference",
-            "description": "Unique merchant order reference"
-          },
-          "title": {
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 50
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Title"
-          },
-          "description": {
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 200
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Description"
-          }
-        },
-        "type": "object",
-        "required": [
-          "category",
-          "biller_id",
-          "item_id",
-          "recharge_account",
-          "amount",
-          "reference"
-        ],
-        "title": "CreateOrderRequestSchema"
-      },
-      "api__biller_reseller__schema__order__CreateOrderResponseSchema": {
-        "properties": {
-          "status": {
-            "type": "boolean",
-            "title": "Status"
-          },
-          "message": {
-            "type": "string",
-            "title": "Message"
-          },
-          "data": {
-            "$ref": "#/components/schemas/api__biller_reseller__schema__order__OrderSchema"
-          }
-        },
-        "type": "object",
-        "required": [
-          "status",
-          "message",
-          "data"
-        ],
-        "title": "CreateOrderResponseSchema"
-      },
-      "api__biller_reseller__schema__order__GetOrderResponseSchema": {
-        "properties": {
-          "status": {
-            "type": "boolean",
-            "title": "Status"
-          },
-          "message": {
-            "type": "string",
-            "title": "Message"
-          },
-          "data": {
-            "$ref": "#/components/schemas/api__biller_reseller__schema__order__OrderSchema"
-          }
-        },
-        "type": "object",
-        "required": [
-          "status",
-          "message",
-          "data"
-        ],
-        "title": "GetOrderResponseSchema"
-      },
-      "api__biller_reseller__schema__order__OrderSchema": {
+      "CountrySchema": {
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          },
-          "business_id": {
-            "type": "string",
-            "title": "Business Id"
-          },
-          "reference": {
-            "type": "string",
-            "title": "Reference"
-          },
-          "provider_reference": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Provider Reference"
-          },
-          "category": {
-            "type": "string",
-            "title": "Category"
-          },
-          "biller_id": {
-            "type": "string",
-            "title": "Biller Id"
-          },
-          "item_id": {
-            "type": "string",
-            "title": "Item Id"
-          },
-          "recharge_account": {
-            "type": "string",
-            "title": "Recharge Account"
-          },
-          "amount": {
-            "type": "number",
-            "title": "Amount"
-          },
-          "status": {
-            "$ref": "#/components/schemas/BillerResellerStatus"
-          },
-          "error_message": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Error Message"
-          },
-          "wallet_transaction_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Wallet Transaction Id"
-          },
-          "created_datetime": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Created Datetime"
-          },
-          "updated_datetime": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Updated Datetime"
-          },
-          "completed_datetime": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Completed Datetime"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "business_id",
-          "reference",
-          "provider_reference",
-          "category",
-          "biller_id",
-          "item_id",
-          "recharge_account",
-          "amount",
-          "status",
-          "error_message",
-          "wallet_transaction_id",
-          "created_datetime",
-          "updated_datetime",
-          "completed_datetime"
-        ],
-        "title": "OrderSchema"
-      },
-      "api__esim__schema__CreateOrderRequestSchema": {
-        "properties": {
-          "reference": {
-            "type": "string",
-            "maxLength": 64,
-            "title": "Reference",
-            "description": "Unique merchant order reference"
-          },
-          "package_code": {
-            "type": "string",
-            "maxLength": 64,
-            "title": "Package Code"
-          },
-          "quantity": {
             "type": "integer",
-            "exclusiveMinimum": 0.0,
-            "title": "Quantity",
-            "default": 1
-          }
-        },
-        "type": "object",
-        "required": [
-          "reference",
-          "package_code"
-        ],
-        "title": "CreateOrderRequestSchema"
-      },
-      "api__esim__schema__CreateOrderResponseSchema": {
-        "properties": {
-          "status": {
-            "type": "boolean",
-            "title": "Status"
-          },
-          "message": {
-            "type": "string",
-            "title": "Message"
-          },
-          "data": {
-            "$ref": "#/components/schemas/api__esim__schema__OrderSchema"
-          }
-        },
-        "type": "object",
-        "required": [
-          "status",
-          "message",
-          "data"
-        ],
-        "title": "CreateOrderResponseSchema"
-      },
-      "api__esim__schema__GetOrderResponseSchema": {
-        "properties": {
-          "status": {
-            "type": "boolean",
-            "title": "Status"
-          },
-          "message": {
-            "type": "string",
-            "title": "Message"
-          },
-          "data": {
-            "$ref": "#/components/schemas/api__esim__schema__OrderSchema"
-          }
-        },
-        "type": "object",
-        "required": [
-          "status",
-          "message",
-          "data"
-        ],
-        "title": "GetOrderResponseSchema"
-      },
-      "api__esim__schema__OrderSchema": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid",
             "title": "Id"
-          },
-          "reference": {
-            "type": "string",
-            "title": "Reference"
-          },
-          "provider_order_no": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Provider Order No"
-          },
-          "provider_transaction_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Provider Transaction Id"
-          },
-          "package_code": {
-            "type": "string",
-            "title": "Package Code"
-          },
-          "package_slug": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Package Slug"
-          },
-          "package_name": {
-            "type": "string",
-            "title": "Package Name"
-          },
-          "location": {
-            "type": "string",
-            "title": "Location"
           },
           "currency_code": {
             "type": "string",
             "title": "Currency Code"
           },
-          "quantity": {
-            "type": "integer",
-            "title": "Quantity"
+          "name": {
+            "type": "string",
+            "title": "Name"
           },
-          "amount_usd": {
-            "type": "number",
-            "title": "Amount Usd"
+          "code": {
+            "type": "string",
+            "title": "Code"
           },
-          "amount_naira": {
-            "type": "number",
-            "title": "Amount Naira"
+          "fee": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fee"
           },
-          "status": {
-            "$ref": "#/components/schemas/EsimOrderStatus"
-          },
-          "error_message": {
+          "image": {
             "anyOf": [
               {
                 "type": "string"
@@ -2541,59 +2605,254 @@
                 "type": "null"
               }
             ],
-            "title": "Error Message"
-          },
-          "profiles": {
-            "items": {
-              "$ref": "#/components/schemas/AllocatedEsimProfileSchema"
-            },
-            "type": "array",
-            "title": "Profiles"
-          },
-          "created_datetime": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Created Datetime"
-          },
-          "updated_datetime": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Updated Datetime"
-          },
-          "completed_datetime": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Completed Datetime"
+            "title": "Image"
           }
         },
         "type": "object",
         "required": [
           "id",
-          "reference",
-          "provider_order_no",
-          "provider_transaction_id",
-          "package_code",
-          "package_slug",
-          "package_name",
-          "location",
           "currency_code",
-          "quantity",
-          "amount_usd",
-          "amount_naira",
-          "status",
-          "error_message",
-          "created_datetime",
-          "updated_datetime",
-          "completed_datetime"
+          "name",
+          "code"
         ],
-        "title": "OrderSchema"
+        "title": "CountrySchema"
+      },
+      "OperatorSchema": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "brand_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Brand Id"
+          },
+          "operator_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OperatorTypeSchema"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "currency": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Currency"
+          },
+          "image": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "OperatorSchema"
+      },
+      "OperatorTypeSchema": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "OperatorTypeSchema"
+      },
+      "ProductSchema": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "price_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price Type"
+          },
+          "usd": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Usd"
+          },
+          "ngn": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ngn"
+          },
+          "operator_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Operator Id"
+          },
+          "country": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
+          },
+          "image": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "ProductSchema"
+      },
+      "ListOperatorsResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/OperatorSchema"
+            },
+            "type": "array",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "ListOperatorsResponseSchema"
+      },
+      "GetCountryResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CountrySchema"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "GetCountryResponseSchema"
+      },
+      "ListProductsResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ProductSchema"
+            },
+            "type": "object",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "ListProductsResponseSchema"
       },
       "api__gift_cards__schema__order__CreateOrderRequestSchema": {
         "properties": {
@@ -2806,6 +3065,16 @@
           "completed_datetime"
         ],
         "title": "OrderSchema"
+      },
+      "GiftCardOrderStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "processing",
+          "completed",
+          "cancelled"
+        ],
+        "title": "GiftCardOrderStatus"
       }
     }
   }

@@ -25,8 +25,8 @@ curl -X POST https://api.payvessel.com/vaas/api/v1/gift-cards/orders \
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `reference` | string | Yes | Your unique merchant order reference (max 64 characters) |
-| `operator_id` | string | Yes | The product/operator ID from [List Products](/gift-cards/list-products) |
-| `product_id` | string | Yes | The denomination ID from [Get Denominations](/gift-cards/get-denominations) |
+| `operator_id` | string | Yes | The operator ID from [List Operators](/gift-cards/list-operators) |
+| `product_id` | string | Yes | The product ID from [List Products](/gift-cards/list-products) |
 
 <Warning>
   The order amount is debited from your business wallet immediately. Make sure you have sufficient balance before creating an order.
@@ -51,7 +51,7 @@ The response returns an order object. Key fields:
 
 ## Next step
 
-If the status is not yet `completed`, poll [Get Order](/gift-cards/get-order) to retrieve the redemption code.
+If the status is not yet `completed`, use [Verify Order](/gift-cards/verify-order) or [Get Order](/gift-cards/get-order) to check the status and retrieve the redemption code.
 
 <Card title="API Reference" icon="code" href="/api-reference/gift-cards/purchase">
   Full request/response details and Try it

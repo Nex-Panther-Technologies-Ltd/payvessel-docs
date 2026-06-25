@@ -158,10 +158,11 @@
                   "gift-cards/overview",
                   "gift-cards/list-countries",
                   "gift-cards/get-country",
+                  "gift-cards/list-operators",
                   "gift-cards/list-products",
-                  "gift-cards/get-denominations",
                   "gift-cards/purchase",
-                  "gift-cards/get-order"
+                  "gift-cards/get-order",
+                  "gift-cards/verify-order"
                 ]
               }
             ]
@@ -274,10 +275,11 @@
                 "pages": [
                   "api-reference/gift-cards/list-countries",
                   "api-reference/gift-cards/get-country",
+                  "api-reference/gift-cards/list-operators",
                   "api-reference/gift-cards/list-products",
-                  "api-reference/gift-cards/get-denominations",
                   "api-reference/gift-cards/purchase",
-                  "api-reference/gift-cards/get-order"
+                  "api-reference/gift-cards/get-order",
+                  "api-reference/gift-cards/verify-order"
                 ]
               }
             ]

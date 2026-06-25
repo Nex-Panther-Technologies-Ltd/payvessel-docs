@@ -1,0 +1,42 @@
+---
+title: "List Operators"
+description: "Fetch all gift card operators available in a specific country"
+sidebarTitle: "List Operators"
+---
+
+Fetch all gift card operators (brands) available in a specific country. Use the ISO 3166-1 alpha-2 country code from [List Countries](/gift-cards/list-countries).
+
+## Usage
+
+```bash
+curl https://api.payvessel.com/vaas/api/v1/gift-cards/countries/US/operators \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY"
+```
+
+## Path parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `country_code` | string | Yes | ISO 3166-1 alpha-2 code (e.g. `US`, `GB`, `NG`) |
+
+## Response fields
+
+Each operator includes:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | string | Operator ID (used to fetch products and create orders) |
+| `name` | string | Brand name (e.g. "Amazon", "iTunes", "Steam") |
+| `brand_id` | string or null | Brand identifier |
+| `operator_type` | object or null | Operator type with `id` and `name` fields |
+| `currency` | string or null | Operator currency |
+| `image` | string or null | Brand logo URL |
+
+## Next step
+
+Use the operator `id` as the `operator_id` to [list products](/gift-cards/list-products).
+
+<Card title="API Reference" icon="code" href="/api-reference/gift-cards/list-operators">
+  Full request/response details and Try it
+</Card>
