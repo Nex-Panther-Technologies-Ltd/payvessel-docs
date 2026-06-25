@@ -1,0 +1,44 @@
+---
+title: "Transfer Status"
+description: "Check the status of a previously initiated transfer"
+sidebarTitle: "Transfer Status"
+---
+
+Check the final status of a transfer you created with [Single Transfers](/transfer-payout/single-transfers) or [Bulk Transfers](/transfer-payout/bulk-transfers). Use this to confirm whether a payout completed successfully.
+
+## Usage
+
+```bash
+curl -X POST https://api.payvessel.com/pms/api/external/request/wallet/transfer-status/ \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "reference": "PAYOUT_2026_0001",
+    "session_id": "SESSION_123456789"
+  }'
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `reference` | string | Yes | The unique reference you passed when initiating the transfer |
+| `session_id` | string | Yes | The session ID returned in the initial transfer response |
+
+## Response fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `reference` | string | Your transfer reference |
+| `session_id` | string | Transfer session ID |
+| `amount` | string | Transfer amount |
+| `status` | string | `pending`, `success`, or `failed` |
+| `destination_account_number` | string | Recipient account number |
+| `destination_bank_code` | string | Recipient bank code |
+| `destination_account_name` | string | Recipient account name |
+| `completed_at` | datetime | When the transfer completed |
+
+<Card title="API Reference" icon="code" href="/api-reference/transfers/transfer-status">
+  Full request/response details and Try it
+</Card>

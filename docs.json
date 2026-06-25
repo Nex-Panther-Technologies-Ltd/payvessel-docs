@@ -74,7 +74,8 @@
               "transfer-payout/get-bank-list",
               "transfer-payout/validate-account",
               "transfer-payout/single-transfers",
-              "transfer-payout/bulk-transfers"
+              "transfer-payout/bulk-transfers",
+              "transfer-payout/transfer-status"
             ]
           },
           {
@@ -221,7 +222,8 @@
               "api-reference/transfers/get-bank-list",
               "api-reference/transfers/validate-account",
               "api-reference/transfers/initiate-transfer",
-              "api-reference/transfers/bulk-transfer"
+              "api-reference/transfers/bulk-transfer",
+              "api-reference/transfers/transfer-status"
             ]
           },
           {
