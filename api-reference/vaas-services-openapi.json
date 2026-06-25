@@ -2938,17 +2938,6 @@
             "type": "string",
             "title": "Reference"
           },
-          "billpoint_transaction_id": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Billpoint Transaction Id"
-          },
           "operator_id": {
             "type": "string",
             "title": "Operator Id"
@@ -3048,7 +3037,6 @@
           "id",
           "business_id",
           "reference",
-          "billpoint_transaction_id",
           "operator_id",
           "product_id",
           "product_name",
