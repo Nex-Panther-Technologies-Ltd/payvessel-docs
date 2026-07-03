@@ -65,6 +65,20 @@ All biller reseller endpoints are under:
 /vaas/api/v1/biller-reseller
 ```
 
+## Sandbox testing
+
+In sandbox mode, only the following recharge accounts are accepted during [account validation](/biller-reseller/validate-account):
+
+| Recharge Account | Account Name |
+| --- | --- |
+| `1234567890` | John Doe |
+| `0987654321` | Jane Smith |
+| `1111111111` | Test User One |
+| `2222222222` | Test User Two |
+| `3333333333` | Test User Three |
+
+Use any of these accounts when testing the validate-account and create-order endpoints.
+
 ## Authentication
 
 All requests require `api-key` and `api-secret` headers. See [Authentication](/api-basics/authentication) for details.

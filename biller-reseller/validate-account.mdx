@@ -37,6 +37,20 @@ The response `data` object contains:
 | --- | --- | --- |
 | `biller` | string or null | The resolved biller/account name from the provider |
 
+## Sandbox testing
+
+In sandbox mode, only the following recharge accounts are valid:
+
+| Recharge Account | Account Name |
+| --- | --- |
+| `1234567890` | John Doe |
+| `0987654321` | Jane Smith |
+| `1111111111` | Test User One |
+| `2222222222` | Test User Two |
+| `3333333333` | Test User Three |
+
+Any other account number will return a validation error.
+
 <Card title="API Reference" icon="code" href="/api-reference/biller-reseller/validate-account">
   Full request/response details and Try it
 </Card>
