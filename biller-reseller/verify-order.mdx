@@ -26,8 +26,8 @@ curl https://api.payvessel.com/vaas/api/v1/biller-reseller/orders/verify/{refere
 | --- | --- | --- |
 | `id` | string (uuid) | PayVessel order ID |
 | `business_id` | string | Your business ID |
-| `reference` | string | Your merchant reference |
-| `provider_reference` | string or null | Reference from the upstream provider |
+| `merchant_reference` | string | Your merchant reference |
+| `order_reference` | string | PayVessel's internal order reference |
 | `category` | string | `airtime`, `data`, or `betting` |
 | `biller_id` | string | The biller used |
 | `item_id` | string | The item purchased |

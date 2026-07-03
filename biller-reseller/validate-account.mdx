@@ -14,7 +14,6 @@ curl -X POST https://api.payvessel.com/vaas/api/v1/biller-reseller/validate-acco
   -H "api-secret: YOUR_SECRET_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "category": "betting",
     "recharge_account": "12345678",
     "biller_id": "BET9JA_BILLER_ID"
   }'
@@ -24,10 +23,9 @@ curl -X POST https://api.payvessel.com/vaas/api/v1/biller-reseller/validate-acco
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `category` | string | Yes | One of: `airtime`, `data`, `betting` |
 | `recharge_account` | string | Yes | The customer's account (phone number or betting ID). Max 15 characters. |
-| `biller_id` | string | Yes | The biller to validate against |
-| `item_id` | string | No | Optional item ID for context |
+| `biller_id` | string | Yes | The biller to validate against. Alphanumeric, hyphens, and underscores only (max 64 characters). |
+| `item_id` | string | No | Optional item ID for context. Alphanumeric, hyphens, and underscores only (max 64 characters). |
 
 ## Response
 

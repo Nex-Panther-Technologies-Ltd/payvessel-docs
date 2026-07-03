@@ -24,7 +24,7 @@ The PayVessel **biller reseller API** lets you resell **airtime**, **data bundle
 
 ## Integration flow
 
-1. **List billers** for a category to show available providers (e.g. Bet9ja, SportyBet).
+1. **List billers** to show available providers (e.g. Bet9ja, SportyBet).
 2. **List biller items** to get the specific packages or denominations for that biller.
 3. **Validate the recharge account** to confirm the customer's account exists before placing an order.
 4. **Create an order** to purchase the item; PayVessel debits your wallet and fulfils the request.
@@ -36,9 +36,9 @@ sequenceDiagram
     participant You
     participant PayVessel
 
-    You->>PayVessel: GET /billers?category=betting
+    You->>PayVessel: GET /billers
     PayVessel-->>You: List of billers
-    You->>PayVessel: GET /billers/{biller_id}/items?category=betting
+    You->>PayVessel: GET /billers/{biller_id}/items
     PayVessel-->>You: Available items/packages
     You->>PayVessel: POST /validate-account
     PayVessel-->>You: Account validated

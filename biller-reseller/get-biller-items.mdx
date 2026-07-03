@@ -8,10 +8,10 @@ Fetch the available items (packages or denominations) for a specific biller. The
 
 ## Usage
 
-Pass the `biller_id` as a path parameter and the `category` as a query parameter.
+Pass the `biller_id` as a path parameter.
 
 ```bash
-curl https://api.payvessel.com/vaas/api/v1/biller-reseller/billers/{biller_id}/items?category=betting \
+curl https://api.payvessel.com/vaas/api/v1/biller-reseller/billers/{biller_id}/items \
   -H "api-key: YOUR_API_KEY" \
   -H "api-secret: YOUR_SECRET_KEY"
 ```
@@ -28,8 +28,7 @@ Each item includes:
 | `amount` | integer or null | Fixed price (null if variable) |
 | `min_amount` | integer or null | Minimum amount for variable-price items |
 | `max_amount` | integer or null | Maximum amount for variable-price items |
-| `is_fix_amount` | integer or null | `1` if the item has a fixed price |
-| `status` | integer or null | Item availability status |
+| `is_fixed_amount` | boolean or null | `true` if the item has a fixed price |
 | `ext_info` | object or null | Extra details (validity period, data size, description) |
 
 ### ext_info object

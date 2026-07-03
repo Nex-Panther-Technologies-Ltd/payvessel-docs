@@ -27,6 +27,7 @@ curl -X POST https://api.payvessel.com/vaas/api/v1/gift-cards/orders \
 | `reference` | string | Yes | Your unique merchant order reference (max 64 characters) |
 | `operator_id` | string | Yes | The operator ID from [List Operators](/gift-cards/list-operators) |
 | `product_id` | string | Yes | The product ID from [List Products](/gift-cards/list-products) |
+| `webhook_url` | string | No | Webhook URL for order status notifications (max 512 characters) |
 
 <Warning>
   The order amount is debited from your business wallet immediately. Make sure you have sufficient balance before creating an order.
@@ -39,7 +40,10 @@ The response returns an order object. Key fields:
 | Field | Type | Description |
 | --- | --- | --- |
 | `id` | string (uuid) | PayVessel order ID |
-| `reference` | string | Your merchant reference |
+| `merchant_reference` | string | Your merchant reference |
+| `order_reference` | string | PayVessel's internal order reference |
+| `operator_id` | string | Operator ID |
+| `product_id` | string | Product ID |
 | `product_name` | string | Gift card name |
 | `country` | string | Country |
 | `amount_usd` | number | Amount in USD |
@@ -48,6 +52,10 @@ The response returns an order object. Key fields:
 | `serial_number` | string or null | Gift card serial number |
 | `status` | string | `pending`, `processing`, `completed`, or `cancelled` |
 | `error_message` | string or null | Error details if the order failed |
+| `wallet_transaction_id` | string or null | Associated wallet transaction |
+| `created_datetime` | datetime | When the order was created |
+| `updated_datetime` | datetime | Last status update |
+| `completed_datetime` | datetime or null | When the order was fulfilled |
 
 ## Next step
 

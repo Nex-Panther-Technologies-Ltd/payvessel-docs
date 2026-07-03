@@ -20,9 +20,10 @@ curl https://api.payvessel.com/vaas/api/v1/gift-cards/orders/{order_id} \
 | --- | --- | --- |
 | `id` | string (uuid) | PayVessel order ID |
 | `business_id` | string | Your business ID |
-| `reference` | string | Your merchant reference |
-| `operator_id` | string | Product/operator ID |
-| `product_id` | string | Denomination ID |
+| `merchant_reference` | string | Your merchant reference |
+| `order_reference` | string | PayVessel's internal order reference |
+| `operator_id` | string | Operator ID |
+| `product_id` | string | Product ID |
 | `product_name` | string | Gift card name |
 | `country` | string | Country |
 | `amount_naira` | number | Amount in NGN |

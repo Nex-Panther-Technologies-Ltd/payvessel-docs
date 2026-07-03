@@ -26,13 +26,11 @@ curl -X POST https://api.payvessel.com/vaas/api/v1/biller-reseller/orders \
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `biller_id` | string | Yes | The biller to purchase from |
-| `item_id` | string | Yes | The specific item/package to purchase |
+| `biller_id` | string | Yes | The biller to purchase from. Alphanumeric, hyphens, and underscores only (max 64 characters). |
+| `item_id` | string | Yes | The specific item/package to purchase. Alphanumeric, hyphens, and underscores only (max 64 characters). |
 | `recharge_account` | string | Yes | Customer's phone number or account ID (max 15 characters) |
-| `amount` | integer | Yes | Amount to charge in naira |
+| `amount` | integer | Yes | Amount to charge in naira (must be greater than 0) |
 | `reference` | string | Yes | Your unique merchant order reference (max 32 characters) |
-| `title` | string | No | Order title (max 50 characters) |
-| `description` | string | No | Order description (max 200 characters) |
 | `webhook_url` | string | No | Webhook URL for order status notifications (max 512 characters) |
 
 <Warning>
@@ -46,11 +44,20 @@ The response returns an order object. Key fields:
 | Field | Type | Description |
 | --- | --- | --- |
 | `id` | string (uuid) | PayVessel order ID |
-| `reference` | string | Your merchant reference |
-| `status` | string | Order status: `pending`, `processing`, `success`, `failed`, or `cancelled` |
+| `business_id` | string | Your business ID |
+| `merchant_reference` | string | Your merchant reference |
+| `order_reference` | string | PayVessel's internal order reference |
+| `category` | string | `airtime`, `data`, or `betting` |
+| `biller_id` | string | The biller used |
+| `item_id` | string | The item purchased |
+| `recharge_account` | string | The customer's account |
 | `amount` | number | Amount charged in naira |
+| `status` | string | Order status: `pending`, `processing`, `success`, `failed`, or `cancelled` |
 | `error_message` | string or null | Error details if the order failed |
+| `wallet_transaction_id` | string or null | Associated wallet transaction |
 | `created_datetime` | datetime | When the order was created |
+| `updated_datetime` | datetime | Last status update |
+| `completed_datetime` | datetime or null | When the order reached a terminal state |
 
 ## Next step
 

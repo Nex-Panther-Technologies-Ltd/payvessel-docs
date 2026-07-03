@@ -438,6 +438,35 @@
               }
             }
           },
+          "404": {
+            "description": "Country not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-06-25T12:00:00+00:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "424": {
             "description": "Unable to reach upstream service",
             "content": {
@@ -525,6 +554,7 @@
             "required": true,
             "schema": {
               "type": "string",
+              "maxLength": 10,
               "title": "Country Code"
             }
           },
@@ -568,6 +598,35 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ListOperatorsResponseSchema"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No operators found for country",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-06-25T12:00:00+00:00"
+                    }
+                  }
                 }
               }
             }
@@ -659,6 +718,7 @@
             "required": true,
             "schema": {
               "type": "string",
+              "maxLength": 64,
               "title": "Operator Id"
             }
           },
@@ -702,6 +762,35 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ListProductsResponseSchema"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Operator not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-06-25T12:00:00+00:00"
+                    }
+                  }
                 }
               }
             }
@@ -1082,7 +1171,7 @@
           "Gift Cards"
         ],
         "summary": "Verify Order",
-        "description": "Verify the status of a gift card order by its reference. Checks the provider for the latest status if the order is not yet final.",
+        "description": "Verify the status of a gift card order by its merchant reference. Checks the provider for the latest status if the order is not yet final.",
         "operationId": "verify_order_api_v1_gift_cards_orders_verify__reference__get",
         "parameters": [
           {
@@ -1347,6 +1436,7 @@
             "required": true,
             "schema": {
               "type": "string",
+              "maxLength": 64,
               "title": "Biller Id"
             }
           },
@@ -1390,6 +1480,32 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GetItemsResponseSchema"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Biller not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "null"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
                 }
               }
             }
@@ -1440,7 +1556,7 @@
           "Biller Reseller"
         ],
         "summary": "Validate Recharge Account",
-        "description": "Validate a customer recharge account (e.g. betting account ID) before placing an order",
+        "description": "Validate a customer recharge account (e.g. betting account ID) before placing an order.\n\n**Sandbox valid test accounts:**\n| recharge_account | Account Name |\n|---|---|\n| `1234567890` | John Doe |\n| `0987654321` | Jane Smith |\n| `1111111111` | Test User One |\n| `2222222222` | Test User Two |\n| `3333333333` | Test User Three |\n\nAny other recharge_account will return `null` for the biller field in sandbox mode.",
         "operationId": "validate_account_api_v1_biller_reseller_validate_account_post",
         "parameters": [
           {
@@ -1493,6 +1609,32 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ValidateAccountResponseSchema"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Biller not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "null"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
                 }
               }
             }
@@ -1724,7 +1866,7 @@
           "Biller Reseller"
         ],
         "summary": "Verify Order",
-        "description": "Verify the status of an order by its reference. Checks the provider for the latest status if the order is not yet final.",
+        "description": "Verify the status of an order by its merchant reference. Checks the provider for the latest status if the order is not yet final.",
         "operationId": "verify_order_api_v1_biller_reseller_orders_verify__reference__get",
         "parameters": [
           {
@@ -2539,27 +2681,16 @@
             ],
             "title": "Max Amount"
           },
-          "is_fix_amount": {
+          "is_fixed_amount": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "boolean"
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Is Fix Amount"
-          },
-          "status": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Status"
+            "title": "Is Fixed Amount"
           },
           "ext_info": {
             "anyOf": [
@@ -2914,9 +3045,6 @@
       },
       "ValidateAccountRequestSchema": {
         "properties": {
-          "category": {
-            "$ref": "#/components/schemas/BillerResellerCategory"
-          },
           "recharge_account": {
             "type": "string",
             "maxLength": 15,
@@ -2924,12 +3052,16 @@
           },
           "biller_id": {
             "type": "string",
+            "maxLength": 64,
+            "pattern": "^[a-zA-Z0-9_\\-]+$",
             "title": "Biller Id"
           },
           "item_id": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 64,
+                "pattern": "^[a-zA-Z0-9_\\-]+$"
               },
               {
                 "type": "null"
@@ -2938,9 +3070,9 @@
             "title": "Item Id"
           }
         },
+        "additionalProperties": false,
         "type": "object",
         "required": [
-          "category",
           "recharge_account",
           "biller_id"
         ],
@@ -3303,6 +3435,19 @@
           "product_id": {
             "type": "string",
             "title": "Product Id"
+          },
+          "webhook_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Webhook Url",
+            "description": "Webhook URL for order status notifications"
           }
         },
         "type": "object",
@@ -3368,9 +3513,13 @@
             "type": "string",
             "title": "Business Id"
           },
-          "reference": {
+          "merchant_reference": {
             "type": "string",
-            "title": "Reference"
+            "title": "Merchant Reference"
+          },
+          "order_reference": {
+            "type": "string",
+            "title": "Order Reference"
           },
           "operator_id": {
             "type": "string",
@@ -3470,7 +3619,8 @@
         "required": [
           "id",
           "business_id",
-          "reference",
+          "merchant_reference",
+          "order_reference",
           "operator_id",
           "product_id",
           "product_name",
@@ -3604,10 +3754,14 @@
         "properties": {
           "biller_id": {
             "type": "string",
+            "maxLength": 64,
+            "pattern": "^[a-zA-Z0-9_\\-]+$",
             "title": "Biller Id"
           },
           "item_id": {
             "type": "string",
+            "maxLength": 64,
+            "pattern": "^[a-zA-Z0-9_\\-]+$",
             "title": "Item Id"
           },
           "recharge_account": {
@@ -3627,30 +3781,6 @@
             "title": "Reference",
             "description": "Unique merchant order reference"
           },
-          "title": {
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 50
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Title"
-          },
-          "description": {
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 200
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Description"
-          },
           "webhook_url": {
             "anyOf": [
               {
@@ -3665,6 +3795,7 @@
             "description": "Webhook URL for order status notifications"
           }
         },
+        "additionalProperties": false,
         "type": "object",
         "required": [
           "biller_id",
@@ -3730,20 +3861,13 @@
             "type": "string",
             "title": "Business Id"
           },
-          "reference": {
+          "merchant_reference": {
             "type": "string",
-            "title": "Reference"
+            "title": "Merchant Reference"
           },
-          "provider_reference": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Provider Reference"
+          "order_reference": {
+            "type": "string",
+            "title": "Order Reference"
           },
           "category": {
             "type": "string",
@@ -3817,8 +3941,8 @@
         "required": [
           "id",
           "business_id",
-          "reference",
-          "provider_reference",
+          "merchant_reference",
+          "order_reference",
           "category",
           "biller_id",
           "item_id",
