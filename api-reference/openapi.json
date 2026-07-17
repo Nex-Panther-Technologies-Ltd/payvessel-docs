@@ -5048,6 +5048,748 @@
         ],
         "operationId": "externalVirtualCardsMockTransaction"
       }
+    },
+    "/pms/api/external/request/flights/airports/": {
+      "get": {
+        "operationId": "flightAirportsList",
+        "summary": "Get Airports",
+        "description": "Returns a cached list of supported airports. Filter by airport name, city, or IATA code using the `search` query parameter.",
+        "tags": [
+          "Flights"
+        ],
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your PayVessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your PayVessel API secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "description": "Filter airports by IATA code, airport name, or city (case-insensitive)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Airports retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlightAirportsResponse"
+                },
+                "examples": {
+                  "success": {
+                    "summary": "Airport list",
+                    "value": {
+                      "status": true,
+                      "message": "Airports retrieved successfully",
+                      "data": [
+                        {
+                          "IATA": "LOS",
+                          "AirportName": "Murtala Muhammed International Airport",
+                          "CityName": "Lagos",
+                          "CountryCode": "NG"
+                        },
+                        {
+                          "IATA": "ABV",
+                          "AirportName": "Nnamdi Azikiwe International Airport",
+                          "CityName": "Abuja",
+                          "CountryCode": "NG"
+                        },
+                        {
+                          "IATA": "LHR",
+                          "AirportName": "Heathrow Airport",
+                          "CityName": "London",
+                          "CountryCode": "GB"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden \u2014 flight booking access not enabled for this business",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Flight service temporarily unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pms/api/external/request/flights/search/": {
+      "post": {
+        "operationId": "flightSearch",
+        "summary": "Search Flights",
+        "description": "Search for available flights by route, date, and passenger count. Supports OneWay, Return, and MultiDestination trips. Returns a list of flight options each with a `flightKey` to use in Select.",
+        "tags": [
+          "Flights"
+        ],
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your PayVessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your PayVessel API secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FlightSearchRequest"
+              },
+              "examples": {
+                "oneWay": {
+                  "summary": "One-way domestic flight",
+                  "value": {
+                    "tripType": "OneWay",
+                    "origin": "LOS",
+                    "destination": "ABV",
+                    "departureDate": "2026-08-20",
+                    "adultCount": 1,
+                    "childCount": 0,
+                    "infantCount": 0,
+                    "cabinClass": "Economy",
+                    "currencyCode": "NGN"
+                  }
+                },
+                "return": {
+                  "summary": "Return international flight",
+                  "value": {
+                    "tripType": "Return",
+                    "origin": "LOS",
+                    "destination": "LHR",
+                    "departureDate": "2026-09-01",
+                    "returnDate": "2026-09-15",
+                    "adultCount": 2,
+                    "childCount": 1,
+                    "infantCount": 0,
+                    "cabinClass": "Economy",
+                    "currencyCode": "NGN"
+                  }
+                },
+                "multiDestination": {
+                  "summary": "Multi-destination trip",
+                  "value": {
+                    "tripType": "MultiDestination",
+                    "legs": [
+                      {
+                        "origin": "LOS",
+                        "destination": "DXB",
+                        "departureDate": "2026-10-01"
+                      },
+                      {
+                        "origin": "DXB",
+                        "destination": "LHR",
+                        "departureDate": "2026-10-05"
+                      },
+                      {
+                        "origin": "LHR",
+                        "destination": "LOS",
+                        "departureDate": "2026-10-15"
+                      }
+                    ],
+                    "adultCount": 1,
+                    "cabinClass": "Business",
+                    "currencyCode": "NGN"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Flight search completed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlightSearchResponse"
+                },
+                "examples": {
+                  "success": {
+                    "summary": "Available flights",
+                    "value": {
+                      "status": true,
+                      "message": "Flight search completed",
+                      "data": {
+                        "flights": [
+                          {
+                            "flightKey": "a1b2c3d4e5f6...",
+                            "airline": "Arik Air",
+                            "flightNumber": "W3 204",
+                            "origin": "LOS",
+                            "destination": "ABV",
+                            "departureTime": "2026-08-20T06:30:00",
+                            "arrivalTime": "2026-08-20T07:45:00",
+                            "duration": "1h 15m",
+                            "stops": 0,
+                            "cabinClass": "Economy",
+                            "availableSeats": 12,
+                            "price": {
+                              "amount": 45000.0,
+                              "currency": "NGN",
+                              "breakdown": {
+                                "base": 38000.0,
+                                "taxes": 7000.0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden \u2014 flight booking access not enabled for this business",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Flight service temporarily unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pms/api/external/request/flights/select/": {
+      "post": {
+        "operationId": "flightSelect",
+        "summary": "Select a Flight",
+        "description": "Select a specific flight option and get confirmed, up-to-date pricing. Always call this before booking \u2014 fares can change between search and booking.",
+        "tags": [
+          "Flights"
+        ],
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your PayVessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your PayVessel API secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FlightSelectRequest"
+              },
+              "examples": {
+                "select": {
+                  "summary": "Select a flight",
+                  "value": {
+                    "flightKey": "a1b2c3d4e5f6..."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Flight selected successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlightSelectResponse"
+                },
+                "examples": {
+                  "success": {
+                    "summary": "Confirmed pricing",
+                    "value": {
+                      "status": true,
+                      "message": "Flight selected successfully",
+                      "data": {
+                        "flightKey": "a1b2c3d4e5f6...",
+                        "airline": "Arik Air",
+                        "flightNumber": "W3 204",
+                        "origin": "LOS",
+                        "destination": "ABV",
+                        "departureTime": "2026-08-20T06:30:00",
+                        "arrivalTime": "2026-08-20T07:45:00",
+                        "cabinClass": "Economy",
+                        "price": {
+                          "amount": 45000.0,
+                          "currency": "NGN"
+                        },
+                        "fareRules": "Non-refundable. Changes allowed with fee."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden \u2014 flight booking access not enabled for this business",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Flight service temporarily unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pms/api/external/request/flights/book/": {
+      "post": {
+        "operationId": "flightBook",
+        "summary": "Book a Flight",
+        "description": "Book a selected flight with full passenger details. Returns a PayVessel reference and a booking ID. Issue the ticket after collecting payment from your customer.",
+        "tags": [
+          "Flights"
+        ],
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your PayVessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your PayVessel API secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FlightBookRequest"
+              },
+              "examples": {
+                "adultSinglePax": {
+                  "summary": "Single adult passenger",
+                  "value": {
+                    "flightKey": "a1b2c3d4e5f6...",
+                    "contactEmail": "traveller@example.com",
+                    "contactPhone": "08031234567",
+                    "passengers": [
+                      {
+                        "firstName": "Amina",
+                        "lastName": "Ibrahim",
+                        "title": "Mrs",
+                        "dateOfBirth": "1988-03-22",
+                        "gender": "Female",
+                        "passengerType": "Adult",
+                        "nationality": "NGA",
+                        "passportNumber": "A12345678",
+                        "passportExpiryDate": "2030-03-22",
+                        "email": "amina.ibrahim@example.com",
+                        "phoneNumber": "08031234567"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Flight booked successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlightBookResponse"
+                },
+                "examples": {
+                  "booked": {
+                    "summary": "Booking confirmed",
+                    "value": {
+                      "status": true,
+                      "message": "Flight booked successfully",
+                      "data": {
+                        "reference": "FLT-A1B2C3D4E5F6",
+                        "booking": {
+                          "bookingId": "BK-20260820-98765",
+                          "status": "BOOKED",
+                          "airline": "Arik Air",
+                          "flightNumber": "W3 204",
+                          "origin": "LOS",
+                          "destination": "ABV",
+                          "departureTime": "2026-08-20T06:30:00",
+                          "passengers": [
+                            {
+                              "firstName": "Amina",
+                              "lastName": "Ibrahim",
+                              "passengerType": "Adult"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden \u2014 flight booking access not enabled for this business",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Flight service temporarily unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pms/api/external/request/flights/ticket/": {
+      "post": {
+        "operationId": "flightTicketPNR",
+        "summary": "Issue Ticket (PNR)",
+        "description": "Issue the airline e-ticket for a confirmed booking. Call after collecting payment. Returns the PNR and e-ticket numbers.",
+        "tags": [
+          "Flights"
+        ],
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your PayVessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your PayVessel API secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FlightTicketRequest"
+              },
+              "examples": {
+                "ticket": {
+                  "summary": "Issue ticket",
+                  "value": {
+                    "BookingId": "BK-20260820-98765"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ticket issued successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlightTicketResponse"
+                },
+                "examples": {
+                  "ticketed": {
+                    "summary": "Ticket issued",
+                    "value": {
+                      "status": true,
+                      "message": "Ticket issued successfully",
+                      "data": {
+                        "PNR": "XYZABC",
+                        "ticketNumbers": [
+                          "167-1234567890"
+                        ],
+                        "bookingId": "BK-20260820-98765",
+                        "status": "TICKETED",
+                        "airline": "Arik Air",
+                        "flightNumber": "W3 204",
+                        "origin": "LOS",
+                        "destination": "ABV",
+                        "departureTime": "2026-08-20T06:30:00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden \u2014 flight booking access not enabled for this business",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Flight service temporarily unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "webhooks": {
@@ -8405,6 +9147,343 @@
               "message": {
                 "type": "string",
                 "description": "Simulation result message"
+              }
+            }
+          }
+        }
+      },
+      "FlightAirportObject": {
+        "type": "object",
+        "properties": {
+          "IATA": {
+            "type": "string",
+            "description": "3-letter IATA airport code"
+          },
+          "AirportName": {
+            "type": "string"
+          },
+          "CityName": {
+            "type": "string"
+          },
+          "CountryCode": {
+            "type": "string",
+            "description": "ISO 2-letter country code"
+          }
+        }
+      },
+      "FlightAirportsResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FlightAirportObject"
+            }
+          }
+        }
+      },
+      "FlightLeg": {
+        "type": "object",
+        "required": [
+          "origin",
+          "destination",
+          "departureDate"
+        ],
+        "properties": {
+          "origin": {
+            "type": "string",
+            "maxLength": 3
+          },
+          "destination": {
+            "type": "string",
+            "maxLength": 3
+          },
+          "departureDate": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "FlightSearchRequest": {
+        "type": "object",
+        "required": [
+          "tripType"
+        ],
+        "properties": {
+          "tripType": {
+            "type": "string",
+            "enum": [
+              "OneWay",
+              "Return",
+              "MultiDestination"
+            ]
+          },
+          "origin": {
+            "type": "string",
+            "maxLength": 3,
+            "description": "Required for OneWay/Return"
+          },
+          "destination": {
+            "type": "string",
+            "maxLength": 3,
+            "description": "Required for OneWay/Return"
+          },
+          "departureDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Required for OneWay/Return"
+          },
+          "returnDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Required for Return trips"
+          },
+          "legs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FlightLeg"
+            },
+            "description": "Required for MultiDestination"
+          },
+          "adultCount": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 1
+          },
+          "childCount": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0
+          },
+          "infantCount": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0
+          },
+          "cabinClass": {
+            "type": "string",
+            "enum": [
+              "Economy",
+              "Business",
+              "FirstClass"
+            ],
+            "default": "Economy"
+          },
+          "preferredAirline": {
+            "type": "string",
+            "maxLength": 3,
+            "description": "IATA airline code filter (optional)"
+          },
+          "currencyCode": {
+            "type": "string",
+            "default": "NGN"
+          }
+        }
+      },
+      "FlightSearchResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        }
+      },
+      "FlightSelectRequest": {
+        "type": "object",
+        "required": [
+          "flightKey"
+        ],
+        "properties": {
+          "flightKey": {
+            "type": "string",
+            "description": "The flight key from Search Flights response"
+          }
+        }
+      },
+      "FlightSelectResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        }
+      },
+      "FlightPassenger": {
+        "type": "object",
+        "required": [
+          "firstName",
+          "lastName",
+          "title",
+          "dateOfBirth",
+          "gender",
+          "passengerType",
+          "nationality"
+        ],
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "enum": [
+              "Mr",
+              "Mrs",
+              "Ms",
+              "Dr",
+              "Prof"
+            ]
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "Male",
+              "Female"
+            ]
+          },
+          "passengerType": {
+            "type": "string",
+            "enum": [
+              "Adult",
+              "Child",
+              "Infant"
+            ]
+          },
+          "nationality": {
+            "type": "string",
+            "description": "ISO 3-letter country code (e.g. NGA)"
+          },
+          "passportNumber": {
+            "type": "string",
+            "description": "Required for international flights"
+          },
+          "passportExpiryDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "phoneNumber": {
+            "type": "string"
+          }
+        }
+      },
+      "FlightBookRequest": {
+        "type": "object",
+        "required": [
+          "flightKey",
+          "passengers",
+          "contactEmail",
+          "contactPhone"
+        ],
+        "properties": {
+          "flightKey": {
+            "type": "string"
+          },
+          "contactEmail": {
+            "type": "string",
+            "format": "email"
+          },
+          "contactPhone": {
+            "type": "string"
+          },
+          "passengers": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/FlightPassenger"
+            }
+          }
+        }
+      },
+      "FlightBookResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "reference": {
+                "type": "string",
+                "description": "PayVessel booking reference"
+              },
+              "booking": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "FlightTicketRequest": {
+        "type": "object",
+        "required": [
+          "BookingId"
+        ],
+        "properties": {
+          "BookingId": {
+            "type": "string",
+            "description": "The bookingId from the Book a Flight response"
+          }
+        }
+      },
+      "FlightTicketResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "PNR": {
+                "type": "string",
+                "description": "Airline PNR code"
+              },
+              "ticketNumbers": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "bookingId": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
               }
             }
           }

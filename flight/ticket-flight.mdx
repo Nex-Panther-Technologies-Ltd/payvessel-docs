@@ -1,0 +1,67 @@
+---
+title: "Issue Ticket (PNR)"
+description: "Issue the airline e-ticket and receive the PNR after payment"
+sidebarTitle: "Issue Ticket"
+---
+
+Issue the airline ticket for a confirmed booking. Call this endpoint **after** you have collected payment from your customer. PayVessel issues the e-ticket with the airline and returns the **PNR** (Passenger Name Record) that the traveller uses to check in.
+
+## When to call
+
+1. Booking is confirmed (`BOOKED` status from [Book a Flight](/flight/book-flight)).
+2. You have collected payment from your customer.
+3. Call this endpoint — receive the PNR.
+
+## Usage
+
+```bash
+curl -X POST https://api.payvessel.com/pms/api/external/request/flights/ticket/ \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_API_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "BookingId": "BK-20260820-98765"
+  }'
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `BookingId` | string | Yes | The `bookingId` from the [Book a Flight](/flight/book-flight) response |
+
+## Response
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `status` | boolean | `true` on success |
+| `message` | string | Human-readable message |
+| `data.PNR` | string | Airline PNR code (share this with the traveller) |
+| `data.ticketNumbers` | array | Individual e-ticket numbers per passenger |
+| `data.status` | string | `TICKETED` |
+
+```json
+{
+  "status": true,
+  "message": "Ticket issued successfully",
+  "data": {
+    "PNR": "XYZABC",
+    "ticketNumbers": ["167-1234567890"],
+    "bookingId": "BK-20260820-98765",
+    "status": "TICKETED",
+    "airline": "Arik Air",
+    "flightNumber": "W3 204",
+    "origin": "LOS",
+    "destination": "ABV",
+    "departureTime": "2026-08-20T06:30:00"
+  }
+}
+```
+
+<Note>
+  The PNR is what the traveller uses to check in online or at the airport. Share it with them immediately after ticketing.
+</Note>
+
+<Card title="API Reference" icon="code" href="/api-reference/flight/ticket">
+  Full request/response details and Try it
+</Card>

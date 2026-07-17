@@ -170,6 +170,17 @@
             ]
           },
           {
+            "group": "Flight Booking",
+            "pages": [
+              "flight/overview",
+              "flight/airports",
+              "flight/search-flights",
+              "flight/select-flight",
+              "flight/book-flight",
+              "flight/ticket-flight"
+            ]
+          },
+          {
             "group": "Webhook",
             "pages": [
               "api-reference/webhook/overview",
@@ -286,6 +297,16 @@
                   "api-reference/gift-cards/verify-order"
                 ]
               }
+            ]
+          },
+          {
+            "group": "Flight Booking",
+            "pages": [
+              "api-reference/flight/airports",
+              "api-reference/flight/search",
+              "api-reference/flight/select",
+              "api-reference/flight/book",
+              "api-reference/flight/ticket"
             ]
           },
           {

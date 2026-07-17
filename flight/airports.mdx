@@ -1,0 +1,76 @@
+---
+title: "Get Airports"
+description: "Retrieve the list of supported airports with IATA codes"
+sidebarTitle: "Airports"
+---
+
+Returns a list of all airports available for booking. Results are cached and refreshed periodically. Use this endpoint to build a search UI or validate IATA codes before calling [Search Flights](/flight/search-flights).
+
+You can filter by passing a `search` query parameter — the API will match against the airport name, city name, or IATA code (case-insensitive).
+
+## Usage
+
+```bash
+curl https://api.payvessel.com/pms/api/external/request/flights/airports/ \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_API_SECRET"
+```
+
+With search filter:
+
+```bash
+curl "https://api.payvessel.com/pms/api/external/request/flights/airports/?search=lagos" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_API_SECRET"
+```
+
+## Query parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `search` | string | No | Filter by airport name, city, or IATA code |
+
+## Response
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `status` | boolean | `true` on success |
+| `message` | string | Human-readable message |
+| `data` | array | List of airport objects |
+| `data[].IATA` | string | 3-letter IATA airport code |
+| `data[].AirportName` | string | Full airport name |
+| `data[].CityName` | string | City the airport serves |
+| `data[].CountryCode` | string | ISO 2-letter country code |
+
+## Example response
+
+```json
+{
+  "status": true,
+  "message": "Airports retrieved successfully",
+  "data": [
+    {
+      "IATA": "LOS",
+      "AirportName": "Murtala Muhammed International Airport",
+      "CityName": "Lagos",
+      "CountryCode": "NG"
+    },
+    {
+      "IATA": "ABV",
+      "AirportName": "Nnamdi Azikiwe International Airport",
+      "CityName": "Abuja",
+      "CountryCode": "NG"
+    },
+    {
+      "IATA": "LHR",
+      "AirportName": "Heathrow Airport",
+      "CityName": "London",
+      "CountryCode": "GB"
+    }
+  ]
+}
+```
+
+<Card title="API Reference" icon="code" href="/api-reference/flight/airports">
+  Full request/response details and Try it
+</Card>

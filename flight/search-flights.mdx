@@ -1,0 +1,115 @@
+---
+title: "Search Flights"
+description: "Search for available flights by route, date, and passenger count"
+sidebarTitle: "Search Flights"
+---
+
+Search for available flights. The response contains a list of flight options with pricing and availability. Pass one of the returned `flightKey` values to [Select a Flight](/flight/select-flight) to confirm pricing before booking.
+
+## Trip types
+
+| `tripType` | Behaviour |
+| --- | --- |
+| `OneWay` | Requires `origin`, `destination`, `departureDate` |
+| `Return` | Requires `origin`, `destination`, `departureDate`, `returnDate` |
+| `MultiDestination` | Requires `legs` array (each leg has `origin`, `destination`, `departureDate`) |
+
+## Usage
+
+### One-way flight
+
+```bash
+curl -X POST https://api.payvessel.com/pms/api/external/request/flights/search/ \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_API_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "tripType": "OneWay",
+    "origin": "LOS",
+    "destination": "ABV",
+    "departureDate": "2026-08-20",
+    "adultCount": 1,
+    "childCount": 0,
+    "infantCount": 0,
+    "cabinClass": "Economy",
+    "currencyCode": "NGN"
+  }'
+```
+
+### Return flight
+
+```bash
+curl -X POST https://api.payvessel.com/pms/api/external/request/flights/search/ \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_API_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "tripType": "Return",
+    "origin": "LOS",
+    "destination": "LHR",
+    "departureDate": "2026-09-01",
+    "returnDate": "2026-09-15",
+    "adultCount": 2,
+    "childCount": 1,
+    "infantCount": 0,
+    "cabinClass": "Economy",
+    "currencyCode": "NGN"
+  }'
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `tripType` | string | Yes | `OneWay`, `Return`, or `MultiDestination` |
+| `origin` | string | OneWay / Return | 3-letter IATA code of departure airport |
+| `destination` | string | OneWay / Return | 3-letter IATA code of arrival airport |
+| `departureDate` | date | OneWay / Return | Departure date (`YYYY-MM-DD`) |
+| `returnDate` | date | Return only | Return date (`YYYY-MM-DD`) |
+| `legs` | array | MultiDestination | Array of `{origin, destination, departureDate}` objects |
+| `adultCount` | integer | No | Number of adult passengers (default: `1`, min: `1`) |
+| `childCount` | integer | No | Number of child passengers (default: `0`) |
+| `infantCount` | integer | No | Number of infant passengers (default: `0`) |
+| `cabinClass` | string | No | `Economy` (default), `Business`, or `FirstClass` |
+| `preferredAirline` | string | No | IATA airline code to filter (e.g. `QR`, `ET`) |
+| `currencyCode` | string | No | Response currency (default: `NGN`) |
+
+## Response
+
+The `data` field contains an array of available flight options. Each option includes price, airline, flight numbers, and a `flightKey` to use in the next step.
+
+```json
+{
+  "status": true,
+  "message": "Flight search completed",
+  "data": {
+    "flights": [
+      {
+        "flightKey": "a1b2c3d4e5f6...",
+        "airline": "Arik Air",
+        "flightNumber": "W3 204",
+        "origin": "LOS",
+        "destination": "ABV",
+        "departureTime": "2026-08-20T06:30:00",
+        "arrivalTime": "2026-08-20T07:45:00",
+        "duration": "1h 15m",
+        "stops": 0,
+        "cabinClass": "Economy",
+        "availableSeats": 12,
+        "price": {
+          "amount": 45000.00,
+          "currency": "NGN",
+          "breakdown": {
+            "base": 38000.00,
+            "taxes": 7000.00
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+<Card title="API Reference" icon="code" href="/api-reference/flight/search">
+  Full request/response details and Try it
+</Card>

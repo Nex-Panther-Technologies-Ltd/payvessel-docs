@@ -1,0 +1,62 @@
+---
+title: "Select a Flight"
+description: "Select and reprice a flight option before booking"
+sidebarTitle: "Select Flight"
+---
+
+Select a specific flight option from the search results and get a confirmed, up-to-date price. Always call this step before [Book a Flight](/flight/book-flight) — fares can change between search and booking, and this step locks in the current price.
+
+Pass the `flightKey` from the [Search Flights](/flight/search-flights) response.
+
+## Usage
+
+```bash
+curl -X POST https://api.payvessel.com/pms/api/external/request/flights/select/ \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_API_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "flightKey": "a1b2c3d4e5f6..."
+  }'
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `flightKey` | string | Yes | The `flightKey` returned from [Search Flights](/flight/search-flights) |
+
+## Response
+
+Returns the confirmed flight details and current price. Use the `flightKey` in this response when calling [Book a Flight](/flight/book-flight).
+
+```json
+{
+  "status": true,
+  "message": "Flight selected successfully",
+  "data": {
+    "flightKey": "a1b2c3d4e5f6...",
+    "airline": "Arik Air",
+    "flightNumber": "W3 204",
+    "origin": "LOS",
+    "destination": "ABV",
+    "departureTime": "2026-08-20T06:30:00",
+    "arrivalTime": "2026-08-20T07:45:00",
+    "duration": "1h 15m",
+    "cabinClass": "Economy",
+    "price": {
+      "amount": 45000.00,
+      "currency": "NGN"
+    },
+    "fareRules": "Non-refundable. Changes allowed with fee."
+  }
+}
+```
+
+<Warning>
+  `flightKey` values are time-sensitive. Select and book in quick succession to avoid pricing changes or seat unavailability.
+</Warning>
+
+<Card title="API Reference" icon="code" href="/api-reference/flight/select">
+  Full request/response details and Try it
+</Card>

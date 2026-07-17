@@ -1,0 +1,113 @@
+---
+title: "Book a Flight"
+description: "Confirm a flight booking with passenger details"
+sidebarTitle: "Book Flight"
+---
+
+Book a selected flight by submitting passenger details. PayVessel reserves the seats with the airline and returns a **booking ID** and your internal **reference**. After booking, collect payment from your customer and then call [Issue Ticket](/flight/ticket-flight) to issue the final e-ticket and PNR.
+
+## How it works
+
+1. Call [Select a Flight](/flight/select-flight) to lock in the price and get a fresh `flightKey`.
+2. **POST** passenger details to this endpoint.
+3. Receive a PayVessel `reference` and a `bookingId` — save both.
+4. Collect payment from your customer.
+5. Call [Issue Ticket](/flight/ticket-flight) with the `bookingId` to complete the ticket.
+
+## Usage
+
+```bash
+curl -X POST https://api.payvessel.com/pms/api/external/request/flights/book/ \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_API_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "flightKey": "a1b2c3d4e5f6...",
+    "contactEmail": "traveller@example.com",
+    "contactPhone": "08031234567",
+    "passengers": [
+      {
+        "firstName": "Amina",
+        "lastName": "Ibrahim",
+        "title": "Mrs",
+        "dateOfBirth": "1988-03-22",
+        "gender": "Female",
+        "passengerType": "Adult",
+        "nationality": "NG",
+        "passportNumber": "A12345678",
+        "passportExpiryDate": "2030-03-22",
+        "email": "amina.ibrahim@example.com",
+        "phoneNumber": "08031234567"
+      }
+    ]
+  }'
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `flightKey` | string | Yes | `flightKey` from [Select a Flight](/flight/select-flight) |
+| `contactEmail` | string | Yes | Primary contact email for booking notifications |
+| `contactPhone` | string | Yes | Primary contact phone number |
+| `passengers` | array | Yes | At least one passenger object (see below) |
+
+### Passenger object
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `firstName` | string | Yes | Passenger first name (as on ID) |
+| `lastName` | string | Yes | Passenger last name (as on ID) |
+| `title` | string | Yes | `Mr`, `Mrs`, `Ms`, `Dr`, or `Prof` |
+| `dateOfBirth` | date | Yes | `YYYY-MM-DD` |
+| `gender` | string | Yes | `Male` or `Female` |
+| `passengerType` | string | Yes | `Adult`, `Child`, or `Infant` |
+| `nationality` | string | Yes | ISO 3-letter country code (e.g. `NGA`) |
+| `passportNumber` | string | No | Required for international flights |
+| `passportExpiryDate` | date | No | Required for international flights (`YYYY-MM-DD`) |
+| `email` | string | No | Passenger email |
+| `phoneNumber` | string | No | Passenger phone number |
+
+## Response
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `status` | boolean | `true` on success |
+| `message` | string | Human-readable message |
+| `data.reference` | string | PayVessel booking reference (e.g. `FLT-A1B2C3D4E5F6`) |
+| `data.booking.bookingId` | string | Booking ID — required for [Issue Ticket](/flight/ticket-flight) |
+| `data.booking.status` | string | Booking status (`BOOKED`) |
+
+```json
+{
+  "status": true,
+  "message": "Flight booked successfully",
+  "data": {
+    "reference": "FLT-A1B2C3D4E5F6",
+    "booking": {
+      "bookingId": "BK-20260820-98765",
+      "status": "BOOKED",
+      "airline": "Arik Air",
+      "flightNumber": "W3 204",
+      "origin": "LOS",
+      "destination": "ABV",
+      "departureTime": "2026-08-20T06:30:00",
+      "passengers": [
+        {
+          "firstName": "Amina",
+          "lastName": "Ibrahim",
+          "passengerType": "Adult"
+        }
+      ]
+    }
+  }
+}
+```
+
+<Warning>
+  Save the `reference` and `booking.bookingId` immediately — you will need `bookingId` to issue the ticket.
+</Warning>
+
+<Card title="API Reference" icon="code" href="/api-reference/flight/book">
+  Full request/response details and Try it
+</Card>
