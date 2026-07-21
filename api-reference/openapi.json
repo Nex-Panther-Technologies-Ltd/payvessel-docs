@@ -3837,6 +3837,29 @@
                     "postal_code": "101233",
                     "brand": "VISA",
                     "currency": "USD",
+                    "is_contactless": false,
+                    "prefund_amount": "10.00",
+                    "card_name": "Jane Doe"
+                  }
+                },
+                "contactless": {
+                  "summary": "Contactless card",
+                  "value": {
+                    "first_name": "Jane",
+                    "last_name": "Doe",
+                    "email": "jane.doe@example.com",
+                    "phone": "08031234567",
+                    "bvn": "22345678901",
+                    "nin": "12345678901",
+                    "dob": "1990-05-15",
+                    "image": "data:image/jpeg;base64,YOUR_BASE64_IDENTITY_IMAGE",
+                    "state": "Lagos",
+                    "lga": "Ikeja",
+                    "street": "12 Admiralty Way, Lekki Phase 1",
+                    "postal_code": "101233",
+                    "brand": "VISA",
+                    "currency": "USD",
+                    "is_contactless": true,
                     "prefund_amount": "10.00",
                     "card_name": "Jane Doe"
                   }
@@ -8984,6 +9007,11 @@
               "USD"
             ],
             "description": "Must be USD for customer cards"
+          },
+          "is_contactless": {
+            "type": "boolean",
+            "default": false,
+            "description": "Set to true to issue a contactless-enabled card. Defaults to false for a standard virtual card."
           },
           "prefund_amount": {
             "type": "string",

@@ -1,8 +1,19 @@
 ---
 title: "Create a Card"
 description: "Virtual card API: create a USD Visa or Mastercard virtual card for a customer with KYC and optional prefund (asynchronous)."
-keywords: ["virtual card API", "create virtual card", "USD virtual card API", "card issuing API"]
+keywords: ["virtual card API", "create virtual card", "USD virtual card API", "card issuing API", "contactless card"]
 openapi: "api-reference/openapi.json POST /pms/api/external/request/virtual-cards/"
 ---
 
 This resource allows you to create a card for a customer. This operation is asynchronous, meaning we notify you via a webhook event on the final status.
+
+## Contactless cards
+
+Use the optional boolean field `is_contactless` on the create payload:
+
+| Value | Description |
+| --- | --- |
+| `false` | Standard virtual card (default) |
+| `true` | Contactless-enabled card for tap-to-pay use cases |
+
+Contactless cards may have a different issuance fee. Quote costs before create using [Card Fee Quote](/virtual-cards/fee-quote).

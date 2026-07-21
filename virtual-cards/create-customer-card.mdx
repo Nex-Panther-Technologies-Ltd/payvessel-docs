@@ -16,6 +16,8 @@ This operation is **asynchronous**, meaning we notify you via a **webhook event*
 
 Currency must be `USD`. Minimum prefund is **$3.00**.
 
+Set `is_contactless` to `true` to issue a contactless-enabled card (tap-to-pay). Defaults to `false` for a standard virtual card. Contactless cards may have a different issuance fee — use [Card Fee Quote](/virtual-cards/fee-quote) before create.
+
 ## How it works
 
 1. **Send a request** with full customer KYC and card details (`brand`, `currency`). Optionally include `prefund_amount` to fund the card on creation.
@@ -34,6 +36,7 @@ Currency must be `USD`. Minimum prefund is **$3.00**.
 | `image` | Yes | Base64 identity document (JPEG or PNG) |
 | `state`, `lga`, `street`, `postal_code` | Yes | Nigerian address |
 | `brand`, `currency` | Yes | USD only |
+| `is_contactless` | No | `false` (default) for standard virtual card; `true` for contactless-enabled card |
 | `prefund_amount` | No | Optional; minimum **$3 USD** when provided |
 | `card_name` | Optional | Label on card (max 255 characters) |
 
@@ -61,6 +64,33 @@ Currency must be `USD`. Minimum prefund is **$3.00**.
   "postal_code": "101233",
   "brand": "VISA",
   "currency": "USD",
+  "is_contactless": false,
+  "prefund_amount": "10.00",
+  "card_name": "Jane Doe"
+}
+```
+
+### Contactless card
+
+Set `is_contactless` to `true` to issue a contactless-enabled card:
+
+```json
+{
+  "first_name": "Jane",
+  "last_name": "Doe",
+  "email": "jane.doe@example.com",
+  "phone": "08031234567",
+  "bvn": "22345678901",
+  "nin": "12345678901",
+  "dob": "1990-05-15",
+  "image": "data:image/jpeg;base64,YOUR_BASE64_IDENTITY_IMAGE",
+  "state": "Lagos",
+  "lga": "Ikeja",
+  "street": "12 Admiralty Way, Lekki Phase 1",
+  "postal_code": "101233",
+  "brand": "VISA",
+  "currency": "USD",
+  "is_contactless": true,
   "prefund_amount": "10.00",
   "card_name": "Jane Doe"
 }
