@@ -133,7 +133,7 @@ def main() -> None:
             },
             "prefund_amount": {
                 "type": "string",
-                "description": "Optional initial card balance in USD (minimum 3.00 when provided)",
+                "description": "Optional initial card balance in USD (minimum 1.00 when provided)",
                 "example": "10.00",
             },
             "card_name": {

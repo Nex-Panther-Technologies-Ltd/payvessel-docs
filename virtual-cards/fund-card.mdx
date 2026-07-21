@@ -5,10 +5,12 @@ description: "Load USD from your business wallet onto a virtual card"
 
 Move USD from your PayVessel **business USD wallet** onto a customer’s virtual card. Funding fees apply; PayVessel holds the spendable card balance.
 
+Minimum fund amount is **$1.00 USD** per request.
+
 ## How it works
 
 1. **Confirm wallet balance** can cover amount + funding fee ([Card Fee Quote](/virtual-cards/fee-quote)).
-2. **POST the fund amount** with the target `card_id`.
+2. **POST the fund amount** (minimum `1.00` USD) with the target `card_id`.
 3. **Card balance updates** on the card object; use [Get a Card](/virtual-cards/get-card) to read the current balance.
 
 ## When to use

@@ -9015,7 +9015,7 @@
           },
           "prefund_amount": {
             "type": "string",
-            "description": "Optional initial card balance in USD (minimum 3.00 when provided)",
+            "description": "Optional initial card balance in USD (minimum 1.00 when provided)",
             "example": "10.00"
           },
           "card_name": {
@@ -9032,7 +9032,7 @@
         "properties": {
           "amount": {
             "type": "string",
-            "description": "USD amount (e.g. 25.00). Withdraw minimum 3.00",
+            "description": "USD amount (e.g. 25.00). Fund minimum 1.00; withdraw minimum 3.00",
             "example": "25.00"
           }
         }
