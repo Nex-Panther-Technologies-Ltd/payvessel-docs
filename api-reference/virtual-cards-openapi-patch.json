@@ -111,45 +111,6 @@
         ]
       }
     },
-    "/pms/api/external/request/virtual-cards/fees/quote/": {
-      "post": {
-        "summary": "Virtual Card Fee Quote",
-        "description": "Calculate a single fee (funding, withdrawal, issuance, etc.).",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/VirtualCardFeeQuoteRequest"
-              },
-              "examples": {
-                "funding": {
-                  "value": {
-                    "fee_type": "funding",
-                    "amount_usd": "50.00"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Quote calculated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VirtualCardFeeQuoteResponse"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Virtual Cards"
-        ]
-      }
-    },
     "/pms/api/external/request/virtual-cards/fees/create-quote/": {
       "post": {
         "summary": "Create Card Quote",
@@ -718,30 +679,6 @@
         }
       }
     },
-    "VirtualCardFeeQuoteRequest": {
-      "type": "object",
-      "required": [
-        "fee_type"
-      ],
-      "properties": {
-        "fee_type": {
-          "type": "string",
-          "enum": [
-            "issuance",
-            "funding",
-            "withdrawal",
-            "spend",
-            "maintenance",
-            "cross_border",
-            "chargeback",
-            "decline"
-          ]
-        },
-        "amount_usd": {
-          "type": "string"
-        }
-      }
-    },
     "VirtualCardCreateQuoteRequest": {
       "type": "object",
       "properties": {
@@ -752,20 +689,6 @@
       }
     },
     "VirtualCardFeesResponse": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "boolean"
-        },
-        "message": {
-          "type": "string"
-        },
-        "data": {
-          "type": "object"
-        }
-      }
-    },
-    "VirtualCardFeeQuoteResponse": {
       "type": "object",
       "properties": {
         "status": {

@@ -190,30 +190,7 @@ def main() -> None:
         },
     }
 
-    schemas["VirtualCardFeeQuoteRequest"] = {
-        "type": "object",
-        "required": ["fee_type"],
-        "properties": {
-            "fee_type": {
-                "type": "string",
-                "enum": [
-                    "issuance",
-                    "funding",
-                    "withdrawal",
-                    "spend",
-                    "maintenance",
-                    "cross_border",
-                    "chargeback",
-                    "decline",
-                ],
-                "description": "Fee type to calculate",
-            },
-            "amount_usd": {
-                "type": "string",
-                "description": "Principal USD amount (required for funding, cross_border)",
-            },
-        },
-    }
+
 
     card_id_param = {
         "name": "card_id",

@@ -3985,128 +3985,6 @@
         ]
       }
     },
-    "/pms/api/external/request/virtual-cards/fees/quote/": {
-      "post": {
-        "summary": "Card Fee Quote",
-        "description": "Calculate a single fee (funding, withdrawal, issuance, etc.).",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/VirtualCardFeeQuoteRequest"
-              },
-              "examples": {
-                "funding": {
-                  "value": {
-                    "fee_type": "funding",
-                    "amount_usd": "50.00"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Quote calculated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VirtualCardFeeQuoteResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                },
-                "examples": {
-                  "unauthorized": {
-                    "summary": "Invalid credentials",
-                    "value": {
-                      "error": 401,
-                      "message": "Unauthorized. Please check your API key."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Resource not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Issuing"
-        ],
-        "operationId": "externalVirtualCardsFeeQuote",
-        "parameters": [
-          {
-            "name": "api-key",
-            "in": "header",
-            "description": "Your Payvessel public API key",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "api-secret",
-            "in": "header",
-            "description": "Your Payvessel secret",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "description": "Request content type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "application/json"
-              ]
-            },
-            "example": "application/json"
-          }
-        ]
-      }
-    },
     "/pms/api/external/request/virtual-cards/{card_id}/": {
       "get": {
         "summary": "Get a Card",
@@ -9037,32 +8915,6 @@
           }
         }
       },
-      "VirtualCardFeeQuoteRequest": {
-        "type": "object",
-        "required": [
-          "fee_type"
-        ],
-        "properties": {
-          "fee_type": {
-            "type": "string",
-            "enum": [
-              "issuance",
-              "funding",
-              "withdrawal",
-              "spend",
-              "maintenance",
-              "cross_border",
-              "chargeback",
-              "decline"
-            ],
-            "description": "Fee type to calculate"
-          },
-          "amount_usd": {
-            "type": "string",
-            "description": "Principal USD amount (required for funding, cross_border)"
-          }
-        }
-      },
       "VirtualCardCreateQuoteRequest": {
         "type": "object",
         "properties": {
@@ -9073,20 +8925,6 @@
         }
       },
       "VirtualCardFeesResponse": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          },
-          "data": {
-            "type": "object"
-          }
-        }
-      },
-      "VirtualCardFeeQuoteResponse": {
         "type": "object",
         "properties": {
           "status": {

@@ -107,8 +107,7 @@
               "virtual-cards/mock-transaction",
               "virtual-cards/freeze-card",
               "virtual-cards/unfreeze-card",
-              "virtual-cards/terminate-card",
-              "virtual-cards/fee-quote"
+              "virtual-cards/terminate-card"
             ]
           },
           {
@@ -224,8 +223,7 @@
               "api-reference/virtual-cards/mock-transaction",
               "api-reference/virtual-cards/freeze-card",
               "api-reference/virtual-cards/unfreeze-card",
-              "api-reference/virtual-cards/terminate-card",
-              "api-reference/virtual-cards/fee-quote"
+              "api-reference/virtual-cards/terminate-card"
             ]
           },
           {
