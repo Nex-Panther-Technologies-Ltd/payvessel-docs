@@ -4378,7 +4378,13 @@
         "properties": {
           "passenger_type": {
             "type": "string",
-            "title": "Passenger Type"
+            "title": "Passenger Type",
+            "enum": [
+              "Adult",
+              "Child",
+              "Infant"
+            ],
+            "description": "Supported values: Adult, Child, Infant."
           },
           "first_name": {
             "type": "string",
@@ -4569,7 +4575,13 @@
         "properties": {
           "passenger_type": {
             "type": "string",
-            "title": "Passenger Type"
+            "title": "Passenger Type",
+            "enum": [
+              "Adult",
+              "Child",
+              "Infant"
+            ],
+            "description": "Supported values: Adult, Child, Infant."
           },
           "first_name": {
             "type": "string",
