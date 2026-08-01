@@ -1,0 +1,82 @@
+---
+title: "Create Quote"
+description: "Validate a selected flight option and receive a bookable quote"
+sidebarTitle: "Create Quote"
+---
+
+Create a quote from a `selection_token` returned by [Search Flights](/flight/search-flights). A quote confirms the selected option and returns a `quote_id` that you will use when creating an order.
+
+Quotes are time-bound. The current quote validity window is **30 minutes**.
+
+## Usage
+
+```bash
+curl -X POST https://api.payvessel.com/vaas/api/v1/flight/quotes \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_API_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "selection_token": "H4sIAJjPj2gC_5WQwU7DMBBE_2Vyk7t8bS1jQk2lM9m1K1JICJt2mN2o0m7b5HkQ3n3M2fWm6v8Q3m6aB7m6U1B8PpK9s7s1wQf2W4B1zQm5V6g3Y7..."
+  }'
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `selection_token` | string | Yes | Opaque token returned by the search response |
+
+## Response
+
+Quote responses return **final pricing**, so `pricing.price_status` is `final`.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | string (uuid) | Quote ID to use in order creation |
+| `status` | string | Quote lifecycle status |
+| `currency_code` | string | Display currency |
+| `pricing` | object | Final pricing breakdown |
+| `expires_at` | datetime | Quote expiry timestamp |
+| `journeys` | array | Confirmed itinerary snapshot |
+
+## Example response
+
+```json
+{
+  "status": true,
+  "message": "Flight quote created successfully",
+  "data": {
+    "id": "f7724ed8-8899-4f19-8757-fcbce8a8d852",
+    "business_id": "9ca6db0d-45bf-459b-b95f-c06e7d5d0c12",
+    "status": "active",
+    "currency_code": "NGN",
+    "pricing": {
+      "currency_code": "NGN",
+      "base_price": 487500.0,
+      "service_charge": 24375.0,
+      "total_amount": 511875.0,
+      "wallet_reward_on_success": 2437.5,
+      "price_status": "final"
+    },
+    "airline_code": "EK",
+    "airline_name": "Emirates",
+    "airline_logo_url": "https://cdn.example.com/airlines/ek.png",
+    "marketing_carrier": "EK",
+    "journeys": [],
+    "fare_rules": [
+      "Changes may attract airline fees."
+    ],
+    "penalty_rules": [
+      "Ticket is non-refundable after departure."
+    ],
+    "is_refundable": false,
+    "expires_at": "2026-08-01T14:30:00Z",
+    "created_datetime": "2026-08-01T14:00:00Z",
+    "updated_datetime": "2026-08-01T14:00:00Z"
+  }
+}
+```
+
+<Card title="API Reference" icon="code" href="/api-reference/flight/create-quote">
+  Full request and response schema
+</Card>

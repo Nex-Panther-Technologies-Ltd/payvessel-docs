@@ -1,0 +1,65 @@
+---
+title: "List Orders"
+description: "Retrieve all flight orders for the authenticated business"
+sidebarTitle: "List Orders"
+---
+
+Retrieve all flight orders belonging to the authenticated business. Orders are returned from **newest to oldest**.
+
+## Usage
+
+```bash
+curl https://api.payvessel.com/vaas/api/v1/flight/orders \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_API_SECRET"
+```
+
+## Response
+
+The `data` field contains an array of order objects. Each order includes the merchant reference, PayVessel order reference, pricing snapshot, status, and passenger summary.
+
+## Example response
+
+```json
+{
+  "status": true,
+  "message": "Flight orders retrieved successfully",
+  "data": [
+    {
+      "id": "df564c2d-4e6a-470a-b4e6-c46c298a01de",
+      "business_id": "9ca6db0d-45bf-459b-b95f-c06e7d5d0c12",
+      "merchant_reference": "flight-order-001",
+      "order_reference": "A1B2C3D4E5F6G7H8",
+      "quote_id": "f7724ed8-8899-4f19-8757-fcbce8a8d852",
+      "currency_code": "NGN",
+      "pricing": {
+        "currency_code": "NGN",
+        "base_price": 487500.0,
+        "service_charge": 24375.0,
+        "total_amount": 511875.0,
+        "wallet_reward_on_success": 2437.5,
+        "price_status": "final"
+      },
+      "status": "completed",
+      "error_message": null,
+      "passengers": [
+        {
+          "passenger_type": "Adult",
+          "first_name": "Amina",
+          "middle_name": "T.",
+          "last_name": "Ibrahim",
+          "title": "Mrs",
+          "gender": "Female"
+        }
+      ],
+      "created_datetime": "2026-08-01T14:05:00Z",
+      "updated_datetime": "2026-08-01T14:12:00Z",
+      "completed_datetime": "2026-08-01T14:12:00Z"
+    }
+  ]
+}
+```
+
+<Card title="API Reference" icon="code" href="/api-reference/flight/list-orders">
+  Full request and response schema
+</Card>

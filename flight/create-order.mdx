@@ -1,0 +1,137 @@
+---
+title: "Create Order"
+description: "Charge your wallet and create a flight booking order"
+sidebarTitle: "Create Order"
+---
+
+Create a flight order from a valid `quote_id`. PayVessel charges your business wallet using the quoted total amount and then submits the booking for processing.
+
+The `reference` you send is your merchant reference. It must be unique **within your business**. PayVessel also generates its own internal `order_reference`, which is returned in the response.
+
+## Passenger type options
+
+| Value | Meaning |
+| --- | --- |
+| `Adult` | Adult passenger |
+| `Child` | Child passenger |
+| `Infant` | Infant passenger |
+
+## Usage
+
+```bash
+curl -X POST https://api.payvessel.com/vaas/api/v1/flight/orders \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_API_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "quote_id": "f7724ed8-8899-4f19-8757-fcbce8a8d852",
+    "reference": "flight-order-001",
+    "passenger_details": [
+      {
+        "passenger_type": "Adult",
+        "first_name": "Amina",
+        "middle_name": "T.",
+        "last_name": "Ibrahim",
+        "date_of_birth": "1988-03-22",
+        "phone_number": "+2348031234567",
+        "address": "12 Admiralty Way, Lekki",
+        "passport_number": "A12345678",
+        "passport_expiry_date": "2030-03-22",
+        "passport_issuing_authority": "Nigeria Immigration Service",
+        "passport_issue_country_code": "NG",
+        "email": "amina.ibrahim@example.com",
+        "gender": "Female",
+        "title": "Mrs",
+        "city": "Lagos",
+        "country": "Nigeria",
+        "country_code": "NG",
+        "postal_code": "101001"
+      }
+    ],
+    "webhook_url": "https://merchant.example.com/webhooks/flight"
+  }'
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `quote_id` | string (uuid) | Yes | Quote ID returned by [Create Quote](/flight/create-quote) |
+| `reference` | string | Yes | Your merchant reference. Maximum length is `64` |
+| `passenger_details` | array | Yes | Passenger payload for the booking |
+| `webhook_url` | string | No | Merchant webhook URL for order status notifications |
+
+### Passenger object
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `passenger_type` | string | Yes | `Adult`, `Child`, or `Infant` |
+| `first_name` | string | Yes | Passenger first name |
+| `middle_name` | string | No | Passenger middle name |
+| `last_name` | string | Yes | Passenger last name |
+| `date_of_birth` | date | No | Date in `YYYY-MM-DD` format. Often required for ticketing |
+| `phone_number` | string | No | Passenger contact number |
+| `address` | string | No | Passenger address |
+| `passport_number` | string | No | Recommended for international bookings |
+| `passport_expiry_date` | date | No | Recommended for international bookings |
+| `passport_issuing_authority` | string | No | Passport issuing authority |
+| `passport_issue_country_code` | string | No | ISO country code for passport issue country |
+| `email` | string | No | Passenger email |
+| `gender` | string | No | Passenger gender |
+| `title` | string | No | Passenger title |
+| `city` | string | No | Passenger city |
+| `country` | string | No | Passenger country |
+| `country_code` | string | No | ISO country code |
+| `postal_code` | string | No | Postal code |
+
+<Warning>
+  Wallet charging happens during order creation. Make sure your business wallet has sufficient balance before calling this endpoint.
+</Warning>
+
+## Example response
+
+```json
+{
+  "status": true,
+  "message": "Flight order is being processed",
+  "data": {
+    "id": "df564c2d-4e6a-470a-b4e6-c46c298a01de",
+    "business_id": "9ca6db0d-45bf-459b-b95f-c06e7d5d0c12",
+    "merchant_reference": "flight-order-001",
+    "order_reference": "A1B2C3D4E5F6G7H8",
+    "quote_id": "f7724ed8-8899-4f19-8757-fcbce8a8d852",
+    "currency_code": "NGN",
+    "pricing": {
+      "currency_code": "NGN",
+      "base_price": 487500.0,
+      "service_charge": 24375.0,
+      "total_amount": 511875.0,
+      "wallet_reward_on_success": 2437.5,
+      "price_status": "final"
+    },
+    "status": "processing",
+    "error_message": null,
+    "passengers": [
+      {
+        "passenger_type": "Adult",
+        "first_name": "Amina",
+        "middle_name": "T.",
+        "last_name": "Ibrahim",
+        "title": "Mrs",
+        "gender": "Female"
+      }
+    ],
+    "created_datetime": "2026-08-01T14:05:00Z",
+    "updated_datetime": "2026-08-01T14:05:00Z",
+    "completed_datetime": null
+  }
+}
+```
+
+## Next steps
+
+Use [List Orders](/flight/list-orders) or [Get Order](/flight/get-order) to track the latest status of the booking.
+
+<Card title="API Reference" icon="code" href="/api-reference/flight/create-order">
+  Full request and response schema
+</Card>

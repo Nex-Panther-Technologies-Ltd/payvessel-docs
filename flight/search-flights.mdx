@@ -1,59 +1,48 @@
 ---
 title: "Search Flights"
-description: "Search for available flights by route, date, and passenger count"
+description: "Retrieve available flight options and preview pricing"
 sidebarTitle: "Search Flights"
 ---
 
-Search for available flights. The response contains a list of flight options with pricing and availability. Pass one of the returned `flightKey` values to [Select a Flight](/flight/select-flight) to confirm pricing before booking.
+Search for available flights by itinerary and passenger counts. The response returns an array of options, each with an opaque `selection_token` that you must pass unchanged to [Create Quote](/flight/create-quote).
 
-## Trip types
+## Request rules
 
-| `tripType` | Behaviour |
+| `search_type` | Itinerary rule |
 | --- | --- |
-| `OneWay` | Requires `origin`, `destination`, `departureDate` |
-| `Return` | Requires `origin`, `destination`, `departureDate`, `returnDate` |
-| `MultiDestination` | Requires `legs` array (each leg has `origin`, `destination`, `departureDate`) |
+| `oneway` | Exactly 1 itinerary |
+| `return` | Exactly 2 itineraries |
+| `multidestination` | At least 2 itineraries |
+
+## Cabin class options
+
+| Value | Meaning |
+| --- | --- |
+| `economy` | Economy |
+| `premium_economy` | Premium economy |
+| `business` | Business |
+| `first` | First |
 
 ## Usage
 
-### One-way flight
-
 ```bash
-curl -X POST https://api.payvessel.com/pms/api/external/request/flights/search/ \
+curl -X POST https://api.payvessel.com/vaas/api/v1/flight/search \
   -H "api-key: YOUR_API_KEY" \
   -H "api-secret: YOUR_API_SECRET" \
   -H "Content-Type: application/json" \
   -d '{
-    "tripType": "OneWay",
-    "origin": "LOS",
-    "destination": "ABV",
-    "departureDate": "2026-08-20",
-    "adultCount": 1,
-    "childCount": 0,
-    "infantCount": 0,
-    "cabinClass": "Economy",
-    "currencyCode": "NGN"
-  }'
-```
-
-### Return flight
-
-```bash
-curl -X POST https://api.payvessel.com/pms/api/external/request/flights/search/ \
-  -H "api-key: YOUR_API_KEY" \
-  -H "api-secret: YOUR_API_SECRET" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "tripType": "Return",
-    "origin": "LOS",
-    "destination": "LHR",
-    "departureDate": "2026-09-01",
-    "returnDate": "2026-09-15",
-    "adultCount": 2,
-    "childCount": 1,
-    "infantCount": 0,
-    "cabinClass": "Economy",
-    "currencyCode": "NGN"
+    "search_type": "oneway",
+    "cabin_class": "economy",
+    "adults": 1,
+    "children": 0,
+    "infants": 0,
+    "itineraries": [
+      {
+        "departure_airport_code": "JFK",
+        "arrival_airport_code": "DXB",
+        "departure_date": "2026-08-20"
+      }
+    ]
   }'
 ```
 
@@ -61,55 +50,110 @@ curl -X POST https://api.payvessel.com/pms/api/external/request/flights/search/ 
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `tripType` | string | Yes | `OneWay`, `Return`, or `MultiDestination` |
-| `origin` | string | OneWay / Return | 3-letter IATA code of departure airport |
-| `destination` | string | OneWay / Return | 3-letter IATA code of arrival airport |
-| `departureDate` | date | OneWay / Return | Departure date (`YYYY-MM-DD`) |
-| `returnDate` | date | Return only | Return date (`YYYY-MM-DD`) |
-| `legs` | array | MultiDestination | Array of `{origin, destination, departureDate}` objects |
-| `adultCount` | integer | No | Number of adult passengers (default: `1`, min: `1`) |
-| `childCount` | integer | No | Number of child passengers (default: `0`) |
-| `infantCount` | integer | No | Number of infant passengers (default: `0`) |
-| `cabinClass` | string | No | `Economy` (default), `Business`, or `FirstClass` |
-| `preferredAirline` | string | No | IATA airline code to filter (e.g. `QR`, `ET`) |
-| `currencyCode` | string | No | Response currency (default: `NGN`) |
+| `search_type` | string | No | `oneway` by default. Also supports `return` and `multidestination` |
+| `cabin_class` | string | No | `economy` by default. Also supports `premium_economy`, `business`, and `first` |
+| `adults` | integer | Yes | Number of adult passengers. Minimum `1` |
+| `children` | integer | No | Number of child passengers. Default `0` |
+| `infants` | integer | No | Number of infant passengers. Default `0` |
+| `itineraries` | array | Yes | Travel legs for the search |
+
+### Itinerary object
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `departure_airport_code` | string | Yes | 3-letter IATA code |
+| `arrival_airport_code` | string | Yes | 3-letter IATA code |
+| `departure_date` | date | Yes | Date in `YYYY-MM-DD` format |
 
 ## Response
 
-The `data` field contains an array of available flight options. Each option includes price, airline, flight numbers, and a `flightKey` to use in the next step.
+Search returns **preview pricing**, so `pricing.price_status` is `preview`.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `selection_token` | string | Opaque token for the selected option |
+| `pricing.currency_code` | string | Display currency |
+| `pricing.base_price` | number | Merchant-facing base fare |
+| `pricing.service_charge` | number | Service fee |
+| `pricing.total_amount` | number | Total payable amount |
+| `pricing.wallet_reward_on_success` | number | Reward amount to be credited after success |
+| `pricing.price_status` | string | `preview` |
+| `journeys` | array | High-level flight journeys and segments |
+
+## Example response
 
 ```json
 {
   "status": true,
-  "message": "Flight search completed",
-  "data": {
-    "flights": [
-      {
-        "flightKey": "a1b2c3d4e5f6...",
-        "airline": "Arik Air",
-        "flightNumber": "W3 204",
-        "origin": "LOS",
-        "destination": "ABV",
-        "departureTime": "2026-08-20T06:30:00",
-        "arrivalTime": "2026-08-20T07:45:00",
-        "duration": "1h 15m",
-        "stops": 0,
-        "cabinClass": "Economy",
-        "availableSeats": 12,
-        "price": {
-          "amount": 45000.00,
-          "currency": "NGN",
-          "breakdown": {
-            "base": 38000.00,
-            "taxes": 7000.00
-          }
+  "message": "Flights retrieved successfully",
+  "data": [
+    {
+      "selection_token": "H4sIAJjPj2gC_5WQwU7DMBBE_2Vyk7t8bS1jQk2lM9m1K1JICJt2mN2o0m7b5HkQ3n3M2fWm6v8Q3m6aB7m6U1B8PpK9s7s1wQf2W4B1zQm5V6g3Y7...",
+      "pricing": {
+        "currency_code": "NGN",
+        "base_price": 487500.0,
+        "service_charge": 24375.0,
+        "total_amount": 511875.0,
+        "wallet_reward_on_success": 2437.5,
+        "price_status": "preview"
+      },
+      "airline_code": "EK",
+      "airline_name": "Emirates",
+      "airline_logo_url": "https://cdn.example.com/airlines/ek.png",
+      "marketing_carrier": "EK",
+      "journeys": [
+        {
+          "name": "Journey 1",
+          "airline_code": "EK",
+          "airline_name": "Emirates",
+          "departure_airport_code": "JFK",
+          "departure_airport_name": "John F. Kennedy International Airport",
+          "departure_datetime": "2026-08-20T11:00:00Z",
+          "arrival_airport_code": "DXB",
+          "arrival_airport_name": "Dubai International Airport",
+          "arrival_datetime": "2026-08-21T07:35:00Z",
+          "stop_count": 0,
+          "stop_time": null,
+          "trip_duration": "12h 35m",
+          "airline_logo_url": "https://cdn.example.com/airlines/ek.png",
+          "segments": [
+            {
+              "sequence": 1,
+              "airline_code": "EK",
+              "airline_name": "Emirates",
+              "flight_number": "EK204",
+              "departure_airport_code": "JFK",
+              "departure_airport_name": "John F. Kennedy International Airport",
+              "arrival_airport_code": "DXB",
+              "arrival_airport_name": "Dubai International Airport",
+              "departure_datetime": "2026-08-20T11:00:00Z",
+              "arrival_datetime": "2026-08-21T07:35:00Z",
+              "duration": "12h 35m",
+              "booking_class": "Y",
+              "cabin_class": "Economy",
+              "cabin_class_name": "Economy",
+              "aircraft": "Boeing 777-300ER",
+              "layover": null,
+              "layover_duration": null,
+              "baggage_count": 1,
+              "baggage_weight": 23,
+              "baggage_weight_unit": "KG"
+            }
+          ]
         }
-      }
-    ]
-  }
+      ],
+      "fare_rules": [
+        "Changes may attract airline fees."
+      ],
+      "penalty_rules": [
+        "Ticket is non-refundable after departure."
+      ],
+      "is_refundable": false
+    }
+  ]
 }
 ```
 
 <Card title="API Reference" icon="code" href="/api-reference/flight/search">
-  Full request/response details and Try it
+  Full request and response schema
 </Card>

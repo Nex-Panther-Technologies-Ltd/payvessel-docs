@@ -1,46 +1,33 @@
 ---
-title: "Get Airports"
-description: "Retrieve the list of supported airports with IATA codes"
+title: "List Airports"
+description: "Retrieve the supported airport catalogue for flight search"
 sidebarTitle: "Airports"
 ---
 
-Returns a list of all airports available for booking. Results are cached and refreshed periodically. Use this endpoint to build a search UI or validate IATA codes before calling [Search Flights](/flight/search-flights).
+Retrieve the airport catalogue used by the flight API. Each airport object includes the airport code, display name, city, and country.
 
-You can filter by passing a `search` query parameter — the API will match against the airport name, city name, or IATA code (case-insensitive).
+Airport data is cached by PayVessel and refreshed periodically. The current refresh window is **7 days**.
 
 ## Usage
 
 ```bash
-curl https://api.payvessel.com/pms/api/external/request/flights/airports/ \
+curl https://api.payvessel.com/vaas/api/v1/flight/airports \
   -H "api-key: YOUR_API_KEY" \
   -H "api-secret: YOUR_API_SECRET"
 ```
 
-With search filter:
-
-```bash
-curl "https://api.payvessel.com/pms/api/external/request/flights/airports/?search=lagos" \
-  -H "api-key: YOUR_API_KEY" \
-  -H "api-secret: YOUR_API_SECRET"
-```
-
-## Query parameters
-
-| Parameter | Type | Required | Description |
-| --- | --- | --- | --- |
-| `search` | string | No | Filter by airport name, city, or IATA code |
-
-## Response
+## Response fields
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `status` | boolean | `true` on success |
-| `message` | string | Human-readable message |
-| `data` | array | List of airport objects |
-| `data[].IATA` | string | 3-letter IATA airport code |
-| `data[].AirportName` | string | Full airport name |
-| `data[].CityName` | string | City the airport serves |
-| `data[].CountryCode` | string | ISO 2-letter country code |
+| `status` | boolean | `true` when the request succeeds |
+| `message` | string | Human-readable response message |
+| `data` | array | Airport objects |
+| `data[].airport_code` | string | IATA airport code |
+| `data[].airport_name` | string | Airport display name |
+| `data[].city_country` | string | Combined city and country label |
+| `data[].city` | string | City |
+| `data[].country` | string | Country |
 
 ## Example response
 
@@ -50,27 +37,23 @@ curl "https://api.payvessel.com/pms/api/external/request/flights/airports/?searc
   "message": "Airports retrieved successfully",
   "data": [
     {
-      "IATA": "LOS",
-      "AirportName": "Murtala Muhammed International Airport",
-      "CityName": "Lagos",
-      "CountryCode": "NG"
+      "airport_code": "LOS",
+      "airport_name": "Murtala Muhammed International Airport (LOS)",
+      "city_country": "Lagos, Nigeria",
+      "city": "Lagos",
+      "country": "Nigeria"
     },
     {
-      "IATA": "ABV",
-      "AirportName": "Nnamdi Azikiwe International Airport",
-      "CityName": "Abuja",
-      "CountryCode": "NG"
-    },
-    {
-      "IATA": "LHR",
-      "AirportName": "Heathrow Airport",
-      "CityName": "London",
-      "CountryCode": "GB"
+      "airport_code": "JFK",
+      "airport_name": "John F. Kennedy International Airport (JFK)",
+      "city_country": "New York, United States",
+      "city": "New York",
+      "country": "United States"
     }
   ]
 }
 ```
 
 <Card title="API Reference" icon="code" href="/api-reference/flight/airports">
-  Full request/response details and Try it
+  Full request and response schema
 </Card>
