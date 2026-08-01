@@ -165,18 +165,19 @@
                   "gift-cards/get-order",
                   "gift-cards/verify-order"
                 ]
+              },
+              {
+                "group": "Flight Booking",
+                "pages": [
+                  "flight/overview",
+                  "flight/airports",
+                  "flight/search-flights",
+                  "flight/create-quote",
+                  "flight/create-order",
+                  "flight/list-orders",
+                  "flight/get-order"
+                ]
               }
-            ]
-          },
-          {
-            "group": "Flight Booking",
-            "pages": [
-              "flight/overview",
-              "flight/airports",
-              "flight/search-flights",
-              "flight/select-flight",
-              "flight/book-flight",
-              "flight/ticket-flight"
             ]
           },
           {
@@ -294,17 +295,18 @@
                   "api-reference/gift-cards/get-order",
                   "api-reference/gift-cards/verify-order"
                 ]
+              },
+              {
+                "group": "Flight Booking",
+                "pages": [
+                  "api-reference/flight/airports",
+                  "api-reference/flight/search",
+                  "api-reference/flight/create-quote",
+                  "api-reference/flight/create-order",
+                  "api-reference/flight/list-orders",
+                  "api-reference/flight/get-order"
+                ]
               }
-            ]
-          },
-          {
-            "group": "Flight Booking",
-            "pages": [
-              "api-reference/flight/airports",
-              "api-reference/flight/search",
-              "api-reference/flight/select",
-              "api-reference/flight/book",
-              "api-reference/flight/ticket"
             ]
           },
           {

@@ -1,88 +1,125 @@
 ---
-title: "Flight Booking API"
-description: "Search, book, and ticket domestic and international flights through the PayVessel Flight Booking API."
+title: "Flight API"
+description: "Search airports, retrieve flight options, create quotes, and place flight orders through the PayVessel flight API."
 keywords:
   [
-    "flight booking API",
-    "flight API Nigeria",
-    "book flight API",
-    "airline booking API",
-    "PayVessel flight",
+    "flight API",
+    "flight booking API Nigeria",
+    "travel API",
+    "flight search API",
+    "PayVessel flight API",
   ]
 sidebarTitle: "Overview"
 ---
 
-The PayVessel **Flight Booking API** lets you search, price, and book flights for your customers across domestic and international routes. Once a booking is confirmed, PayVessel debits your business wallet and issues the airline ticket directly via the API — you receive a **PNR** (Passenger Name Record) confirmation to share with the traveller.
+The PayVessel **flight API** lets you search airports, retrieve available flight options, create a bookable quote, and place flight orders through a single VaaS integration.
 
-## Access
-
-Flight Booking is a **gated product**. To request access to this service, contact [support@payvessel.com](mailto:support@payvessel.com). Once enabled, authenticate every request with your **API key** and **API secret**.
+Search responses return **preview pricing**. Before creating an order, create a quote to confirm the final payable amount and receive a time-bound `quote_id`.
 
 ## Integration flow
+
+1. **List airports** to retrieve supported airport codes.
+2. **Search flights** to retrieve available options and an opaque `selection_token`.
+3. **Create quote** to validate the selected option and receive a `quote_id`.
+4. **Create order** to charge your wallet and submit the booking.
+5. **List orders** or **get order** to track the latest booking status.
 
 ```mermaid
 sequenceDiagram
     participant You
     participant PayVessel
 
-    You->>PayVessel: GET /airports (discover IATA codes)
-    PayVessel-->>You: Airport list
+    You->>PayVessel: GET /flight/airports
+    PayVessel-->>You: Airport catalogue
 
-    You->>PayVessel: POST /search (dates, route, passengers)
-    PayVessel-->>You: Available flight options
+    You->>PayVessel: POST /flight/search
+    PayVessel-->>You: Flight options + selection_token
 
-    You->>PayVessel: POST /select (choose a flight option)
-    PayVessel-->>You: Confirmed pricing + flight key
+    You->>PayVessel: POST /flight/quotes
+    PayVessel-->>You: Bookable quote + quote_id
 
-    You->>PayVessel: POST /book (passenger details)
-    PayVessel-->>You: Booking confirmed (reference + booking ID)
+    You->>PayVessel: POST /flight/orders
+    PayVessel-->>You: Flight order created
 
-    Note over You,PayVessel: Collect payment from your customer
-
-    You->>PayVessel: POST /ticket (issue ticket)
-    PayVessel-->>You: PNR / e-ticket issued
+    You->>PayVessel: GET /flight/orders or /flight/orders/{order_id}
+    PayVessel-->>You: Latest order status
 ```
 
-## Booking statuses
+## Base path
 
-| Status | Description |
+All flight endpoints are under:
+
+```text
+/vaas/api/v1/flight
+```
+
+## Authentication
+
+All requests require `api-key` and `api-secret` headers. See [Authentication](/api-basics/authentication) for details.
+
+## Search types
+
+| `search_type` | Description |
 | --- | --- |
-| `PENDING` | Booking request received, not yet confirmed |
-| `BOOKED` | Booking confirmed with the airline, awaiting ticketing |
-| `TICKETED` | Ticket issued; PNR available |
-| `FAILED` | Booking or ticketing failed |
-| `CANCELLED` | Booking was cancelled |
-
-## Trip types
-
-| `tripType` | Description |
-| --- | --- |
-| `OneWay` | Single leg, one direction |
-| `Return` | Outbound + return on the same route |
-| `MultiDestination` | Multiple legs with different origins/destinations |
+| `oneway` | One itinerary only |
+| `return` | Exactly two itineraries, outbound and return |
+| `multidestination` | Two or more itineraries |
 
 ## Cabin classes
 
-| `cabinClass` | Description |
+| `cabin_class` | Description |
 | --- | --- |
-| `Economy` | Standard economy class |
-| `Business` | Business class |
-| `FirstClass` | First class |
+| `economy` | Standard economy |
+| `premium_economy` | Premium economy |
+| `business` | Business class |
+| `first` | First class |
 
+## Quote statuses
+
+| Status | Description |
+| --- | --- |
+| `active` | Quote is valid and can be used to create an order |
+| `consumed` | Quote has already been used to create an order |
+| `expired` | Quote validity window has elapsed |
+| `cancelled` | Quote is no longer usable |
+
+## Order statuses
+
+| Status | Description |
+| --- | --- |
+| `pending` | Order has been created and is awaiting downstream processing |
+| `processing` | Booking is in progress |
+| `completed` | Booking completed successfully |
+| `failed` | Booking could not be completed |
+| `cancelled` | Order was cancelled |
+
+## Pricing fields
+
+| Field | Meaning |
+| --- | --- |
+| `base_price` | Merchant-facing fare before service charge |
+| `service_charge` | Additional service fee charged on the booking |
+| `total_amount` | Total amount payable by the merchant |
+| `wallet_reward_on_success` | Amount scheduled to be credited back after a successful booking |
+| `price_status` | `preview` during search, `final` after quote creation |
 
 <CardGroup cols={2}>
-  <Card title="Get Airports" icon="location-dot" href="/flight/airports">
-    Discover IATA airport codes
+  <Card title="List Airports" icon="location-dot" href="/flight/airports">
+    Retrieve supported airport codes
   </Card>
   <Card title="Search Flights" icon="magnifying-glass" href="/flight/search-flights">
-    Find available flights by route and date
+    Retrieve flight options and preview pricing
   </Card>
-  <Card title="Book a Flight" icon="ticket-airline" href="/flight/book-flight">
-    Confirm seats with passenger details
+  <Card title="Create Quote" icon="receipt" href="/flight/create-quote">
+    Confirm a selected option and receive a quote ID
   </Card>
-  <Card title="Issue Ticket" icon="paper-plane" href="/flight/ticket-flight">
-    Get the PNR after payment
+  <Card title="Create Order" icon="ticket-airline" href="/flight/create-order">
+    Charge the wallet and place a booking
+  </Card>
+  <Card title="List Orders" icon="list" href="/flight/list-orders">
+    Retrieve all orders for your business
+  </Card>
+  <Card title="Get Order" icon="circle-info" href="/flight/get-order">
+    Retrieve one order by ID
   </Card>
 </CardGroup>
-
----
