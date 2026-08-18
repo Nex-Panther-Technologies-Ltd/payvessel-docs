@@ -9,10 +9,10 @@ description: "Create virtual bank accounts for customers: STATIC (permanent) or 
 
 <CardGroup cols={2}>
   <Card title="STATIC account" icon="university">
-    Permanent account; requires BVN or NIN. Safe to store and reuse.
+    Permanent account. **9PSB: KYC optional** (30k daily limit, can upgrade). **Palmpay: KYC required**. Safe to store and reuse.
   </Card>
   <Card title="DYNAMIC account" icon="bolt">
-    Temporary, one-time use. Create when needed; do not store.
+    Temporary, one-time use. No KYC required. Create when needed; do not store.
   </Card>
 </CardGroup>
 
@@ -24,9 +24,10 @@ description: "Create virtual bank accounts for customers: STATIC (permanent) or 
 |--|------------|-------------|
 | **Lifespan** | Permanent | Temporary, single use |
 | **Use case** | Recurring payments, wallet funding, saved beneficiaries | One-time payment (e.g. checkout) |
-| **BVN/NIN** | Required (BVN or NIN) | Not required |
+| **BVN/NIN** | 9PSB: Optional; Palmpay: Required | Not required |
 | **Storage** | Can store in your DB; customer can save as beneficiary | Do **not** store; create when you need it |
 | **After use** | Stays valid | Becomes invalid immediately after use |
+| **Daily limit** | 9PSB: 30k (without BVN/NIN); upgrade to lift limit | N/A |
 
 <Warning>
 **DYNAMIC accounts:** If a customer sends money to an expired or already-used DYNAMIC account, they will receive a **refund**. Always create a new DYNAMIC account per transaction when using one-time flows.
@@ -42,18 +43,22 @@ description: "Create virtual bank accounts for customers: STATIC (permanent) or 
 4. When the customer transfers to that account, Payvessel, the partner bank, and you (the merchant) get notified.
 5. You use the account reference / tracking reference for reconciliation and records.
 
-### Partner bank codes
+### Supported banks
+
+Both STATIC and DYNAMIC accounts can be created with these partner banks:
 
 | Bank | Code |
 |------|------|
 | PalmPay | `999991` |
 | 9Payment Service Bank | `120001` |
 
-| Rubies MFB | `090175` |
+**KYC Requirements:**
+- **9PSB Static**: KYC optional (no BVN/NIN needed to create; 30k daily limit applies)
+- **Palmpay Static**: KYC required (BVN or NIN must be provided)
+- **9PSB Dynamic**: No KYC required
+- **Palmpay Dynamic**: No KYC required
 
 You can request accounts for one or both banks by passing their codes in the `bankcode` array.
-
-For DYNAMIC accounts, you can now use Rubies MFB (`090175`) in addition to the existing banks. The bank name will be returned in the response.
 
 ***
 
@@ -62,7 +67,14 @@ For DYNAMIC accounts, you can now use Rubies MFB (`090175`) in addition to the e
 - **Single-service payments** (e.g. electricity, ISP): Reserve an account per customer so they pay by transfer; you get notifications and can confirm payment.
 - **Wallets / top-up** (e.g. super agents, investment apps, logistics): Use **STATIC** accounts so each customer has a permanent account number to fund their wallet.
 - **One-time checkout**: Use **DYNAMIC**: create an account when the user chooses “Pay with bank transfer”, show the details, and do not reuse that account.
+## Upgrading 9PSB Static Accounts
 
+When a customer's 9PSB static account receives funds exceeding the 30k daily limit, they must upgrade the account by providing their BVN and NIN. You can implement this upgrade flow in two ways:
+
+1. **Merchant-initiated**: Merchant upgrades the account on their dashboard
+2. **Customer-initiated**: Customer upgrades via your platform using the [Update Virtual Account](/api-reference/virtual-accounts/update-virtual-account) API endpoint
+
+Once upgraded, the customer's account will have no daily limit restrictions.
 ***
 
 ## API reference (code, payload, response)

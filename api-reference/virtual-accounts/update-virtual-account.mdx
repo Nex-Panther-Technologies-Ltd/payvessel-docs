@@ -1,0 +1,58 @@
+---
+title: "Update Virtual Account"
+description: "Upgrade a 9PSB static virtual account by providing BVN and NIN to remove the 30k daily limit."
+keywords: ["virtual account API", "update virtual account", "upgrade account", "BVN", "NIN"]
+openapi: "api-reference/openapi.json PUT /pms/api/external/request/customerReservedAccount/{account_number}/"
+---
+
+Upgrade a 9PSB static virtual account by providing the customer's BVN and NIN. This removes the 30,000 NGN daily receive limit.
+
+**When to use this endpoint:**
+When a customer's 9PSB static account (created without initial KYC) is about to or has exceeded the 30k daily receive limit, they must upgrade by providing their BVN and NIN. You can implement this upgrade flow on your platform using this endpoint, or merchants can upgrade directly on the PayVessel dashboard.
+
+**Request body:**
+
+Submit the customer's BVN (Bank Verification Number) and NIN (National Identification Number) as strings.
+
+**Example request body:**
+
+```json
+{
+  "bvn": "22345678901",
+  "nin": "12345678901"
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `bvn` | string | Customer's 11-digit Bank Verification Number |
+| `nin` | string | Customer's 11-digit National Identification Number |
+
+**Example response:**
+
+```json
+{
+  "status": true,
+  "service": "string",
+  "bvn": "string",
+  "business": "string",
+  "errors": []
+}
+```
+
+**cURL:**
+
+```bash
+curl -X PUT "https://api.payvessel.com/pms/api/external/request/customerReservedAccount/{account_number}/" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"bvn":"22345678901","nin":"12345678901"}'
+```
+
+**Parameters:**
+- **account_number** (path, required): The virtual account number to upgrade
+- **api-key** (header, required): Your API key
+- **api-secret** (header, required): Your business API secret
+
+For concepts on static vs dynamic accounts, see the [Customer Reserved Account](/accept-payment/customer-reserved-account) guide.

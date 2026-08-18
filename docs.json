@@ -90,7 +90,8 @@
             "group": "Virtual Accounts",
             "pages": [
               "virtual-accounts/create-virtual-account",
-              "virtual-accounts/get-virtual-account"
+              "virtual-accounts/get-virtual-account",
+              "virtual-accounts/update-virtual-account"
             ]
           },
           {
@@ -209,7 +210,8 @@
             "group": "Virtual Accounts",
             "pages": [
               "api-reference/virtual-accounts/create-virtual-account",
-              "api-reference/virtual-accounts/get-virtual-account"
+              "api-reference/virtual-accounts/get-virtual-account",
+              "api-reference/virtual-accounts/update-virtual-account"
             ]
           },
           {
