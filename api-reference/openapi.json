@@ -1905,6 +1905,178 @@
         ]
       }
     },
+    "/pms/api/external/request/customerReservedAccount/{account_number}/": {
+      "put": {
+        "summary": "Update Virtual Account",
+        "description": "Upgrade a 9PSB static virtual account by providing BVN and NIN to remove the 30k daily receive limit.",
+        "parameters": [
+          {
+            "name": "account_number",
+            "in": "path",
+            "description": "The virtual account number to upgrade",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Your Payvessel public API key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "description": "Your Payvessel secret",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "Request content type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "bvn",
+                  "nin"
+                ],
+                "properties": {
+                  "bvn": {
+                    "type": "string",
+                    "description": "Customer's 11-digit Bank Verification Number",
+                    "example": "22345678901"
+                  },
+                  "nin": {
+                    "type": "string",
+                    "description": "Customer's 11-digit National Identification Number",
+                    "example": "12345678901"
+                  }
+                }
+              },
+              "examples": {
+                "upgrade": {
+                  "summary": "Upgrade 9PSB static account",
+                  "value": {
+                    "bvn": "22345678901",
+                    "nin": "12345678901"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Virtual account upgraded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "description": "Success status"
+                    },
+                    "service": {
+                      "type": "string",
+                      "description": "Service type"
+                    },
+                    "bvn": {
+                      "type": "string",
+                      "description": "Customer's BVN"
+                    },
+                    "business": {
+                      "type": "string",
+                      "description": "Business ID"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "description": "Any errors encountered"
+                    }
+                  }
+                },
+                "examples": {
+                  "success": {
+                    "summary": "Account upgraded successfully",
+                    "value": {
+                      "status": true,
+                      "service": "UPDATE_VIRTUAL_ACCOUNT",
+                      "bvn": "22345678901",
+                      "business": "061C074E2F91F944B93993B4",
+                      "errors": []
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Virtual account not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Virtual Accounts"
+        ]
+      }
+    },
     "/pms/api/external/request/virtual-account/{businessid}/{account}/": {
       "get": {
         "summary": "Get Single Virtual Account",
