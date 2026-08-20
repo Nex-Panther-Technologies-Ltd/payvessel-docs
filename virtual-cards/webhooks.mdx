@@ -124,6 +124,52 @@ These are the possible transaction types on `issuing.transaction`:
 
 ***
 
+## Card transaction events (`card.transaction`)
+
+PayVessel also sends `card.transaction` to the webhook URL on your business. Use `event_type` to decide what to do.
+
+| `event_type` | When it fires | Suggested action |
+| --- | --- | --- |
+| `settlement` | Spend settled on the card | Append to history; refresh card balance |
+| `decline` | Spend declined (for example insufficient card balance) | Show the decline to your customer |
+| `termination` | Card terminated | Mark the card terminated |
+| `contactless_fee` | Miden billed a contactless payment fee that the **card could not pay** (usually insufficient balance). PayVessel debits your USD wallet instead. | Debit your customer for `amount`. `charged_from` is `merchant_wallet`. |
+| `cross_border_fee` | Same recovery path for a cross-border / FX fee Miden could not take from the card | Debit your customer for `amount` |
+
+### Contactless and cross-border fee recovery
+
+Miden sometimes cannot collect contactless or cross-border fees from the card (the card is below the amount, or would drop under the $1 retain). They still bill PayVessel. PayVessel then:
+
+1. Debits the **issuing merchant USD wallet** for the same fee amount
+2. Sends you a `card.transaction` webhook so you can recover it from your customer
+
+Treat `reference` as idempotent — the same event is not charged twice.
+
+```json
+{
+  "event": "card.transaction",
+  "card_id": "7b231d95-9006-4e53-a08c-dbe3b4d3ab4d",
+  "reference": "MIDEN_ISSUER_FEE_evt-contactless-1",
+  "event_type": "contactless_fee",
+  "status": "successful",
+  "amount": "0.50",
+  "currency": "USD",
+  "balance_after": "1.20",
+  "merchant_name": "Merchant",
+  "description": "Contactless payment fee charged to merchant wallet — card had insufficient balance",
+  "fee_type": "contactless_payment",
+  "charged_from": "merchant_wallet",
+  "reason": "insufficient_card_balance",
+  "created_at": "2026-08-20T08:15:00.000000+00:00",
+  "message": "Success",
+  "code": "00"
+}
+```
+
+Cross-border recovery uses `event_type` `cross_border_fee` and `fee_type` `cross_border`. If your USD wallet cannot cover the fee, `status` is `failed`. Fund the wallet and expect a retry of the same `reference`, or recover the amount from your customer.
+
+***
+
 ## What to do on each event
 
 | Event | Suggested action |
