@@ -475,7 +475,20 @@
         },
         "expiry": {
           "type": "string",
-          "nullable": true
+          "nullable": true,
+          "description": "Card expiry (MM/YY)"
+        },
+        "billing_address": {
+          "type": "object",
+          "nullable": true,
+          "description": "Card billing address used at issuance",
+          "properties": {
+            "street": { "type": "string" },
+            "city": { "type": "string" },
+            "state": { "type": "string" },
+            "postal_code": { "type": "string" },
+            "country": { "type": "string" }
+          }
         },
         "card_number": {
           "type": "string",

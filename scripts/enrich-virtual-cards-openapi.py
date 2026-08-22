@@ -165,6 +165,18 @@ def main() -> None:
             "brand": {"type": "string", "description": "VISA or MASTERCARD"},
             "balance": {"type": "string", "description": "Issuer-synced balance in USD"},
             "expiry": {"type": "string", "description": "Card expiry (MM/YY)"},
+            "billing_address": {
+                "type": "object",
+                "nullable": True,
+                "description": "Card billing address used at issuance",
+                "properties": {
+                    "street": {"type": "string"},
+                    "city": {"type": "string"},
+                    "state": {"type": "string"},
+                    "postal_code": {"type": "string"},
+                    "country": {"type": "string"},
+                },
+            },
             "card_number": {
                 "type": "string",
                 "description": "Full PAN (GET card only, when ACTIVE/FROZEN)",
@@ -302,6 +314,13 @@ def main() -> None:
                     "brand": "MASTERCARD",
                     "balance": "3.00",
                     "expiry": "08/31",
+                    "billing_address": {
+                        "street": "12 Allen Ave",
+                        "city": "Ikeja",
+                        "state": "Lagos",
+                        "postal_code": "100001",
+                        "country": "Nigeria",
+                    },
                     "card_number": "5573 5078 9962 7848",
                     "cvv": "123",
                     "created_datetime": "2026-05-24T00:38:02.543669",
