@@ -71,6 +71,43 @@ Use these test cards for different scenarios:
   </Accordion>
 </AccordionGroup>
 
+### 🪪 Test Identity Values
+
+Identity verification is simulated in the sandbox too. Reserved BVN, NIN, document
+and image values select the response you get:
+
+<AccordionGroup>
+  <Accordion icon="circle-check" title="Verified">
+    **BVN:** 22222999900
+    **NIN:** 11111999900
+
+    - Submit `John` / `Doe` / `1990-01-01` to see a `MATCH` result
+    - Any value that is not reserved also returns a successful verification
+  </Accordion>
+  <Accordion icon="circle-question" title="Not Found">
+    **BVN:** 22222999901
+    **NIN:** 11111999901
+
+    - Returns HTTP `200` with `success: false` and `data: null`
+  </Accordion>
+  <Accordion icon="triangle-exclamation" title="Adverse Result">
+    **BVN:** 22222999902
+    **NIN:** 11111999902
+
+    - Name mismatch, blacklist hit, poor credit score, or failed liveness
+  </Accordion>
+  <Accordion icon="plug-circle-xmark" title="Provider Errors">
+    **Provider error:** 22222999903
+    **Timeout:** 22222999904
+    **Rate limited:** 22222999906
+  </Accordion>
+</AccordionGroup>
+
+<Note>
+See [Sandbox Testing](/identity-verification/sandbox-testing) for the full table,
+including document numbers, phone numbers, face comparison tokens, and per-endpoint notes.
+</Note>
+
 ## Testing Categories
 
 ### 🎯 Functional Testing

@@ -1,0 +1,159 @@
+---
+title: "Identity Verification Sandbox Testing"
+description: "Reserved test values for simulating successful, failed, and error identity verification responses in the PayVessel sandbox."
+keywords:
+  [
+    "KYC sandbox testing",
+    "BVN test values",
+    "NIN test values",
+    "identity verification sandbox",
+    "PayVessel test BVN",
+  ]
+sidebarTitle: "Sandbox Testing"
+---
+
+Every identity verification endpoint is **simulated in the sandbox**. No request reaches a real bureau, nothing is billed to a live provider, and no real person's data is ever returned.
+
+Reserved test values let you choose which response you get, so you can build and test your error handling before going live.
+
+<Note>
+These values only work on `https://sandbox.payvessel.com`. In production the same endpoints query real records.
+</Note>
+
+## How It Works
+
+Every reserved value ends in `9999` followed by a two-digit outcome code. **Any value that does not end that way returns a successful verification**, so you can keep using realistic-looking test data for the happy path.
+
+<AccordionGroup>
+  <Accordion icon="circle-check" title="00 — Verified">
+    Returns a populated, successful response. `success` is `true`.
+  </Accordion>
+  <Accordion icon="circle-question" title="01 — Not Found">
+    The record does not exist. Returns HTTP `200` with `success: false` and `data: null`.
+  </Accordion>
+  <Accordion icon="triangle-exclamation" title="02 — Adverse Result">
+    The lookup succeeds but the answer is negative: a name mismatch, a blacklist hit, a poor credit score, an expired document, or a failed liveness check. `success` is `true` — the check ran, the outcome was unfavourable.
+  </Accordion>
+  <Accordion icon="plug-circle-xmark" title="03 — Provider Error">
+    The upstream bureau failed. Returns HTTP `502`.
+  </Accordion>
+  <Accordion icon="clock" title="04 — Timeout">
+    The upstream bureau did not respond in time. Returns HTTP `502`.
+  </Accordion>
+  <Accordion icon="ban" title="05 — Invalid Request">
+    Returns HTTP `400`.
+  </Accordion>
+  <Accordion icon="gauge-high" title="06 — Rate Limited">
+    Returns HTTP `429`.
+  </Accordion>
+</AccordionGroup>
+
+## Reserved Values
+
+| Field | Verified | Not found | Adverse | Provider error | Timeout | Invalid | Rate limited |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `bvn`, `bvn_no`, `id_number` | `22222999900` | `22222999901` | `22222999902` | `22222999903` | `22222999904` | `22222999905` | `22222999906` |
+| `nin` | `11111999900` | `11111999901` | `11111999902` | `11111999903` | `11111999904` | `11111999905` | `11111999906` |
+| `bank_account` | `0000999900` | `0000999901` | — | `0000999903` | `0000999904` | `0000999905` | `0000999906` |
+| `license_number` | `SBX999900` | `SBX999901` | `SBX999902` | `SBX999903` | `SBX999904` | `SBX999905` | `SBX999906` |
+| `voters_id` | `SBX000999900` | `SBX000999901` | `SBX000999902` | `SBX000999903` | `SBX000999904` | `SBX000999905` | `SBX000999906` |
+| `passport_number` | `A0999900` | `A0999901` | `A0999902` | `A0999903` | `A0999904` | `A0999905` | `A0999906` |
+| `phone_number` | `234800000999900` | `234800000999901` | `234800000999902` | `234800000999903` | `234800000999904` | `234800000999905` | `234800000999906` |
+| `biz_id`, `value` | any value ending `999900` | `…999901` | `…999902` | `…999903` | `…999904` | `…999905` | `…999906` |
+| `source_image`, `target_image` | `sandbox:00` | `sandbox:01` | `sandbox:02` | `sandbox:03` | `sandbox:04` | `sandbox:05` | `sandbox:06` |
+
+Hyphens and spaces are ignored, so `SBX-9999-02` and `SBX999902` behave identically.
+
+## The Sandbox Identity
+
+Reserved values return this person:
+
+| Field | Value |
+| --- | --- |
+| First name | `John` |
+| Middle name | `Ade` |
+| Last name | `Doe` |
+| Gender | `MALE` |
+| Date of birth | `1990-01-01` |
+| Phone number | `08000000000` |
+
+Any **non-reserved** identifier returns a different but consistent person — the same input always gives the same result, so you can rely on it in automated tests.
+
+## Choosing An Outcome When A Request Has Several Identifiers
+
+The first reserved value wins, in this order:
+
+| Endpoint | Order checked |
+| --- | --- |
+| Basic BVN | `bvn`, then `phone_number` |
+| Bank account | `bank_account`, then `bank_code` |
+| Blacklist query | `bvn_no`, then `nin`, then `phone_number` |
+| Loan feature | `value`, then `authorization` |
+| Liveness (initialize) | `biz_id`, then `user_id` |
+| Face comparison | `source_image`, then `target_image` |
+
+## Examples
+
+<CodeGroup>
+```bash Verified
+curl --request POST \
+  --url https://sandbox.payvessel.com/kyc/api/v1/merchant/bvn/basic \
+  --header 'Content-Type: application/json' \
+  --header 'api-key: YOUR_API_KEY' \
+  --header 'api-secret: YOUR_API_SECRET' \
+  --data '{
+    "bvn": "22222999900",
+    "first_name": "John",
+    "last_name": "Doe",
+    "birthday": "1990-01-01"
+  }'
+```
+
+```bash Not found
+curl --request POST \
+  --url https://sandbox.payvessel.com/kyc/api/v1/merchant/bvn/basic \
+  --header 'Content-Type: application/json' \
+  --header 'api-key: YOUR_API_KEY' \
+  --header 'api-secret: YOUR_API_SECRET' \
+  --data '{
+    "bvn": "22222999901",
+    "first_name": "John",
+    "last_name": "Doe",
+    "birthday": "1990-01-01"
+  }'
+```
+
+```bash Provider error
+curl --request POST \
+  --url https://sandbox.payvessel.com/kyc/api/v1/merchant/bvn/basic \
+  --header 'Content-Type: application/json' \
+  --header 'api-key: YOUR_API_KEY' \
+  --header 'api-secret: YOUR_API_SECRET' \
+  --data '{
+    "bvn": "22222999903",
+    "first_name": "John",
+    "last_name": "Doe",
+    "birthday": "1990-01-01"
+  }'
+```
+</CodeGroup>
+
+## Endpoint Notes
+
+<AccordionGroup>
+  <Accordion icon="id-card" title="Basic NIN and Basic BVN — how to get a MATCH">
+    These endpoints compare the identity fields **you submit** against the record. To see `MATCH`, submit the sandbox identity above alongside the reserved value. Submitting any other name returns `NO_MATCH`, which is a useful test case in its own right.
+  </Accordion>
+  <Accordion icon="building-columns" title="Bank account verification has no adverse outcome">
+    A successful bank account lookup always reports a confirmed name match, so there is no adverse variant to simulate. `0000999902` behaves the same as the not-found value.
+  </Accordion>
+  <Accordion icon="face-smile" title="Face comparison uses explicit tokens">
+    Images are base64, so the numeric suffix rule would match real data by accident. Pass the literal string `sandbox:00` (or another code) as the image instead. `sandbox:01` returns a `400` for a missing face, matching production behaviour. Any real base64 image returns a successful comparison.
+  </Accordion>
+  <Accordion icon="video" title="Liveness sessions chain automatically">
+    The `transaction_id` returned by the initialize call carries the outcome you selected with `biz_id`. Pass it straight to the query endpoint and you get the matching result.
+  </Accordion>
+  <Accordion icon="wallet" title="Insufficient funds is not simulated">
+    A wallet balance failure happens before verification starts, so there is no reserved value for it. To test that path, drain your sandbox wallet balance.
+  </Accordion>
+</AccordionGroup>
