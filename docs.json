@@ -115,6 +115,7 @@
             "group": "Identity Verification",
             "pages": [
               "identity-verification/overview",
+              "identity-verification/sandbox-testing",
               "identity-verification/basic-bvn-verification",
               "identity-verification/enhanced-bvn-verification",
               "identity-verification/basic-nin-verification",
