@@ -50,7 +50,14 @@ Use the PayVessel **identity verification API** to confirm who a customer is, va
   <Card title="Risk Queries" icon="triangle-exclamation" href="/identity-verification/blacklist-query">
     Screen blacklist status, credit score, and loan-related signals.
   </Card>
+  <Card title="Sandbox Testing" icon="flask" href="/identity-verification/sandbox-testing">
+    Reserved test values for simulating verified, not-found, and error responses.
+  </Card>
 </CardGroup>
+
+<Note>
+Every identity endpoint is **simulated in the sandbox** — no request reaches a real bureau. See [Sandbox Testing](/identity-verification/sandbox-testing) for the reserved values that select each response.
+</Note>
 
 <Note>
 Use the **API Reference** tab for exact headers, payloads, and live request examples. Use the pages in this section to decide **when** to call each endpoint and **how** to combine them.
