@@ -964,7 +964,7 @@
     "/api/v1/merchant/documents/international-passport": {
       "post": {
         "summary": "Verify International Passport",
-        "description": "Verify an international passport and retrieve the identity details attached to the passport number.",
+        "description": "Verify an international passport and retrieve the identity details attached to the passport number and surname.",
         "tags": [
           "Identity Verification"
         ],
@@ -987,7 +987,8 @@
                 "default": {
                   "summary": "International passport verification request",
                   "value": {
-                    "passport_number": "A12345678"
+                    "passport_number": "A12345678",
+                    "surname": "Doe"
                   }
                 }
               }
@@ -6670,13 +6671,19 @@
       "InternationalPassportVerificationRequest": {
         "type": "object",
         "required": [
-          "passport_number"
+          "passport_number",
+          "surname"
         ],
         "properties": {
           "passport_number": {
             "type": "string",
             "description": "International passport number",
             "example": "A12345678"
+          },
+          "surname": {
+            "type": "string",
+            "description": "Surname on the international passport",
+            "example": "Doe"
           }
         }
       },
