@@ -22,7 +22,8 @@ Search responses return **preview pricing**. Before creating an order, create a 
 2. **Search flights** to retrieve available options and an opaque `selection_token`.
 3. **Create quote** to validate the selected option and receive a `quote_id`.
 4. **Create order** to charge your wallet and submit the booking.
-5. **List orders** or **get order** to track the latest booking status.
+5. **Receive webhooks** when the order status changes, if you supplied a `webhook_url`.
+6. **List orders** or **get order** to track the latest booking status.
 
 ```mermaid
 sequenceDiagram
@@ -40,6 +41,8 @@ sequenceDiagram
 
     You->>PayVessel: POST /flight/orders
     PayVessel-->>You: Flight order created
+
+    PayVessel-->>You: Signed webhook notification
 
     You->>PayVessel: GET /flight/orders or /flight/orders/{order_id}
     PayVessel-->>You: Latest order status
@@ -115,6 +118,9 @@ All requests require `api-key` and `api-secret` headers. See [Authentication](/a
   </Card>
   <Card title="Create Order" icon="ticket-airline" href="/flight/create-order">
     Charge the wallet and place a booking
+  </Card>
+  <Card title="Webhooks" icon="webhook" href="/flight/webhooks">
+    Receive signed order status notifications
   </Card>
   <Card title="List Orders" icon="list" href="/flight/list-orders">
     Retrieve all orders for your business

@@ -1,0 +1,190 @@
+---
+title: "Flight Webhooks"
+description: "Receive signed flight order status notifications from PayVessel"
+sidebarTitle: "Webhooks"
+---
+
+Flight webhooks notify your `webhook_url` when a flight order status changes. Add `webhook_url` when you [create a flight order](/flight/create-order) to receive status updates for that order.
+
+Webhook delivery is asynchronous. Always verify the signature, make your webhook handler idempotent, and use [Get Order](/flight/get-order) if you need to confirm the latest state.
+
+## Headers
+
+PayVessel sends flight webhooks as JSON `POST` requests.
+
+```http
+POST /your/webhook/path HTTP/1.1
+Content-Type: application/json
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36
+PAYVESSEL-HTTP-SIGNATURE: 6a5f7b4a9a8e2f0f4d1c3b2a...example
+```
+
+| Header | Description |
+| --- | --- |
+| `Content-Type` | Always `application/json` |
+| `PAYVESSEL-HTTP-SIGNATURE` | HMAC SHA-512 signature of the raw request body, signed with your `api-secret` |
+| `User-Agent` | PayVessel webhook dispatcher user agent |
+
+<Note>
+  Some frameworks expose `PAYVESSEL-HTTP-SIGNATURE` as `HTTP_PAYVESSEL_HTTP_SIGNATURE`. Verify the signature against the raw request body before parsing or formatting the JSON.
+</Note>
+
+## Signature verification
+
+To verify a flight webhook:
+
+1. Read the raw request body exactly as received.
+2. Compute `HMAC-SHA512(raw_body, api_secret)`.
+3. Compare the hex digest with the `PAYVESSEL-HTTP-SIGNATURE` header using a constant-time comparison.
+
+See [Verifying Webhooks](/api-reference/webhook/verifying-webhooks) for implementation examples.
+
+## Event types
+
+| Event | When it is sent |
+| --- | --- |
+| `order.processing` | The order is still being processed |
+| `order.completed` | The flight order completed successfully and ticket details are available |
+| `order.failed` | The flight order failed |
+| `order.cancelled` | The flight order was cancelled |
+
+The `data.status` field contains the current order status:
+
+| Event | `data.status` |
+| --- | --- |
+| `order.processing` | `processing` |
+| `order.completed` | `success` |
+| `order.failed` | `failed` |
+| `order.cancelled` | `cancelled` |
+
+## Payload structure
+
+```json
+{
+  "event": "order.completed",
+  "service": "flight",
+  "data": {},
+  "metadata": null,
+  "timestamp": "2026-09-30T10:45:12.123456+00:00"
+}
+```
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `event` | string | Webhook event name, such as `order.completed` |
+| `service` | string | Always `flight` for flight order webhooks |
+| `data` | object | Flight order payload |
+| `metadata` | object or null | Reserved for additional context |
+| `timestamp` | datetime | When PayVessel queued the webhook event |
+
+## Completed order payload
+
+```json
+{
+  "event": "order.completed",
+  "service": "flight",
+  "data": {
+    "id": "7f90e431-aa34-45ec-ae1e-e28be0fbffec",
+    "business_id": "d73c1e3a-4d77-41ce-8c0b-1b3d4d3930f1",
+    "merchant_reference": "flight-order-001",
+    "order_reference": "100082026093045123456789012",
+    "quote_id": "54e159ca-66a9-4ae2-ab5a-9291380ebcee",
+    "currency_code": "NGN",
+    "pricing": {
+      "currency_code": "NGN",
+      "base_price": 106762.5,
+      "service_charge": 5338.13,
+      "total_amount": 112100.63,
+      "wallet_reward_on_success": 533.81,
+      "price_status": "final"
+    },
+    "status": "success",
+    "error_message": null,
+    "ticket_info": {
+      "pnr_reference_number": "TESTPNR",
+      "booking_status": "issued",
+      "ticket_status": "issued",
+      "payment_status": "paid",
+      "ticket_passengers": [
+        {
+          "passenger_type": "adult",
+          "first_name": "Amina",
+          "middle_name": "T.",
+          "last_name": "Ibrahim",
+          "ticket_number": "7082402628015",
+          "passenger_reference_number": null
+        }
+      ]
+    },
+    "passengers": [
+      {
+        "passenger_type": "adult",
+        "first_name": "Amina",
+        "middle_name": "T.",
+        "last_name": "Ibrahim",
+        "title": "mrs",
+        "gender": "female"
+      }
+    ],
+    "created_datetime": "2026-09-30T10:40:12.123456Z",
+    "updated_datetime": "2026-09-30T10:45:12.123456Z",
+    "completed_datetime": "2026-09-30T10:45:12.000000Z"
+  },
+  "metadata": null,
+  "timestamp": "2026-09-30T10:45:12.123456+00:00"
+}
+```
+
+## Failed order payload
+
+```json
+{
+  "event": "order.failed",
+  "service": "flight",
+  "data": {
+    "id": "7f90e431-aa34-45ec-ae1e-e28be0fbffec",
+    "business_id": "d73c1e3a-4d77-41ce-8c0b-1b3d4d3930f1",
+    "merchant_reference": "flight-order-001",
+    "order_reference": "100082026093045123456789012",
+    "quote_id": "54e159ca-66a9-4ae2-ab5a-9291380ebcee",
+    "currency_code": "NGN",
+    "pricing": {
+      "currency_code": "NGN",
+      "base_price": 106762.5,
+      "service_charge": 5338.13,
+      "total_amount": 112100.63,
+      "wallet_reward_on_success": 533.81,
+      "price_status": "final"
+    },
+    "status": "failed",
+    "error_message": "Flight order could not be completed",
+    "ticket_info": null,
+    "passengers": [
+      {
+        "passenger_type": "adult",
+        "first_name": "Amina",
+        "middle_name": "T.",
+        "last_name": "Ibrahim",
+        "title": "mrs",
+        "gender": "female"
+      }
+    ],
+    "created_datetime": "2026-09-30T10:40:12.123456Z",
+    "updated_datetime": "2026-09-30T10:45:12.123456Z",
+    "completed_datetime": "2026-09-30T10:45:12.000000Z"
+  },
+  "metadata": null,
+  "timestamp": "2026-09-30T10:45:12.123456+00:00"
+}
+```
+
+## Important notes
+
+- Return a `2xx` response only after your system has processed the webhook successfully.
+- Webhooks may be retried, so use `order_reference` or `merchant_reference` to prevent duplicate processing.
+- The `ticket_info` object is usually present for `order.completed` events and may be `null` for non-completed events.
+- The `PAYVESSEL-HTTP-SIGNATURE` is calculated over the exact JSON body sent to your endpoint.
+
+<Card title="Create Flight Order" icon="ticket-airline" href="/flight/create-order">
+  Add `webhook_url` when creating an order
+</Card>

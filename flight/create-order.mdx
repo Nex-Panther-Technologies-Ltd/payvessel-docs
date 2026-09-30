@@ -130,7 +130,7 @@ curl -X POST https://api.payvessel.com/vaas/api/v1/flight/orders \
 
 ## Next steps
 
-Use [List Orders](/flight/list-orders) or [Get Order](/flight/get-order) to track the latest status of the booking.
+Use [List Orders](/flight/list-orders) or [Get Order](/flight/get-order) to track the latest status of the booking. If you supplied `webhook_url`, PayVessel also sends signed status notifications to that URL. See [Flight Webhooks](/flight/webhooks) for the headers and payload structure.
 
 <Card title="API Reference" icon="code" href="/api-reference/flight/create-order">
   Full request and response schema
