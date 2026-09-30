@@ -176,6 +176,7 @@
                   "flight/search-flights",
                   "flight/create-quote",
                   "flight/create-order",
+                  "flight/webhooks",
                   "flight/list-orders",
                   "flight/get-order"
                 ]
