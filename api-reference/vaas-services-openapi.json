@@ -949,7 +949,240 @@
         }
       }
     },
+    "/vaas/api/v1/esim/topups": {
+      "post": {
+        "tags": [
+          "eSIM",
+          "eSIM"
+        ],
+        "summary": "Top Up an eSIM",
+        "description": "Purchase a compatible top-up package for an eSIM issued to the merchant",
+        "operationId": "create_topup_vaas_api_v1_esim_topups_post",
+        "parameters": [
+          {
+            "name": "api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Key"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Secret"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/api__esim__schema__CreateTopupRequestSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api__esim__schema__CreateTopupResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vaas/api/v1/esim/topups/{topup_id}": {
+      "get": {
+        "tags": [
+          "eSIM",
+          "eSIM"
+        ],
+        "summary": "Get eSIM Top-Up",
+        "description": "Get a completed or failed eSIM top-up by ID",
+        "operationId": "get_topup_vaas_api_v1_esim_topups__topup_id__get",
+        "parameters": [
+          {
+            "name": "topup_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Topup Id"
+            }
+          },
+          {
+            "name": "api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Key"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Secret"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api__esim__schema__GetTopupResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/vaas/api/v1/esim/orders": {
+      "get": {
+        "tags": [
+          "eSIM",
+          "eSIM"
+        ],
+        "summary": "List eSIM Orders",
+        "description": "List purchase or top-up orders for the authenticated business",
+        "operationId": "list_orders_vaas_api_v1_esim_orders_get",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "purchase",
+                "topup"
+              ],
+              "default": "purchase",
+              "description": "Order type to return. Defaults to purchase."
+            }
+          },
+          {
+            "name": "api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Key"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Secret"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api__esim__schema__ListOrdersResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "eSIM",
@@ -5311,6 +5544,75 @@
         ],
         "title": "OrderSchema"
       },
+      "api__esim__schema__ListOrdersResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/api__esim__schema__PurchaseOrderListItemSchema"
+                },
+                {
+                  "$ref": "#/components/schemas/api__esim__schema__TopupOrderListItemSchema"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "ListOrdersResponseSchema"
+      },
+      "api__esim__schema__PurchaseOrderListItemSchema": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/api__esim__schema__OrderSchema"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "purchase",
+                "default": "purchase",
+                "title": "Type"
+              }
+            }
+          }
+        ],
+        "title": "PurchaseOrderListItemSchema"
+      },
+      "api__esim__schema__TopupOrderListItemSchema": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/api__esim__schema__TopupSchema"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "topup",
+                "default": "topup",
+                "title": "Type"
+              }
+            }
+          }
+        ],
+        "title": "TopupOrderListItemSchema"
+      },
       "api__esim__schema__CreateOrderRequestSchema": {
         "properties": {
           "reference": {
@@ -5502,6 +5804,234 @@
           "completed_datetime"
         ],
         "title": "OrderSchema"
+      },
+      "api__esim__schema__CreateTopupRequestSchema": {
+        "properties": {
+          "reference": {
+            "type": "string",
+            "maxLength": 64,
+            "title": "Reference",
+            "description": "Unique merchant top-up reference"
+          },
+          "package_code": {
+            "type": "string",
+            "maxLength": 64,
+            "title": "Package Code"
+          },
+          "iccid": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Iccid"
+          },
+          "esim_tran_no": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Esim Tran No"
+          },
+          "period_num": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period Num"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "reference",
+          "package_code"
+        ],
+        "title": "CreateTopupRequestSchema"
+      },
+      "api__esim__schema__CreateTopupResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "$ref": "#/components/schemas/api__esim__schema__TopupSchema"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "CreateTopupResponseSchema"
+      },
+      "api__esim__schema__GetTopupResponseSchema": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "$ref": "#/components/schemas/api__esim__schema__TopupSchema"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "title": "GetTopupResponseSchema"
+      },
+      "api__esim__schema__TopupSchema": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "reference": {
+            "type": "string",
+            "title": "Reference"
+          },
+          "package_code": {
+            "type": "string",
+            "title": "Package Code"
+          },
+          "package_slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Package Slug"
+          },
+          "package_name": {
+            "type": "string",
+            "title": "Package Name"
+          },
+          "location": {
+            "type": "string",
+            "title": "Location"
+          },
+          "target_iccid": {
+            "type": "string",
+            "title": "Target Iccid"
+          },
+          "target_esim_tran_no": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Esim Tran No"
+          },
+          "provider_topup_esim_tran_no": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider Topup Esim Tran No"
+          },
+          "amount_usd": {
+            "type": "number",
+            "title": "Amount Usd"
+          },
+          "amount_naira": {
+            "type": "number",
+            "title": "Amount Naira"
+          },
+          "status": {
+            "$ref": "#/components/schemas/EsimOrderStatus"
+          },
+          "error_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Message"
+          },
+          "created_datetime": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created Datetime"
+          },
+          "updated_datetime": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated Datetime"
+          },
+          "completed_datetime": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed Datetime"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "reference",
+          "package_code",
+          "package_slug",
+          "package_name",
+          "location",
+          "target_iccid",
+          "target_esim_tran_no",
+          "provider_topup_esim_tran_no",
+          "amount_usd",
+          "amount_naira",
+          "status",
+          "error_message",
+          "created_datetime",
+          "updated_datetime",
+          "completed_datetime"
+        ],
+        "title": "TopupSchema"
       },
       "api__flight__schemas__order__CreateOrderRequestSchema": {
         "properties": {

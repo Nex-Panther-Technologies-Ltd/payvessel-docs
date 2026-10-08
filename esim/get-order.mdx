@@ -4,7 +4,7 @@ description: "Retrieve an eSIM order by ID, including profile and activation det
 sidebarTitle: "Get Order"
 ---
 
-Retrieve an eSIM order by its PayVessel order ID. When the order is `completed`, the response includes full eSIM profile details your user needs to activate their data plan.
+Retrieve an eSIM order by its PayVessel order ID. When the order is `success`, the response includes full eSIM profile details your user needs to activate their data plan.
 
 ## Usage
 
@@ -21,7 +21,6 @@ curl https://api.payvessel.com/vaas/api/v1/esim/orders/{order_id} \
 | `id` | string (uuid) | PayVessel order ID |
 | `reference` | string | Your merchant reference |
 | `provider_order_no` | string or null | Provider's order number |
-| `provider_transaction_id` | string or null | Provider's transaction ID |
 | `package_code` | string | The package purchased |
 | `package_slug` | string or null | Package slug |
 | `package_name` | string | Human-readable package name |
@@ -30,7 +29,7 @@ curl https://api.payvessel.com/vaas/api/v1/esim/orders/{order_id} \
 | `quantity` | integer | Number of eSIMs |
 | `amount_usd` | number | Amount in USD |
 | `amount_naira` | number | Amount in NGN |
-| `status` | string | `pending`, `processing`, `completed`, or `failed` |
+| `status` | string | `pending`, `processing`, `success`, or `failed` |
 | `error_message` | string or null | Error details if the order failed |
 | `profiles` | array | eSIM profiles (see below) |
 | `created_datetime` | datetime | When the order was created |

@@ -1,0 +1,47 @@
+---
+title: "Create eSIM Top-Up"
+description: "Add a compatible data package to an existing eSIM"
+sidebarTitle: "Create Top-Up"
+---
+
+Create a top-up for an eSIM profile issued to your business. PayVessel verifies ownership of the profile, validates the selected package against that profile, debits your wallet, then adds the package to the existing eSIM.
+
+## Before you start
+
+Use [List Top-Up Packages](/esim/list-topup-packages) with the profile's ICCID. Only submit a package code returned for that profile.
+
+## Usage
+
+```bash
+curl -X POST https://api.payvessel.com/vaas/api/v1/esim/topups \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "reference": "esim-topup-001",
+    "package_code": "TOPUP_CKH002",
+    "iccid": "8943108170003131575"
+  }'
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `reference` | string | Yes | Your unique top-up reference. Maximum 64 characters. |
+| `package_code` | string | Yes | A compatible code from [List Top-Up Packages](/esim/list-topup-packages). |
+| `iccid` | string | Conditional | The target eSIM ICCID. Supply this or `esim_tran_no`. |
+| `esim_tran_no` | string | Conditional | The provider eSIM transaction number. Supply this or `iccid`. Preferred when available. |
+| `period_num` | integer | No | Number of periods for providers that support day-pass plan extensions. |
+
+<Warning>
+  `POST /orders` provisions a new eSIM and only accepts a base-package code. Use `POST /topups` for a code returned by the top-up catalogue.
+</Warning>
+
+## Response
+
+The response has status `success` when the provider has applied the top-up. It includes the PayVessel top-up ID, package details, target profile identifiers, charged USD and NGN amounts, and the provider's top-up transaction number when available.
+
+<Card title="API Reference" icon="code" href="/api-reference/esim/create-topup">
+  Full request/response details and Try it
+</Card>

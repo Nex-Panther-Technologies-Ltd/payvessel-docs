@@ -1,0 +1,33 @@
+---
+title: "List eSIM Orders"
+description: "Retrieve purchase or top-up orders for your business"
+sidebarTitle: "List Orders"
+---
+
+Retrieve eSIM transaction history for your business. The endpoint returns one order type per request.
+
+## Usage
+
+```bash
+# Purchase orders. This is the default when type is omitted.
+curl "https://api.payvessel.com/vaas/api/v1/esim/orders" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY"
+
+# Top-up orders.
+curl "https://api.payvessel.com/vaas/api/v1/esim/orders?type=topup" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY"
+```
+
+## Query parameters
+
+| Parameter | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `type` | string | No | `purchase` | Order type to return: `purchase` for newly provisioned eSIMs or `topup` for recharges. |
+
+Each returned item includes a `type` field. Purchase items contain profile data; top-up items contain the target ICCID and top-up transaction details.
+
+<Card title="API Reference" icon="code" href="/api-reference/esim/list-orders">
+  Full request/response details and Try it
+</Card>
