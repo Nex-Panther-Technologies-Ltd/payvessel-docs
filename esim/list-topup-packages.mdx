@@ -1,0 +1,32 @@
+---
+title: "List Top-Up Packages"
+description: "Find compatible data packages for an existing PayVessel eSIM"
+sidebarTitle: "List Top-Up Packages"
+---
+
+List the top-up packages compatible with an existing eSIM profile. Use the profile's ICCID whenever possible so PayVessel returns plans that can be applied to that specific profile.
+
+## Usage
+
+```bash
+curl "https://api.payvessel.com/vaas/api/v1/esim/topup-packages?iccid=8943108170003131575" \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY"
+```
+
+## Query parameters
+
+At least one of `package_code`, `slug`, or `iccid` is required. Use `iccid` for a profile-specific result.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `iccid` | string | No | ICCID of the installed eSIM. Recommended for compatible-package lookup. |
+| `package_code` | string | No | Filter by a base-package or top-up package code. |
+| `slug` | string | No | Filter by package slug. |
+| `location_code` | string | No | Filter by ISO country code. |
+
+The response uses the same package shape as [List Packages](/esim/list-packages). Submit the returned `package_code` to [Create Top-Up](/esim/create-topup). Do not submit a top-up package to `POST /orders`.
+
+<Card title="API Reference" icon="code" href="/api-reference/esim/list-topup-packages">
+  Full request/response details and Try it
+</Card>

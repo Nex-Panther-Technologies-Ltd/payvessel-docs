@@ -15,8 +15,7 @@ curl -X POST https://api.payvessel.com/vaas/api/v1/esim/orders \
   -H "Content-Type: application/json" \
   -d '{
     "reference": "esim-order-001",
-    "package_code": "US_5GB_30D",
-    "quantity": 1
+    "package_code": "US_5GB_30D"
   }'
 ```
 
@@ -26,7 +25,6 @@ curl -X POST https://api.payvessel.com/vaas/api/v1/esim/orders \
 | --- | --- | --- | --- | --- |
 | `reference` | string | Yes | | Your unique merchant order reference (max 64 characters) |
 | `package_code` | string | Yes | | The package to purchase (from [List Packages](/esim/list-packages)) |
-| `quantity` | integer | No | `1` | Number of eSIMs to provision (must be greater than 0) |
 
 <Warning>
   The order amount is debited from your business wallet immediately. Make sure you have sufficient balance before creating an order.
@@ -46,12 +44,12 @@ The response returns an order object. Key fields:
 | `quantity` | integer | Number of eSIMs |
 | `amount_usd` | number | Amount in USD |
 | `amount_naira` | number | Amount in NGN |
-| `status` | string | `pending`, `processing`, `completed`, or `failed` |
-| `profiles` | array | eSIM profile details (populated when `completed`) |
+| `status` | string | `pending`, `processing`, `success`, or `failed` |
+| `profiles` | array | eSIM profile details (populated when `success`) |
 
 ## Next step
 
-Poll [Get Order](/esim/get-order) until the status is `completed` to retrieve the eSIM profile with QR code and activation details.
+Poll [Get Order](/esim/get-order) until the status is `success` to retrieve the eSIM profile with QR code and activation details.
 
 <Card title="API Reference" icon="code" href="/api-reference/esim/create-order">
   Full request/response details and Try it

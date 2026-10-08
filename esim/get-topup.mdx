@@ -1,0 +1,34 @@
+---
+title: "Get eSIM Top-Up"
+description: "Retrieve an eSIM top-up by its PayVessel ID"
+sidebarTitle: "Get Top-Up"
+---
+
+Retrieve a top-up created by your business.
+
+## Usage
+
+```bash
+curl https://api.payvessel.com/vaas/api/v1/esim/topups/{topup_id} \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_SECRET_KEY"
+```
+
+## Response fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | string (uuid) | PayVessel top-up ID |
+| `reference` | string | Your merchant reference |
+| `package_code` | string | Applied top-up package code |
+| `target_iccid` | string | ICCID of the eSIM that was topped up |
+| `target_esim_tran_no` | string or null | Provider eSIM transaction number |
+| `provider_topup_esim_tran_no` | string or null | Provider top-up transaction number |
+| `amount_usd` | number | Amount in USD |
+| `amount_naira` | number | Amount debited in NGN |
+| `status` | string | `pending`, `success`, or `failed` |
+| `error_message` | string or null | Error details when the top-up failed |
+
+<Card title="API Reference" icon="code" href="/api-reference/esim/get-topup">
+  Full request/response details and Try it
+</Card>

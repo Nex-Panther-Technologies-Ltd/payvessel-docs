@@ -4,12 +4,12 @@ description: "Browse available eSIM data packages with optional filters"
 sidebarTitle: "List Packages"
 ---
 
-List available eSIM data packages. Use query filters to narrow results by location, package type, or specific codes.
+List available base eSIM data packages. Use query filters to narrow results by location, package code, or slug.
 
 ## Usage
 
 ```bash
-curl "https://api.payvessel.com/vaas/api/v1/esim/packages?location_code=US&package_type=BASE" \
+curl "https://api.payvessel.com/vaas/api/v1/esim/packages?location_code=US" \
   -H "api-key: YOUR_API_KEY" \
   -H "api-secret: YOUR_SECRET_KEY"
 ```
@@ -19,10 +19,8 @@ curl "https://api.payvessel.com/vaas/api/v1/esim/packages?location_code=US&packa
 | Parameter | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `location_code` | string | No | | Filter by region/country code (e.g. `US`, `GB`) |
-| `package_type` | string | No | `BASE` | Package type filter |
 | `package_code` | string | No | | Filter by exact package code |
 | `slug` | string | No | | Filter by package slug |
-| `iccid` | string | No | | Filter by ICCID (for top-up packages on existing eSIMs) |
 
 ## Response fields
 
@@ -61,7 +59,7 @@ Each operator has:
 
 ## Next step
 
-Use the `package_code` when [creating an order](/esim/create-order).
+Use the `package_code` when [creating an order](/esim/create-order). To recharge an existing profile, use [List Top-Up Packages](/esim/list-topup-packages) instead.
 
 <Card title="API Reference" icon="code" href="/api-reference/esim/list-packages">
   Full request/response details and Try it

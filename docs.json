@@ -151,8 +151,12 @@
                   "esim/overview",
                   "esim/list-regions",
                   "esim/list-packages",
+                  "esim/list-topup-packages",
                   "esim/create-order",
-                  "esim/get-order"
+                  "esim/get-order",
+                  "esim/create-topup",
+                  "esim/get-topup",
+                  "esim/list-orders"
                 ]
               },
               {
@@ -284,8 +288,12 @@
                 "pages": [
                   "api-reference/esim/list-regions",
                   "api-reference/esim/list-packages",
+                  "api-reference/esim/list-topup-packages",
                   "api-reference/esim/create-order",
-                  "api-reference/esim/get-order"
+                  "api-reference/esim/get-order",
+                  "api-reference/esim/create-topup",
+                  "api-reference/esim/get-topup",
+                  "api-reference/esim/list-orders"
                 ]
               },
               {
