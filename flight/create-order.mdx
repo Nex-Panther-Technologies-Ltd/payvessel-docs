@@ -113,12 +113,12 @@ curl -X POST https://api.payvessel.com/vaas/api/v1/flight/orders \
     "error_message": null,
     "passengers": [
       {
-        "passenger_type": "Adult",
+        "passenger_type": "adult",
         "first_name": "Amina",
         "middle_name": "T.",
         "last_name": "Ibrahim",
-        "title": "Mrs",
-        "gender": "Female"
+        "title": "mrs",
+        "gender": "female"
       }
     ],
     "created_datetime": "2026-08-01T14:05:00Z",
@@ -131,6 +131,8 @@ curl -X POST https://api.payvessel.com/vaas/api/v1/flight/orders \
 ## Next steps
 
 Use [List Orders](/flight/list-orders) or [Get Order](/flight/get-order) to track the latest status of the booking. If you supplied `webhook_url`, PayVessel also sends signed status notifications to that URL. See [Flight Webhooks](/flight/webhooks) for the headers and payload structure.
+
+Eligible reservations can be cancelled before ticket issuance using [Cancel Order](/flight/cancel-order). A confirmed, eligible cancellation reverses the original wallet debit, including the service charge. Issued tickets require support assistance.
 
 <Card title="API Reference" icon="code" href="/api-reference/flight/create-order">
   Full request and response schema

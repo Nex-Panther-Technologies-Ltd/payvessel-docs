@@ -2636,6 +2636,151 @@
         }
       }
     },
+    "/vaas/api/v1/flight/orders/{order_id}/cancel": {
+      "post": {
+        "tags": [
+          "Flight"
+        ],
+        "summary": "Cancel Flight Order",
+        "description": "Cancel an eligible unticketed reservation for the authenticated business. No request body is required. Confirmation is required before reversing the original wallet debit, including the base fare and service charge. Repeating a confirmed cancellation does not repeat a completed refund. If a refund is pending, retry this endpoint for the same order. Issued tickets require support assistance. See the Cancel Order guide for eligibility and retry behavior.",
+        "operationId": "cancel_order_vaas_api_v1_flight_orders__order_id__cancel_post",
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "description": "PayVessel order ID returned when the order was created",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Order Id"
+            }
+          },
+          {
+            "name": "api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Api-Key"
+            }
+          },
+          {
+            "name": "api-secret",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Api-Secret"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Flight order cancelled successfully, or already cancelled. Any eligible wallet refund has completed or was previously completed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CancelOrderResponseSchema"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "API credentials are missing or invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlightOrderErrorResponseSchema"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Flight order not found for the authenticated business",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlightOrderErrorResponseSchema"
+                },
+                "example": {
+                  "status": false,
+                  "message": "Flight order not found",
+                  "data": null,
+                  "timestamp": "2026-10-16T10:00:30+00:00"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Order is ineligible, tickets are issued, the booking is not ready, or online cancellation is unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlightOrderErrorResponseSchema"
+                },
+                "example": {
+                  "status": false,
+                  "message": "Issued tickets cannot be cancelled through this API. Please contact support",
+                  "data": null,
+                  "timestamp": "2026-10-16T10:00:30+00:00"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid order ID format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlightOrderErrorResponseSchema"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "Cancellation could not be confirmed, or cancellation succeeded but the wallet refund is pending",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlightOrderErrorResponseSchema"
+                },
+                "examples": {
+                  "cancellation_unconfirmed": {
+                    "summary": "Check the order status before retrying cancellation",
+                    "value": {
+                      "status": false,
+                      "message": "Flight cancellation could not be confirmed. Please check the order status before retrying",
+                      "data": null,
+                      "timestamp": "2026-10-16T10:00:30+00:00"
+                    }
+                  },
+                  "refund_pending": {
+                    "summary": "Booking cancelled; retry cancellation to retry the wallet refund",
+                    "value": {
+                      "status": false,
+                      "message": "Flight order cancelled, but the wallet refund is pending. Please retry the cancellation to check the refund",
+                      "data": null,
+                      "timestamp": "2026-10-16T10:00:30+00:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An unexpected server error occurred",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlightOrderErrorResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/vaas/api/v1/flight/orders/{order_id}": {
       "get": {
         "tags": [
@@ -3499,7 +3644,7 @@
         "enum": [
           "pending",
           "processing",
-          "completed",
+          "success",
           "failed",
           "cancelled"
         ],
@@ -4810,11 +4955,11 @@
             "type": "string",
             "title": "Passenger Type",
             "enum": [
-              "Adult",
-              "Child",
-              "Infant"
+              "adult",
+              "child",
+              "infant"
             ],
-            "description": "Supported values: Adult, Child, Infant."
+            "description": "Returned values: adult, child, infant."
           },
           "first_name": {
             "type": "string",
@@ -4838,7 +4983,14 @@
           "title": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "enum": [
+                  "mr",
+                  "mrs",
+                  "ms",
+                  "miss",
+                  "master"
+                ]
               },
               {
                 "type": "null"
@@ -4849,7 +5001,11 @@
           "gender": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "enum": [
+                  "male",
+                  "female"
+                ]
               },
               {
                 "type": "null"
@@ -6121,6 +6277,182 @@
         ],
         "title": "GetOrderResponseSchema"
       },
+      "CancelOrderResponseSchema": {
+        "type": "object",
+        "title": "CancelOrderResponseSchema",
+        "required": [
+          "status",
+          "message",
+          "data"
+        ],
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "$ref": "#/components/schemas/api__flight__schemas__order__OrderSchema"
+          }
+        }
+      },
+      "FlightOrderErrorResponseSchema": {
+        "type": "object",
+        "title": "FlightOrderErrorResponseSchema",
+        "required": [
+          "status",
+          "message",
+          "data",
+          "timestamp"
+        ],
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {},
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "TicketPassengerInfoSchema": {
+        "type": "object",
+        "title": "TicketPassengerInfoSchema",
+        "properties": {
+          "passenger_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "first_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "middle_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "last_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "ticket_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "passenger_reference_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        }
+      },
+      "TicketInfoSchema": {
+        "type": "object",
+        "title": "TicketInfoSchema",
+        "properties": {
+          "pnr_reference_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "booking_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "ticket_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "payment_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "ticket_passengers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TicketPassengerInfoSchema"
+            }
+          }
+        }
+      },
       "api__flight__schemas__order__OrderSchema": {
         "properties": {
           "id": {
@@ -6165,6 +6497,17 @@
               }
             ],
             "title": "Error Message"
+          },
+          "ticket_info": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TicketInfoSchema"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
           },
           "passengers": {
             "items": {
