@@ -178,12 +178,62 @@ The `data.status` field contains the current order status:
 }
 ```
 
+## Cancelled order payload
+
+A confirmed cancellation uses `event: order.cancelled` and `data.status: cancelled`. The order retains its original pricing snapshot. See [Cancel Order](/flight/cancel-order) for cancellation eligibility and refund retries.
+
+```json
+{
+  "event": "order.cancelled",
+  "service": "flight",
+  "data": {
+    "id": "df564c2d-4e6a-470a-b4e6-c46c298a01de",
+    "business_id": "9ca6db0d-45bf-459b-b95f-c06e7d5d0c12",
+    "merchant_reference": "flight-order-001",
+    "order_reference": "A1B2C3D4E5F6G7H8",
+    "quote_id": "f7724ed8-8899-4f19-8757-fcbce8a8d852",
+    "currency_code": "NGN",
+    "pricing": {
+      "currency_code": "NGN",
+      "base_price": 487500.0,
+      "service_charge": 24375.0,
+      "total_amount": 511875.0,
+      "wallet_reward_on_success": 2437.5,
+      "price_status": "final"
+    },
+    "status": "cancelled",
+    "error_message": null,
+    "ticket_info": null,
+    "passengers": [
+      {
+        "passenger_type": "adult",
+        "first_name": "Amina",
+        "middle_name": "T.",
+        "last_name": "Ibrahim",
+        "title": "mrs",
+        "gender": "female"
+      }
+    ],
+    "created_datetime": "2026-10-16T10:00:00Z",
+    "updated_datetime": "2026-10-16T10:00:30Z",
+    "completed_datetime": "2026-10-16T10:00:30Z"
+  },
+  "metadata": null,
+  "timestamp": "2026-10-16T10:00:30+00:00"
+}
+```
+
+<Note>
+  This notification is sent on a confirmed cancellation transition, even if its eligible wallet refund is pending. It does not include a refund settlement status. A repeated cancellation request does not send another cancellation notification for the same transition.
+</Note>
+
 ## Important notes
 
 - Return a `2xx` response only after your system has processed the webhook successfully.
-- Webhooks may be retried, so use `order_reference` or `merchant_reference` to prevent duplicate processing.
+- Webhooks may be retried. Handle repeated notifications for the same `order_reference` and event idempotently, while allowing later status transitions for that order.
 - The `ticket_info` object is usually present for `order.completed` events and may be `null` for non-completed events.
 - The `PAYVESSEL-HTTP-SIGNATURE` is calculated over the exact JSON body sent to your endpoint.
+- `order.cancelled` confirms cancellation, not wallet refund settlement. See [Cancel Order](/flight/cancel-order) for full-refund behavior and refund-pending retries.
 
 <Card title="Create Flight Order" icon="ticket-airline" href="/flight/create-order">
   Add `webhook_url` when creating an order
