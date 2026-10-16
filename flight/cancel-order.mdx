@@ -1,0 +1,164 @@
+---
+title: "Cancel Order"
+description: "Cancel an unticketed flight reservation and reverse the original wallet charge"
+sidebarTitle: "Cancel Order"
+keywords: ["flight cancellation", "cancel flight order", "flight wallet refund"]
+---
+
+Cancel an eligible, unticketed flight reservation belonging to your business. PayVessel confirms the booking status before cancellation and confirms that cancellation succeeded before refunding a charged wallet.
+
+## Usage
+
+```bash
+curl -X POST https://api.payvessel.com/vaas/api/v1/flight/orders/df564c2d-4e6a-470a-b4e6-c46c298a01de/cancel \
+  -H "api-key: YOUR_API_KEY" \
+  -H "api-secret: YOUR_API_SECRET"
+```
+
+This endpoint has no request body. Use the PayVessel order `id`, not your merchant reference, in the URL. The API keys identify your business; do not send a `business_id`.
+
+## Path parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `order_id` | string (uuid) | Yes | PayVessel order ID returned by [Create Order](/flight/create-order) |
+
+## Cancellation eligibility
+
+| Order state | Behavior |
+| --- | --- |
+| `pending` or `processing` | Can be cancelled if a reservation exists, ticket issuance has not occurred, and online cancellation is supported for that booking |
+| `success` or an issued ticket | Returns `409`. Contact support for ticket cancellation and applicable refund terms |
+| `failed` | Returns `409`. This order cannot be cancelled |
+| `cancelled` | Returns the cancelled order without cancelling again. If an eligible wallet refund previously failed, the request retries that refund |
+
+<Note>
+  A reservation can exist before a ticket is issued. Order creation automatically attempts ticket issuance, so an unticketed reservation may only be available for cancellation briefly. PayVessel rechecks its eligibility when you request cancellation.
+</Note>
+
+Orders without a booking reference are not ready for cancellation. Some bookings do not support online cancellation and require support assistance.
+
+## Refunds
+
+For an eligible cancellation, PayVessel requests a reversal of the **entire original wallet debit**:
+
+```text
+refund = base_price + service_charge = total_amount
+```
+
+For example, an order with a base fare of `487500.00 NGN` and a service charge of `24375.00 NGN` reverses the original `511875.00 NGN` wallet debit. The service charge is not retained.
+
+No wallet refund is requested if the wallet was never charged. Cancelled orders do not earn the successful-booking reward. The response retains the original pricing snapshot, including `wallet_reward_on_success`; that field is not confirmation that a reward was credited.
+
+Repeated requests do not issue a second completed refund. If cancellation succeeds but the wallet refund fails, the endpoint returns `424` with a refund-pending message. Repeat this cancellation request for the same `order_id` to retry the refund without cancelling the reservation again.
+
+## Example response
+
+HTTP `200`:
+
+```json
+{
+  "status": true,
+  "message": "Flight order cancelled successfully",
+  "data": {
+    "id": "df564c2d-4e6a-470a-b4e6-c46c298a01de",
+    "business_id": "9ca6db0d-45bf-459b-b95f-c06e7d5d0c12",
+    "merchant_reference": "flight-order-001",
+    "order_reference": "A1B2C3D4E5F6G7H8",
+    "quote_id": "f7724ed8-8899-4f19-8757-fcbce8a8d852",
+    "currency_code": "NGN",
+    "pricing": {
+      "currency_code": "NGN",
+      "base_price": 487500.0,
+      "service_charge": 24375.0,
+      "total_amount": 511875.0,
+      "wallet_reward_on_success": 2437.5,
+      "price_status": "final"
+    },
+    "status": "cancelled",
+    "error_message": null,
+    "ticket_info": null,
+    "passengers": [
+      {
+        "passenger_type": "adult",
+        "first_name": "Amina",
+        "middle_name": "T.",
+        "last_name": "Ibrahim",
+        "title": "mrs",
+        "gender": "female"
+      }
+    ],
+    "created_datetime": "2026-10-16T10:00:00Z",
+    "updated_datetime": "2026-10-16T10:00:30Z",
+    "completed_datetime": "2026-10-16T10:00:30Z"
+  }
+}
+```
+
+`data` uses the same order structure as [Get Order](/flight/get-order). `ticket_info` may be `null` or contain available booking details. Pricing records the original charge, not a separate refund transaction.
+
+## Errors
+
+| HTTP status | Meaning | What to do |
+| --- | --- | --- |
+| `401` | API credentials are missing or invalid | Check `api-key` and `api-secret` |
+| `404` | Order does not exist or does not belong to your business | Check the PayVessel order ID and credentials |
+| `409` | Order is ineligible, ticket is issued, reservation is not ready, or online cancellation is unavailable | Check the message and contact support where advised |
+| `422` | Invalid order ID format | Supply a valid UUID |
+| `424` | Cancellation could not be confirmed, or cancellation succeeded but the wallet refund is pending | Follow the relevant message below |
+| `500` | An unexpected server error occurred | Check the latest order status and contact support if the problem persists |
+
+### Issued ticket
+
+HTTP `409`:
+
+```json
+{
+  "status": false,
+  "message": "Issued tickets cannot be cancelled through this API. Please contact support",
+  "data": null,
+  "timestamp": "2026-10-16T10:00:30+00:00"
+}
+```
+
+### Cancellation not confirmed
+
+HTTP `424`:
+
+```json
+{
+  "status": false,
+  "message": "Flight cancellation could not be confirmed. Please check the order status before retrying",
+  "data": null,
+  "timestamp": "2026-10-16T10:00:30+00:00"
+}
+```
+
+Use [Get Order](/flight/get-order) to check the current booking state before retrying. A timeout or failed confirmation does not establish whether cancellation occurred.
+
+### Refund pending
+
+HTTP `424`:
+
+```json
+{
+  "status": false,
+  "message": "Flight order cancelled, but the wallet refund is pending. Please retry the cancellation to check the refund",
+  "data": null,
+  "timestamp": "2026-10-16T10:00:30+00:00"
+}
+```
+
+The booking is already cancelled. Repeat `POST /flight/orders/{order_id}/cancel` to retry the wallet refund. Fetching the order alone does not retry it.
+
+## Webhook notification
+
+If the order has a `webhook_url`, PayVessel sends a signed `order.cancelled` notification when cancellation is confirmed. An order without a webhook URL is still updated internally.
+
+<Warning>
+  `order.cancelled` confirms the booking state. It can also be sent when a refund is pending, so it is not proof that funds have reached your wallet. See [Flight Webhooks](/flight/webhooks) for the headers and payload.
+</Warning>
+
+<Card title="API Reference" icon="code" href="/api-reference/flight/cancel-order">
+  Full request and response schema
+</Card>

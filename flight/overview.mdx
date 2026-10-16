@@ -92,7 +92,7 @@ All requests require `api-key` and `api-secret` headers. See [Authentication](/a
 | --- | --- |
 | `pending` | Order has been created and is awaiting downstream processing |
 | `processing` | Booking is in progress |
-| `completed` | Booking completed successfully |
+| `success` | Booking completed successfully |
 | `failed` | Booking could not be completed |
 | `cancelled` | Order was cancelled |
 
@@ -106,6 +106,10 @@ All requests require `api-key` and `api-secret` headers. See [Authentication](/a
 | `wallet_reward_on_success` | Amount scheduled to be credited back after a successful booking |
 | `price_status` | `preview` during search, `final` after quote creation |
 
+## Cancellations
+
+Use [Cancel Order](/flight/cancel-order) to cancel an eligible reservation before ticket issuance. PayVessel confirms cancellation before requesting a reversal of the original wallet debit, including both the base fare and service charge. Issued tickets require support assistance.
+
 <CardGroup cols={2}>
   <Card title="List Airports" icon="location-dot" href="/flight/airports">
     Retrieve supported airport codes
@@ -118,6 +122,9 @@ All requests require `api-key` and `api-secret` headers. See [Authentication](/a
   </Card>
   <Card title="Create Order" icon="ticket-airline" href="/flight/create-order">
     Charge the wallet and place a booking
+  </Card>
+  <Card title="Cancel Order" icon="ban" href="/flight/cancel-order">
+    Cancel an unticketed reservation and reverse its wallet charge
   </Card>
   <Card title="Webhooks" icon="webhook" href="/flight/webhooks">
     Receive signed order status notifications
